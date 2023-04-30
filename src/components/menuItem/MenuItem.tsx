@@ -26,7 +26,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
         marginRight: "1rem",
         height: "full",
         padding: "0 0.7rem",
-        width: "100%",
+        width: { xs: "100%", sm: "auto" },
       }}
       onClick={handleClick}
     >

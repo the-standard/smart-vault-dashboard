@@ -60,7 +60,7 @@ const Navbar = (props: any) => {
   return (
     <Box
       sx={{
-        padding: 0,
+        padding: "0 7%",
         // border: "10px solid red",
       }}
     >
@@ -104,6 +104,7 @@ const Navbar = (props: any) => {
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "space-between",
           alignItems: "center",
         }}
@@ -112,10 +113,10 @@ const Navbar = (props: any) => {
         {/* title */}
         <Box>
           <Typography
-            variant="h4"
             sx={{
               marginLeft: { xs: "5rem", sm: "5rem", lg: "5rem", xl: "5rem" },
               margin: "36px",
+              fontSize: "1.5rem",
             }}
           >
             TheStandard.io
@@ -136,12 +137,18 @@ const Navbar = (props: any) => {
           >
             <Web3Button />
           </Box>
-          <Box sx={{}}>
-            <IoSettingsSharp
-              style={{
-                margin: "0 1rem",
-              }}
-            />
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
+            <Box>
+              <IoSettingsSharp
+                style={{
+                  margin: "0 1rem",
+                }}
+              />
+            </Box>
             <Badge
               style={{
                 margin: "0 1rem",

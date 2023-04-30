@@ -37,6 +37,7 @@ const NavbarMenu = () => {
       sx={{
         display: "flex",
         flexDirection: { xs: "column", sm: "row" },
+        flexWrap: { sm: "wrap", md: "nowrap" },
         alignItems: "center",
         justifyContent: "space-evenly",
         background: { xs: "transparent", sm: "rgba(18, 18, 18, 0.5)" },
