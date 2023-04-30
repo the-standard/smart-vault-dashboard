@@ -11,7 +11,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
   return (
     <Box
       sx={{
-        width: "30%",
+        // width: "30%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -21,6 +21,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
         boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
         borderRadius: "10px 10px 0px 0px",
         padding: "0",
+        margin: "1rem 0",
       }}
     >
       <Box
