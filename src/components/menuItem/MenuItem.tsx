@@ -17,18 +17,28 @@ const MenuItem: React.FC<MenuItemProps> = ({
 }) => {
   return (
     <Box
-      className={`box ${isActive ? "glowing" : ""}`}
+      className={` ${isActive ? "box glowing" : ""}`}
       sx={{
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "flex-start",
         marginRight: "1rem",
+        height: "full",
+        padding: "0 0.7rem",
+        width: "100%",
       }}
       onClick={handleClick}
     >
       <div>{icon}</div>
-      <p> {text} </p>
+      <p
+        style={{
+          marginLeft: "0.5rem",
+        }}
+      >
+        {" "}
+        {text}{" "}
+      </p>
     </Box>
   );
 };

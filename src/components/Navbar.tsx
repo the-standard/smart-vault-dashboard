@@ -37,7 +37,7 @@ const Navbar = (props: any) => {
       height: "100%",
     },
     bmMenu: {
-      background: "white",
+      background: "transparent",
       padding: "2.5em 1.5em 0",
       fontSize: "1.15em",
     },
@@ -49,7 +49,8 @@ const Navbar = (props: any) => {
       padding: "0.8em",
     },
     bmItem: {
-      display: "inline-block",
+      // display: "inline-block",
+      display: "flex",
     },
     bmOverlay: {
       background: "rgba(0, 0, 0, 0.3)",
@@ -63,9 +64,12 @@ const Navbar = (props: any) => {
         // border: "10px solid red",
       }}
     >
-      {/* ///////////////////////////// */}
       {/* sidebar starts */}
-      <Box>
+      <Box
+        sx={{
+          display: { xs: "block", sm: "none" },
+        }}
+      >
         <Menu styles={styles}>
           {/* <a id="home" className="menu-item" href="/">
             Home
@@ -76,8 +80,22 @@ const Navbar = (props: any) => {
           <a id="contact" className="menu-item" href="/contact">
             Contact
           </a> */}
-          <Box>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Web3Button />
+          </Box>
+          <Box
+            sx={{
+              display: { xs: "block", sm: "none" },
+            }}
+          >
+            <NavbarMenu />
           </Box>
         </Menu>
       </Box>
@@ -96,7 +114,7 @@ const Navbar = (props: any) => {
           <Typography
             variant="h4"
             sx={{
-              marginLeft: { xs: "5rem", md: "0" },
+              marginLeft: { xs: "5rem", sm: "5rem", lg: "5rem", xl: "5rem" },
               margin: "36px",
             }}
           >
@@ -113,21 +131,36 @@ const Navbar = (props: any) => {
         >
           <Box
             sx={{
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", sm: "flex" },
             }}
           >
             <Web3Button />
           </Box>
-
           <Box sx={{}}>
-            <IoSettingsSharp />
-            <Badge color="secondary" variant="dot">
+            <IoSettingsSharp
+              style={{
+                margin: "0 1rem",
+              }}
+            />
+            <Badge
+              style={{
+                margin: "0 1rem",
+              }}
+              color="secondary"
+              variant="dot"
+            >
               <NotificationsIcon />
             </Badge>
           </Box>
         </Box>
       </Box>
-      <NavbarMenu />
+      <Box
+        sx={{
+          display: { xs: "none", sm: "block" },
+        }}
+      >
+        <NavbarMenu />
+      </Box>
     </Box>
   );
 };
