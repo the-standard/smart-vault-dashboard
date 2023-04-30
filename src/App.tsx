@@ -25,9 +25,8 @@ function App() {
   return (
     <>
       <WagmiConfig client={wagmiClient}>
-        <Navbar>
-          <HomePage />
-        </Navbar>
+        <Navbar />
+        <HomePage />
       </WagmiConfig>
 
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
