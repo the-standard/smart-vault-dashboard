@@ -7,7 +7,7 @@ function valuetext(value: number) {
 }
 
 interface RangeSliderProps {
-  step?: number[];
+  step: number[];
 }
 
 export default function RangeSlider(props: RangeSliderProps) {

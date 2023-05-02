@@ -11,10 +11,23 @@ import { Slider } from "@mui/material";
 import SliderComponent from "../SliderComponent";
 
 export default function DataGridDemo() {
-  const renderCustomRow = (params: GridRenderCellParams, step: number[]) => {
+  const renderSlider = (params: GridRenderCellParams, step: number[]) => {
     return (
       <Box>
         <SliderComponent step={step} />
+      </Box>
+    );
+  };
+
+  const renderActions = (params: GridRenderCellParams) => {
+    const handleManageClick = () => {
+      console.log(params.row.vaultNFT);
+    };
+
+    return (
+      <Box>
+        <button onClick={handleManageClick}>Manage</button>
+        <button>Sell NFT</button>
       </Box>
     );
   };
@@ -51,7 +64,13 @@ export default function DataGridDemo() {
       headerName: "Debt Range",
       width: 250,
       renderCell: (params: GridRenderCellParams) =>
-        renderCustomRow(params, params.row.step),
+        renderSlider(params, params.row.step),
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 150,
+      renderCell: (params: GridRenderCellParams) => renderActions(params),
     },
   ];
 
