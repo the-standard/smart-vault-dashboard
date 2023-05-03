@@ -1,11 +1,11 @@
 import React, { ReactNode, useState } from "react";
 import { Box } from "@mui/material";
-// import "./style.css";
 import "../../styles/glowingStyle.css";
 
 interface MenuItemProps {
   text: string;
   icon: string;
+  icon2: string;
   isActive: boolean;
   handleClick: () => void;
 }
@@ -13,6 +13,7 @@ interface MenuItemProps {
 const MenuItem: React.FC<MenuItemProps> = ({
   text,
   icon,
+  icon2,
   isActive,
   handleClick,
 }) => {
@@ -31,12 +32,12 @@ const MenuItem: React.FC<MenuItemProps> = ({
       }}
       onClick={handleClick}
     >
-      <div>
+      <div style={{ color: "red" }}>
         <span></span>
         <span></span>
         <span></span>
         <span></span>
-        <img src={icon} alt="" />
+        {isActive ? <img src={icon2} alt="" /> : <img src={icon} alt="" />}
       </div>
       <p
         style={{

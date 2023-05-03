@@ -6,27 +6,37 @@ import tststakinglogo from "../assets/tststakinglogo.svg";
 import liquidatorslogo from "../assets/liquidatorslogo.svg";
 import historylogo from "../assets/historylogo.svg";
 import borrowinglogo from "../assets/borrowinglogo.svg";
+import seuroibcologo2 from "../assets/2ndseuroibcologo.svg";
+import tststakinglogo2 from "../assets/2ndtststakinglogo.svg";
+import liquidatorslogo2 from "../assets/2ndliquidatorslogo.svg";
+import historylogo2 from "../assets/2ndhistorylogo.svg";
+import borrowinglogo2 from "../assets/2ndborrowinglogo.svg";
 
 const menuItems = [
   {
     text: "sEuro IBCO",
     icon: seuroibcologo,
+    icon2: seuroibcologo2,
   },
   {
     text: "TST Staking",
     icon: tststakinglogo,
+    icon2: tststakinglogo2,
   },
   {
     text: "Liquidators",
     icon: liquidatorslogo,
+    icon2: liquidatorslogo2,
   },
   {
     text: "History",
     icon: historylogo,
+    icon2: historylogo2,
   },
   {
     text: "Borrowing via Smart Vaults",
     icon: borrowinglogo,
+    icon2: borrowinglogo2,
   },
 ];
 
@@ -56,6 +66,7 @@ const NavbarMenu = () => {
           key={index}
           text={item.text}
           icon={item.icon}
+          icon2={item.icon2}
           isActive={activeIndex === index}
           handleClick={() => handleItemClick(index)}
         />
