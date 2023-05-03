@@ -40,6 +40,12 @@ export default function DataGridDemo() {
     .no-border .MuiDataGrid-cell {
       border: none;
     }
+    .css-wop1k0-MuiDataGrid-footerContainer{
+      border: none;
+    }
+    .css-1iyq7zh-MuiDataGrid-columnHeaders{
+      border: none;
+    }
   `;
 
   const columns: GridColDef[] = [
