@@ -46,7 +46,7 @@ const HomePage = () => {
           </Grid>
         ))}
       </Grid>
-      <Datagrid />
+      {/* <Datagrid /> */}
     </Box>
   );
 };

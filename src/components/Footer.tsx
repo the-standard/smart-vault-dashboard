@@ -24,10 +24,6 @@ const icons = [
     link: "https://www.instagram.com/standardprotocol/",
   },
   {
-    logo: twitterLogo,
-    link: "https://twitter.com/StandardBSC",
-  },
-  {
     logo: facebooklogo,
     link: "https://www.facebook.com/StandardProtocol",
   },
@@ -36,24 +32,109 @@ const icons = [
     link: "https://www.linkedin.com/company/standardprotocol",
   },
   {
+    logo: discordlogo,
+    link: "https://discord.gg/standardprotocol",
+  },
+  {
     logo: redditlogo,
     link: "https://www.reddit.com/r/StandardProtocol/",
+  },
+  {
+    logo: twitterLogo,
+    link: "https://twitter.com/StandardBSC",
   },
 
   {
     logo: youtubelogo,
     link: "https://www.youtube.com/channel/UCQ6V4hWJUx4J5HfX6pWzYFQ",
   },
-  {
-    logo: discordlogo,
-    link: "https://discord.gg/standardprotocol",
-  },
 ];
 
 const Footer = () => {
   return (
-    <Box>
-      <Box></Box>
+    <Box
+      sx={{
+        padding: "0 7%",
+        display: "flex",
+        flexDirection: {
+          xs: "column",
+          md: "row",
+        },
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: {
+            xs: "center",
+            md: "flex-start",
+          },
+          flexWrap: {
+            xs: "wrap",
+            md: "nowrap",
+          },
+        }}
+      >
+        {links.map((link) => (
+          <Box key={link.name}>
+            <a
+              style={{
+                color: "#8E9BAE",
+                textDecoration: "none",
+                marginRight: "1rem",
+              }}
+              href={link.link}
+            >
+              {link.name}
+            </a>
+          </Box>
+        ))}
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: {
+            xs: "center",
+            md: "flex-end",
+          },
+          flexWrap: {
+            xs: "wrap",
+            md: "nowrap",
+          },
+        }}
+      >
+        {icons.map((icon) => (
+          <Box
+            sx={{
+              /* From https://css.glass */
+              background: " rgba(255, 255, 255, 0.2)",
+              borderRadius: "16px",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(5px)",
+              // -webkit-backdrop-filter: blur(5px),
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              width: "50px",
+              height: "50px",
+              margin: {
+                xs: "0.5rem",
+                md: "0 0 0 1rem",
+              },
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+            }}
+            key={icon.logo}
+          >
+            <img src={icon.logo} />
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 };
