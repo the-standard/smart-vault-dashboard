@@ -139,24 +139,30 @@ export default function DataGridDemo() {
   return (
     <Box
       sx={{
-        height: 400,
-        padding: "0 7%",
+        padding: "0 12%",
       }}
     >
-      <DataGrid
-        style={{ backgroundColor: "white" }}
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
+      <Box
+        sx={{
+          height: 400,
+          width: "100%",
         }}
-        pageSizeOptions={[5]}
-        disableRowSelectionOnClick
-      />
+      >
+        <DataGrid
+          style={{ backgroundColor: "#0C0C0C", color: "white" }}
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+        />
+      </Box>
     </Box>
   );
 }

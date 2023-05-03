@@ -30,7 +30,7 @@ const HomePage = () => {
     <Box>
       <Grid
         sx={{
-          padding: "0 7%",
+          padding: "0 12%",
           margin: "5rem 0",
         }}
         container

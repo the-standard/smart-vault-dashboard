@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import React from "react";
 import instagramLogo from "../assets/instagramlogo.svg";
 import twitterLogo from "../assets/twitterlogo.svg";
 import facebooklogo from "../assets/facebooklogo.svg";
@@ -54,7 +53,7 @@ const Footer = () => {
   return (
     <Box
       sx={{
-        padding: "0 7%",
+        padding: "0 12%",
         display: "flex",
         flexDirection: {
           xs: "column",
@@ -62,6 +61,9 @@ const Footer = () => {
         },
         alignItems: "center",
         justifyContent: "space-between",
+        borderTop: "1px solid #8E9BAE",
+        marginTop: "20rem",
+        paddingBlock: "1rem",
       }}
     >
       <Box
@@ -112,7 +114,7 @@ const Footer = () => {
           <Box
             sx={{
               /* From https://css.glass */
-              background: " rgba(255, 255, 255, 0.2)",
+              background: " rgba(104, 104, 104, 0.2)",
               borderRadius: "16px",
               boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
               backdropFilter: "blur(5px)",

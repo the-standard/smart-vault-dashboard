@@ -60,7 +60,7 @@ const Navbar = (props: any) => {
   return (
     <Box
       sx={{
-        padding: "0 7%",
+        padding: "0 12%",
         // border: "10px solid red",
       }}
     >
