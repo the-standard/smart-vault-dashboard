@@ -32,6 +32,16 @@ export default function DataGridDemo() {
     );
   };
 
+  const getRowClassName = (params: any) => {
+    return "no-border";
+  };
+
+  const styles = `
+    .no-border .MuiDataGrid-cell {
+      border: none;
+    }
+  `;
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "#", width: 90 },
     {
@@ -148,10 +158,17 @@ export default function DataGridDemo() {
           width: "100%",
         }}
       >
+        {" "}
+        <style>{styles}</style>
         <DataGrid
-          style={{ backgroundColor: "#0C0C0C", color: "white" }}
+          style={{
+            backgroundColor: "#0C0C0C",
+            color: "white",
+            border: "transparent",
+          }}
           rows={rows}
           columns={columns}
+          getRowClassName={getRowClassName}
           initialState={{
             pagination: {
               paginationModel: {

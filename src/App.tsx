@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage.tsx";
 //import navbar
 import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
+import { Box } from "@mui/material";
 
 const chains = [mainnet, polygon];
 const projectId = import.meta.env.VITE_WEB3MODAL_PROJECT_ID;
@@ -24,7 +25,14 @@ const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 function App() {
   return (
-    <>
+    <Box
+      sx={{
+        overflowX: {
+          xs: "scroll",
+          md: "hidden",
+        },
+      }}
+    >
       <WagmiConfig client={wagmiClient}>
         <Navbar />
         <HomePage />
@@ -32,7 +40,7 @@ function App() {
       </WagmiConfig>
 
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-    </>
+    </Box>
   );
 }
 
