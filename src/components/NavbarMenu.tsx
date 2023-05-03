@@ -1,28 +1,32 @@
 import { Box } from "@mui/material";
 import MenuItem from "./menuItem/MenuItem";
-import { IoSettingsSharp, IoPersonSharp } from "react-icons/io5";
 import { useState } from "react";
+import seuroibcologo from "../assets/seuroibcologo.svg";
+import tststakinglogo from "../assets/tststakinglogo.svg";
+import liquidatorslogo from "../assets/liquidatorslogo.svg";
+import historylogo from "../assets/historylogo.svg";
+import borrowinglogo from "../assets/borrowinglogo.svg";
 
 const menuItems = [
   {
     text: "sEuro IBCO",
-    icon: <IoSettingsSharp />,
+    icon: seuroibcologo,
   },
   {
     text: "TST Staking",
-    icon: <IoSettingsSharp />,
+    icon: tststakinglogo,
   },
   {
     text: "Liquidators",
-    icon: <IoSettingsSharp />,
+    icon: liquidatorslogo,
   },
   {
     text: "History",
-    icon: <IoSettingsSharp />,
+    icon: historylogo,
   },
   {
     text: "Borrowing via Smart Vaults",
-    icon: <IoSettingsSharp />,
+    icon: borrowinglogo,
   },
 ];
 

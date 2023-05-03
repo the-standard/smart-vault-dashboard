@@ -4,7 +4,7 @@ import "./style.css";
 
 interface MenuItemProps {
   text: string;
-  icon: ReactNode;
+  icon: string;
   isActive: boolean;
   handleClick: () => void;
 }
@@ -30,7 +30,9 @@ const MenuItem: React.FC<MenuItemProps> = ({
       }}
       onClick={handleClick}
     >
-      <div>{icon}</div>
+      <div>
+        <img src={icon} alt="" />
+      </div>
       <p
         style={{
           marginLeft: "0.5rem",
