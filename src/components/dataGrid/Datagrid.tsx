@@ -141,9 +141,6 @@ export default function DataGridDemo() {
       sx={{
         height: 400,
         padding: "0 7%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
       }}
     >
       <DataGrid

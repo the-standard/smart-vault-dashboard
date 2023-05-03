@@ -1,0 +1,118 @@
+.glowingCard {
+  position: relative;
+  background: #131b33;
+
+  overflow: hidden;
+  box-shadow: inset 0 0 5px rgba(23, 243, 253, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.glowingCard span {
+  position: absolute;
+}
+
+.glowingCard span:nth-child(1),
+.glowingCard span:nth-child(3) {
+  width: 100%;
+  height: 3px;
+}
+
+.glowingCard span:nth-child(2),
+.glowingCard span:nth-child(4) {
+  width: 3px;
+  height: 100%;
+}
+
+.glowingCard span:nth-child(1) {
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(23, 243, 253, 0),
+    #00fff0,
+    rgba(23, 243, 253, 0)
+  );
+  filter: blur(6px);
+  animation: animate_one 8s linear infinite;
+}
+
+.glowingCard span:nth-child(2) {
+  top: 0;
+  right: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(23, 243, 253, 0),
+    #00fff0,
+    rgba(23, 243, 253, 0)
+  );
+  filter: blur(6px);
+  animation: animate_two 8s linear infinite;
+  animation-delay: 4s;
+}
+
+.glowingCard span:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    to left,
+    rgba(23, 243, 253, 0),
+    #00fff0,
+    rgba(23, 243, 253, 0)
+  );
+  filter: blur(6px);
+  animation: animate_three 8s linear infinite;
+}
+
+.glowingCard span:nth-child(4) {
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    to top,
+    rgba(23, 243, 253, 0),
+    #00fff0,
+    rgba(23, 243, 253, 0)
+  );
+  filter: blur(6px);
+  animation: animate_four 8s linear infinite;
+  animation-delay: 4s;
+}
+
+@keyframes animate_one {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes animate_two {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes animate_three {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes animate_four {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}

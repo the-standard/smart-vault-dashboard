@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import { Box } from "@mui/material";
-import "./style.css";
+// import "./style.css";
+import "../../styles/glowingStyle.css";
 
 interface MenuItemProps {
   text: string;
@@ -17,7 +18,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 }) => {
   return (
     <Box
-      className={` ${isActive ? "box glowing" : ""}`}
+      className={` ${isActive ? "glowingCard" : ""}`}
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -31,6 +32,10 @@ const MenuItem: React.FC<MenuItemProps> = ({
       onClick={handleClick}
     >
       <div>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
         <img src={icon} alt="" />
       </div>
       <p
