@@ -10,9 +10,9 @@ import {
 } from "wagmi";
 import { useEffect } from "react";
 // import { ethers } from "ethers";
-import abi from "../abis/tokenManagerABI.ts";
+// import abi from "../abis/tokenManagerABI.ts";
 import { ethers } from "ethers";
-// import abi from "../abis/vaultManager.ts";
+import abi from "../abis/vaultManager.ts";
 
 const items = [
   {
@@ -39,12 +39,14 @@ const items = [
 
 const HomePage = () => {
   const { data, isError, isLoading } = useContractRead({
-    address: "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
+    address: "0x951368849030f4B748fB12f6AF431Db1D0762974",
     abi: abi,
-    functionName: "getAcceptedTokens",
+    functionName: "vaults",
   });
 
   console.log("data", data);
+  console.log("isError", isError);
+  console.log("isLoading", isLoading);
 
   return (
     <Box>
