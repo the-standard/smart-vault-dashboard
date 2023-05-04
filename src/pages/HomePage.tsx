@@ -38,10 +38,20 @@ const items = [
 ];
 
 const HomePage = () => {
-  const { data, isError, isLoading } = useContractRead({
-    address: "0x951368849030f4B748fB12f6AF431Db1D0762974",
+  // First, create a contract instance for the proxy contract
+  const proxyContract = useContract({
+    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
     abi: abi,
-    functionName: "vaults",
+  });
+  console.log(proxyContract);
+
+  // // Then, call the `implementation` function on the proxy contract to get the address of the underlying contract
+  // const underlyingContractAddress = proxyContract?.implementation();
+
+  const { data, isError, isLoading } = useContractRead({
+    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+    abi: abi,
+    functionName: "implementation",
   });
 
   console.log("data", data);

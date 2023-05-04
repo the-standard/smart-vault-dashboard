@@ -9,6 +9,7 @@ import {
 } from "@mui/x-data-grid";
 import { Slider } from "@mui/material";
 import SliderComponent from "../SliderComponent";
+import "../../styles/glowingRed.css";
 
 export default function DataGridDemo() {
   const renderSlider = (params: GridRenderCellParams, step: number[]) => {
@@ -25,9 +26,33 @@ export default function DataGridDemo() {
     };
 
     return (
-      <Box>
-        <button onClick={handleManageClick}>Manage</button>
-        <button>Sell NFT</button>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <button
+          style={{
+            height: "2rem",
+            width: "10rem",
+            margin: "0 1rem",
+          }}
+          className="glowingCard"
+          onClick={handleManageClick}
+        >
+          Manage
+        </button>
+        <button
+          style={{
+            height: "2rem",
+            width: "10rem",
+            margin: "0 1rem",
+          }}
+          className="glowingCardRed"
+        >
+          Sell NFT
+        </button>
       </Box>
     );
   };
@@ -85,7 +110,7 @@ export default function DataGridDemo() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 500,
       renderCell: (params: GridRenderCellParams) => renderActions(params),
     },
   ];

@@ -98,6 +98,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
             // margin: "4rem 0 0.8rem 0",
             width: "100%",
           }}
+          className="glowingCard"
         >
           <Typography
             sx={{
