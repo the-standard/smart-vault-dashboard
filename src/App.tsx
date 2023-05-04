@@ -5,14 +5,14 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet, polygon } from "wagmi/chains";
+import { mainnet, polygon, sepolia, polygonMumbai } from "wagmi/chains";
 import HomePage from "./pages/HomePage.tsx";
 //import navbar
 import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import { Box } from "@mui/material";
 
-const chains = [mainnet, polygon];
+const chains = [mainnet, polygon, sepolia, polygonMumbai];
 const projectId = import.meta.env.VITE_WEB3MODAL_PROJECT_ID;
 
 const { provider } = configureChains(chains, [w3mProvider({ projectId })]);

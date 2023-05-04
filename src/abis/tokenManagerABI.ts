@@ -1,16 +1,8 @@
 export const abi = [
   {
     inputs: [
-      {
-        internalType: "bytes32",
-        name: "_native",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "_clNativeUsd",
-        type: "address",
-      },
+      { internalType: "bytes32", name: "_native", type: "bytes32" },
+      { internalType: "address", name: "_clNativeUsd", type: "address" },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -36,16 +28,8 @@ export const abi = [
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "_token",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_chainlinkFeed",
-        type: "address",
-      },
+      { internalType: "address", name: "_token", type: "address" },
+      { internalType: "address", name: "_chainlinkFeed", type: "address" },
     ],
     name: "addAcceptedToken",
     outputs: [],
@@ -55,13 +39,7 @@ export const abi = [
   {
     inputs: [],
     name: "clNativeUsd",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
@@ -71,31 +49,11 @@ export const abi = [
     outputs: [
       {
         components: [
-          {
-            internalType: "bytes32",
-            name: "symbol",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "addr",
-            type: "address",
-          },
-          {
-            internalType: "uint8",
-            name: "dec",
-            type: "uint8",
-          },
-          {
-            internalType: "address",
-            name: "clAddr",
-            type: "address",
-          },
-          {
-            internalType: "uint8",
-            name: "clDec",
-            type: "uint8",
-          },
+          { internalType: "bytes32", name: "symbol", type: "bytes32" },
+          { internalType: "address", name: "addr", type: "address" },
+          { internalType: "uint8", name: "dec", type: "uint8" },
+          { internalType: "address", name: "clAddr", type: "address" },
+          { internalType: "uint8", name: "clDec", type: "uint8" },
         ],
         internalType: "struct ITokenManager.Token[]",
         name: "",
@@ -106,42 +64,23 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "_symbol",
-        type: "bytes32",
-      },
-    ],
+    inputs: [{ internalType: "bytes32", name: "_symbol", type: "bytes32" }],
+    name: "getAddressOf",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes32", name: "_symbol", type: "bytes32" }],
     name: "getToken",
     outputs: [
       {
         components: [
-          {
-            internalType: "bytes32",
-            name: "symbol",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "addr",
-            type: "address",
-          },
-          {
-            internalType: "uint8",
-            name: "dec",
-            type: "uint8",
-          },
-          {
-            internalType: "address",
-            name: "clAddr",
-            type: "address",
-          },
-          {
-            internalType: "uint8",
-            name: "clDec",
-            type: "uint8",
-          },
+          { internalType: "bytes32", name: "symbol", type: "bytes32" },
+          { internalType: "address", name: "addr", type: "address" },
+          { internalType: "uint8", name: "dec", type: "uint8" },
+          { internalType: "address", name: "clAddr", type: "address" },
+          { internalType: "uint8", name: "clDec", type: "uint8" },
         ],
         internalType: "struct ITokenManager.Token",
         name: "token",
@@ -152,42 +91,16 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_tokenAddr",
-        type: "address",
-      },
-    ],
+    inputs: [{ internalType: "address", name: "_tokenAddr", type: "address" }],
     name: "getTokenIfExists",
     outputs: [
       {
         components: [
-          {
-            internalType: "bytes32",
-            name: "symbol",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "addr",
-            type: "address",
-          },
-          {
-            internalType: "uint8",
-            name: "dec",
-            type: "uint8",
-          },
-          {
-            internalType: "address",
-            name: "clAddr",
-            type: "address",
-          },
-          {
-            internalType: "uint8",
-            name: "clDec",
-            type: "uint8",
-          },
+          { internalType: "bytes32", name: "symbol", type: "bytes32" },
+          { internalType: "address", name: "addr", type: "address" },
+          { internalType: "uint8", name: "dec", type: "uint8" },
+          { internalType: "address", name: "clAddr", type: "address" },
+          { internalType: "uint8", name: "clDec", type: "uint8" },
         ],
         internalType: "struct ITokenManager.Token",
         name: "token",
@@ -200,24 +113,12 @@ export const abi = [
   {
     inputs: [],
     name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "_symbol",
-        type: "bytes32",
-      },
-    ],
+    inputs: [{ internalType: "bytes32", name: "_symbol", type: "bytes32" }],
     name: "removeAcceptedToken",
     outputs: [],
     stateMutability: "nonpayable",
@@ -231,16 +132,10 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "returnOne",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "pure",
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];
