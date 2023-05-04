@@ -1,18 +1,11 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridTreeBasicNode,
-  GridValueGetterParams,
-} from "@mui/x-data-grid";
-import { Slider } from "@mui/material";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+// import { Slider } from "@mui/material";
 import SliderComponent from "../SliderComponent";
 import "../../styles/glowingRed.css";
 
 export default function DataGridDemo() {
-  const renderSlider = (params: GridRenderCellParams, step: number[]) => {
+  const renderSlider = (_params: GridRenderCellParams, step: number[]) => {
     return (
       <Box>
         <SliderComponent step={step} />
@@ -57,7 +50,7 @@ export default function DataGridDemo() {
     );
   };
 
-  const getRowClassName = (params: any) => {
+  const getRowClassName = (_params: any) => {
     return "no-border";
   };
 

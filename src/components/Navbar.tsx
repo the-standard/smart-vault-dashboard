@@ -1,15 +1,16 @@
 import { Web3Button } from "@web3modal/react";
-import { useAccount, useConnect, useEnsName } from "wagmi";
-import { useDisconnect } from "wagmi";
+// import { useAccount } from "wagmi";
+// import { useDisconnect } from "wagmi";
 import { IoSettingsSharp } from "react-icons/io5";
 import { Badge, Box, Typography } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
-const Navbar = (props: any) => {
-  const { address, isConnected } = useAccount();
-  const { data: ensName } = useEnsName({ address });
-  const { disconnect } = useDisconnect();
+
+const Navbar = () => {
+  // const { address } = useAccount();
+  // const { data: ensName } = useEnsName({ address });
+  // const { disconnect } = useDisconnect();
 
   const styles = {
     bmBurgerButton: {
