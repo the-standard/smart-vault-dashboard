@@ -3,9 +3,8 @@ import VaultCard from "../components/vaultCard/VaultCard";
 import Datagrid from "../components/dataGrid/Datagrid";
 import {
   useContract,
-  // useContractReads,
-  // useProvider,
-  // useSigner,
+  useContractWrite,
+  usePrepareContractWrite,
   useContractRead,
 } from "wagmi";
 // import { useEffect } from "react";
@@ -45,21 +44,24 @@ const HomePage = () => {
   });
   console.log(proxyContract);
 
-  // // Then, call the `implementation` function on the proxy contract to get the address of the underlying contract
-  // const underlyingContractAddress = proxyContract?.implementation();
+  // const { data, isError, isLoading } = useContractRead({
+  //   address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+  //   abi: abi,
+  //   functionName: "vaults",
+  // });
 
-  const { data, isError, isLoading } = useContractRead({
-    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
-    abi: abi,
-    functionName: "implementation",
-  });
-
-  console.log("data", data);
-  console.log("isError", isError);
-  console.log("isLoading", isLoading);
+  // console.log("data", data);
+  // console.log("isError", isError);
+  // console.log("isLoading", isLoading);
 
   return (
     <Box>
+      {/* {" "}
+      <button disabled={!write} onClick={() => write?.()}>
+        Feed
+      </button>
+      {isLoading && <div>Check Wallet</div>}
+      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>} */}
       <Grid
         sx={{
           padding: "0 12%",

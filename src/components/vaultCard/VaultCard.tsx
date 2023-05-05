@@ -1,5 +1,18 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ImCoinEuro } from "react-icons/im";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import abi from "../../abis/vaultManager.ts";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import React, { useEffect } from "react";
+
+//for snackbar
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 interface VaultCardProps {
   title: string;
@@ -8,6 +21,44 @@ interface VaultCardProps {
 }
 
 const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
+  //snackbar config
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  //snackbar config end
+
+  //call mint function and mint a smart vault NFT
+
+  const { config } = usePrepareContractWrite({
+    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+    abi: abi,
+    functionName: "mint",
+  });
+  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  console.log("data", data);
+  console.log("isLoading", isLoading);
+  console.log("isSuccess", isSuccess);
+  console.log("write", write);
+
+  //show snackbar if succesfull
+  useEffect(() => {
+    if (isSuccess) {
+      setOpen(true);
+    }
+  }, [isSuccess]);
   return (
     <Box
       sx={{
@@ -99,6 +150,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
             width: "100%",
           }}
           className="glowingCard"
+          onClick={() => write?.()}
         >
           <Typography
             sx={{
@@ -108,6 +160,18 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
             Create new smart vault
           </Typography>
         </Button>
+        {/* {isLoading && <div>Check Wallet</div>}
+        {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>} */}
+
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Succesfully opened smart vault!
+          </Alert>
+        </Snackbar>
       </Box>
     </Box>
   );

@@ -43,6 +43,7 @@ export default function DataGridDemo() {
             margin: "0 1rem",
           }}
           className="glowingCardRed"
+          onClick={() => console.log("sell")}
         >
           Sell NFT
         </button>
