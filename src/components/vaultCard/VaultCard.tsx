@@ -48,10 +48,10 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
     functionName: "mint",
   });
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
-  console.log("data", data);
-  console.log("isLoading", isLoading);
-  console.log("isSuccess", isSuccess);
-  console.log("write", write);
+  // console.log("data", data);
+  // console.log("isLoading", isLoading);
+  // console.log("isSuccess", isSuccess);
+  // console.log("write", write);
 
   //show snackbar if succesfull
   useEffect(() => {

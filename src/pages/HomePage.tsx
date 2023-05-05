@@ -12,6 +12,8 @@ import {
 // import abi from "../abis/tokenManagerABI.ts";
 // import { ethers } from "ethers";
 import abi from "../abis/vaultManager.ts";
+import { useEffect } from "react";
+import { ethers } from "ethers";
 
 const items = [
   {
@@ -37,13 +39,6 @@ const items = [
 ];
 
 const HomePage = () => {
-  // First, create a contract instance for the proxy contract
-  const proxyContract = useContract({
-    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
-    abi: abi,
-  });
-  console.log(proxyContract);
-
   // const { data, isError, isLoading } = useContractRead({
   //   address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
   //   abi: abi,
@@ -54,14 +49,39 @@ const HomePage = () => {
   // console.log("isError", isError);
   // console.log("isLoading", isLoading);
 
+  const { data, isError, isLoading, isSuccess } = useContractRead({
+    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+    abi: abi,
+    functionName: "vaults",
+  });
+
+  const getVaults = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+      abi,
+      signer
+    );
+    const vaults = await contract.vaults();
+    console.log("vaults", vaults);
+  };
+
+  useEffect(() => {
+    console.log("data", data);
+  }, [data]);
+
   return (
     <Box>
-      {/* {" "}
-      <button disabled={!write} onClick={() => write?.()}>
-        Feed
-      </button>
-      {isLoading && <div>Check Wallet</div>}
-      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>} */}
+      <div>
+        {isLoading && <div>Loading...</div>}
+        {isError && <div>Error: {isError}</div>}
+        {isSuccess && (
+          <div>Transaction: {JSON.stringify(data) as React.ReactNode}</div>
+        )}
+      </div>
+      {/* <button onClick={connectWallet}>Connect Wallet</button> */}
+      <button onClick={getVaults}>Get Vaults</button>
       <Grid
         sx={{
           padding: "0 12%",
