@@ -78,6 +78,10 @@ export default function DataGridDemo() {
     .css-ptiqhd-MuiSvgIcon-root{
       color:white !important;
     }
+    .MuiDataGrid-root{
+      background:#0C0C0C !important;
+      color:white !important;
+    }
   `;
 
   const columns: GridColDef[] = [
@@ -199,11 +203,13 @@ export default function DataGridDemo() {
         {" "}
         <style>{styles}</style>
         <DataGrid
-          sx={{
-            backgroundColor: "#0C0C0C",
-            color: "white",
-            border: "transparent",
-          }}
+          sx={
+            {
+              // backgroundColor: "#0C0C0C",
+              // color: "white",
+              // border: "transparent",
+            }
+          }
           rows={rows}
           columns={columns}
           getRowClassName={getRowClassName}
