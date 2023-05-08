@@ -1,12 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import VaultCard from "../components/vaultCard/VaultCard";
 import Datagrid from "../components/dataGrid/Datagrid";
-import {
-  useContract,
-  useContractWrite,
-  usePrepareContractWrite,
-  useContractRead,
-} from "wagmi";
+import { useContractRead } from "wagmi";
 // import { useEffect } from "react";
 // import { ethers } from "ethers";
 // import abi from "../abis/tokenManagerABI.ts";
@@ -66,6 +61,11 @@ const HomePage = () => {
     abi: abi,
     functionName: "vaults",
   });
+
+  console.log("data", data);
+  console.log("isError", isError);
+  console.log("isLoading", isLoading);
+  console.log("isSuccess", isSuccess);
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);

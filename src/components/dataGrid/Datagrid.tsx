@@ -65,6 +65,19 @@ export default function DataGridDemo() {
     .css-1iyq7zh-MuiDataGrid-columnHeaders{
       border: none;
     }
+    .css-wop1k0-MuiDataGrid-footerContainer{
+      background:#0C0C0C;
+    }
+    .css-levciy-MuiTablePagination-displayedRows{
+      color:white;
+
+    }
+    .MuiTablePagination-actions{
+      color:white;
+    }
+    .css-ptiqhd-MuiSvgIcon-root{
+      color:white;
+    }
   `;
 
   const columns: GridColDef[] = [
@@ -133,7 +146,7 @@ export default function DataGridDemo() {
       ratio: "45",
       step: 10,
     },
-    { id: 4, vaultID: "Stark", vaultNFT: "Arya", ratio: "16", step: [20, 10] },
+    { id: 4, vaultID: "Stark", vaultNFT: "Arya", ratio: "16", step: 20 },
     {
       id: 5,
       vaultID: "Targaryen",
@@ -186,7 +199,7 @@ export default function DataGridDemo() {
         {" "}
         <style>{styles}</style>
         <DataGrid
-          style={{
+          sx={{
             backgroundColor: "#0C0C0C",
             color: "white",
             border: "transparent",

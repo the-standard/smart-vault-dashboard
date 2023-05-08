@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-import { ImCoinEuro } from "react-icons/im";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
@@ -32,12 +31,12 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //snackbar config
   const [open, setOpen] = React.useState(false);
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -56,10 +55,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
     functionName: "mint",
   });
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
-  // console.log("data", data);
-  // console.log("isLoading", isLoading);
-  // console.log("isSuccess", isSuccess);
-  // console.log("write", write);
+  console.log("data", data);
+  console.log("isLoading", isLoading);
+  console.log("isSuccess", isSuccess);
+  console.log("write", write);
 
   //show snackbar if succesfull
   useEffect(() => {
