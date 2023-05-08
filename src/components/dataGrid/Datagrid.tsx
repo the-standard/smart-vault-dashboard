@@ -4,7 +4,12 @@ import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import SliderComponent from "../SliderComponent";
 import "../../styles/glowingRed.css";
 
-export default function DataGridDemo() {
+interface VaultProps {
+  vaults: never[];
+  myMap: Map<string, string>;
+}
+
+const DataGridDemo: React.FC<VaultProps> = ({ vaults, myMap }) => {
   const renderSlider = (_params: GridRenderCellParams, step: number) => {
     return (
       <Box>
@@ -125,7 +130,7 @@ export default function DataGridDemo() {
       renderCell: (params: GridRenderCellParams) => renderActions(params),
     },
   ];
-
+  console.log(vaults);
   const rows = [
     {
       id: 1,
@@ -226,4 +231,5 @@ export default function DataGridDemo() {
       </Box>
     </Box>
   );
-}
+};
+export default DataGridDemo;
