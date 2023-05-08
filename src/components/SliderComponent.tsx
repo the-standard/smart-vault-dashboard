@@ -7,20 +7,21 @@ function valuetext(value: number) {
 }
 
 interface RangeSliderProps {
-  step: number[];
+  step: number;
 }
 
 export default function RangeSlider(props: RangeSliderProps) {
-  const [value, setValue] = React.useState<number[]>(props.step);
+  const [value, setValue] = React.useState<number>(props.step);
 
   const handleChange = (_event: Event, newValue: number | number[]) => {
-    setValue(newValue as number[]);
+    setValue(newValue as number);
   };
 
   return (
     <Box sx={{ width: 300 }}>
       <Slider
-        getAriaLabel={() => "Temperature range"}
+        disabled
+        getAriaLabel={() => "Disabled slider"}
         value={value}
         onChange={handleChange}
         valueLabelDisplay="auto"

@@ -18,9 +18,17 @@ interface VaultCardProps {
   title: string;
   para: string;
   borrowRate: string;
+  image: string;
+  isActive: boolean;
 }
 
-const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
+const VaultCard: React.FC<VaultCardProps> = ({
+  title,
+  para,
+  borrowRate,
+  image,
+  isActive,
+}) => {
   //snackbar config
   const [open, setOpen] = React.useState(false);
 
@@ -94,7 +102,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
             // border: "1px solid red",
           }}
         >
-          <ImCoinEuro
+          <img
             style={{
               fontSize: "3rem",
               marginRight: "1rem",
@@ -104,6 +112,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
               borderRadius: "10px",
               padding: "0.7rem",
             }}
+            src={image}
           />
 
           <Box>
@@ -141,6 +150,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ title, para, borrowRate }) => {
         }}
       >
         <Button
+          disabled={!isActive}
           sx={{
             background:
               "linear-gradient(119.96deg, rgba(255, 255, 255, 0.1) 26.6%, rgba(255, 255, 255, 0) 64.62%)",

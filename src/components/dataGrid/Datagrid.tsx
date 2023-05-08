@@ -5,7 +5,7 @@ import SliderComponent from "../SliderComponent";
 import "../../styles/glowingRed.css";
 
 export default function DataGridDemo() {
-  const renderSlider = (_params: GridRenderCellParams, step: number[]) => {
+  const renderSlider = (_params: GridRenderCellParams, step: number) => {
     return (
       <Box>
         <SliderComponent step={step} />
@@ -116,7 +116,7 @@ export default function DataGridDemo() {
       vaultNFT: "Jon",
       ratio: "35%",
       debt: "1000",
-      step: [5, 30],
+      step: 5,
     },
     {
       id: 2,
@@ -124,14 +124,14 @@ export default function DataGridDemo() {
       vaultNFT: "Cersei",
       ratio: "42",
       debt: "1000",
-      step: [50, 30],
+      step: 50,
     },
     {
       id: 3,
       vaultID: "Lannister",
       vaultNFT: "Jaime",
       ratio: "45",
-      step: [10, 5],
+      step: 10,
     },
     { id: 4, vaultID: "Stark", vaultNFT: "Arya", ratio: "16", step: [20, 10] },
     {
@@ -139,35 +139,35 @@ export default function DataGridDemo() {
       vaultID: "Targaryen",
       vaultNFT: "Daenerys",
       ratio: null,
-      step: [5, 1],
+      step: 5,
     },
     {
       id: 6,
       vaultID: "Melisandre",
       vaultNFT: null,
       ratio: "150",
-      step: [30, 10],
+      step: 30,
     },
     {
       id: 7,
       vaultID: "Clifford",
       vaultNFT: "Ferrara",
       ratio: "44",
-      step: [10, 5],
+      step: 10,
     },
     {
       id: 8,
       vaultID: "Frances",
       vaultNFT: "Rossini",
       ratio: "36",
-      step: [5, 1],
+      step: 5,
     },
     {
       id: 9,
       vaultID: "Roxie",
       vaultNFT: "Harvey",
       ratio: "65",
-      step: [50, 10],
+      step: 50,
     },
   ];
 

@@ -14,27 +14,39 @@ import {
 import abi from "../abis/vaultManager.ts";
 import { useEffect } from "react";
 import { ethers } from "ethers";
+import seurologo from "../assets/seurologo.png";
+import sarslogo from "../assets/sarslogo.png";
+import saudlogo from "../assets/saudlogo.png";
+import susdlogo from "../assets/susdlogo.png";
 
 const items = [
   {
     title: "sEuro",
     para: "Euro pegged",
-    borrowRate: "Borrow up to 750%",
+    borrowRate: "Borrow up to 75%",
+    image: seurologo,
+    isActive: true,
   },
   {
     title: "sEuro",
     para: "Euro pegged",
-    borrowRate: "Borrow up to 750%",
+    borrowRate: "Borrow up to 75%",
+    image: susdlogo,
+    isActive: false,
   },
   {
     title: "sEuro",
     para: "Euro pegged",
-    borrowRate: "Borrow up to 750%",
+    borrowRate: "Borrow up to 75%",
+    image: saudlogo,
+    isActive: false,
   },
   {
     title: "sEuro",
     para: "Euro pegged",
-    borrowRate: "Borrow up to 750%",
+    borrowRate: "Borrow up to 75%",
+    image: sarslogo,
+    isActive: false,
   },
 ];
 
@@ -128,6 +140,8 @@ const HomePage = () => {
               title={item.title}
               para={item.para}
               borrowRate={item.borrowRate}
+              image={item.image}
+              isActive={item.isActive}
             />
           </Grid>
         ))}
