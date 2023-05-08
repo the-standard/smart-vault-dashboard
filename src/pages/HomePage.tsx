@@ -134,13 +134,14 @@ const HomePage = () => {
     return tokenDecoded.image;
   };
 
-  getNFT(4)
-    .then((image) => {
-      console.log(image);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  // getNFT(4)
+  //   .then((image) => {
+  //     console.log(image);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+
   type Row = {
     id: number;
     vaultID: number;
@@ -205,7 +206,7 @@ const HomePage = () => {
         ))}
       </Grid>
       {vaultsData !== undefined && (
-        <Datagrid vaults={vaultsData} myMap={myMap} />
+        <Datagrid vaults={vaultsData} myMap={myMap} myRows={myRows} />
       )}
       {vaultsData === undefined && <div>Loading...</div>}{" "}
     </Box>

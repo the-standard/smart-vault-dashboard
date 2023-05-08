@@ -7,9 +7,11 @@ import "../../styles/glowingRed.css";
 interface VaultProps {
   vaults: never[];
   myMap: Map<string, string>;
+  myRows: any;
 }
 
-const DataGridDemo: React.FC<VaultProps> = ({ vaults, myMap }) => {
+const DataGridDemo: React.FC<VaultProps> = ({ vaults, myMap, myRows }) => {
+  console.log("myRows", myRows);
   const renderSlider = (_params: GridRenderCellParams, step: number) => {
     return (
       <Box>
@@ -93,9 +95,9 @@ const DataGridDemo: React.FC<VaultProps> = ({ vaults, myMap }) => {
     { field: "id", headerName: "#", width: 90 },
     {
       field: "vaultNFT",
-      headerName: "Vault NFT",
+      headerName: "Image",
       width: 150,
-      editable: true,
+      renderCell: (params) => <img src={params.value} alt="SVG image" />,
     },
     {
       field: "vaultID",
@@ -215,7 +217,7 @@ const DataGridDemo: React.FC<VaultProps> = ({ vaults, myMap }) => {
               // border: "transparent",
             }
           }
-          rows={rows}
+          rows={myRows}
           columns={columns}
           getRowClassName={getRowClassName}
           initialState={{
