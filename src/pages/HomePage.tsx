@@ -46,18 +46,20 @@ const items = [
 ];
 
 const HomePage = () => {
-  const [vaultsData, setVaultsData] = useState([]);
+  const { data, isError, isLoading, isSuccess } = useContractRead({
+    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+    abi: abi,
+    functionName: "vaults",
+  });
 
-  // const { data, isError, isLoading, isSuccess } = useContractRead({
-  //   address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
-  //   abi: abi,
-  //   functionName: "vaults",
-  // });
+  console.log("data", data);
+  console.log("isError", isError);
+  console.log("isLoading", isLoading);
+  console.log("isSuccess", isSuccess);
 
-  // console.log("data", data);
-  // console.log("isError", isError);
-  // console.log("isLoading", isLoading);
-  // console.log("isSuccess", isSuccess);
+  const [tokenToId, setTokenToId] = useState<any[]>([]);
+  const [resolved, setResolved] = useState(false);
+  const [myVaults, setMyVaults] = useState<any[]>([]);
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -68,8 +70,9 @@ const HomePage = () => {
       signer
     );
     const vaults = await contract.vaults();
-    setVaultsData(vaults);
     console.log("vaults", vaults);
+    setMyVaults(vaults);
+
     //token id
     console.log("token id " + ethers.BigNumber.from(vaults[0][0]).toNumber());
     //vault address
@@ -111,78 +114,19 @@ const HomePage = () => {
     //bytes32 vaultType - 32-byte array representation of the stablecoin which can be borrowed from the Smart Vault e.g. "sEURO"
     console.log(ethers.utils.parseBytes32String(vaults[0][5][6]));
   };
-  // console.log("vaultsData", vaultsData);
+
   useEffect(() => {
     // console.log("data", data);
     getVaults();
+    console.log("useEffect ran");
   }, []);
 
-  const myMap = new Map();
-
-  const getNFT = async (tokenId: any) => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(
-      "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
-      abi,
-      signer
-    );
-    const tokenURI = await contract.tokenURI(tokenId);
-    const tokenDecoded = JSON.parse(atob(tokenURI.split(",")[1]));
-
-    // myMap.set(tokenId, tokenDecoded.image);
-    return tokenDecoded.image;
-  };
-
-  // getNFT(4)
-  //   .then((image) => {
-  //     console.log(image);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-
-  type Row = {
-    id: number;
-    vaultID: number;
-    vaultNFT: string;
-  };
-  const [myRows, setMyRows] = useState<Row[]>([]);
-
-  const listGridRows = async (vaults: any) => {
-    const rows: any[] = [];
-    vaults.map((vault: any, index: any) => {
-      getNFT(ethers.BigNumber.from(vault[0]).toNumber())
-        .then((image) => {
-          myMap.set(ethers.BigNumber.from(vault[0]).toNumber(), image);
-          rows.push({
-            id: index,
-            vaultID: ethers.BigNumber.from(vault[0]).toNumber(),
-            vaultNFT: myMap.get(ethers.BigNumber.from(vault[0]).toNumber()),
-          });
-          setMyRows(rows);
-          console.log("rows", rows);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  };
-
   useEffect(() => {
-    console.log("vaultsData", vaultsData);
-    listGridRows(vaultsData);
-  }, [vaultsData]);
-
-  // const createMap = (vaults:any) => {
-  //   const map = new Map();
-  //   vaults.forEach((vault:any) => {
-  //     map.set(ethers.BigNumber.from(vaults[0][0]).toNumber(), vault);
-  //   });
-  //   return map;
-
-  // }
-
+    console.log("myVaults", myVaults);
+    myVaults.map((vault: any) => {
+      // getNFT(vault);
+    });
+  }, [myVaults]);
   return (
     <Box>
       <Grid
@@ -205,10 +149,7 @@ const HomePage = () => {
           </Grid>
         ))}
       </Grid>
-      {vaultsData !== undefined && (
-        <Datagrid vaults={vaultsData} myMap={myMap} myRows={myRows} />
-      )}
-      {vaultsData === undefined && <div>Loading...</div>}{" "}
+      <Datagrid vaults={myVaults} />
     </Box>
   );
 };
