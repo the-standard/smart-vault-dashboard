@@ -5,7 +5,7 @@ import SliderComponent from "../SliderComponent";
 import "../../styles/glowingRed.css";
 import { ethers } from "ethers";
 import abi from "../../abis/vaultManager.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface DataGridDemoProps {
   vaults: any[];
@@ -14,6 +14,7 @@ interface DataGridDemoProps {
 const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   const [tokenToId, setTokenToId] = useState<any[]>([]);
   const [resolved, setResolved] = useState(false);
+  const myMap = useRef(new Map());
 
   async function getNFT(vault: any) {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -27,6 +28,10 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     const tokenDecoded = JSON.parse(atob(tokenURI.split(",")[1]));
     console.log(tokenDecoded.image);
 
+    myMap.current.set(
+      ethers.BigNumber.from(vault[0]).toNumber(),
+      tokenDecoded.image
+    );
     return {
       tokenId: ethers.BigNumber.from(vault[0]).toNumber(),
       image: tokenDecoded.image,
@@ -53,6 +58,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     if (tokenToId.length > 0) {
       setResolved(true);
     }
+    console.log(myMap);
   }, [tokenToId]);
 
   console.log("vaults", vaults);
@@ -144,7 +150,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
       width: 50,
       renderCell: (params) => (
         <img
-          src={params.value}
+          src={params.row.vaultNFT}
           alt="Product"
           style={{ width: "100%", height: "auto" }}
         />
@@ -187,8 +193,8 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   const myRows = vaults.map((vault, index) => {
     return {
       id: index + 1,
-      vaultNFT: tokenToId[vault[0]]?.image,
-      vaultID: vault[0],
+      vaultNFT: myMap.current.get(ethers.BigNumber.from(vault[0]).toNumber()),
+      vaultID: ethers.BigNumber.from(vault[0]).toNumber(),
       ratio: vault[1],
       debt: vault[2],
       step: vault[3],
