@@ -140,9 +140,15 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     { field: "id", headerName: "#", width: 90 },
     {
       field: "vaultNFT",
-      headerName: "Vault NFT",
-      width: 150,
-      editable: true,
+      headerName: "vaultNFT",
+      width: 50,
+      renderCell: (params) => (
+        <img
+          src={params.value}
+          alt="Product"
+          style={{ width: "100%", height: "auto" }}
+        />
+      ),
     },
     {
       field: "vaultID",
@@ -177,6 +183,17 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
       renderCell: (params: GridRenderCellParams) => renderActions(params),
     },
   ];
+
+  const myRows = vaults.map((vault, index) => {
+    return {
+      id: index + 1,
+      vaultNFT: tokenToId[vault[0]]?.image,
+      vaultID: vault[0],
+      ratio: vault[1],
+      debt: vault[2],
+      step: vault[3],
+    };
+  });
 
   const rows = [
     {
@@ -262,7 +279,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
               // border: "transparent",
             }
           }
-          rows={rows}
+          rows={myRows}
           columns={columns}
           getRowClassName={getRowClassName}
           initialState={{
