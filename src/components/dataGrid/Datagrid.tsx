@@ -68,14 +68,14 @@ export default function DataGridDemo() {
     .css-wop1k0-MuiDataGrid-footerContainer{
       background:#0C0C0C !important;
     }
-    .css-levciy-MuiTablePagination-displayedRows{
+    .MuiTablePagination-displayedRows{
       color:white !important;
 
     }
     .MuiTablePagination-actions{
       color:white !important;
     }
-    .css-ptiqhd-MuiSvgIcon-root{
+    .MuiSvgIcon-root{
       color:white !important;
     }
     .MuiDataGrid-root{
