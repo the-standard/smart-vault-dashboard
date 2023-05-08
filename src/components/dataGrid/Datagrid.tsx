@@ -59,10 +59,10 @@ export default function DataGridDemo() {
     .no-border .MuiDataGrid-cell {
       border: none;
     }
-    .css-wop1k0-MuiDataGrid-footerContainer{
+    .MuiDataGrid-footerContainer{
       border: none;
     }
-    .css-1iyq7zh-MuiDataGrid-columnHeaders{
+    .MuiDataGrid-columnHeaders{
       border: none;
     }
     .css-wop1k0-MuiDataGrid-footerContainer{
