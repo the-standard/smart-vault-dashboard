@@ -66,17 +66,17 @@ export default function DataGridDemo() {
       border: none;
     }
     .css-wop1k0-MuiDataGrid-footerContainer{
-      background:#0C0C0C;
+      background:#0C0C0C !important;
     }
     .css-levciy-MuiTablePagination-displayedRows{
-      color:white;
+      color:white !important;
 
     }
     .MuiTablePagination-actions{
-      color:white;
+      color:white !important;
     }
     .css-ptiqhd-MuiSvgIcon-root{
-      color:white;
+      color:white !important;
     }
   `;
 

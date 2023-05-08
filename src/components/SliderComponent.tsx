@@ -20,7 +20,9 @@ export default function RangeSlider(props: RangeSliderProps) {
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}
         sx={{
-          color: "red",
+          color: "black",
+          background:
+            "linear-gradient(to right, #00ff00, #ffff00, #ffa500, #ff0000)",
         }}
       />
     </Box>
