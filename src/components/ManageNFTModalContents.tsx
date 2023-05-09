@@ -20,7 +20,7 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 600,
     // bgcolor:
     //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%);",
     bgcolor: "#0C0C0C",
@@ -32,12 +32,23 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
     <div>
       {" "}
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Text in a modal
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          {modalChildState}
-        </Typography>
+        <img src={tokenMap.get(modalChildState).image} alt="NFT" />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" component="div">
+            {tokenMap.get(modalChildState).name}
+          </Typography>
+          <Typography variant="body2" component="div">
+            Smart Vault type:{" "}
+            {tokenMap.get(modalChildState).attributes[8].value}
+          </Typography>
+        </Box>
       </Box>
     </div>
   );
