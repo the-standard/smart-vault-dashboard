@@ -338,7 +338,11 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: "60%",
+              width: {
+                xs: "60%",
+                sm: "50%",
+                md: "40%",
+              },
               bgcolor: "#0C0C0C",
               border: "2px solid #000",
               boxShadow: 24,
