@@ -323,12 +323,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
         />
       </Box>
       {/* modal */}
-      <Box
-      // sx={{
-      //   height: "200px",
-      //   overflowY: "auto",
-      // }}
-      >
+      <Box>
         <Modal
           open={open}
           onClose={handleClose}

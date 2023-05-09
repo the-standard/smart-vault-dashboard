@@ -22,7 +22,7 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 500,
+    width: 600,
     // bgcolor:
     //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%);",
     bgcolor: "#0C0C0C",
@@ -43,17 +43,54 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
             alignItems: "center",
           }}
         >
-          <Typography variant="h6" component="div">
+          <Typography
+            sx={{
+              fontStyle: "normal",
+              fontWeight: "700",
+              fontSize: "24px",
+              lineHeight: "27px",
+            }}
+            variant="h6"
+            component="div"
+          >
             {tokenMap.get(modalChildState).name}
           </Typography>
-          <Typography variant="body2" component="div">
+          <Typography
+            sx={{
+              fontStyle: "normal",
+              fontWeight: "400",
+              fontSize: "16px",
+              lineHeight: "141.5%",
+              textAlign: "right",
+              color: "#8E9BAE",
+            }}
+            variant="body2"
+            component="div"
+          >
             Smart Vault type:{" "}
-            {tokenMap.get(modalChildState).attributes[8].value}
+            <span
+              style={{
+                color: "white",
+              }}
+            >
+              {tokenMap.get(modalChildState).attributes[8].value}
+            </span>
           </Typography>
         </Box>
         {/* bg color different */}
         <Box>
-          <Typography variant="body2" component="div">
+          <Typography
+            sx={{
+              fontStyle: "normal",
+              fontWeight: "400",
+              fontSize: "16px",
+              lineHeight: "141.5%",
+              color: "#8E9BAE",
+              margin: "25px 0 10px 0",
+            }}
+            variant="body2"
+            component="div"
+          >
             Collateral
           </Typography>
           <Card
@@ -73,7 +110,16 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[4].trait_type}
               </Typography>{" "}
               <Typography sx={{ fontSize: 14 }} gutterBottom>
@@ -88,7 +134,16 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[5].trait_type}
               </Typography>{" "}
               <Typography sx={{ fontSize: 14 }} gutterBottom>
@@ -103,7 +158,16 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[6].trait_type}
               </Typography>{" "}
               <Typography sx={{ fontSize: 14 }} gutterBottom>
@@ -127,8 +191,43 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 }}
               ></div>
             </div>
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
+                Total value
+              </Typography>{" "}
+              <Typography sx={{ fontSize: 14 }} gutterBottom>
+                {tokenMap.get(modalChildState).attributes[6].value}
+              </Typography>
+            </CardContent>
           </Card>
-          <Typography variant="body2" component="div">
+          <Typography
+            sx={{
+              fontStyle: "normal",
+              fontWeight: "400",
+              fontSize: "16px",
+              lineHeight: "141.5%",
+              color: "#8E9BAE",
+              margin: "25px 0 10px 0",
+            }}
+            variant="body2"
+            component="div"
+          >
             Debt
           </Typography>
           <Card
@@ -148,7 +247,16 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[4].trait_type}
               </Typography>{" "}
               <Typography sx={{ fontSize: 14 }} gutterBottom>
@@ -163,28 +271,22 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[5].trait_type}
               </Typography>{" "}
               <Typography sx={{ fontSize: 14 }} gutterBottom>
                 {tokenMap.get(modalChildState).attributes[5].value}
               </Typography>
             </CardContent>{" "}
-            <CardContent
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
-                {tokenMap.get(modalChildState).attributes[6].trait_type}
-              </Typography>{" "}
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
-                {tokenMap.get(modalChildState).attributes[6].value}
-              </Typography>
-            </CardContent>
             <div
               style={{
                 height: "1px",
@@ -202,8 +304,57 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 }}
               ></div>
             </div>
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
+                Total value minus debt
+              </Typography>{" "}
+              <Typography sx={{ fontSize: 14 }} gutterBottom>
+                {tokenMap.get(modalChildState).attributes[6].value}
+              </Typography>
+            </CardContent>
           </Card>
-          <button>click</button>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              sx={{
+                fontStyle: "normal",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "24px",
+                color: "#8E9BAE",
+                margin: "20px 0 10px 0",
+              }}
+              variant="body2"
+              component="div"
+            >
+              Whoever controls this NFT controls the smart vault.<br></br> If
+              you need liquidity, you can sell your smart Vault NFT and the
+              owner can pay down the debt and unlock the collateral.
+            </Typography>
+            <button>click</button>
+          </Box>
         </Box>
       </Box>
     </div>
