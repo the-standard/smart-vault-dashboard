@@ -2,11 +2,18 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 interface ModalProps {
-  modalChildState: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  modalChildState: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tokenMap: any;
 }
 
-const ManageNFTModalContents: React.FC<ModalProps> = ({ modalChildState }) => {
+const ManageNFTModalContents: React.FC<ModalProps> = ({
+  modalChildState,
+  tokenMap,
+}) => {
   console.log(modalChildState);
+  console.log(tokenMap.get(modalChildState));
   //modal styles
   const style = {
     position: "absolute" as const,

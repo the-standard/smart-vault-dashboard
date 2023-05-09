@@ -17,7 +17,9 @@ interface DataGridDemoProps {
 const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   const [tokenToId, setTokenToId] = useState<any[]>([]);
   const [resolved, setResolved] = useState(false);
-  const myMap = useRef(new Map());
+  const tokenToNFTMap = useRef(new Map());
+  const tokenMap = useRef(new Map());
+
   //modal state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -36,10 +38,16 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     const tokenURI = await contract.tokenURI(vault[0]);
     const tokenDecoded = JSON.parse(atob(tokenURI.split(",")[1]));
     console.log(tokenDecoded.image);
+    console.log(tokenDecoded);
 
-    myMap.current.set(
+    tokenToNFTMap.current.set(
       ethers.BigNumber.from(vault[0]).toNumber(),
       tokenDecoded.image
+    );
+
+    tokenMap.current.set(
+      ethers.BigNumber.from(vault[0]).toNumber(),
+      tokenDecoded
     );
     return {
       tokenId: ethers.BigNumber.from(vault[0]).toNumber(),
@@ -67,7 +75,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     if (tokenToId.length > 0) {
       setResolved(true);
     }
-    console.log(myMap);
+    console.log(tokenToNFTMap);
   }, [tokenToId]);
 
   console.log("vaults", vaults);
@@ -206,7 +214,9 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   const myRows = vaults.map((vault, index) => {
     return {
       id: index + 1,
-      vaultNFT: myMap.current.get(ethers.BigNumber.from(vault[0]).toNumber()),
+      vaultNFT: tokenToNFTMap.current.get(
+        ethers.BigNumber.from(vault[0]).toNumber()
+      ),
       vaultID: ethers.BigNumber.from(vault[0]).toNumber(),
       ratio: vault[1],
       debt: vault[2],
@@ -319,7 +329,10 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <ManageNFTModalContents modalChildState={modalChildState} />
+        <ManageNFTModalContents
+          modalChildState={modalChildState}
+          tokenMap={tokenMap.current}
+        />
       </Modal>
     </Box>
   );
