@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import { Button } from "@mui/material";
 interface ModalProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   modalChildState: any;
@@ -353,7 +354,26 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
               you need liquidity, you can sell your smart Vault NFT and the
               owner can pay down the debt and unlock the collateral.
             </Typography>
-            <button>click</button>
+            <Button
+              sx={{
+                background:
+                  "linear-gradient(119.96deg, rgba(255, 255, 255, 0.1) 26.6%, rgba(255, 255, 255, 0) 64.62%)",
+                border: "1px solid rgba(70, 205, 235, 0.3)",
+                borderRadius: "3.88576px",
+                // margin: "4rem 0 0.8rem 0",
+                width: "100%",
+              }}
+              className="glowingCard"
+              // onClick={() => write?.()}
+            >
+              <Typography
+                sx={{
+                  color: "#00FFF0",
+                }}
+              >
+                List on opensea
+              </Typography>
+            </Button>{" "}
           </Box>
         </Box>
       </Box>
