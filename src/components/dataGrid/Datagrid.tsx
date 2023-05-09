@@ -323,17 +323,31 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
         />
       </Box>
       {/* modal */}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+      <Box
+      // sx={{
+      //   height: "200px",
+      //   overflowY: "auto",
+      // }}
       >
-        <ManageNFTModalContents
-          modalChildState={modalChildState}
-          tokenMap={tokenMap.current}
-        />
-      </Modal>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            height: "100vh",
+            overflowY: "auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ManageNFTModalContents
+            modalChildState={modalChildState}
+            tokenMap={tokenMap.current}
+          />
+        </Modal>
+      </Box>
     </Box>
   );
 };
