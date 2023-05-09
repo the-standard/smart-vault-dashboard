@@ -8,6 +8,8 @@ import abi from "../../abis/vaultManager.ts";
 import { useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import { Typography } from "@mui/material";
+// import ManageNFTModalContents from "../ManageNFTModalContents.tsx";
 import ManageNFTModalContents from "../ManageNFTModalContents.tsx";
 
 interface DataGridDemoProps {
@@ -329,18 +331,31 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-          sx={{
-            height: "100vh",
-            overflowY: "auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
         >
-          <ManageNFTModalContents
-            modalChildState={modalChildState}
-            tokenMap={tokenMap.current}
-          />
+          <Box
+            sx={{
+              position: { xs: "absolute" as const, md: "" },
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "60%",
+              bgcolor: "#0C0C0C",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+              maxHeight: {
+                xs: "80vh",
+                sm: "80vh",
+              },
+              overflowY: "auto",
+            }}
+            className="modal-content" // add class name to modal content box
+          >
+            <ManageNFTModalContents
+              modalChildState={modalChildState}
+              tokenMap={tokenMap.current}
+            />
+          </Box>
         </Modal>
       </Box>
     </Box>

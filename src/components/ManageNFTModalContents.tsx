@@ -4,6 +4,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
+
 interface ModalProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   modalChildState: any;
@@ -11,31 +12,14 @@ interface ModalProps {
   tokenMap: any;
 }
 
-const ManageNFTModalContents: React.FC<ModalProps> = ({
-  modalChildState,
-  tokenMap,
-}) => {
-  console.log(modalChildState);
-  console.log(tokenMap.get(modalChildState));
-  //modal styles
-  const style = {
-    position: "absolute" as const,
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    // bgcolor:
-    //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%);",
-    bgcolor: "#0C0C0C",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
+const Modal2: React.FC<ModalProps> = ({ modalChildState, tokenMap }) => {
   return (
     <div>
       {" "}
-      <Box sx={style}>
-        <img style={{}} src={tokenMap.get(modalChildState).image} alt="NFT" />
+      <Box sx={{}}>
+        <Box sx={{}}>
+          <img style={{}} src={tokenMap.get(modalChildState).image} alt="NFT" />
+        </Box>
         <Box
           sx={{
             display: "flex",
@@ -48,7 +32,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
             sx={{
               fontStyle: "normal",
               fontWeight: "700",
-              fontSize: "24px",
+              fontSize: {
+                xs: "14px",
+                sm: "24px",
+              },
               lineHeight: "27px",
             }}
             variant="h6"
@@ -60,7 +47,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
             sx={{
               fontStyle: "normal",
               fontWeight: "400",
-              fontSize: "16px",
+              fontSize: {
+                xs: "12px",
+                sm: "16px",
+              },
               lineHeight: "141.5%",
               textAlign: "right",
               color: "#8E9BAE",
@@ -115,7 +105,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 sx={{
                   fontStyle: "normal",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
                   lineHeight: "141.5%",
                   color: "#8E9BAE",
                 }}
@@ -123,7 +116,15 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
               >
                 {tokenMap.get(modalChildState).attributes[4].trait_type}
               </Typography>{" "}
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[4].value}
               </Typography>
             </CardContent>{" "}
@@ -139,7 +140,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 sx={{
                   fontStyle: "normal",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
                   lineHeight: "141.5%",
                   color: "#8E9BAE",
                 }}
@@ -147,7 +151,15 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
               >
                 {tokenMap.get(modalChildState).attributes[5].trait_type}
               </Typography>{" "}
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[5].value}
               </Typography>
             </CardContent>{" "}
@@ -163,7 +175,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 sx={{
                   fontStyle: "normal",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
                   lineHeight: "141.5%",
                   color: "#8E9BAE",
                 }}
@@ -171,7 +186,15 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
               >
                 {tokenMap.get(modalChildState).attributes[6].trait_type}
               </Typography>{" "}
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[6].value}
               </Typography>
             </CardContent>
@@ -204,7 +227,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 sx={{
                   fontStyle: "normal",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
                   lineHeight: "141.5%",
                   color: "#8E9BAE",
                 }}
@@ -212,7 +238,15 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
               >
                 Total value
               </Typography>{" "}
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[6].value}
               </Typography>
             </CardContent>
@@ -252,7 +286,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 sx={{
                   fontStyle: "normal",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
                   lineHeight: "141.5%",
                   color: "#8E9BAE",
                 }}
@@ -260,7 +297,15 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
               >
                 {tokenMap.get(modalChildState).attributes[4].trait_type}
               </Typography>{" "}
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[4].value}
               </Typography>
             </CardContent>{" "}
@@ -276,7 +321,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 sx={{
                   fontStyle: "normal",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
                   lineHeight: "141.5%",
                   color: "#8E9BAE",
                 }}
@@ -284,7 +332,15 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
               >
                 {tokenMap.get(modalChildState).attributes[5].trait_type}
               </Typography>{" "}
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[5].value}
               </Typography>
             </CardContent>{" "}
@@ -317,7 +373,10 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
                 sx={{
                   fontStyle: "normal",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
                   lineHeight: "141.5%",
                   color: "#8E9BAE",
                 }}
@@ -325,7 +384,15 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
               >
                 Total value minus debt
               </Typography>{" "}
-              <Typography sx={{ fontSize: 14 }} gutterBottom>
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                }}
+                gutterBottom
+              >
                 {tokenMap.get(modalChildState).attributes[6].value}
               </Typography>
             </CardContent>
@@ -380,5 +447,4 @@ const ManageNFTModalContents: React.FC<ModalProps> = ({
     </div>
   );
 };
-
-export default ManageNFTModalContents;
+export default Modal2;
