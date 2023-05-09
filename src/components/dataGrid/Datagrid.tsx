@@ -6,6 +6,9 @@ import "../../styles/glowingRed.css";
 import { ethers } from "ethers";
 import abi from "../../abis/vaultManager.ts";
 import { useEffect, useRef, useState } from "react";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import ManageNFTModalContents from "../ManageNFTModalContents.tsx";
 
 interface DataGridDemoProps {
   vaults: any[];
@@ -15,6 +18,12 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   const [tokenToId, setTokenToId] = useState<any[]>([]);
   const [resolved, setResolved] = useState(false);
   const myMap = useRef(new Map());
+  //modal state
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  //modal child state
+  const [modalChildState, setModalChildState] = useState();
 
   async function getNFT(vault: any) {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -74,6 +83,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   const renderActions = (params: GridRenderCellParams) => {
     const handleManageClick = () => {
       console.log(params.row.vaultID);
+      setModalChildState(params.row.vaultID);
     };
 
     return (
@@ -90,7 +100,10 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
             margin: "0 1rem",
           }}
           className="glowingCard"
-          onClick={handleManageClick}
+          onClick={() => {
+            handleManageClick();
+            handleOpen();
+          }}
         >
           Manage
         </button>
@@ -147,12 +160,12 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     {
       field: "vaultNFT",
       headerName: "vaultNFT",
-      width: 50,
+      width: 100,
       renderCell: (params) => (
         <img
           src={params.row.vaultNFT}
           alt="Product"
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "100%", height: "80px" }}
         />
       ),
     },
@@ -299,6 +312,15 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
           disableRowSelectionOnClick
         />
       </Box>
+      {/* modal */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <ManageNFTModalContents modalChildState={modalChildState} />
+      </Modal>
     </Box>
   );
 };
