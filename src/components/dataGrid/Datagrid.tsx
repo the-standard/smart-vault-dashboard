@@ -9,8 +9,8 @@ import { useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { Typography } from "@mui/material";
-// import ManageNFTModalContents from "../ManageNFTModalContents.tsx";
-import ManageNFTModalContents from "../ManageNFTModalContents.tsx";
+// import ManageSteps from "../ManageSteps.tsx";
+import ManageSteps from "../modal/ManageSteps.tsx";
 
 interface DataGridDemoProps {
   vaults: any[];
@@ -355,7 +355,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
             }}
             className="modal-content" // add class name to modal content box
           >
-            <ManageNFTModalContents
+            <ManageSteps
               modalChildState={modalChildState}
               tokenMap={tokenMap.current}
             />
