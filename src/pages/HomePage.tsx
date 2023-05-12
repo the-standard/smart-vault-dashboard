@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import VaultCard from "../components/vaultCard/VaultCard";
 import Datagrid from "../components/dataGrid/Datagrid";
-import { useContractRead } from "wagmi";
+// import { useContractRead } from "wagmi";
 // import { useEffect } from "react";
 // import { ethers } from "ethers";
 // import abi from "../abis/tokenManagerABI.ts";
@@ -46,26 +46,15 @@ const items = [
 ];
 
 const HomePage = () => {
-  const { data, isError, isLoading, isSuccess } = useContractRead({
-    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
-    abi: abi,
-    functionName: "vaults",
-  });
-
-  console.log("data", data);
-  console.log("isError", isError);
-  console.log("isLoading", isLoading);
-  console.log("isSuccess", isSuccess);
-
-  const [tokenToId, setTokenToId] = useState<any[]>([]);
-  const [resolved, setResolved] = useState(false);
+  // const [tokenToId, setTokenToId] = useState<any[]>([]);
+  // const [resolved, setResolved] = useState(false);
   const [myVaults, setMyVaults] = useState<any[]>([]);
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+      "0xbF615e590EC00140d522A721251645c65642de58",
       abi,
       signer
     );
@@ -123,9 +112,9 @@ const HomePage = () => {
 
   useEffect(() => {
     console.log("myVaults", myVaults);
-    myVaults.map((vault: any) => {
-      // getNFT(vault);
-    });
+    // myVaults.map((vault: any) => {
+    //   // getNFT(vault);
+    // });
   }, [myVaults]);
   return (
     <Box>

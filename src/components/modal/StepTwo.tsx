@@ -3,7 +3,12 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
+// import { OpenSeaSDK, Network } from "opensea-js";
+import { ethers } from "ethers";
+import { Seaport } from "@opensea/seaport-js";
+// import { ItemType } from "@opensea/seaport-js/lib/constants";
+// import axios from "axios";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,15 +17,31 @@ interface StepProps {
   tokenMap: any;
   onDataFromChild: (data: number) => void;
 }
+// const url =
+//   "https://testnets-api.opensea.io/v2/orders/goerli/seaport/listings?limit=1";
+
 const StepTwo: React.FC<StepProps> = ({
   modalChildState,
   tokenMap,
   onDataFromChild,
 }) => {
-  function handleClick() {
-    const data = 3;
-    onDataFromChild(data);
-  }
+  // function handleClick() {
+  //   const data = 3;
+  //   onDataFromChild(data);
+  // }
+  console.log(onDataFromChild);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  console.log(signer);
+
+  const seaport = new Seaport(signer);
+  //console.log(seaport);
+
+  const handleListing = async () => {
+    console.log(seaport);
+    console.log(signer);
+  };
   return (
     <Box sx={{ color: "white" }}>
       <Box sx={{}}>
@@ -229,7 +250,7 @@ const StepTwo: React.FC<StepProps> = ({
         </CardContent>
       </Card>{" "}
       <Button
-        onClick={handleClick}
+        onClick={handleListing}
         sx={{
           background:
             "linear-gradient(119.96deg, rgba(255, 255, 255, 0.1) 26.6%, rgba(255, 255, 255, 0) 64.62%)",

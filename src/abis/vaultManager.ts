@@ -655,15 +655,42 @@ export const abi = [
               },
               {
                 internalType: "uint256",
-                name: "currentCollateralPercentage",
+                name: "collateralValue",
                 type: "uint256",
               },
               {
                 components: [
                   {
-                    internalType: "bytes32",
-                    name: "symbol",
-                    type: "bytes32",
+                    components: [
+                      {
+                        internalType: "bytes32",
+                        name: "symbol",
+                        type: "bytes32",
+                      },
+                      {
+                        internalType: "address",
+                        name: "addr",
+                        type: "address",
+                      },
+                      {
+                        internalType: "uint8",
+                        name: "dec",
+                        type: "uint8",
+                      },
+                      {
+                        internalType: "address",
+                        name: "clAddr",
+                        type: "address",
+                      },
+                      {
+                        internalType: "uint8",
+                        name: "clDec",
+                        type: "uint8",
+                      },
+                    ],
+                    internalType: "struct ITokenManager.Token",
+                    name: "token",
+                    type: "tuple",
                   },
                   {
                     internalType: "uint256",

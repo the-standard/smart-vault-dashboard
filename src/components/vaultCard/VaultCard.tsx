@@ -50,7 +50,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //call mint function and mint a smart vault NFT
 
   const { config } = usePrepareContractWrite({
-    address: "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+    address: "0xbF615e590EC00140d522A721251645c65642de58",
     abi: abi,
     functionName: "mint",
   });

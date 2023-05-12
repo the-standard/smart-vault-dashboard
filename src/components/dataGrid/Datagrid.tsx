@@ -6,9 +6,7 @@ import "../../styles/glowingRed.css";
 import { ethers } from "ethers";
 import abi from "../../abis/vaultManager.ts";
 import { useEffect, useRef, useState } from "react";
-import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { Typography } from "@mui/material";
 // import ManageSteps from "../ManageSteps.tsx";
 import ManageSteps from "../modal/ManageSteps.tsx";
 
@@ -33,7 +31,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0xbE70d41FB3505385c01429cbcCB1943646Db344f",
+      "0xbF615e590EC00140d522A721251645c65642de58",
       abi,
       signer
     );
@@ -76,11 +74,13 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     console.log("tokenToId real", tokenToId);
     if (tokenToId.length > 0) {
       setResolved(true);
+      console.log(resolved);
     }
     console.log(tokenToNFTMap);
   }, [tokenToId]);
 
   console.log("vaults", vaults);
+  // console.log("vault sth", ethers.BigNumber.from(vaults[0][1]).toNumber());
 
   const renderSlider = (_params: GridRenderCellParams, step: number) => {
     return (
@@ -163,6 +163,9 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
       background:#0C0C0C !important;
       color:white !important;
     }
+    .MuiDataGrid-row{
+      margin-bottom:15px !important;
+    }
   `;
 
   const columns: GridColDef[] = [
@@ -225,68 +228,6 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
       step: vault[3],
     };
   });
-
-  const rows = [
-    {
-      id: 1,
-      vaultID: "Snow",
-      vaultNFT: "Jon",
-      ratio: "35%",
-      debt: "1000",
-      step: 5,
-    },
-    {
-      id: 2,
-      vaultID: "Lannister",
-      vaultNFT: "Cersei",
-      ratio: "42",
-      debt: "1000",
-      step: 50,
-    },
-    {
-      id: 3,
-      vaultID: "Lannister",
-      vaultNFT: "Jaime",
-      ratio: "45",
-      step: 10,
-    },
-    { id: 4, vaultID: "Stark", vaultNFT: "Arya", ratio: "16", step: 20 },
-    {
-      id: 5,
-      vaultID: "Targaryen",
-      vaultNFT: "Daenerys",
-      ratio: null,
-      step: 5,
-    },
-    {
-      id: 6,
-      vaultID: "Melisandre",
-      vaultNFT: null,
-      ratio: "150",
-      step: 30,
-    },
-    {
-      id: 7,
-      vaultID: "Clifford",
-      vaultNFT: "Ferrara",
-      ratio: "44",
-      step: 10,
-    },
-    {
-      id: 8,
-      vaultID: "Frances",
-      vaultNFT: "Rossini",
-      ratio: "36",
-      step: 5,
-    },
-    {
-      id: 9,
-      vaultID: "Roxie",
-      vaultNFT: "Harvey",
-      ratio: "65",
-      step: 50,
-    },
-  ];
 
   return (
     <Box
