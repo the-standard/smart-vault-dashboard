@@ -22,6 +22,8 @@ import HomePage from "./pages/HomePage.tsx";
 import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import { Box } from "@mui/material";
+import { Routes, Route, Outlet, Link } from "react-router-dom";
+import History from "./pages/History.tsx";
 
 function App() {
   return (
@@ -35,7 +37,10 @@ function App() {
     >
       <WagmiConfig config={wagmiConfig}>
         <Navbar />
-        <HomePage />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="history" element={<History />} />
+        </Routes>
         <Footer />
       </WagmiConfig>
 

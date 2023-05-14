@@ -11,6 +11,7 @@ import tststakinglogo2 from "../assets/2ndtststakinglogo.svg";
 import liquidatorslogo2 from "../assets/2ndliquidatorslogo.svg";
 import historylogo2 from "../assets/2ndhistorylogo.svg";
 import borrowinglogo2 from "../assets/2ndborrowinglogo.svg";
+import { Link } from "react-router-dom";
 
 const menuItems = [
   {
@@ -32,11 +33,13 @@ const menuItems = [
     text: "History",
     icon: historylogo,
     icon2: historylogo2,
+    route: "history",
   },
   {
     text: "Borrowing via Smart Vaults",
     icon: borrowinglogo,
     icon2: borrowinglogo2,
+    route: "",
   },
 ];
 
@@ -62,14 +65,17 @@ const NavbarMenu = () => {
       }}
     >
       {menuItems.map((item, index) => (
-        <MenuItem
-          key={index}
-          text={item.text}
-          icon={item.icon}
-          icon2={item.icon2}
-          isActive={activeIndex === index}
-          handleClick={() => handleItemClick(index)}
-        />
+        <Link to={item.route ? `/${item.route}` : "/"}>
+          {" "}
+          <MenuItem
+            key={index}
+            text={item.text}
+            icon={item.icon}
+            icon2={item.icon2}
+            isActive={activeIndex === index}
+            handleClick={() => handleItemClick(index)}
+          />
+        </Link>
       ))}
     </Box>
   );

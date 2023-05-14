@@ -110,10 +110,6 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
             margin: "0 1rem",
           }}
           className="glowingCard"
-          onClick={() => {
-            handleManageClick();
-            handleOpen();
-          }}
         >
           Manage
         </button>
@@ -124,7 +120,10 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
             margin: "0 1rem",
           }}
           className="glowingCardRed"
-          onClick={() => console.log("sell")}
+          onClick={() => {
+            handleManageClick();
+            handleOpen();
+          }}
         >
           Sell NFT
         </button>
