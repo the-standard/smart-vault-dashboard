@@ -18,28 +18,33 @@ const menuItems = [
     text: "sEuro IBCO",
     icon: seuroibcologo,
     icon2: seuroibcologo2,
+    isWorking: false,
   },
   {
     text: "TST Staking",
     icon: tststakinglogo,
     icon2: tststakinglogo2,
+    isWorking: false,
   },
   {
     text: "Liquidators",
     icon: liquidatorslogo,
     icon2: liquidatorslogo2,
+    isWorking: false,
   },
   {
     text: "History",
     icon: historylogo,
     icon2: historylogo2,
     route: "history",
+    isWorking: true,
   },
   {
     text: "Borrowing via Smart Vaults",
     icon: borrowinglogo,
     icon2: borrowinglogo2,
     route: "",
+    isWorking: true,
   },
 ];
 
@@ -65,13 +70,21 @@ const NavbarMenu = () => {
       }}
     >
       {menuItems.map((item, index) => (
-        <Link key={index} to={item.route ? `/${item.route}` : "/"}>
+        <Link
+          style={{
+            textDecoration: "none",
+            color: "white",
+          }}
+          key={index}
+          to={item.route ? `/${item.route}` : "/"}
+        >
           {" "}
           <MenuItem
             text={item.text}
             icon={item.icon}
             icon2={item.icon2}
             isActive={activeIndex === index}
+            isWorking={item.isWorking}
             handleClick={() => handleItemClick(index)}
           />
         </Link>

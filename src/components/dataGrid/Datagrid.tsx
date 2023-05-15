@@ -10,6 +10,7 @@ import Modal from "@mui/material/Modal";
 // import ManageSteps from "../ManageSteps.tsx";
 import ManageSteps from "../modal/ManageSteps.tsx";
 import { styles } from "../../styles/dataGridStyles.ts";
+// import { useAccount, useConnect } from "wagmi";
 
 interface DataGridDemoProps {
   vaults: any[];

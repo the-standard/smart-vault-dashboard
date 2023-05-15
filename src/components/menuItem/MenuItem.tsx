@@ -7,6 +7,7 @@ interface MenuItemProps {
   icon: string;
   icon2: string;
   isActive: boolean;
+  isWorking: boolean;
   handleClick: () => void;
 }
 
@@ -16,6 +17,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
   icon2,
   isActive,
   handleClick,
+  isWorking,
 }) => {
   return (
     <Box
