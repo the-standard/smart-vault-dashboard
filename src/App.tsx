@@ -24,6 +24,7 @@ import Footer from "./components/Footer.tsx";
 import { Box } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import History from "./pages/History.tsx";
+import Collateral from "./pages/collateral/Collateral.tsx";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="history" element={<History />} />
+          <Route path="collateral" element={<Collateral />} />
         </Routes>
         <Footer />
       </WagmiConfig>

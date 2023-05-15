@@ -8,9 +8,11 @@ import abi from "../../abis/vaultManager.ts";
 import { useEffect, useRef, useState } from "react";
 import Modal from "@mui/material/Modal";
 // import ManageSteps from "../ManageSteps.tsx";
-import ManageSteps from "../modal/ManageSteps.tsx";
+import ManageSteps from "../listNFTModal/ManageSteps.tsx";
 import { styles } from "../../styles/dataGridStyles.ts";
 // import { useAccount, useConnect } from "wagmi";
+import { Link } from "react-router-dom";
+import { useVaultStore } from "../../store/Store.ts";
 
 interface DataGridDemoProps {
   vaults: any[];
@@ -96,6 +98,8 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     const handleManageClick = () => {
       console.log(params.row.vaultID);
       setModalChildState(params.row.vaultID);
+      const { vault, getVaultID } = useVaultStore.getState();
+      getVaultID(params.row.vaultID);
     };
 
     return (
@@ -105,16 +109,18 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
           flexDirection: "row",
         }}
       >
-        <button
-          style={{
-            height: "2rem",
-            width: "10rem",
-            margin: "0 1rem",
-          }}
-          className="glowingCard"
-        >
-          Manage
-        </button>
+        <Link to="Collateral" onClick={handleManageClick}>
+          <button
+            style={{
+              height: "2rem",
+              width: "10rem",
+              margin: "0 1rem",
+            }}
+            className="glowingCard"
+          >
+            Manage
+          </button>
+        </Link>
         <button
           style={{
             height: "2rem",
@@ -123,7 +129,6 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
           }}
           className="glowingCardRed"
           onClick={() => {
-            handleManageClick();
             handleOpen();
           }}
         >
