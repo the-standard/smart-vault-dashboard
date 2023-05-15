@@ -113,6 +113,7 @@ const History = () => {
             background: "transparent",
             width: "20rem",
             height: "1.5rem",
+            color: "white",
           }}
           type="text"
           placeholder="Search"
@@ -132,7 +133,7 @@ const History = () => {
       <DataGrid
         sx={{
           height: "90%",
-          background: "red",
+          background: "rgba(26, 17, 17, 0.07)",
         }}
         rows={rows}
         columns={columns}

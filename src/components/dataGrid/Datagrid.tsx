@@ -191,18 +191,46 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
         ethers.BigNumber.from(vault[0]).toNumber()
       ),
       vaultID: ethers.BigNumber.from(vault[0]).toNumber(),
-      ratio: vault[1],
-      debt: vault[2],
-      step: vault[3],
+      ratio: ethers.BigNumber.from(vault[5][0]).toNumber(),
+      debt: ethers.BigNumber.from(vault[5][1]).toNumber(),
+      step: 55,
+      // step:
+      // ethers.BigNumber.from(vault[5][2]).toNumber() /
+      // ethers.BigNumber.from(vault[5][1]).toNumber(),
     };
   });
 
   return (
     <Box
       sx={{
-        padding: "0 12%",
+        margin: "3% 12%",
+        padding: "3%",
+        borderRadius: "16px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(5px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+        background: "rgba(255, 255, 255, 0.07)",
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <input
+          style={{
+            background: "transparent",
+            width: "100%",
+            height: "1.5rem",
+            color: "white",
+          }}
+          type="text"
+          placeholder="Search"
+        />
+      </Box>
       <Box
         sx={{
           height: 400,
