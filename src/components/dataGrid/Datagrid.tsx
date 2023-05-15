@@ -165,6 +165,10 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     .MuiDataGrid-row{
       margin-bottom:15px !important;
     }
+    .MuiDataGrid-root{
+      border: none;
+  
+    }
   `;
 
   const columns: GridColDef[] = [

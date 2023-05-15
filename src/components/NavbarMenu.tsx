@@ -65,10 +65,9 @@ const NavbarMenu = () => {
       }}
     >
       {menuItems.map((item, index) => (
-        <Link to={item.route ? `/${item.route}` : "/"}>
+        <Link key={index} to={item.route ? `/${item.route}` : "/"}>
           {" "}
           <MenuItem
-            key={index}
             text={item.text}
             icon={item.icon}
             icon2={item.icon2}

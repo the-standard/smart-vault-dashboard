@@ -32,13 +32,15 @@ const StepTwo: React.FC<StepProps> = ({
   console.log(onDataFromChild);
 
   const { address, isConnecting, isDisconnected } = useAccount();
+  console.log(isConnecting);
+  console.log(isDisconnected);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   console.log(signer);
 
   const seaport = new Seaport(signer, { seaportVersion: "1.4" }); //console.log(seaport);
-  const [myPrices, setMyPrices] = React.useState<object[]>([]);
+  // const [myPrices, setMyPrices] = React.useState<object[]>([]);
 
   function calculatePrices(listing_price: number, royalty: number) {
     try {
@@ -141,7 +143,7 @@ const StepTwo: React.FC<StepProps> = ({
     calculatePrices(1, 1);
     console.log(prices);
 
-    const counter = 0;
+    // const counter = 0;
     const signature = await seaport.signOrder(
       {
         counter: 0,
