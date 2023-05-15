@@ -130,6 +130,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
           className="glowingCardRed"
           onClick={() => {
             handleOpen();
+            handleManageClick();
           }}
         >
           Sell NFT

@@ -9,7 +9,7 @@ interface ModalProps {
   tokenMap: any;
 }
 
-const Modal2: React.FC<ModalProps> = ({ modalChildState, tokenMap }) => {
+const ManageSteps: React.FC<ModalProps> = ({ modalChildState, tokenMap }) => {
   const [dataFromChild, setDataFromChild] = useState<number>(1);
   const [state, setState] = useState<number>(1);
 
@@ -57,4 +57,4 @@ const Modal2: React.FC<ModalProps> = ({ modalChildState, tokenMap }) => {
     </div>
   );
 };
-export default Modal2;
+export default ManageSteps;
