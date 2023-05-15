@@ -1,6 +1,7 @@
 import { Network, Alchemy, AssetTransfersCategory } from "alchemy-sdk";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
+import { styles } from "../styles/dataGridStyles";
 
 const History = () => {
   const config = {
@@ -37,41 +38,6 @@ const History = () => {
   };
 
   foo();
-
-  const styles = `
-  .no-border .MuiDataGrid-cell {
-    border: none;
-  }
-  .css-wop1k0-MuiDataGrid-footerContainer{
-    border: none;
-  }
-  .css-1iyq7zh-MuiDataGrid-columnHeaders{
-    border: none;
-  }
-  .css-wop1k0-MuiDataGrid-footerContainer{
-    background:#0C0C0C !important;
-  }
-  .css-levciy-MuiTablePagination-displayedRows{
-    color:white !important;
-
-  }
-  .MuiTablePagination-actions{
-    color:white !important;
-  }
-  .css-ptiqhd-MuiSvgIcon-root{
-    color:white !important;
-  }
-  .MuiDataGrid-root{
-    background:#0C0C0C !important;
-    color:white !important;
-  }
-  .MuiDataGrid-row{
-    margin-bottom:15px !important;
-  }
-  .MuiDataGrid-root{
-    border: none;
-  }
-`;
 
   const getRowClassName = (_params: any) => {
     return "no-border";
@@ -123,13 +89,51 @@ const History = () => {
   return (
     <Box
       sx={{
-        padding: "0 12%",
-        marginTop: "50px",
+        margin: "3% 9%",
+        padding: "3%",
+        // marginTop: "50px",
+        borderRadius: "16px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(5px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+        background: "rgba(255, 255, 255, 0.07)",
+        height: "100vh",
       }}
-      style={{ height: 500, width: "auto" }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <input
+          style={{
+            background: "transparent",
+            width: "20rem",
+            height: "1.5rem",
+          }}
+          type="text"
+          placeholder="Search"
+        />
+        <button
+          style={{
+            height: "2rem",
+            width: "10rem",
+            margin: "0 1rem",
+          }}
+          className="glowingCard"
+        >
+          + Add product
+        </button>
+      </Box>
       <style>{styles}</style>
       <DataGrid
+        sx={{
+          height: "90%",
+          background: "red",
+        }}
         rows={rows}
         columns={columns}
         getRowClassName={getRowClassName}

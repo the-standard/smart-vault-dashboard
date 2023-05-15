@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import Modal from "@mui/material/Modal";
 // import ManageSteps from "../ManageSteps.tsx";
 import ManageSteps from "../modal/ManageSteps.tsx";
+import { styles } from "../../styles/dataGridStyles.ts";
 
 interface DataGridDemoProps {
   vaults: any[];
@@ -134,42 +135,6 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   const getRowClassName = (_params: any) => {
     return "no-border";
   };
-
-  const styles = `
-    .no-border .MuiDataGrid-cell {
-      border: none;
-    }
-    .css-wop1k0-MuiDataGrid-footerContainer{
-      border: none;
-    }
-    .css-1iyq7zh-MuiDataGrid-columnHeaders{
-      border: none;
-    }
-    .css-wop1k0-MuiDataGrid-footerContainer{
-      background:#0C0C0C !important;
-    }
-    .css-levciy-MuiTablePagination-displayedRows{
-      color:white !important;
-
-    }
-    .MuiTablePagination-actions{
-      color:white !important;
-    }
-    .css-ptiqhd-MuiSvgIcon-root{
-      color:white !important;
-    }
-    .MuiDataGrid-root{
-      background:#0C0C0C !important;
-      color:white !important;
-    }
-    .MuiDataGrid-row{
-      margin-bottom:15px !important;
-    }
-    .MuiDataGrid-root{
-      border: none;
-  
-    }
-  `;
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "#", width: 90 },
