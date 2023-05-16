@@ -11,6 +11,19 @@ import { styles } from "../styles/dataGridStyles";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import abi from "../abis/vaultManager.ts";
+import axios from "axios";
+
+import Moralis from "moralis";
+import { EvmChain } from "@moralisweb3/common-evm-utils";
+
+const runApp = async () => {
+  await Moralis.start({
+    apiKey: import.meta.env.VITE_MORALIS_API_KEY,
+    // ...and any other configuration
+  });
+};
+
+runApp();
 
 const History = () => {
   // //user wallet address
@@ -38,13 +51,60 @@ const History = () => {
     return vaults;
   };
 
-  const getContractTransactionHistory = async (userNfts: any) => {
+  const getVaultTransactionHistory = async (userVaults: any) => {
     //Assign the contract address to a variable
 
-    userNfts.forEach((nft: any) => {
-      console.log(nft);
-      getContractTransferHistory(nft.vaultAddress);
+    userVaults.forEach((vault: any) => {
+      console.log(vault);
+      getTransfersToAddress(vault.vaultAddress);
     });
+  };
+
+  const getTransfersToAddress = async (_address: any) => {
+    const address = _address;
+
+    const chain = EvmChain.GOERLI;
+
+    const response = await Moralis.EvmApi.transaction.getWalletTransactions({
+      address,
+      chain,
+    });
+
+    console.log(response.toJSON());
+    //alchemy api that also returns the token type, like ETH, but does not provide block timestamp
+    // const options = {
+    //   method: "POST",
+    //   url: "https://eth-goerli.g.alchemy.com/v2/lR_ZMR6YvBelSN9gNw4R49-Nhm6-JcmO",
+    //   headers: {
+    //     accept: "application/json",
+    //     "content-type": "application/json",
+    //   },
+    //   data: {
+    //     id: 1,
+    //     jsonrpc: "2.0",
+    //     method: "alchemy_getAssetTransfers",
+    //     params: [
+    //       {
+    //         fromBlock: "0x0",
+    //         toBlock: "latest",
+    //         toAddress: "0xE7903CE9191D6e13fbF4dD7b183F6d0d961e778D",
+    //         category: ["external"],
+    //         withMetadata: false,
+    //         excludeZeroValue: true,
+    //         maxCount: "0x3e8",
+    //       },
+    //     ],
+    //   },
+    // };
+
+    // axios
+    //   .request(options)
+    //   .then(function (response) {
+    //     console.log(response.data);
+    //   })
+    //   .catch(function (error) {
+    //     console.error(error);
+    //   });
   };
 
   useEffect(() => {
@@ -53,28 +113,9 @@ const History = () => {
 
   useEffect(() => {
     if (nfts) {
-      getContractTransactionHistory(nfts);
+      getVaultTransactionHistory(nfts);
     }
   }, [nfts]);
-
-  const getContractTransferHistory = async (address: any) => {
-    //Assign the contract address to a variable
-    const toAddress = address;
-
-    //The response fetches the transactions the specified addresses.
-    const response = await alchemy.core.getAssetTransfers({
-      fromBlock: "0x0",
-      fromAddress: toAddress,
-      // toAddress: toAddress,
-      excludeZeroValue: true,
-      category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.ERC721],
-    });
-
-    //Logging the response to the console
-    console.log(response);
-  };
-
-  // getContractTransferHistory();
 
   const getRowClassName = (_params: any) => {
     return "no-border";
