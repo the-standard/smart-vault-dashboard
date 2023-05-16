@@ -1,34 +1,71 @@
-import { Network, Alchemy, AssetTransfersCategory } from "alchemy-sdk";
+import {
+  Network,
+  Alchemy,
+  AssetTransfersCategory,
+  OwnedNftsResponse,
+} from "alchemy-sdk";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import { styles } from "../styles/dataGridStyles";
+// import { useAccount } from "wagmi";
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import abi from "../abis/vaultManager.ts";
 
 const History = () => {
+  // //user wallet address
+  // const { address, isConnecting, isDisconnected } = useAccount();
+  // console.log(address);
+  //nftforowner state
+  const [nfts, setNfts] = useState();
   const config = {
-    apiKey: "7u8XX7fS7FzYP78RV1sk3WzNmTpZWDSH", // Replace with your Alchemy API Key.
+    apiKey: import.meta.env.VITE_ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
     network: Network.ETH_GOERLI, // Replace with your network.
   };
 
   const alchemy = new Alchemy(config);
+  const getVaults = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      "0xbF615e590EC00140d522A721251645c65642de58",
+      abi,
+      signer
+    );
+    const vaults = await contract.vaults();
+    console.log("vaults", vaults);
+    setNfts(vaults);
+    return vaults;
+  };
 
-  // Print all NFTs returned in the response:
-  async function getNftsForOwner() {
-    const owner = "0x600044FE9A152C27f337BbB23803dC6A68E3eFB0";
-    const nfts = await alchemy.nft.getNftsForOwner(owner);
-    console.log(nfts);
-  }
-
-  getNftsForOwner();
-
-  const foo = async () => {
+  const getContractTransactionHistory = async (userNfts: any) => {
     //Assign the contract address to a variable
-    const toAddress = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266";
+
+    userNfts.forEach((nft: any) => {
+      console.log(nft);
+      getContractTransferHistory(nft.vaultAddress);
+    });
+  };
+
+  useEffect(() => {
+    getVaults();
+  }, []);
+
+  useEffect(() => {
+    if (nfts) {
+      getContractTransactionHistory(nfts);
+    }
+  }, [nfts]);
+
+  const getContractTransferHistory = async (address: any) => {
+    //Assign the contract address to a variable
+    const toAddress = address;
 
     //The response fetches the transactions the specified addresses.
     const response = await alchemy.core.getAssetTransfers({
       fromBlock: "0x0",
       fromAddress: toAddress,
-      toAddress: toAddress,
+      // toAddress: toAddress,
       excludeZeroValue: true,
       category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.ERC721],
     });
@@ -37,7 +74,7 @@ const History = () => {
     console.log(response);
   };
 
-  foo();
+  // getContractTransferHistory();
 
   const getRowClassName = (_params: any) => {
     return "no-border";

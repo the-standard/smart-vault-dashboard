@@ -5,14 +5,7 @@
   margin: 0; */
 }
 body {
-  background: rgb(10, 107, 140);
-  background: linear-gradient(
-    90deg,
-    rgba(10, 107, 140, 1) 0%,
-    rgba(2, 0, 36, 1) 21%,
-    rgba(18, 18, 43, 1) 87%,
-    rgba(0, 212, 255, 1) 100%
-  );
+  background: linear-gradient(180deg, #434242 0%, #242424 39.96%);
   color: white;
   padding: 0;
   margin: 0;

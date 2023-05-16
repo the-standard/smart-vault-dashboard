@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { useVaultStore } from "../../store/Store";
+import { useVaultIdStore } from "../../store/Store";
 
 const Collateral = () => {
-  const { vault, getVaultID } = useVaultStore();
+  const { vault, getVaultID } = useVaultIdStore();
 
   useEffect(() => {
     console.log(vault + "my vault update");

@@ -12,7 +12,7 @@ import ManageSteps from "../listNFTModal/ManageSteps.tsx";
 import { styles } from "../../styles/dataGridStyles.ts";
 // import { useAccount, useConnect } from "wagmi";
 import { Link } from "react-router-dom";
-import { useVaultStore } from "../../store/Store.ts";
+import { useVaultIdStore } from "../../store/Store.ts";
 
 interface DataGridDemoProps {
   vaults: any[];
@@ -98,7 +98,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     const handleManageClick = () => {
       console.log(params.row.vaultID);
       setModalChildState(params.row.vaultID);
-      const { vault, getVaultID } = useVaultStore.getState();
+      const { vault, getVaultID } = useVaultIdStore.getState();
       getVaultID(params.row.vaultID);
     };
 
