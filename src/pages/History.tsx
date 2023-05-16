@@ -70,7 +70,7 @@ const History = () => {
       chain,
     });
 
-    console.log(response.toJSON());
+    console.log(response.toJSON().result);
     //alchemy api that also returns the token type, like ETH, but does not provide block timestamp
     // const options = {
     //   method: "POST",

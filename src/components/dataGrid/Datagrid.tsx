@@ -45,16 +45,16 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     console.log(tokenDecoded);
 
     tokenToNFTMap.current.set(
-      ethers.BigNumber.from(vault[0]).toNumber(),
+      ethers.BigNumber.from(vault[0]).toString(),
       tokenDecoded.image
     );
 
     tokenMap.current.set(
-      ethers.BigNumber.from(vault[0]).toNumber(),
+      ethers.BigNumber.from(vault[0]).toString(),
       tokenDecoded
     );
     return {
-      tokenId: ethers.BigNumber.from(vault[0]).toNumber(),
+      tokenId: ethers.BigNumber.from(vault[0]).toString(),
       image: tokenDecoded.image,
     };
   }
@@ -195,11 +195,11 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     return {
       id: index + 1,
       vaultNFT: tokenToNFTMap.current.get(
-        ethers.BigNumber.from(vault[0]).toNumber()
+        ethers.BigNumber.from(vault[0]).toString()
       ),
-      vaultID: ethers.BigNumber.from(vault[0]).toNumber(),
-      ratio: ethers.BigNumber.from(vault[5][0]).toNumber(),
-      debt: ethers.BigNumber.from(vault[5][1]).toNumber(),
+      vaultID: ethers.BigNumber.from(vault[0]).toString(),
+      ratio: ethers.BigNumber.from(vault[5][0]).toString(),
+      debt: ethers.BigNumber.from(vault[5][1]).toString(),
       step: 55,
       // step:
       // ethers.BigNumber.from(vault[5][2]).toNumber() /
