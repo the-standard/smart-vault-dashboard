@@ -3,6 +3,8 @@ import { useVaultIdStore } from "../store/Store";
 import { Box } from "@mui/material";
 import QRicon from "../assets/qricon.png";
 import EmptyCard from "../components/collateral/EmptyCard";
+import SmallCard from "../components/collateral/SmallCard";
+import HalfChart from "../components/collateral/HalfChart";
 
 const Collateral = () => {
   const { vault, getVaultID } = useVaultIdStore();
@@ -11,6 +13,24 @@ const Collateral = () => {
   const handleClick = (element: any) => {
     setActiveElement(element);
   };
+
+  const smallCardDummyValues = [
+    {
+      title: "Total Collateral",
+      value: 2709273,
+      type: "sEURO",
+    },
+    {
+      title: "Debt",
+      value: 8273,
+      type: "sEURO",
+    },
+    {
+      title: "Vault Liquidation",
+      value: 8123273,
+      type: "sEURO",
+    },
+  ];
 
   useEffect(() => {
     console.log(vault + "my vault update");
@@ -27,7 +47,8 @@ const Collateral = () => {
         border: "1px solid rgba(52, 52, 52, 0.3)",
         boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
         borderRadius: "10px 10px 0px 0px",
-        height: "100vh",
+        minHeight: "100vh",
+        height: "100%",
       }}
     >
       {/* divide into 2 columns */}
@@ -148,7 +169,7 @@ const Collateral = () => {
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: "flex-start",
         }}
       >
         <Box>
@@ -156,10 +177,12 @@ const Collateral = () => {
           {/*  row 1 */}
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "flex-start",
+              // display: "flex",
+              // flexDirection: "column",
+              // justifyContent: "center",
+              // alignItems: "flex-start",
+              // border: "1px solid red",
+              width: "30rem",
             }}
           >
             <Box
@@ -169,7 +192,7 @@ const Collateral = () => {
                   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
                 borderRadius: "6.24932px",
                 cursor: "pointer",
-                width: "100%",
+                width: "auto",
               }}
             >
               <Box
@@ -200,10 +223,25 @@ const Collateral = () => {
             border: "1px solid rgba(52, 52, 52, 0.3)",
             boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
             borderRadius: "10px 10px 0px 0px",
-            width: "100%",
-            height: "10rem",
+            width: { sm: "auto", md: "50%" },
           }}
-        ></Box>
+        >
+          {/* <SmallCard /> */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            {smallCardDummyValues.map((item, index) => (
+              <SmallCard key={index} {...item} />
+            ))}
+            <HalfChart />
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

@@ -87,8 +87,9 @@ const EmptyCard = () => {
           borderBottom: "1px solid #8E9BAE",
           justifyContent: "space-around",
           alignItems: "center",
-          width: "70%",
+          width: "100%",
           height: "3rem",
+          padding: "0 1rem",
         }}
       >
         <Box>$0.00</Box>
@@ -96,13 +97,18 @@ const EmptyCard = () => {
           sx={{
             width: "2rem",
             borderBottom: "1px solid #8E9BAE",
+            margin: "0 1rem",
           }}
         ></Box>
         <Box>0.00%</Box>
         <img
           src={closeIcon}
           alt="close"
-          style={{ cursor: "pointer", alignSelf: "flex-start" }}
+          style={{
+            cursor: "pointer",
+            alignSelf: "flex-start",
+            marginLeft: "2rem",
+          }}
         />
       </Box>
     </Box>
