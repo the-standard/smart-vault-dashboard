@@ -24,7 +24,7 @@ import Footer from "./components/Footer.tsx";
 import { Box } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import History from "./pages/History.tsx";
-import Collateral from "./pages/collateral/Collateral.tsx";
+import Collateral from "./pages/Collateral.tsx";
 
 function App() {
   return (
