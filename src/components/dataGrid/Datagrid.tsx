@@ -212,11 +212,11 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
       sx={{
         margin: "3% 12%",
         padding: "3%",
-        borderRadius: "16px",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(5px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        background: "rgba(255, 255, 255, 0.07)",
+        background:
+          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+        border: "1px solid rgba(52, 52, 52, 0.3)",
+        boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+        borderRadius: "10px 10px 0px 0px",
       }}
     >
       <Box
