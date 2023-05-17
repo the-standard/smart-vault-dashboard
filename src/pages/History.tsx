@@ -32,6 +32,8 @@ const History = () => {
   //nftforowner state
   const [nfts, setNfts] = useState<any>();
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [matchedTransactions, setMatchedTransactions] = useState<any[]>([]);
+
   const config = {
     apiKey: import.meta.env.VITE_ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
     network: Network.ETH_GOERLI, // Replace with your network.
@@ -61,8 +63,6 @@ const History = () => {
       getTransfersToAddress(vault.vaultAddress);
     });
   };
-
-  const [matchedTransactions, setMatchedTransactions] = useState<any[]>([]);
 
   const getTransfersToAddress = async (_address: any) => {
     const address = _address;
@@ -121,6 +121,8 @@ const History = () => {
     });
     // console.log(nfts);
     console.log(matchedObjects);
+    console.log(matchedObjects.length);
+    setMatchedTransactions(matchedObjects);
 
     //alchemy api that also returns the token type, like ETH, but does not provide block timestamp
     // const options = {
@@ -161,6 +163,12 @@ const History = () => {
   useEffect(() => {
     getVaults();
   }, []);
+
+  useEffect(() => {
+    if (transactions) {
+      console.log(transactions);
+    }
+  }, [transactions]);
 
   useEffect(() => {
     if (nfts) {
@@ -215,6 +223,33 @@ const History = () => {
     },
   ];
 
+  function returnDataGrid() {
+    if (matchedTransactions.length > 0) {
+      return (
+        <DataGrid
+          sx={{
+            height: "90%",
+            background: "rgba(26, 17, 17, 0.07)",
+          }}
+          rows={rows}
+          columns={columns}
+          getRowClassName={getRowClassName}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+        />
+      );
+    } else {
+      return <h4>Loading...</h4>;
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -259,7 +294,7 @@ const History = () => {
         </button>
       </Box>
       <style>{styles}</style>
-      <DataGrid
+      {/* <DataGrid
         sx={{
           height: "90%",
           background: "rgba(26, 17, 17, 0.07)",
@@ -276,7 +311,8 @@ const History = () => {
         }}
         pageSizeOptions={[5]}
         disableRowSelectionOnClick
-      />
+      /> */}
+      {returnDataGrid()}
     </Box>
   );
 };
