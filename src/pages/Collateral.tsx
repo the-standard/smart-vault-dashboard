@@ -143,47 +143,68 @@ const Collateral = () => {
         </Box>
       </Box>
       {/*  column 2 */}
-      <Box>
-        {/* divide into 2 rows */}
-        {/*  row 1 */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "flex-start",
-          }}
-        >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          {/* divide into 2 rows */}
+          {/*  row 1 */}
           <Box
             sx={{
-              background: " rgba(18, 18, 18, 0.5)",
-              boxShadow:
-                " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-              borderRadius: "6.24932px",
-              cursor: "pointer",
-              width: "40%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              border: "1px solid rgba(245, 13, 13, 0.3)",
             }}
           >
             <Box
               sx={{
-                margin: "2px",
-                padding: "5px",
+                background: " rgba(18, 18, 18, 0.5)",
+                boxShadow:
+                  " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
+                borderRadius: "6.24932px",
+                cursor: "pointer",
+                width: "100%",
               }}
-              className="glowingCard"
             >
-              + Deposit Collateral{" "}
-              <img
-                style={{
-                  marginLeft: "1.5rem",
+              <Box
+                sx={{
+                  margin: "2px",
+                  padding: "5px",
                 }}
-                src={QRicon}
-                alt="qricon"
-              />
+                className="glowingCard"
+              >
+                + Deposit Collateral{" "}
+                <img
+                  style={{
+                    marginLeft: "1.5rem",
+                  }}
+                  src={QRicon}
+                  alt="qricon"
+                />
+              </Box>
             </Box>
+            <EmptyCard />
           </Box>
-          <EmptyCard />
         </Box>
         {/*  row 2 */}
+        <Box
+          sx={{
+            borderRadius: "16px",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(5px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            background: "rgba(255, 255, 255, 0.07)",
+            width: "100%",
+            height: "10rem",
+          }}
+        ></Box>
       </Box>
     </Box>
   );

@@ -10,7 +10,7 @@ const EmptyCard = () => {
         backdropFilter: "blur(5px)",
         border: "1px solid rgba(255, 255, 255, 0.3)",
         background: "rgba(255, 255, 255, 0.07)",
-        width: "40%",
+        width: "auto",
         height: "10rem",
         padding: "1rem",
         marginTop: "0.5rem",
