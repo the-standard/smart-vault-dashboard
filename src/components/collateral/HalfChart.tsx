@@ -1,14 +1,15 @@
 import { Box } from "@mui/material";
 import React, { PureComponent } from "react";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
+  { name: "Group A", value: 100 },
+  { name: "Group B", value: 100 },
+  { name: "Group C", value: 100 },
+  { name: "Group D", value: 100 },
+  { name: "Group E", value: 100 },
 ];
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#7AFA3D", "#FF7A00", "#FE6434", "#E71836", "#E71836"];
 
 export default class Example extends PureComponent {
   static demoUrl =
@@ -19,18 +20,15 @@ export default class Example extends PureComponent {
       <Box
         sx={{
           height: "auto",
-
           display: "flex",
-
-          //   alignItems: "center",
           justifyContent: "center",
         }}
       >
         <PieChart width={800} height={400}>
           <Pie
             data={data}
-            cx={420}
-            cy={200}
+            cx="50%"
+            cy="50%"
             startAngle={180}
             endAngle={0}
             innerRadius={60}
@@ -43,9 +41,31 @@ export default class Example extends PureComponent {
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
+                filter={`url(#glow-${index})`}
               />
             ))}
           </Pie>
+          {data.map((_, index) => (
+            <defs key={`def-${index}`}>
+              <filter
+                id={`glow-${index}`}
+                x="-50%"
+                y="-50%"
+                width="200%"
+                height="200%"
+              >
+                <feGaussianBlur
+                  in="SourceGraphic"
+                  stdDeviation="4"
+                  result="blur"
+                />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+          ))}
         </PieChart>
       </Box>
     );
