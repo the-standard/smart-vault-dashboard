@@ -123,7 +123,6 @@ const History = () => {
     console.log(matchedObjects);
     console.log(matchedObjects.length);
     setMatchedTransactions(matchedObjects);
-    incrementCount();
 
     //alchemy api that also returns the token type, like ETH, but does not provide block timestamp
     // const options = {
@@ -164,34 +163,6 @@ const History = () => {
   useEffect(() => {
     getVaults();
   }, []);
-
-  // State variable example
-  const [count, setCount] = useState(0);
-
-  // Effect that runs whenever count changes
-  useEffect(() => {
-    // Your effect code here
-    console.log("Effect triggered");
-    console.log(matchedTransactions.length);
-
-    // Cleanup function (optional)
-    return () => {
-      console.log("Cleanup");
-    };
-  }, [count, matchedTransactions.length]); // <- Specify count as a dependency
-
-  // Function to update count
-  const incrementCount = () => {
-    setCount(count + 1);
-  };
-  const [bool, setBool] = useState(false);
-
-  useEffect(() => {
-    console.log("rendered for matching transactions");
-    console.log(matchedTransactions.length);
-    // Add your logic here to handle the rendering of your app based on the matchedTransactions state.
-    // This code will run whenever the matchedTransactions state changes.
-  }, [bool]);
 
   useEffect(() => {
     if (transactions) {
@@ -342,7 +313,6 @@ const History = () => {
         disableRowSelectionOnClick
       /> */}
       {returnDataGrid()}
-      <button onClick={() => setBool(!bool)}>Click me</button>
     </Box>
   );
 };
