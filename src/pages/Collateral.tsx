@@ -1,18 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { useVaultIdStore } from "../store/Store";
-import { Box } from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";
 import EmptyCard from "../components/collateral/EmptyCard";
 import SmallCard from "../components/collateral/SmallCard";
 import HalfChart from "../components/collateral/HalfChart";
+import QRCode from "react-qr-code";
+import abi from "../abis/vaultManager.ts";
+import { ethers } from "ethers";
 
 const Collateral = () => {
-  const { vault, getVaultID } = useVaultIdStore();
+  const { vaultID, getVaultID } = useVaultIdStore();
+  const [vaultAddress, setVaultAddress] = useState("");
   const [activeElement, setActiveElement] = useState(null);
+  //modal states
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleClick = (element: any) => {
     setActiveElement(element);
   };
+
+  const returnVaultID = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      "0xbF615e590EC00140d522A721251645c65642de58",
+      abi,
+      signer
+    );
+    const vaults = await contract.vaults();
+    console.log(vaults);
+    const filteredVaults = vaults.filter((vault: any, index: number) => {
+      const tokenId = ethers.BigNumber.from(vault[0]).toString();
+      //stringify it because the vaultID is a number initially
+      const stringifiedVaultID = vaultID.toString();
+      return tokenId === stringifiedVaultID;
+    });
+    console.log(filteredVaults[0][1]);
+    setVaultAddress(filteredVaults[0][1]);
+  };
+
+  useEffect(() => {
+    console.log(vaultID + "my vault");
+    returnVaultID();
+  }, []);
 
   const smallCardDummyValues = [
     {
@@ -33,7 +66,7 @@ const Collateral = () => {
   ];
 
   useEffect(() => {
-    console.log(vault + "my vault update");
+    console.log(vaultID + "my vault update");
   }, []);
   return (
     <Box
@@ -201,6 +234,7 @@ const Collateral = () => {
                   padding: "5px",
                 }}
                 className="glowingCard"
+                onClick={handleOpen}
               >
                 + Deposit Collateral{" "}
                 <img
@@ -223,7 +257,7 @@ const Collateral = () => {
             border: "1px solid rgba(52, 52, 52, 0.3)",
             boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
             borderRadius: "10px 10px 0px 0px",
-            width: { sm: "auto", md: "50%" },
+            width: { sm: "100%", md: "50%" },
           }}
         >
           {/* <SmallCard /> */}
@@ -243,6 +277,53 @@ const Collateral = () => {
           </Box>
         </Box>
       </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: { xs: "absolute" as const, md: "" },
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: {
+              xs: "60%",
+              sm: "50%",
+              md: "40%",
+            },
+            bgcolor: "#0C0C0C",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+            maxHeight: {
+              xs: "80vh",
+              sm: "80vh",
+            },
+            overflowY: "auto",
+          }}
+          className="modal-content" // add class name to modal content box
+        >
+          {" "}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Box style={{ background: "white", padding: "16px" }}>
+              <QRCode value={vaultAddress} />{" "}
+            </Box>
+            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
+              {/* Scan QR code to deposit collateral */}
+            </Typography>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };

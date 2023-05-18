@@ -11,13 +11,13 @@ const useBearStore = create<BearState>()((set) => ({
 }));
 
 interface VaultIdState {
-  vault: number;
+  vaultID: number;
   getVaultID: (id: number) => void;
 }
 
 export const useVaultIdStore = create<VaultIdState>()((set) => ({
-  vault: 0,
-  getVaultID: (id) => set(() => ({ vault: id })),
+  vaultID: 0,
+  getVaultID: (id) => set(() => ({ vaultID: id })),
 }));
 
 interface VaultsState {

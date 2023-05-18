@@ -22,6 +22,7 @@ export default class Example extends PureComponent {
           height: "auto",
           display: "flex",
           justifyContent: "center",
+          width: "auto",
         }}
       >
         <PieChart width={800} height={400}>
