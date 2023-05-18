@@ -29,3 +29,14 @@ export const useVaultsStore = create<VaultsState>()((set) => ({
   vaultsStore: [],
   getVaultsStore: (vaultsStore) => set(() => ({ vaultsStore: vaultsStore })),
 }));
+
+interface VaultAddressState {
+  vaultAddress: string;
+  getVaultAddress: (vaultAddress: string) => void;
+}
+
+export const useVaultAddressStore = create<VaultAddressState>()((set) => ({
+  vaultAddress: "",
+  getVaultAddress: (vaultAddress) =>
+    set(() => ({ vaultAddress: vaultAddress })),
+}));

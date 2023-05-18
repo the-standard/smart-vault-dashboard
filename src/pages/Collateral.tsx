@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useVaultIdStore } from "../store/Store";
+import { useVaultIdStore, useVaultAddressStore } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";
 import EmptyCard from "../components/collateral/EmptyCard";
@@ -7,12 +7,15 @@ import SmallCard from "../components/collateral/SmallCard";
 import HalfChart from "../components/collateral/HalfChart";
 import QRCode from "react-qr-code";
 import abi from "../abis/vaultManager.ts";
+import tokenmanagerabi from "../abis/tokenManagerABI.ts";
 import { ethers } from "ethers";
+import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 
 const Collateral = () => {
   const { vaultID, getVaultID } = useVaultIdStore();
-  const [vaultAddress, setVaultAddress] = useState("");
+  const [vaultAddressLocal, setVaultAddressLocal] = useState("");
   const [activeElement, setActiveElement] = useState(null);
+  const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
   //modal states
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -22,16 +25,60 @@ const Collateral = () => {
     setActiveElement(element);
   };
 
+  // useEffect(() => {
+  //   useVaultAddressStore((state) => state.getVaultAddress(vaultAddressLocal));
+  // }, []);
+
+  const returntokens = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
+      tokenmanagerabi,
+      signer
+    );
+    const tokens = await contract.getAcceptedTokens();
+    console.log(tokens[0][0]);
+    console.log(ethers.utils.parseBytes32String(tokens[1][0]));
+  };
+
   const returnVaultID = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0xbF615e590EC00140d522A721251645c65642de58",
+      "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
       abi,
       signer
     );
     const vaults = await contract.vaults();
     console.log(vaults);
+    console.log(vaults[0][5]);
+    //minted
+    console.log(ethers.BigNumber.from(vaults[0][5][0]).toString());
+    //max mintable
+    console.log(ethers.BigNumber.from(vaults[0][5][1]).toString());
+    //collateral value
+    console.log(ethers.BigNumber.from(vaults[0][5][2]).toString());
+    //Asset[] collateral
+    console.log(vaults[0][5][3]);
+    //accepted collateral asset symbol
+    console.log(ethers.utils.parseBytes32String(vaults[0][5][3][0][0][0]));
+
+    const acceptedTokensList = vaults[0][5][3].map((token: any) => {
+      //amount
+      console.log(ethers.BigNumber.from(token[1]).toString());
+      //symbol
+      console.log(ethers.utils.parseBytes32String(token[0][0]).toString());
+
+      return token;
+    });
+
+    console.log(acceptedTokensList);
+    setAcceptedTokens(acceptedTokensList);
+
+    // console.log(ethers.utils.parseBytes32String(vaults[0][5][3]));
+    console.log(vaults[0][5][3][0][0][4]);
+
     const filteredVaults = vaults.filter((vault: any, index: number) => {
       const tokenId = ethers.BigNumber.from(vault[0]).toString();
       //stringify it because the vaultID is a number initially
@@ -39,12 +86,32 @@ const Collateral = () => {
       return tokenId === stringifiedVaultID;
     });
     console.log(filteredVaults[0][1]);
-    setVaultAddress(filteredVaults[0][1]);
+    setVaultAddressLocal(filteredVaults[0][1]);
+    const { vaultAddress, getVaultAddress } = useVaultAddressStore.getState();
+    getVaultAddress(filteredVaults[0][1]);
+  };
+
+  const displayTokens = () => {
+    if (acceptedTokens.length === 0) {
+      return <div>Loading...</div>;
+    }
+
+    return acceptedTokens.map((token: any, index: number) => {
+      return (
+        <AcceptedToken
+          key={index}
+          symbol={ethers.utils.parseBytes32String(token[0][0])}
+          amount={ethers.BigNumber.from(token[1]).toString()}
+        />
+      );
+    });
   };
 
   useEffect(() => {
     console.log(vaultID + "my vault");
+    returntokens();
     returnVaultID();
+    // console.log(tokenmanagerabi);
   }, []);
 
   const smallCardDummyValues = [
@@ -215,7 +282,7 @@ const Collateral = () => {
               // justifyContent: "center",
               // alignItems: "flex-start",
               // border: "1px solid red",
-              width: "30rem",
+              width: "25rem",
             }}
           >
             <Box
@@ -246,7 +313,9 @@ const Collateral = () => {
                 />
               </Box>
             </Box>
-            <EmptyCard />
+            {/* <EmptyCard /> */}
+            {/* list available tokens here */}
+            {displayTokens()}{" "}
           </Box>
         </Box>
         {/*  row 2 */}
@@ -316,10 +385,10 @@ const Collateral = () => {
             }}
           >
             <Box style={{ background: "white", padding: "16px" }}>
-              <QRCode value={vaultAddress} />{" "}
+              <QRCode value={vaultAddressLocal} />{" "}
             </Box>
             <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              {/* Scan QR code to deposit collateral */}
+              Scan QR code to deposit collateral
             </Typography>
           </Box>
         </Box>
