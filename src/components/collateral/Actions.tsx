@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 import Deposit from "./actions/Deposit";
 
@@ -25,7 +25,11 @@ const Actions: React.FC<ActionsProps> = ({ activeElement }) => {
       content = <Box>Number is 2</Box>;
       break;
     case 3:
-      content = <Box>Number is 3</Box>;
+      content = (
+        <Typography variant="body1">
+          Swapping functionality will come soon!
+        </Typography>
+      );
       break;
     default:
       content = <Box></Box>;

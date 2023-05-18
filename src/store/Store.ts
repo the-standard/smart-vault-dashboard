@@ -40,3 +40,14 @@ export const useVaultAddressStore = create<VaultAddressState>()((set) => ({
   getVaultAddress: (vaultAddress) =>
     set(() => ({ vaultAddress: vaultAddress })),
 }));
+
+// interface CollateralState {
+//   collateralOrDebt: number;
+//   getCollateralOrDebt: (collateralOrDebt: number) => void;
+// }
+
+// export const useCollateralOrDebtStore = create<CollateralState>()((set) => ({
+//   collateralOrDebt: 1,
+//   getCollateralOrDebt: (collateralOrDebt) =>
+//     set(() => ({ collateralOrDebt: collateralOrDebt })),
+// }));

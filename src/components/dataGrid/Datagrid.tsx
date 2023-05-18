@@ -98,7 +98,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     const handleManageClick = () => {
       console.log(params.row.vaultID);
       setModalChildState(params.row.vaultID);
-      const { vault, getVaultID } = useVaultIdStore.getState();
+      const { getVaultID } = useVaultIdStore.getState();
       getVaultID(params.row.vaultID);
     };
 

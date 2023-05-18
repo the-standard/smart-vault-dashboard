@@ -10,12 +10,14 @@ import abi from "../abis/vaultManager.ts";
 import tokenmanagerabi from "../abis/tokenManagerABI.ts";
 import { ethers } from "ethers";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
+import Debt from "../components/collateral/Debt.tsx";
 
 const Collateral = () => {
   const { vaultID, getVaultID } = useVaultIdStore();
   const [vaultAddressLocal, setVaultAddressLocal] = useState("");
   const [activeElement, setActiveElement] = useState(null);
   const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
+  const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
   //modal states
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -23,11 +25,9 @@ const Collateral = () => {
 
   const handleClick = (element: any) => {
     setActiveElement(element);
+    //set state
+    setCollateralOrDebt(element);
   };
-
-  // useEffect(() => {
-  //   useVaultAddressStore((state) => state.getVaultAddress(vaultAddressLocal));
-  // }, []);
 
   const returntokens = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -105,6 +105,10 @@ const Collateral = () => {
         />
       );
     });
+  };
+
+  const displayDebt = () => {
+    return <Debt />;
   };
 
   useEffect(() => {
@@ -315,7 +319,8 @@ const Collateral = () => {
             </Box>
             {/* <EmptyCard /> */}
             {/* list available tokens here */}
-            {displayTokens()}{" "}
+            {collateralOrDebt === 1 ? displayTokens() : displayDebt()}
+            {/* {displayTokens()}{" "} */}
           </Box>
         </Box>
         {/*  row 2 */}
