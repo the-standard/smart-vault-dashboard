@@ -14,6 +14,7 @@ import sarslogo from "../assets/sarslogo.png";
 import saudlogo from "../assets/saudlogo.png";
 import susdlogo from "../assets/susdlogo.png";
 import { useVaultsStore } from "../store/Store.ts";
+import { useAccount, useConnect } from "wagmi";
 
 const items = [
   {
@@ -50,6 +51,13 @@ const HomePage = () => {
   // const [tokenToId, setTokenToId] = useState<any[]>([]);
   // const [resolved, setResolved] = useState(false);
   const [myVaults, setMyVaults] = useState<any[]>([]);
+  const { connector: activeConnector, isConnected } = useAccount();
+
+  useEffect(() => {
+    if (isConnected) {
+      console.log("connected");
+    }
+  });
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
