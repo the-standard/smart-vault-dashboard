@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import Deposit from "./actions/Deposit";
+import Withdraw from "./actions/Withdraw";
 
 interface ActionsProps {
   activeElement: number;
@@ -22,7 +23,12 @@ const Actions: React.FC<ActionsProps> = ({ activeElement }) => {
       );
       break;
     case 2:
-      content = <Box>Number is 2</Box>;
+      content = (
+        <Box>
+          {" "}
+          <Withdraw />{" "}
+        </Box>
+      );
       break;
     case 3:
       content = (

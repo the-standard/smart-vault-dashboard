@@ -15,7 +15,7 @@ import Debt from "../components/collateral/Debt.tsx";
 const Collateral = () => {
   const { vaultID, getVaultID } = useVaultIdStore();
   const [vaultAddressLocal, setVaultAddressLocal] = useState("");
-  const [activeElement, setActiveElement] = useState(null);
+  const [activeElement, setActiveElement] = useState(1);
   const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
   //modal states
@@ -274,11 +274,17 @@ const Collateral = () => {
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
           alignItems: "flex-start",
+          width: "100%",
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            width: { xs: "100%", md: "60%" },
+          }}
+        >
           {/* divide into 2 rows */}
           {/*  row 1 */}
+
           <Box
             sx={{
               // display: "flex",
@@ -286,7 +292,7 @@ const Collateral = () => {
               // justifyContent: "center",
               // alignItems: "flex-start",
               // border: "1px solid red",
-              width: "25rem",
+              width: "100%",
             }}
           >
             <Box
@@ -347,7 +353,7 @@ const Collateral = () => {
             {smallCardDummyValues.map((item, index) => (
               <SmallCard key={index} {...item} />
             ))}
-            <HalfChart />
+            {/* <HalfChart /> */}
           </Box>
         </Box>
       </Box>

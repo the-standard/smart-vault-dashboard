@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import React, { useState } from "react";
 import Actions from "./Actions";
+import { useCollateralSymbolStore } from "../../store/Store";
 
 interface AcceptedTokenProps {
   amount: string;
@@ -10,8 +11,12 @@ interface AcceptedTokenProps {
 
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [activeElement, setActiveElement] = useState(0);
+  const { getCollateralSymbol } = useCollateralSymbolStore.getState();
+
   const handleClick = (element: number) => {
     setActiveElement(element);
+    console.log(symbol);
+    getCollateralSymbol(symbol);
   };
   return (
     <Box
