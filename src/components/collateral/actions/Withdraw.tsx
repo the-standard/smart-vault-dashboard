@@ -31,17 +31,21 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
     try {
       console.log(symbol);
       if (symbol === "ETH" || symbol === "MATIC") {
-        await contract.removeCollateralNative(amount, address);
+        await contract.removeCollateralNative(
+          ethers.utils.parseUnits(amount.toString()),
+          address
+        );
       } else if (symbol === "SUSD18" || symbol === "SUSD6") {
         const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
         console.log(symbolBytes32);
         await contract.removeCollateral(
           symbolBytes32,
-          ethers.utils.parseUnits(amount.toString(), "ether"),
+          ethers.utils.parseUnits(amount.toString()),
           address
         );
       } else {
         //this one should get the token address instead of symbol
+        //but how will the user know the token address if this is just a fallback function?
         await contract.removeAsset(amount, address);
       }
     } catch (error) {

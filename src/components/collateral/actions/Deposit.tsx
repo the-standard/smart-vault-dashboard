@@ -2,6 +2,9 @@ import { Box, Modal, Typography } from "@mui/material";
 import React, { useState } from "react";
 import QRCode from "react-qr-code";
 import { useVaultAddressStore } from "../../../store/Store";
+import QRicon from "../../../assets/qricon.png";
+import smartVaultAbi from "../../../abis/smartVault";
+import { ethers } from "ethers";
 
 const Deposit = () => {
   //modal states
@@ -10,25 +13,70 @@ const Deposit = () => {
   const handleClose = () => setOpen(false);
   //store
   const { vaultAddress } = useVaultAddressStore.getState();
+
+  const depositViaMetamask = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+      // Prompt user to enter the amount in MetaMask
+      const transactionParameters = {
+        to: vaultAddress,
+        from: "0x600044FE9A152C27f337BbB23803dC6A68E3eFB0",
+        value: ethers.utils.parseEther("0").toString(), // Set the initial value to 0
+      };
+
+      // Send funds using MetaMask
+      const txHash = await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [transactionParameters],
+      });
+
+      console.log("Transaction sent:", txHash);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Box>
       {" "}
       <Box
         sx={{
-          margin: "2px",
-          padding: "5px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          alignItems: "center",
         }}
-        className="glowingCard"
-        onClick={handleOpen}
       >
-        + Deposit Collateral{" "}
-        {/* <img
-          style={{
-            marginLeft: "1.5rem",
+        <Box
+          sx={{
+            margin: "2px",
+            padding: "5px",
           }}
-          src={QRicon}
-          alt="qricon"
-        /> */}
+          className="glowingCard"
+          onClick={handleOpen}
+        >
+          {" "}
+          <img
+            style={{
+              marginRight: "1.5rem",
+            }}
+            src={QRicon}
+            alt="qricon"
+          />
+          With QR Code{" "}
+        </Box>
+        <Box
+          sx={{
+            margin: "2px",
+            padding: "5px",
+          }}
+          className="glowingCard"
+          onClick={depositViaMetamask}
+        >
+          {" "}
+          With Metamask
+        </Box>
       </Box>
       <Modal
         open={open}
