@@ -36,9 +36,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
       }}
     >
       {/* {" "}
-       */}{" "}
       amount: {ethers.utils.formatEther(amount)}
-      symbol: {symbol}
+      symbol: {symbol} */}
       <Box
         sx={{
           color: "#00FFF0",

@@ -11,8 +11,15 @@ const Deposit = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [amount, setAmount] = useState(0);
+
   //store
   const { vaultAddress } = useVaultAddressStore.getState();
+
+  const handleAmount = (e: any) => {
+    setAmount(Number(e.target.value));
+    console.log(e.target.value);
+  };
 
   const depositViaMetamask = async () => {
     try {
@@ -20,10 +27,11 @@ const Deposit = () => {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
       // Prompt user to enter the amount in MetaMask
+      const txAmount = amount.toString();
       const transactionParameters = {
         to: vaultAddress,
         from: "0x600044FE9A152C27f337BbB23803dC6A68E3eFB0",
-        value: ethers.utils.parseEther("0").toString(), // Set the initial value to 0
+        value: ethers.utils.parseEther(txAmount).toString(),
       };
 
       // Send funds using MetaMask
@@ -52,6 +60,7 @@ const Deposit = () => {
           sx={{
             margin: "2px",
             padding: "5px",
+            cursor: "pointer",
           }}
           className="glowingCard"
           onClick={handleOpen}
@@ -68,14 +77,38 @@ const Deposit = () => {
         </Box>
         <Box
           sx={{
-            margin: "2px",
-            padding: "5px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          className="glowingCard"
-          onClick={depositViaMetamask}
         >
-          {" "}
-          With Metamask
+          <input
+            style={{
+              background: " rgba(18, 18, 18, 0.5)",
+              border: "1px solid #8E9BAE",
+              color: "white",
+              fontSize: "1.1rem",
+              fontWeight: "bold",
+              height: "2rem",
+              margin: "0.5rem",
+              width: "100%",
+            }}
+            type="text"
+            onChange={handleAmount}
+          />
+          <Box
+            sx={{
+              margin: "2px",
+              padding: "5px",
+              cursor: "pointer",
+            }}
+            className="glowingCard"
+            onClick={depositViaMetamask}
+          >
+            {" "}
+            With Metamask
+          </Box>
         </Box>
       </Box>
       <Modal

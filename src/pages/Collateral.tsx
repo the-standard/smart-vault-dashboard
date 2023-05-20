@@ -28,6 +28,10 @@ const Collateral = () => {
     //set state
     setCollateralOrDebt(element);
   };
+  //scroll to the top of the page on page load
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top of the page
+  }, []);
 
   const returntokens = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);

@@ -28,6 +28,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
     const signer = provider.getSigner();
     const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
     console.log(amount);
+    console.log(address);
     try {
       console.log(symbol);
       if (symbol === "ETH" || symbol === "MATIC") {

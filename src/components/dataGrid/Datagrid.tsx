@@ -13,6 +13,7 @@ import { styles } from "../../styles/dataGridStyles.ts";
 // import { useAccount, useConnect } from "wagmi";
 import { Link } from "react-router-dom";
 import { useVaultIdStore } from "../../store/Store.ts";
+import Decimal from "decimal.js";
 
 interface DataGridDemoProps {
   vaults: any[];
@@ -192,15 +193,28 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   ];
 
   const myRows = vaults.map((vault, index) => {
+    console.log(
+      Number(ethers.BigNumber.from(vault[5][0]).toString()),
+      Number(ethers.BigNumber.from(vault[5][1]).toString())
+    );
+    const result = new Decimal(vault[5][0].toString())
+      .dividedBy(vault[5][1].toString())
+      .toNumber();
+    console.log(result);
     return {
       id: index + 1,
       vaultNFT: tokenToNFTMap.current.get(
         ethers.BigNumber.from(vault[0]).toString()
       ),
       vaultID: ethers.BigNumber.from(vault[0]).toString(),
-      ratio: ethers.BigNumber.from(vault[5][0]).toString(),
-      debt: ethers.BigNumber.from(vault[5][1]).toString(),
-      step: 55,
+      ratio: ethers.BigNumber.from(vault[5][2]).toString(),
+      debt: ethers.BigNumber.from(vault[5][0]).toString(),
+      // step: new Decimal(vault[5][0].toString())
+      //   .dividedBy(vault[5][1].toString())
+      //   .toNumber(),
+      step:
+        Number(ethers.BigNumber.from(vault[5][0]).toString()) /
+        Number(ethers.BigNumber.from(vault[5][1]).toString()),
       // step:
       // ethers.BigNumber.from(vault[5][2]).toNumber() /
       // ethers.BigNumber.from(vault[5][1]).toNumber(),
