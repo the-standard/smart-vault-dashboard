@@ -124,7 +124,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
           Swap
         </Box>
       </Box>
-      <Actions activeElement={activeElement} />
+      <Actions activeElement={activeElement} symbol={symbol} />
     </Box>
   );
 };

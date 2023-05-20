@@ -5,10 +5,11 @@ import Withdraw from "./actions/Withdraw";
 
 interface ActionsProps {
   activeElement: number;
+  symbol: string;
   //1 = deposit, 2 = withdraw, 3 = swap, 4 = borrow 5 = pay down
 }
 
-const Actions: React.FC<ActionsProps> = ({ activeElement }) => {
+const Actions: React.FC<ActionsProps> = ({ activeElement, symbol }) => {
   let content: JSX.Element;
 
   console.log(activeElement);
@@ -26,7 +27,7 @@ const Actions: React.FC<ActionsProps> = ({ activeElement }) => {
       content = (
         <Box>
           {" "}
-          <Withdraw />{" "}
+          <Withdraw symbol={symbol} />{" "}
         </Box>
       );
       break;
