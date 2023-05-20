@@ -31,9 +31,15 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
     try {
       console.log(symbol);
       if (symbol === "ETH" || symbol === "MATIC") {
-        await contract.removeCollateralNative(symbol, amount, address);
+        await contract.removeCollateralNative(amount, address);
       } else if (symbol === "SUSD18" || symbol === "SUSD6") {
-        await contract.removeCollateral(symbol, amount, address);
+        const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
+        console.log(symbolBytes32);
+        await contract.removeCollateral(
+          symbolBytes32,
+          ethers.utils.parseUnits(amount.toString(), "ether"),
+          address
+        );
       } else {
         //this one should get the token address instead of symbol
         await contract.removeAsset(amount, address);

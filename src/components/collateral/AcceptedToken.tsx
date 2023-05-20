@@ -27,16 +27,18 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
         boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
         borderRadius: "10px 10px 0px 0px",
         width: "auto",
-        height: "10rem",
         padding: "1rem",
         marginTop: "0.5rem",
+        marginBottom: "1rem",
         display: "flex",
         flexDirection: "column",
+        height: "auto",
       }}
     >
       {/* {" "}
+       */}{" "}
       amount: {ethers.utils.formatEther(amount)}
-      symbol: {symbol} */}
+      symbol: {symbol}
       <Box
         sx={{
           color: "#00FFF0",
