@@ -110,12 +110,19 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
           flexDirection: "row",
         }}
       >
-        <Link to="Collateral" onClick={handleManageClick}>
+        <Link
+          style={{
+            textDecoration: "none",
+          }}
+          to="Collateral"
+          onClick={handleManageClick}
+        >
           <button
             style={{
               height: "2rem",
               width: "10rem",
               margin: "0 1rem",
+              cursor: "pointer",
             }}
             className="glowingCard"
           >
@@ -127,6 +134,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
             height: "2rem",
             width: "10rem",
             margin: "0 1rem",
+            cursor: "pointer",
           }}
           className="glowingCardRed"
           onClick={() => {
@@ -193,14 +201,16 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   ];
 
   const myRows = vaults.map((vault, index) => {
+    console.log(Number(ethers.BigNumber.from(vault[5][0]).toString()));
+    console.log(Number(ethers.BigNumber.from(vault[5][1]).toString()));
     console.log(
-      Number(ethers.BigNumber.from(vault[5][0]).toString()),
-      Number(ethers.BigNumber.from(vault[5][1]).toString())
+      Number(ethers.BigNumber.from(vault[5][0]).toString()) /
+        Number(ethers.BigNumber.from(vault[5][1]).toString())
     );
     const result = new Decimal(vault[5][0].toString())
       .dividedBy(vault[5][1].toString())
       .toNumber();
-    console.log(result);
+    // console.log(result);
     return {
       id: index + 1,
       vaultNFT: tokenToNFTMap.current.get(

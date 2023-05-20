@@ -1,11 +1,10 @@
 import { Web3Button } from "@web3modal/react";
 // import { useAccount } from "wagmi";
 // import { useDisconnect } from "wagmi";
-import { IoSettingsSharp } from "react-icons/io5";
-import { Badge, Box, Typography } from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import { Box, Typography } from "@mui/material";
 import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
+import logo from "../assets/standardiologo.png";
 
 const Navbar = () => {
   // const { address } = useAccount();
@@ -112,11 +111,26 @@ const Navbar = () => {
       >
         {" "}
         {/* title */}
-        <Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={logo}
+            alt="logo"
+            style={{
+              width: "2rem",
+              height: "2rem",
+              marginRight: "1rem",
+            }}
+          />
           <Typography
             sx={{
-              marginLeft: { xs: "5rem", sm: "5rem", lg: "5rem", xl: "5rem" },
-              margin: "36px",
+              // marginLeft: { xs: "5rem", sm: "5rem", lg: "5rem", xl: "5rem" },
+              margin: "36px 0",
               fontSize: "1.5rem",
             }}
           >
@@ -137,28 +151,6 @@ const Navbar = () => {
             }}
           >
             <Web3Button />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-            }}
-          >
-            <Box>
-              <IoSettingsSharp
-                style={{
-                  margin: "0 1rem",
-                }}
-              />
-            </Box>
-            <Badge
-              style={{
-                margin: "0 1rem",
-              }}
-              color="secondary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
           </Box>
         </Box>
       </Box>

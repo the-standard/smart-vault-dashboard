@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import VaultCard from "../components/vaultCard/VaultCard";
 import Datagrid from "../components/dataGrid/Datagrid";
 // import { useContractRead } from "wagmi";
@@ -18,29 +18,29 @@ import { useAccount, useConnect } from "wagmi";
 
 const items = [
   {
-    title: "sEuro",
+    title: "sEURO",
     para: "Euro pegged",
     borrowRate: "Borrow up to 75%",
     image: seurologo,
     isActive: true,
   },
   {
-    title: "sEuro",
-    para: "Euro pegged",
+    title: "sUSD",
+    para: "USD pegged",
     borrowRate: "Borrow up to 75%",
     image: susdlogo,
     isActive: false,
   },
   {
-    title: "sEuro",
-    para: "Euro pegged",
+    title: "sAUD",
+    para: "Aussie Dollar pegged",
     borrowRate: "Borrow up to 75%",
     image: saudlogo,
     isActive: false,
   },
   {
-    title: "sEuro",
-    para: "Euro pegged",
+    title: "sARS",
+    para: "Argentine Peso pegged",
     borrowRate: "Borrow up to 75%",
     image: sarslogo,
     isActive: false,
@@ -149,7 +149,17 @@ const HomePage = () => {
           </Grid>
         ))}
       </Grid>
-      <Datagrid vaults={myVaults} />
+      <Typography
+        variant="body1"
+        sx={{
+          textAlign: "left",
+
+          padding: "0 12%",
+        }}
+      >
+        My Smart Vaults
+      </Typography>
+      {isConnected ? <Datagrid vaults={myVaults} /> : <Box>loading</Box>}
     </Box>
   );
 };

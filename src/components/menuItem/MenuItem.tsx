@@ -21,7 +21,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 }) => {
   return (
     <Box
-      className={` ${isActive ? "glowingCard" : ""}`}
+      className={` ${isWorking && isActive ? "glowingCard" : ""}`}
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -39,7 +39,11 @@ const MenuItem: React.FC<MenuItemProps> = ({
         <span></span>
         <span></span>
         <span></span>
-        {isActive ? <img src={icon2} alt="" /> : <img src={icon} alt="" />}
+        {isWorking && isActive ? (
+          <img src={icon2} alt="" />
+        ) : (
+          <img src={icon} alt="" />
+        )}
       </div>
       <p
         style={{
