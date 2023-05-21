@@ -137,69 +137,69 @@ const History = () => {
   };
   const columns: GridColDef[] = [
     { field: "id", headerName: "#", width: 90 },
-    { field: "col1", headerName: "Action", width: 250 },
-    { field: "col2", headerName: "Vault", width: 250 },
-    { field: "col3", headerName: "Vault type", width: 250 },
-    { field: "col4", headerName: "Description", width: 250 },
-    { field: "col5", headerName: "Amount", width: 250 },
+    { field: "col1", headerName: "Vault", width: 250 },
+    { field: "col2", headerName: "From", width: 250 },
+    { field: "col3", headerName: "To", width: 250 },
+    { field: "col4", headerName: "Block Hash", width: 250 },
+    { field: "col5", headerName: "Block Number", width: 250 },
+    { field: "col6", headerName: "Date", width: 250 },
   ];
 
-  const rows: GridRowsProp = [
-    {
-      id: 1,
-      col1: "asdsadasd",
-      col2: "World",
-      col3: "World",
-      col4: "World",
-      col5: "World",
-    },
-    {
-      id: 2,
-      col1: "Hello",
-      col2: "World",
-      col3: "World",
-      col4: "World",
-      col5: "World",
-    },
-    {
-      id: 3,
-      col1: "Hello",
-      col2: "World",
-      col3: "World",
-      col4: "World",
-      col5: "World",
-    },
-    {
-      id: 4,
-      col1: "Hello",
-      col2: "World",
-      col3: "World",
-      col4: "World",
-      col5: "World",
-    },
-  ];
+  function formatDate(dateString: string) {
+    const date = new Date(dateString);
+
+    const options: any = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      timeZone: "UTC",
+    };
+
+    return date.toLocaleString("en-US", options);
+  }
+
+  const rows: GridRowsProp = matchedTransactions.map(
+    (transaction: any, index: number) => {
+      return {
+        id: index + 1,
+        col1: transaction.token_id,
+        col2: transaction.from_address,
+        col3: transaction.to_address,
+        col4: transaction.block_hash,
+        col5: transaction.block_number,
+        col6: formatDate(transaction.block_timestamp),
+      };
+    }
+  );
 
   function returnDataGrid() {
-    return (
-      <DataGrid
-        sx={{
-          height: "90%",
-          background: "rgba(26, 17, 17, 0.07)",
-        }}
-        rows={rows}
-        columns={columns}
-        getRowClassName={getRowClassName}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
+    if (matchedTransactions.length > 0) {
+      return (
+        <DataGrid
+          sx={{
+            height: "auto",
+            background: "rgba(26, 17, 17, 0.07)",
+          }}
+          rows={rows}
+          columns={columns}
+          getRowClassName={getRowClassName}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
             },
-          },
-        }}
-        pageSizeOptions={[5]}
-        disableRowSelectionOnClick
-      />
-    );
+          }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+        />
+      );
+    } else {
+      return <h4>Loading...</h4>;
+    }
   }
 
   return (
