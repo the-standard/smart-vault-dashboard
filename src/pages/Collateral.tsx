@@ -14,6 +14,7 @@ import Debt from "../components/collateral/Debt.tsx";
 
 const Collateral = () => {
   const { vaultID, getVaultID } = useVaultIdStore();
+  const { vaultAddress, getVaultAddress } = useVaultAddressStore();
   const [vaultAddressLocal, setVaultAddressLocal] = useState("");
   const [activeElement, setActiveElement] = useState(1);
   const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
@@ -69,6 +70,7 @@ const Collateral = () => {
         console.log(vault);
         console.log(vault[5][3]);
         foundValue = vault[5][3];
+        getVaultAddress(vault[1]);
       }
     });
     console.log(foundValue);

@@ -26,6 +26,7 @@ const Debt = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+    console.log(vaultAddress);
     await contract.mint(address, amount);
   };
 
@@ -33,6 +34,8 @@ const Debt = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+    console.log(vaultAddress);
+
     await contract.burn(amount);
   };
 
