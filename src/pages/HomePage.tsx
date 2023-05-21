@@ -52,6 +52,7 @@ const HomePage = () => {
   // const [resolved, setResolved] = useState(false);
   const [myVaults, setMyVaults] = useState<any[]>([]);
   const { connector: activeConnector, isConnected } = useAccount();
+  const [loading, setLoading] = useState(true); // Add this line
 
   useEffect(() => {
     if (isConnected) {
@@ -116,17 +117,11 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // console.log("data", data);
-    getVaults();
-    console.log("useEffect ran");
-  }, []);
+    if (isConnected) {
+      getVaults();
+    }
+  }, [isConnected]);
 
-  useEffect(() => {
-    console.log("myVaults", myVaults);
-    // myVaults.map((vault: any) => {
-    //   // getNFT(vault);
-    // });
-  }, [myVaults]);
   return (
     <Box>
       <Grid
@@ -159,7 +154,11 @@ const HomePage = () => {
       >
         My Smart Vaults
       </Typography>
-      {isConnected ? <Datagrid vaults={myVaults} /> : <Box>loading</Box>}
+      {myVaults.length > 0 ? ( // Update this line
+        <Datagrid vaults={myVaults} />
+      ) : (
+        <Box>loading</Box>
+      )}
     </Box>
   );
 };

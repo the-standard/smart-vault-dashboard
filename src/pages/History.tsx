@@ -170,11 +170,11 @@ const History = () => {
     }
   }, [transactions]);
 
-  useEffect(() => {
-    if (nfts) {
-      getVaultTransactionHistory(nfts);
-    }
-  }, [nfts, matchedTransactions]);
+  // useEffect(() => {
+  //   if (nfts) {
+  //     getVaultTransactionHistory(nfts);
+  //   }
+  // }, [nfts, matchedTransactions]);
 
   const getRowClassName = (_params: any) => {
     return "no-border";

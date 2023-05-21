@@ -16,7 +16,7 @@ export default function RangeSlider(props: RangeSliderProps) {
     <Box sx={{ width: 300 }}>
       <Slider
         getAriaLabel={() => "Disabled slider"}
-        value={value}
+        value={isNaN(value) ? 0 : value}
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}
         sx={{
