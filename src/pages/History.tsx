@@ -27,6 +27,8 @@ runApp();
 
 const History = () => {
   const [nfts, setNfts] = useState<any>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [matchedTransactions, setMatchedTransactions] = useState<any[]>([]);
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -42,6 +44,40 @@ const History = () => {
     return vaults;
   };
 
+  const matchTransactions = async (_transactions: any) => {
+    const matchedObjects: any[] = [];
+    _transactions.map((transaction: any) => {
+      // if (nfts) {
+      nfts.map((nft: any) => {
+        // console.log(nft);
+        // console.log(nft.vaultAddress.toLowerCase());
+        // console.log(transaction);
+        if (
+          transaction.to_address.toLowerCase() ===
+            nft.vaultAddress.toLowerCase() ||
+          transaction.from_address.toLowerCase() ===
+            nft.vaultAddress.toLowerCase()
+        ) {
+          const matchedObject = {
+            ...transaction,
+            vaultType: ethers.utils.parseBytes32String(nft[5][6]).toString(),
+            token_id: ethers.BigNumber.from(nft[0]).toString(),
+          };
+          console.log(ethers.BigNumber.from(nft[0]).toString());
+          console.log(ethers.utils.parseBytes32String(nft[5][6]).toString());
+          console.log(matchedObject);
+
+          matchedObjects.push(matchedObject);
+        }
+      });
+      // }
+    });
+    // console.log(nfts);
+    console.log(matchedObjects);
+    console.log(matchedObjects.length);
+    setMatchedTransactions(matchedObjects);
+  };
+
   const getVaultTransactionHistory = async (userVaults: any) => {
     //Assign the contract address to a variable
 
@@ -50,6 +86,22 @@ const History = () => {
       //vault address
       getTransfersToAddress(vault[1]);
     });
+  };
+
+  const sortTransactions = async (result: unknown) => {
+    const updatedTransactions = [...transactions, result]; // Create a new array by spreading the existing transactions array and adding the result
+
+    // Sort the updatedTransactions array by date
+    updatedTransactions.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateA - dateB;
+    });
+
+    //because it returns the array as the first element of the array, we need to access it with [0]
+    setTransactions(updatedTransactions[0]); // Update the state with the sorted array
+    console.log(updatedTransactions[0]);
+    matchTransactions(updatedTransactions[0]);
   };
 
   const getTransfersToAddress = async (_address: any) => {
@@ -67,6 +119,7 @@ const History = () => {
     // console.log(response.toJSON().result);
     const result = response.toJSON().result; // Get the result from the response
     console.log(result);
+    sortTransactions(result);
   };
 
   useEffect(() => {
