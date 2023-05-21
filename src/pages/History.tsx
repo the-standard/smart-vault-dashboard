@@ -176,30 +176,26 @@ const History = () => {
   );
 
   function returnDataGrid() {
-    if (matchedTransactions.length > 0) {
-      return (
-        <DataGrid
-          sx={{
-            height: "auto",
-            background: "rgba(26, 17, 17, 0.07)",
-          }}
-          rows={rows}
-          columns={columns}
-          getRowClassName={getRowClassName}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
+    return (
+      <DataGrid
+        sx={{
+          height: "auto",
+          background: "rgba(26, 17, 17, 0.07)",
+        }}
+        rows={rows}
+        columns={columns}
+        getRowClassName={getRowClassName}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 10,
             },
-          }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
-        />
-      );
-    } else {
-      return <h4>Loading...</h4>;
-    }
+          },
+        }}
+        pageSizeOptions={[10]}
+        disableRowSelectionOnClick
+      />
+    );
   }
 
   return (

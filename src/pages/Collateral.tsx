@@ -46,7 +46,7 @@ const Collateral = () => {
     console.log(ethers.utils.parseBytes32String(tokens[1][0]));
   };
 
-  const returnVaultID = async () => {
+  const returnAcceptedTokensList = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
@@ -56,51 +56,31 @@ const Collateral = () => {
     );
     const vaults = await contract.vaults();
     console.log(vaults);
-    console.log(vaults[0][5]);
-    //minted
-    console.log(ethers.BigNumber.from(vaults[0][5][0]).toString());
-    //max mintable
-    console.log(ethers.BigNumber.from(vaults[0][5][1]).toString());
-    //collateral value
-    console.log(ethers.BigNumber.from(vaults[0][5][2]).toString());
-    //Asset[] collateral
-    console.log(vaults[0][5][3]);
-    //accepted collateral asset symbol
-    console.log(ethers.utils.parseBytes32String(vaults[0][5][3][0][0][0]));
 
-    const acceptedTokensList = vaults[0][5][3].map((token: any) => {
-      //amount
-      console.log(ethers.BigNumber.from(token[1]).toString());
-      //symbol
-      console.log(ethers.utils.parseBytes32String(token[0][0]).toString());
+    let foundValue: any;
 
-      return token;
+    vaults.map((vault: any) => {
+      const tokenId = ethers.BigNumber.from(vault[0]);
+      console.log(vault);
+      console.log(vaultID);
+      console.log(tokenId);
+      if (Number(tokenId) === Number(vaultID)) {
+        console.log("found");
+        console.log(vault);
+        console.log(vault[5][3]);
+        foundValue = vault[5][3];
+      }
     });
-
-    console.log(acceptedTokensList);
-    setAcceptedTokens(acceptedTokensList);
-
-    // console.log(ethers.utils.parseBytes32String(vaults[0][5][3]));
-    console.log(vaults[0][5][3][0][0][4]);
-
-    const filteredVaults = vaults.filter((vault: any, index: number) => {
-      const tokenId = ethers.BigNumber.from(vault[0]).toString();
-      //stringify it because the vaultID is a number initially
-      const stringifiedVaultID = vaultID.toString();
-      return tokenId === stringifiedVaultID;
-    });
-    console.log(filteredVaults[0][1]);
-    setVaultAddressLocal(filteredVaults[0][1]);
-    const { vaultAddress, getVaultAddress } = useVaultAddressStore.getState();
-    getVaultAddress(filteredVaults[0][1]);
+    console.log(foundValue);
+    setAcceptedTokens(foundValue);
   };
-
   const displayTokens = () => {
     if (acceptedTokens.length === 0) {
       return <div>Loading...</div>;
     }
 
     return acceptedTokens.map((token: any, index: number) => {
+      console.log(token);
       return (
         <AcceptedToken
           key={index}
@@ -118,7 +98,7 @@ const Collateral = () => {
   useEffect(() => {
     console.log(vaultID + "my vault");
     returntokens();
-    returnVaultID();
+    returnAcceptedTokensList();
     // console.log(tokenmanagerabi);
   }, []);
 
