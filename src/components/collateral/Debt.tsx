@@ -5,13 +5,17 @@ import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
-import { useVaultAddressStore } from "../../store/Store";
+import { useVaultAddressStore, useVaultStore } from "../../store/Store";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
   const { address, isConnecting, isDisconnected } = useAccount();
   const [amount, setAmount] = useState(0);
   const { vaultAddress } = useVaultAddressStore.getState();
+  const { vaultStore }: any = useVaultStore();
+
+  const debtValue = ethers.BigNumber.from(vaultStore[5][0]);
+  console.log(debtValue.toString());
 
   const handleClick = (element: any) => {
     setActiveElement(element);
@@ -125,7 +129,7 @@ const Debt = () => {
           }}
         >
           <Typography variant="body1">sEURO </Typography>
-          <Typography variant="body1"> €0.00 </Typography>
+          <Typography variant="body1"> € {debtValue.toString()} </Typography>
         </Box>
       </Box>
       <Box

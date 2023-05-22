@@ -124,7 +124,17 @@ const VaultCard: React.FC<VaultCardProps> = ({
             >
               {title}
             </Typography>
-            <Typography variant="body1">{para}</Typography>
+            <Typography
+              sx={{
+                width: {
+                  sm: "auto",
+                  lg: "200px",
+                },
+              }}
+              variant="body1"
+            >
+              {para}
+            </Typography>
           </Box>
         </Box>
         <Typography

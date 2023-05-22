@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useVaultIdStore, useVaultAddressStore } from "../store/Store";
+import {
+  useVaultIdStore,
+  useVaultAddressStore,
+  useVaultStore,
+} from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";
 import EmptyCard from "../components/collateral/EmptyCard";
@@ -15,6 +19,7 @@ import Debt from "../components/collateral/Debt.tsx";
 const Collateral = () => {
   const { vaultID, getVaultID } = useVaultIdStore();
   const { vaultAddress, getVaultAddress } = useVaultAddressStore();
+  const { vaultStore, getVaultStore } = useVaultStore();
   const [vaultAddressLocal, setVaultAddressLocal] = useState("");
   const [activeElement, setActiveElement] = useState(1);
   const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
@@ -70,6 +75,9 @@ const Collateral = () => {
         console.log(vault);
         console.log(vault[5][3]);
         foundValue = vault[5][3];
+        //set vault to state
+        getVaultStore(vault);
+        //set vault address to state
         getVaultAddress(vault[1]);
       }
     });
