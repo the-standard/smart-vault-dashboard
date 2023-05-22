@@ -42,8 +42,8 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     );
     const tokenURI = await contract.tokenURI(vault[0]);
     const tokenDecoded = JSON.parse(atob(tokenURI.split(",")[1]));
-    console.log(tokenDecoded.image);
-    console.log(tokenDecoded);
+    // console.log(tokenDecoded.image);
+    // console.log(tokenDecoded);
 
     tokenToNFTMap.current.set(
       ethers.BigNumber.from(vault[0]).toString(),
@@ -204,8 +204,11 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     console.log(Number(ethers.BigNumber.from(vault[5][0]).toString()));
     console.log(Number(ethers.BigNumber.from(vault[5][1]).toString()));
     console.log(
-      Number(ethers.BigNumber.from(vault[5][0]).toString()) /
-        Number(ethers.BigNumber.from(vault[5][1]).toString())
+      (
+        (Number(ethers.BigNumber.from(vault[5][0]).toString()) /
+          Number(ethers.BigNumber.from(vault[5][1]).toString())) *
+        100
+      ).toFixed(18)
     );
     const result = new Decimal(vault[5][0].toString())
       .dividedBy(vault[5][1].toString())
@@ -223,8 +226,9 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
       //   .dividedBy(vault[5][1].toString())
       //   .toNumber(),
       step:
-        Number(ethers.BigNumber.from(vault[5][0]).toString()) /
-        Number(ethers.BigNumber.from(vault[5][1]).toString()),
+        (Number(ethers.BigNumber.from(vault[5][0]).toString()) /
+          Number(ethers.BigNumber.from(vault[5][1]).toString())) *
+        100,
       // step:
       // ethers.BigNumber.from(vault[5][2]).toNumber() /
       // ethers.BigNumber.from(vault[5][1]).toNumber(),

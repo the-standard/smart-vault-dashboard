@@ -55,3 +55,16 @@ export const useCollateralSymbolStore = create<CollateralSymbolState>()(
       set(() => ({ collateralSymbol: collateralSymbol })),
   })
 );
+
+interface TransactionHashState {
+  transactionHash: string;
+  getTransactionHash: (transactionHash: string) => void;
+}
+
+export const useTransactionHashStore = create<TransactionHashState>()(
+  (set) => ({
+    transactionHash: "",
+    getTransactionHash: (transactionHash) =>
+      set(() => ({ transactionHash: transactionHash })),
+  })
+);

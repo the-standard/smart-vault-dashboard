@@ -3,6 +3,7 @@ import {
   useVaultIdStore,
   useVaultAddressStore,
   useVaultStore,
+  useTransactionHashStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";

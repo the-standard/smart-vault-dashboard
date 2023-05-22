@@ -110,16 +110,20 @@ const History = () => {
     const chain = EvmChain.SEPOLIA;
     console.log("address", address);
 
-    const response = await Moralis.EvmApi.transaction.getWalletTransactions({
-      address,
-      chain,
-    });
-    //push these into an array
-    //sort the array by date
-    // console.log(response.toJSON().result);
-    const result = response.toJSON().result; // Get the result from the response
-    console.log(result);
-    sortTransactions(result);
+    try {
+      const response = await Moralis.EvmApi.transaction.getWalletTransactions({
+        address,
+        chain,
+      });
+      //push these into an array
+      //sort the array by date
+      // console.log(response.toJSON().result);
+      const result = response.toJSON().result; // Get the result from the response
+      console.log(result);
+      sortTransactions(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -242,24 +246,7 @@ const History = () => {
         </button>
       </Box>
       <style>{styles}</style>
-      {/* <DataGrid
-        sx={{
-          height: "90%",
-          background: "rgba(26, 17, 17, 0.07)",
-        }}
-        rows={rows}
-        columns={columns}
-        getRowClassName={getRowClassName}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        disableRowSelectionOnClick
-      /> */}
+
       {returnDataGrid()}
     </Box>
   );

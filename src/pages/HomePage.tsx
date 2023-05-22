@@ -157,7 +157,7 @@ const HomePage = () => {
       {myVaults.length > 0 ? ( // Update this line
         <Datagrid vaults={myVaults} />
       ) : (
-        <Box>loading</Box>
+        <Box></Box>
       )}
     </Box>
   );

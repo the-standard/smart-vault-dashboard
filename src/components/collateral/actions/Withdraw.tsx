@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   useCollateralSymbolStore,
   useVaultAddressStore,
+  useTransactionHashStore,
 } from "../../../store/Store";
 import { Box } from "@mui/material";
 import { useAccount } from "wagmi";
@@ -17,6 +18,8 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   const [amount, setAmount] = useState(0);
   const { address, isConnecting, isDisconnected } = useAccount();
   const { vaultAddress } = useVaultAddressStore.getState();
+  const { transactionHash, getTransactionHash } =
+    useTransactionHashStore.getState();
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
@@ -31,24 +34,34 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
     console.log(address);
     try {
       console.log(symbol);
+      let transactionResponse; // Declare a variable to hold the transaction response
+
       if (symbol === "ETH" || symbol === "MATIC") {
-        await contract.removeCollateralNative(
+        transactionResponse = await contract.removeCollateralNative(
           ethers.utils.parseUnits(amount.toString()),
           address
         );
       } else if (symbol === "SUSD18" || symbol === "SUSD6") {
         const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
         console.log(symbolBytes32);
-        await contract.removeCollateral(
+        transactionResponse = await contract.removeCollateral(
           symbolBytes32,
           ethers.utils.parseUnits(amount.toString()),
           address
         );
       } else {
-        //this one should get the token address instead of symbol
-        //but how will the user know the token address if this is just a fallback function?
-        await contract.removeAsset(amount, address);
+        // This one should get the token address instead of symbol
+        // But how will the user know the token address if this is just a fallback function?
+        transactionResponse = await contract.removeAsset(amount, address);
       }
+
+      // Access the transaction hash from the transaction response
+      const transactionHash = transactionResponse.hash;
+      console.log("Transaction Hash:", transactionHash);
+      console.log("confirming transaction " + transactionHash.confirmations);
+      getTransactionHash(transactionHash);
+
+      // Continue with transaction confirmation check or other logic
     } catch (error) {
       console.log(error);
     }
