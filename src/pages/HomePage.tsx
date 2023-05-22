@@ -13,8 +13,8 @@ import seurologo from "../assets/seurologo.png";
 import sarslogo from "../assets/sarslogo.png";
 import saudlogo from "../assets/saudlogo.png";
 import susdlogo from "../assets/susdlogo.png";
-import { useVaultsStore } from "../store/Store.ts";
-import { useAccount, useConnect } from "wagmi";
+// import { useVaultsStore } from "../store/Store.ts";
+import { useAccount } from "wagmi";
 
 const items = [
   {
@@ -51,8 +51,8 @@ const HomePage = () => {
   // const [tokenToId, setTokenToId] = useState<any[]>([]);
   // const [resolved, setResolved] = useState(false);
   const [myVaults, setMyVaults] = useState<any[]>([]);
-  const { connector: activeConnector, isConnected } = useAccount();
-  const [loading, setLoading] = useState(true); // Add this line
+  const { connector: isConnected } = useAccount();
+  // const [loading, setLoading] = useState(true); // Add this line
 
   useEffect(() => {
     if (isConnected) {

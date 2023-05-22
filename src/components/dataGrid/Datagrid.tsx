@@ -13,7 +13,7 @@ import { styles } from "../../styles/dataGridStyles.ts";
 // import { useAccount, useConnect } from "wagmi";
 import { Link } from "react-router-dom";
 import { useVaultIdStore } from "../../store/Store.ts";
-import Decimal from "decimal.js";
+// import Decimal from "decimal.js";
 
 interface DataGridDemoProps {
   vaults: any[];
@@ -210,9 +210,9 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
         100
       ).toFixed(18)
     );
-    const result = new Decimal(vault[5][0].toString())
-      .dividedBy(vault[5][1].toString())
-      .toNumber();
+    // const result = new Decimal(vault[5][0].toString())
+    //   .dividedBy(vault[5][1].toString())
+    //   .toNumber();
     // console.log(result);
     return {
       id: index + 1,

@@ -1,5 +1,5 @@
-import { Box, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Typography } from "@mui/material";
+import { useState } from "react";
 import seurologo from "../../assets/seurologo.png";
 import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
@@ -9,7 +9,7 @@ import { useVaultAddressStore, useVaultStore } from "../../store/Store";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
-  const { address, isConnecting, isDisconnected } = useAccount();
+  const { address } = useAccount();
   const [amount, setAmount] = useState(0);
   const { vaultAddress } = useVaultAddressStore.getState();
   const { vaultStore }: any = useVaultStore();

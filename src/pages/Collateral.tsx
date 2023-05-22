@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useVaultIdStore,
   useVaultAddressStore,
   useVaultStore,
-  useTransactionHashStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";
-import EmptyCard from "../components/collateral/EmptyCard";
+// import EmptyCard from "../components/collateral/EmptyCard";
 import SmallCard from "../components/collateral/SmallCard";
-import HalfChart from "../components/collateral/HalfChart";
+// import HalfChart from "../components/collateral/HalfChart";
 import QRCode from "react-qr-code";
 import abi from "../abis/vaultManager.ts";
 import tokenmanagerabi from "../abis/tokenManagerABI.ts";
@@ -18,10 +17,10 @@ import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import Debt from "../components/collateral/Debt.tsx";
 
 const Collateral = () => {
-  const { vaultID, getVaultID } = useVaultIdStore();
-  const { vaultAddress, getVaultAddress } = useVaultAddressStore();
-  const { vaultStore, getVaultStore } = useVaultStore();
-  const [vaultAddressLocal, setVaultAddressLocal] = useState("");
+  const { vaultID } = useVaultIdStore();
+  const { getVaultAddress } = useVaultAddressStore();
+  const { getVaultStore } = useVaultStore();
+  const [vaultAddressLocal] = useState("");
   const [activeElement, setActiveElement] = useState(1);
   const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);

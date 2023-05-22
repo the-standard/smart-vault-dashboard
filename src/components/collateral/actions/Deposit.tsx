@@ -1,9 +1,9 @@
 import { Box, Modal, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import QRCode from "react-qr-code";
 import { useVaultAddressStore } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
-import smartVaultAbi from "../../../abis/smartVault";
+// import smartVaultAbi from "../../../abis/smartVault";
 import { ethers } from "ethers";
 
 const Deposit = () => {
@@ -23,9 +23,9 @@ const Deposit = () => {
 
   const depositViaMetamask = async () => {
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+      // const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const signer = provider.getSigner();
+      // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
       // Prompt user to enter the amount in MetaMask
       const txAmount = amount.toString();
       const transactionParameters = {

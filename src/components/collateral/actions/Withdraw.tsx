@@ -16,10 +16,9 @@ interface WithdrawProps {
 const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   const { collateralSymbol } = useCollateralSymbolStore.getState();
   const [amount, setAmount] = useState(0);
-  const { address, isConnecting, isDisconnected } = useAccount();
+  const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore.getState();
-  const { transactionHash, getTransactionHash } =
-    useTransactionHashStore.getState();
+  const { getTransactionHash } = useTransactionHashStore.getState();
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
