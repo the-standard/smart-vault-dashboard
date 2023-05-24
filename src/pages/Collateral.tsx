@@ -3,6 +3,7 @@ import {
   useVaultIdStore,
   useVaultAddressStore,
   useVaultStore,
+  useTransactionHashStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";
@@ -20,6 +21,7 @@ const Collateral = () => {
   const { vaultID } = useVaultIdStore();
   const { getVaultAddress } = useVaultAddressStore();
   const { getVaultStore } = useVaultStore();
+  const { getTransactionHash, transactionHash } = useTransactionHashStore();
   const [vaultAddressLocal] = useState("");
   const [activeElement, setActiveElement] = useState(1);
   const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
@@ -38,6 +40,30 @@ const Collateral = () => {
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
   }, []);
+  const [count, setCount] = useState(0);
+
+  async function listenToTransaction(transactionHash: string) {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const receipt = await provider.waitForTransaction(transactionHash);
+
+    // Check if the transaction is successful
+    if (receipt.status === 1) {
+      // Transaction was successful, perform rerender or any other necessary action
+      console.log("Transaction successful");
+      setCount(count + 1);
+      returnAcceptedTokensList();
+      // Trigger rerender or any other necessary action
+    } else {
+      // Transaction failed
+      console.log("Transaction failed");
+    }
+  }
+
+  useEffect(() => {
+    listenToTransaction(transactionHash);
+    console.log("count", count);
+    console.log("transactionHash", transactionHash);
+  }, [transactionHash]);
 
   const returntokens = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -96,6 +122,7 @@ const Collateral = () => {
           key={index}
           symbol={ethers.utils.parseBytes32String(token[0][0])}
           amount={ethers.BigNumber.from(token[1]).toString()}
+          //  amount={count.toString()}
         />
       );
     });

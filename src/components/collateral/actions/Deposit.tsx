@@ -1,5 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { useVaultAddressStore } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
@@ -21,6 +21,21 @@ const Deposit = () => {
     console.log(e.target.value);
   };
 
+  async function listenToTransaction(transactionHash: string) {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const receipt = await provider.waitForTransaction(transactionHash);
+
+    // Check if the transaction is successful
+    if (receipt.status === 1) {
+      // Transaction was successful, perform rerender or any other necessary action
+      console.log("Transaction successful");
+      // Trigger rerender or any other necessary action
+    } else {
+      // Transaction failed
+      console.log("Transaction failed");
+    }
+  }
+
   const depositViaMetamask = async () => {
     try {
       // const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -41,6 +56,7 @@ const Deposit = () => {
       });
 
       console.log("Transaction sent:", txHash);
+      listenToTransaction(txHash);
     } catch (error) {
       console.log(error);
     }
