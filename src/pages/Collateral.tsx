@@ -40,7 +40,6 @@ const Collateral = () => {
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
   }, []);
-  const [count, setCount] = useState(0);
 
   async function listenToTransaction(transactionHash: string) {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -50,7 +49,6 @@ const Collateral = () => {
     if (receipt.status === 1) {
       // Transaction was successful, perform rerender or any other necessary action
       console.log("Transaction successful");
-      setCount(count + 1);
       returnAcceptedTokensList();
       // Trigger rerender or any other necessary action
     } else {
@@ -61,7 +59,6 @@ const Collateral = () => {
 
   useEffect(() => {
     listenToTransaction(transactionHash);
-    console.log("count", count);
     console.log("transactionHash", transactionHash);
   }, [transactionHash]);
 
@@ -122,7 +119,6 @@ const Collateral = () => {
           key={index}
           symbol={ethers.utils.parseBytes32String(token[0][0])}
           amount={ethers.BigNumber.from(token[1]).toString()}
-          //  amount={count.toString()}
         />
       );
     });
