@@ -45,37 +45,41 @@ const History = () => {
   };
 
   const matchTransactions = async (_transactions: any) => {
-    const matchedObjects: any[] = [];
-    _transactions.map((transaction: any) => {
-      // if (nfts) {
-      nfts.map((nft: any) => {
-        // console.log(nft);
-        // console.log(nft.vaultAddress.toLowerCase());
-        // console.log(transaction);
-        if (
-          transaction.to_address.toLowerCase() ===
-            nft.vaultAddress.toLowerCase() ||
-          transaction.from_address.toLowerCase() ===
-            nft.vaultAddress.toLowerCase()
-        ) {
-          const matchedObject = {
-            ...transaction,
-            vaultType: ethers.utils.parseBytes32String(nft[5][6]).toString(),
-            token_id: ethers.BigNumber.from(nft[0]).toString(),
-          };
-          console.log(ethers.BigNumber.from(nft[0]).toString());
-          console.log(ethers.utils.parseBytes32String(nft[5][6]).toString());
-          console.log(matchedObject);
+    try {
+      const matchedObjects: any[] = [];
+      _transactions.map((transaction: any) => {
+        // if (nfts) {
+        nfts.map((nft: any) => {
+          // console.log(nft);
+          // console.log(nft.vaultAddress.toLowerCase());
+          // console.log(transaction);
+          if (
+            transaction.to_address.toLowerCase() ===
+              nft.vaultAddress.toLowerCase() ||
+            transaction.from_address.toLowerCase() ===
+              nft.vaultAddress.toLowerCase()
+          ) {
+            const matchedObject = {
+              ...transaction,
+              vaultType: ethers.utils.parseBytes32String(nft[5][6]).toString(),
+              token_id: ethers.BigNumber.from(nft[0]).toString(),
+            };
+            console.log(ethers.BigNumber.from(nft[0]).toString());
+            console.log(ethers.utils.parseBytes32String(nft[5][6]).toString());
+            console.log(matchedObject);
 
-          matchedObjects.push(matchedObject);
-        }
+            matchedObjects.push(matchedObject);
+          }
+        });
+        // }
       });
-      // }
-    });
-    // console.log(nfts);
-    console.log(matchedObjects);
-    console.log(matchedObjects.length);
-    setMatchedTransactions(matchedObjects);
+      // console.log(nfts);
+      console.log(matchedObjects);
+      console.log(matchedObjects.length);
+      setMatchedTransactions(matchedObjects);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getVaultTransactionHistory = async (userVaults: any) => {
@@ -135,6 +139,10 @@ const History = () => {
       getVaultTransactionHistory(nfts);
     }
   }, [nfts]);
+
+  useEffect(() => {
+    console.log("rendered");
+  }, [matchedTransactions]);
 
   const getRowClassName = (_params: any) => {
     return "no-border";

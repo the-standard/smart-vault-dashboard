@@ -22,7 +22,9 @@ const Collateral = () => {
   const { getVaultAddress } = useVaultAddressStore();
   const { getVaultStore } = useVaultStore();
   const { getTransactionHash, transactionHash } = useTransactionHashStore();
-  const [vaultAddressLocal] = useState("");
+  //local states
+  const [vaultAddressLocal, setVaultAddressLocal] = useState("");
+  const [localVault, setLocalVault] = useState<any[]>([]);
   const [activeElement, setActiveElement] = useState(1);
   const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
@@ -100,8 +102,12 @@ const Collateral = () => {
         foundValue = vault[5][3];
         //set vault to state
         getVaultStore(vault);
+        //set vault to local state
+        setLocalVault(vault);
         //set vault address to state
         getVaultAddress(vault[1]);
+        //set vault address to local state
+        setVaultAddressLocal(vault[1]);
       }
     });
     console.log(foundValue);
@@ -135,23 +141,38 @@ const Collateral = () => {
     // console.log(tokenmanagerabi);
   }, []);
 
-  const smallCardDummyValues = [
-    {
-      title: "Total Collateral",
-      value: 2709273,
-      type: "sEURO",
-    },
-    {
-      title: "Debt",
-      value: 8273,
-      type: "sEURO",
-    },
-    {
-      title: "Vault Liquidation",
-      value: 8123273,
-      type: "sEURO",
-    },
-  ];
+  const [smallCardValues, setSmallCardValues] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (localVault[5] != undefined) {
+      console.log(localVault[5][2]);
+      const totalCollateralValue = ethers.BigNumber.from(
+        localVault[5][2]
+      ).toString();
+      const totalDebtValue = ethers.BigNumber.from(localVault[5][0]).toString();
+      const collateralRate = ethers.BigNumber.from(localVault[2].toString());
+      const totalLiquidationValue =
+        Number(totalDebtValue) * Number(collateralRate);
+
+      setSmallCardValues([
+        {
+          title: "Total Collateral",
+          value: totalCollateralValue,
+          type: "sEURO",
+        },
+        {
+          title: "Debt",
+          value: totalDebtValue,
+          type: "sEURO",
+        },
+        {
+          title: "Vault Liquidation",
+          value: totalLiquidationValue,
+          type: "sEURO",
+        },
+      ]);
+    }
+  }, [localVault]);
 
   useEffect(() => {
     console.log(vaultID + "my vault update");
@@ -367,9 +388,13 @@ const Collateral = () => {
               flexWrap: "wrap",
             }}
           >
-            {smallCardDummyValues.map((item, index) => (
-              <SmallCard key={index} {...item} />
-            ))}
+            {localVault != undefined ? (
+              smallCardValues.map((item, index) => (
+                <SmallCard key={index} {...item} />
+              ))
+            ) : (
+              <div>loading</div>
+            )}
             {/* <HalfChart /> */}
           </Box>
         </Box>
