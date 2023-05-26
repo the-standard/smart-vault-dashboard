@@ -9,7 +9,7 @@ import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";
 // import EmptyCard from "../components/collateral/EmptyCard";
 import SmallCard from "../components/collateral/SmallCard";
-// import HalfChart from "../components/collateral/HalfChart";
+import FullChart from "../components/collateral/FullChart.tsx";
 import QRCode from "react-qr-code";
 import abi from "../abis/vaultManager.ts";
 import tokenmanagerabi from "../abis/tokenManagerABI.ts";
@@ -395,7 +395,23 @@ const Collateral = () => {
             ) : (
               <div>loading</div>
             )}
-            {/* <HalfChart /> */}
+            <div
+              style={{
+                height: "500px",
+                width: "500px",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  top: "50%",
+                  left: "50%",
+                }}
+              >
+                hey
+              </Box>
+              <FullChart />
+            </div>
           </Box>
         </Box>
       </Box>
