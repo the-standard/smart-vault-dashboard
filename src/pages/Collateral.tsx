@@ -10,6 +10,7 @@ import QRicon from "../assets/qricon.png";
 // import EmptyCard from "../components/collateral/EmptyCard";
 import SmallCard from "../components/collateral/SmallCard";
 import FullChart from "../components/collateral/FullChart.tsx";
+import HalfChart from "../components/collateral/halfChart/index.tsx";
 import QRCode from "react-qr-code";
 import abi from "../abis/vaultManager.ts";
 import tokenmanagerabi from "../abis/tokenManagerABI.ts";
@@ -395,6 +396,9 @@ const Collateral = () => {
             ) : (
               <div>loading</div>
             )}
+
+            <HalfChart />
+
             <Box
               sx={{
                 height: "400px",
