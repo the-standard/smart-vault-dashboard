@@ -6,30 +6,33 @@ const index = () => {
   return (
     <Box
       sx={{
+        position: "relative",
         height: "400px",
         width: "400px",
       }}
     >
-      {/* <Box
+      <Box
         sx={{
-          position: "relative",
-          top: "50%",
-          left: "50%",
-          border: "1px solid red",
-          width: "5px",
+          width: "16rem",
+          height: "8rem",
+          backgroundColor: "rgba(18, 18, 18, 0.8)",
+          borderRadius: "8rem 8rem 0 0",
+          borderTop: "1px solid #23EAE0",
+          position: "absolute",
+          top: "27%",
+          left: "18.2%",
+          zIndex: 0,
         }}
-      >
-        Collateral Value
-      </Box> */}
+      ></Box>
       <Box
         sx={{
           width: "12rem",
           height: "6rem",
           backgroundColor: "rgba(18, 18, 18, 0.6)",
           borderRadius: "6rem 6rem 0 0",
-          border: "1px solid #8E9BAE",
-          position: "relative",
-          top: "59%",
+          borderTop: "1px solid #23EAE0",
+          position: "absolute",
+          top: "35%",
           left: "26%",
           zIndex: 0,
         }}
