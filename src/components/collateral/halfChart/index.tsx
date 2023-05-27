@@ -13,6 +13,19 @@ const index = () => {
     >
       <Box
         sx={{
+          width: "24rem",
+          height: "12rem",
+          backgroundColor: "rgba(30, 29, 29, 0.9)",
+          borderRadius: "12rem 12rem 0 0",
+          borderTop: "1px solid #5C5C5C",
+          position: "absolute",
+          top: "11%",
+          left: "2.5%",
+          zIndex: 0,
+        }}
+      ></Box>
+      <Box
+        sx={{
           width: "16rem",
           height: "8rem",
           backgroundColor: "rgba(18, 18, 18, 0.8)",
