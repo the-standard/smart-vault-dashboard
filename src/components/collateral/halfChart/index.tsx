@@ -21,6 +21,19 @@ const index = () => {
       >
         Collateral Value
       </Box> */}
+      <Box
+        sx={{
+          width: "12rem",
+          height: "6rem",
+          backgroundColor: "rgba(18, 18, 18, 0.6)",
+          borderRadius: "6rem 6rem 0 0",
+          border: "1px solid #8E9BAE",
+          position: "relative",
+          top: "59%",
+          left: "26%",
+          zIndex: 0,
+        }}
+      ></Box>
       <HalfChart />
     </Box>
   );

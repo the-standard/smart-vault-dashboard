@@ -54,6 +54,7 @@ const FullChart = () => (
     }}
     enableArcLinkLabels={false}
     enableArcLabels={false}
+    isInteractive={false}
     defs={[
       // using helpers
       // will inherit colors from current element
