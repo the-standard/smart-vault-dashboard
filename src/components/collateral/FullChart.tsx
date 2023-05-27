@@ -44,7 +44,7 @@ const FullChart = () => (
         color: "hsl(304, 70%, 50%)",
       },
     ]}
-    margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+    margin={{ top: 0, right: 80, bottom: 80, left: 80 }}
     innerRadius={0.82}
     padAngle={4}
     cornerRadius={45}

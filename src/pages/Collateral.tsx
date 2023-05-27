@@ -373,39 +373,55 @@ const Collateral = () => {
           sx={{
             background:
               "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-            border: "1px solid rgba(52, 52, 52, 0.3)",
+            // border: "1px solid rgba(52, 52, 52, 0.3)",
             boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
             borderRadius: "10px 10px 0px 0px",
             width: { sm: "100%", md: "50%" },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            border: "1px solid red",
           }}
         >
           {/* <SmallCard /> */}
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-around",
+              display: { xs: "flex", md: "static" },
+              flexDirection: "column",
+              // justifyContent: "space-around",
               alignItems: "center",
-              flexWrap: "wrap",
+              // flexWrap: "wrap",
+              //border: "1px solid red",
+              height: "400px",
+              width: "320px",
             }}
           >
-            {localVault != undefined ? (
-              smallCardValues.map((item, index) => (
-                <SmallCard key={index} {...item} />
-              ))
-            ) : (
-              <div>loading</div>
-            )}
-
-            <HalfChart />
-
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-around",
+              }}
+            >
+              {localVault != undefined ? (
+                smallCardValues.map((item, index) => (
+                  <SmallCard key={index} {...item} />
+                ))
+              ) : (
+                <div>loading</div>
+              )}
+            </Box>
+            <Box sx={{}}>
+              <HalfChart />
+            </Box>
             <Box
               sx={{
                 height: "400px",
                 width: "400px",
               }}
             >
-              <Box
+              {/* <Box
                 sx={{
                   position: "relative",
                   top: "50%",
@@ -415,9 +431,16 @@ const Collateral = () => {
                 }}
               >
                 Collateral Value
-              </Box>
-              <FullChart />
+              </Box> */}
             </Box>
+          </Box>
+          <Box
+            sx={{
+              width: "400px",
+              height: "400px",
+            }}
+          >
+            <FullChart />
           </Box>
         </Box>
       </Box>
