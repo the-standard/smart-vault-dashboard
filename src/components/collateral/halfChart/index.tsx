@@ -2,10 +2,21 @@ import React from "react";
 import HalfChart from "./HalfChart";
 // import ChartBar from "./ChartBar";
 import { Box } from "@mui/material";
-import ReactSpeedometer from "react-d3-speedometer";
+// import ReactSpeedometer from "react-d3-speedometer";
+import GradientSVG from "./GradientSvg";
+
+import {
+  CircularProgressbar,
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
+import "react-circular-progressbar/dist/styles.css";
 
 const index = () => {
-  const barValue = 20;
+  const barValue = 50;
+  const idCSS = "gradientProgress";
   return (
     <Box
       sx={{
@@ -14,19 +25,6 @@ const index = () => {
         width: "400px",
       }}
     >
-      <Box
-        sx={{
-          width: "20rem",
-          height: "10rem",
-          backgroundColor: "rgba(30, 29, 29, 0.9)",
-          borderRadius: "10rem 10rem 0 0",
-          borderTop: "1px solid #5C5C5C",
-          position: "absolute",
-          top: "20%",
-          left: "10.5%",
-          zIndex: 0,
-        }}
-      ></Box>
       <Box
         sx={{
           width: "16rem",
@@ -59,19 +57,56 @@ const index = () => {
           height: "250px",
           width: "308px",
           position: "absolute",
-          top: "15.5%",
-          right: "0%",
-          left: "6%",
+          top: "21%",
+          left: "12%",
         }}
       >
-        <ReactSpeedometer
-          ringWidth={27}
-          width={355}
-          maxValue={100}
-          startColor="black"
-          endColor="#23EAE0"
+        <CircularProgressbar
           value={barValue}
-        />{" "}
+          text={`${barValue}%`}
+          circleRatio={0.5}
+          //   styles={buildStyles({
+          //     rotation: 0.25 * 3,
+
+          //     strokeLinecap: "butt",
+          //     trailColor: "rgba(30, 29, 29, 0.9)",
+          //     pathColor: " hsl(180, 46.058091286307054%, 52.74509803921569%)",
+          //     textSize: "14px",
+          //   })}
+          styles={{
+            path: {
+              stroke: `url(#${idCSS})`,
+              height: "100%",
+              transform: "rotate(0.75turn)",
+              transformOrigin: "center center",
+            },
+            trail: {
+              stroke: "rgba(30, 29, 29, 0.9)",
+              transform: "rotate(0.75turn)",
+              transformOrigin: "center center",
+            },
+            text: {
+              fill: "white",
+              fontSize: "1rem",
+
+              position: "relative",
+              top: "20%",
+              left: "50%",
+            },
+          }}
+        />
+        <GradientSVG />
+        {/* <CircularProgressbar
+          strokeWidth={8}
+          value={barValue}
+          //   text={barValue}
+          styles={{
+            path: { stroke: `url(#${idCSS})`, height: "100%" },
+            trail: {
+              stroke: "#2e2e2e",
+            },
+          }}
+        /> */}
       </Box>
     </Box>
   );
