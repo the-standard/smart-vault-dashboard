@@ -395,10 +395,10 @@ const Collateral = () => {
             ) : (
               <div>loading</div>
             )}
-            <div
-              style={{
-                height: "500px",
-                width: "500px",
+            <Box
+              sx={{
+                height: "400px",
+                width: "400px",
               }}
             >
               <Box
@@ -406,12 +406,14 @@ const Collateral = () => {
                   position: "relative",
                   top: "50%",
                   left: "50%",
+                  border: "1px solid red",
+                  width: "5px",
                 }}
               >
-                hey
+                Collateral Value
               </Box>
               <FullChart />
-            </div>
+            </Box>
           </Box>
         </Box>
       </Box>
