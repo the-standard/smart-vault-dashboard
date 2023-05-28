@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import React, { useState } from "react";
 import Actions from "./Actions";
 import { useCollateralSymbolStore } from "../../store/Store";
+import LineChart from "./LineChart";
 
 interface AcceptedTokenProps {
   amount: string;
@@ -40,40 +41,61 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
       symbol: {symbol} */}
       <Box
         sx={{
-          color: "#00FFF0",
-          border: "1px solid #8E9BAE",
-          borderRadius: "50%",
-          width: "3.5rem",
-          height: "3.5rem",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          animation: "glowing 2s infinite",
-          boxShadow: () => `0 0 5px #00FFF0`,
-          "@keyframes glowing": {
-            "0%": {
-              boxShadow: () => `0 0 5px #00FFF0`,
-            },
-            "50%": {
-              boxShadow: () => `0 0 20px #00FFF0`,
-            },
-            "100%": {
-              boxShadow: () => `0 0 5px #00FFF0`,
-            },
-          },
+          flexDirection: { xs: "column", lg: "row" },
+          justifyContent: "space-between",
         }}
       >
-        <Typography variant="body2"> {symbol}</Typography>
+        <Box>
+          <Box
+            sx={{
+              color: "#00FFF0",
+              border: "1px solid #8E9BAE",
+              borderRadius: "50%",
+              width: "3.5rem",
+              height: "3.5rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              animation: "glowing 2s infinite",
+              boxShadow: () => `0 0 5px #00FFF0`,
+              "@keyframes glowing": {
+                "0%": {
+                  boxShadow: () => `0 0 5px #00FFF0`,
+                },
+                "50%": {
+                  boxShadow: () => `0 0 20px #00FFF0`,
+                },
+                "100%": {
+                  boxShadow: () => `0 0 5px #00FFF0`,
+                },
+              },
+            }}
+          >
+            <Typography variant="body2"> {symbol}</Typography>
+          </Box>
+          <Typography
+            sx={{
+              marginTop: "1rem",
+            }}
+            variant="body1"
+          >
+            {ethers.utils.formatEther(amount)} {symbol}{" "}
+          </Typography>
+        </Box>
+        {/* line chart comes here */}
+        <Box
+          sx={{
+            minWidth: { xs: "100%", lg: "400px" },
+            width: "auto",
+            height: "200px",
+            border: "1px solid #8E9BAE",
+          }}
+        >
+          <LineChart />
+        </Box>
       </Box>
-      <Typography
-        sx={{
-          marginTop: "1rem",
-        }}
-        variant="body1"
-      >
-        {ethers.utils.formatEther(amount)} {symbol}{" "}
-      </Typography>
       <Box
         sx={{
           display: "flex",
@@ -83,6 +105,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
           borderRadius: "6.24932px",
           // padding: "1%",
+          marginTop: "2rem",
         }}
       >
         <Box

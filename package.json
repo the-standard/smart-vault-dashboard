@@ -19,6 +19,7 @@
     "@mui/x-data-grid": "^6.3.0",
     "@mui/x-data-grid-generator": "^6.3.0",
     "@nivo/core": "^0.83.0",
+    "@nivo/line": "^0.83.0",
     "@nivo/pie": "^0.83.0",
     "@opensea/seaport-js": "^1.2.1",
     "@rainbow-me/rainbowkit": "^1.0.0",

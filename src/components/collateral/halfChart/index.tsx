@@ -86,6 +86,7 @@ const index = () => {
               transformOrigin: "center center",
             },
             text: {
+              //make this transparent
               fill: "white",
               fontSize: "1rem",
 
