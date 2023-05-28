@@ -4,7 +4,7 @@ export const priceFeed = {
     decimals: "8",
     prices: [
       {
-        price: 1,
+        price: 22681456700,
         ts: 1681817400,
       },
       {
@@ -12,7 +12,7 @@ export const priceFeed = {
         ts: 1681819200,
       },
       {
-        price: 3,
+        price: 522681456700,
         ts: 1681821000,
       },
       {

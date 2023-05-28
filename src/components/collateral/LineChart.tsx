@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import priceFeed from "../../feed/priceFeed.ts";
 
-const data = priceFeed.SUSD6.prices;
+const data = priceFeed.ETH.prices;
 
 export default class Example extends PureComponent {
   static demoUrl = "https://codesandbox.io/s/simple-line-chart-kec3v";
@@ -20,13 +20,17 @@ export default class Example extends PureComponent {
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart width={500} height={100} data={data}>
-          <Tooltip />
-          <YAxis hide={true} domain={[500000000000, "dataMax"]} />{" "}
+          {/* <Tooltip /> */}
+          <YAxis
+            hide={true}
+            domain={[priceFeed.ETH.prices[0].price, "dataMax"]}
+          />{" "}
           <Line
             type="monotone"
             dataKey="price"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
+            dot={false}
           />
         </LineChart>
       </ResponsiveContainer>
