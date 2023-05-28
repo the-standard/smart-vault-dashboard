@@ -312,7 +312,7 @@ const Collateral = () => {
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
-          alignItems: "flex-start",
+          alignItems: { xs: "center", md: "flex-start" },
           width: "100%",
         }}
       >
@@ -376,12 +376,11 @@ const Collateral = () => {
             // border: "1px solid rgba(52, 52, 52, 0.3)",
             boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
             borderRadius: "10px 10px 0px 0px",
-            width: { sm: "100%", md: "50%" },
+            width: { sm: "auto", md: "50%" },
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            //   border: "1px solid red",
           }}
         >
           {/* <SmallCard /> */}
@@ -392,7 +391,6 @@ const Collateral = () => {
               // justifyContent: "space-around",
               alignItems: "center",
               // flexWrap: "wrap",
-              //border: "1px solid red",
               height: "400px",
               width: "320px",
             }}
@@ -426,8 +424,7 @@ const Collateral = () => {
                   position: "relative",
                   top: "50%",
                   left: "50%",
-                  border: "1px solid red",
-                  width: "5px",
+                          width: "5px",
                 }}
               >
                 Collateral Value
