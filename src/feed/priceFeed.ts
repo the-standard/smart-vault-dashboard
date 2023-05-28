@@ -4,19 +4,19 @@ export const priceFeed = {
     decimals: "8",
     prices: [
       {
-        price: 177242279508,
+        price: 1,
         ts: 1681817400,
       },
       {
-        price: 164966610911,
+        price: 2,
         ts: 1681819200,
       },
       {
-        price: 152058788040,
+        price: 3,
         ts: 1681821000,
       },
       {
-        price: 169406590452,
+        price: 4,
         ts: 1681822800,
       },
       {
