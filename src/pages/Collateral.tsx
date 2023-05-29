@@ -183,7 +183,7 @@ const Collateral = () => {
       sx={{
         color: "#8E9BAE",
         margin: "3% 9%",
-        padding: "3%",
+        padding: "1%",
         // marginTop: "50px",
         background:
           "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
@@ -192,6 +192,7 @@ const Collateral = () => {
         borderRadius: "10px 10px 0px 0px",
         minHeight: "100vh",
         height: "100%",
+        // border: "1px solid red",
       }}
     >
       {/* divide into 2 columns */}
@@ -334,7 +335,7 @@ const Collateral = () => {
               width: "100%",
             }}
           >
-            <Box
+            {/* <Box
               sx={{
                 background: " rgba(18, 18, 18, 0.5)",
                 boxShadow:
@@ -361,7 +362,7 @@ const Collateral = () => {
                   alt="qricon"
                 />
               </Box>
-            </Box>
+            </Box> */}
             {/* <EmptyCard /> */}
             {/* list available tokens here */}
             {collateralOrDebt === 1 ? displayTokens() : displayDebt()}

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 
 const ApexChart = () => {
+  const [chartWidth, setChartWidth] = useState(400);
+  const [chartHeight, setChartHeight] = useState(220);
   const series = [
     {
       name: "XYZ MOTORS",
@@ -19,9 +21,32 @@ const ApexChart = () => {
         [1623062400000, 16],
         [1623148800000, 13],
         [1623235200000, 11],
-      ], // Replace 'dates' with your actual data
+      ],
     },
   ];
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.matchMedia("(max-width: 600px)").matches) {
+        setChartWidth(100);
+        setChartHeight(100);
+      } else if (window.matchMedia("(max-width: 1200px)").matches) {
+        setChartWidth(200);
+        setChartHeight(150);
+      } else {
+        setChartWidth(400);
+        setChartHeight(220);
+      }
+    };
+
+    handleResize(); // Set initial dimensions
+
+    window.addEventListener("resize", handleResize); // Add event listener for window resize
+
+    return () => {
+      window.removeEventListener("resize", handleResize); // Clean up event listener on component unmount
+    };
+  }, []);
 
   return (
     <div id="chart">
@@ -30,7 +55,7 @@ const ApexChart = () => {
           chart: {
             type: "area",
             stacked: false,
-            height: 350,
+            //   height: 350,
             zoom: {
               type: "x",
               enabled: true,
@@ -89,8 +114,8 @@ const ApexChart = () => {
         }}
         series={series}
         type="area"
-        height={220}
-        width={400}
+        height={chartHeight}
+        width={chartWidth}
       />
     </div>
   );
