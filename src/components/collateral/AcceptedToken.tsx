@@ -15,15 +15,15 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore.getState();
 
-  const renderLineChart = () => {
-    if (symbol === "ETH") {
-      return <LineChart data={priceFeed.ETH.prices} />;
-    } else if (symbol === "SUSD6") {
-      return <LineChart data={priceFeed.SUSD6.prices} />;
-    } else if (symbol === "SUSD18") {
-      return <LineChart data={priceFeed.SUSD18.prices} />;
-    }
-  };
+  // const renderLineChart = () => {
+  //   if (symbol === "ETH") {
+  //     return <LineChart data={priceFeed.ETH.prices} />;
+  //   } else if (symbol === "SUSD6") {
+  //     return <LineChart data={priceFeed.SUSD6.prices} />;
+  //   } else if (symbol === "SUSD18") {
+  //     return <LineChart data={priceFeed.SUSD18.prices} />;
+  //   }
+  // };
 
   const handleClick = (element: number) => {
     setActiveElement(element);
@@ -104,7 +104,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             // border: "1px solid #8E9BAE",
           }}
         >
-          {renderLineChart()}{" "}
+          {/* {renderLineChart()}{" "} */}
+          <LineChart />
         </Box>
       </Box>
       <Box

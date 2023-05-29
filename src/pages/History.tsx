@@ -118,11 +118,11 @@ const History = () => {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "#", width: 90 },
-    { field: "col1", headerName: "Vault", width: 250 },
+    { field: "col1", headerName: "Vault", width: 90 },
     { field: "col2", headerName: "From", width: 250 },
     { field: "col3", headerName: "To", width: 250 },
     { field: "col4", headerName: "Block Hash", width: 250 },
-    { field: "col5", headerName: "Block Number", width: 250 },
+    { field: "col5", headerName: "Block Number", width: 120 },
     { field: "col6", headerName: "Date", width: 250 },
   ];
 
