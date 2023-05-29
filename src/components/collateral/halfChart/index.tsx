@@ -1,7 +1,7 @@
 import React from "react";
 import HalfChart from "./HalfChart";
 // import ChartBar from "./ChartBar";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 // import ReactSpeedometer from "react-d3-speedometer";
 import GradientSVG from "./GradientSvg";
 
@@ -13,6 +13,22 @@ import {
 import "react-circular-progressbar/dist/styles.css";
 
 import "react-circular-progressbar/dist/styles.css";
+
+const conditionBarText = (barValue: number) => {
+  if (barValue <= 10) {
+    return "Very Low";
+  } else if (barValue <= 20) {
+    return "Low";
+  } else if (barValue <= 30) {
+    return "Medium";
+  } else if (barValue <= 40) {
+    return "High";
+  } else if (barValue <= 50) {
+    return "Very High";
+  } else {
+    return "Very High";
+  }
+};
 
 const index = () => {
   const barValue = 50;
@@ -63,7 +79,8 @@ const index = () => {
       >
         <CircularProgressbar
           value={barValue}
-          text={`${barValue}%`}
+          //  text={`${barValue}%`}
+
           circleRatio={0.5}
           //   styles={buildStyles({
           //     rotation: 0.25 * 3,
@@ -85,29 +102,42 @@ const index = () => {
               transform: "rotate(0.75turn)",
               transformOrigin: "center center",
             },
-            text: {
-              //make this transparent
-              fill: "white",
-              fontSize: "1rem",
+            // text: {
+            //   //make this transparent
+            //   fill: "white",
+            //   fontSize: "1rem",
 
-              position: "relative",
-              top: "20%",
-              left: "50%",
-            },
+            //   position: "relative",
+            //   top: "20%",
+            //   left: "50%",
+            // },
           }}
         />
         <GradientSVG />
-        {/* <CircularProgressbar
-          strokeWidth={8}
-          value={barValue}
-          //   text={barValue}
-          styles={{
-            path: { stroke: `url(#${idCSS})`, height: "100%" },
-            trail: {
-              stroke: "#2e2e2e",
-            },
+        <Typography
+          variant="h4"
+          sx={{
+            position: "relative",
+            top: "-100%",
+            left: "40%",
+            //  transform: "translate(-50%, -50%)",
+            color: "white",
+            fontWeight: "bold",
           }}
-        /> */}
+        >
+          {barValue}%
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            position: "relative",
+            top: "-100%",
+            left: "40%",
+            //  transform: "translate(-50%, -50%)",
+          }}
+        >
+          {conditionBarText(barValue)}
+        </Typography>
       </Box>
     </Box>
   );

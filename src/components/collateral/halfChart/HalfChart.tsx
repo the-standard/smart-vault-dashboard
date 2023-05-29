@@ -10,7 +10,7 @@ import { linearGradientDef } from "@nivo/core";
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const FullChart = () => (
+const HalfChart = () => (
   <ResponsivePie
     data={[
       {
@@ -123,4 +123,4 @@ const FullChart = () => (
   />
 );
 
-export default FullChart;
+export default HalfChart;
