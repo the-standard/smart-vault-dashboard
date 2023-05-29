@@ -28,13 +28,13 @@ const ApexChart = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.matchMedia("(max-width: 600px)").matches) {
-        setChartWidth(100);
-        setChartHeight(100);
+        setChartWidth(250);
+        setChartHeight(120);
       } else if (window.matchMedia("(max-width: 1200px)").matches) {
-        setChartWidth(200);
+        setChartWidth(400);
         setChartHeight(150);
       } else {
-        setChartWidth(400);
+        setChartWidth(350);
         setChartHeight(220);
       }
     };
