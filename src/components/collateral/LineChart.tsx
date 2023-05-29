@@ -1,29 +1,45 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 
-const ApexChart = () => {
+interface LineChartProps {
+  data: { x: number; y: number }[];
+  symbol: string;
+}
+
+const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
   const [chartWidth, setChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(220);
+  const [lineColor, setLineColor] = useState("green");
+
+  const convertedData = data.map(({ y, x }) => [y, x]);
+  console.log(data);
+  console.log(convertedData);
   const series = [
     {
-      name: "XYZ MOTORS",
-      data: [
-        [1622198400000, 10],
-        [1622284800000, 15],
-        [1622371200000, 8],
-        [1622457600000, 12],
-        [1622544000000, 6],
-        [1622630400000, 10],
-        [1622716800000, 14],
-        [1622803200000, 18],
-        [1622889600000, 12],
-        [1622976000000, 9],
-        [1623062400000, 16],
-        [1623148800000, 13],
-        [1623235200000, 11],
-      ],
+      //symbol should come here
+      name: symbol,
+      data: convertedData,
     },
   ];
+
+  const renderColor = () => {
+    //if the last element is greater than the second to last element, set lineColor to green
+    if (
+      Number(convertedData[convertedData.length - 1][1]) >
+      Number(convertedData[convertedData.length - 2][1])
+    ) {
+      setLineColor("green");
+    } else if (
+      Number(convertedData[convertedData.length - 1][1]) <
+      Number(convertedData[convertedData.length - 2][1])
+    ) {
+      setLineColor("red");
+    }
+  };
+
+  useEffect(() => {
+    renderColor();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,6 +63,10 @@ const ApexChart = () => {
       window.removeEventListener("resize", handleResize); // Clean up event listener on component unmount
     };
   }, []);
+
+  if (!data || data.length === 0) {
+    return null; // or render a loading state or placeholder
+  }
 
   return (
     <div id="chart">
@@ -75,7 +95,7 @@ const ApexChart = () => {
             text: "Stock Price Movement",
             align: "left",
           },
-          colors: ["#F44336", "#E91E63", "#9C27B0"],
+          colors: [lineColor],
           fill: {
             type: "gradient",
             gradient: {
@@ -121,4 +141,4 @@ const ApexChart = () => {
   );
 };
 
-export default ApexChart;
+export default LineChart;
