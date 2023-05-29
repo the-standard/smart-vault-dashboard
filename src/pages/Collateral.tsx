@@ -7,7 +7,6 @@ import {
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";
-// import EmptyCard from "../components/collateral/EmptyCard";
 import SmallCard from "../components/collateral/SmallCard";
 import FullChart from "../components/collateral/FullChart.tsx";
 import HalfChart from "../components/collateral/halfChart/index.tsx";
@@ -372,70 +371,77 @@ const Collateral = () => {
         {/*  row 2 */}
         <Box
           sx={{
-            background:
-              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-            // border: "1px solid rgba(52, 52, 52, 0.3)",
-            boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-            borderRadius: "10px 10px 0px 0px",
-            width: { sm: "auto", md: "50%" },
+            width: { xs: "100%", md: "auto" },
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          {/* <SmallCard /> */}
           <Box
             sx={{
-              display: { xs: "flex", md: "static" },
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+              border: "1px solid rgba(52, 52, 52, 0.3)",
+              boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+              borderRadius: "10px 10px 0px 0px",
+              width: { sm: "auto", md: "100%" },
+              height: "420px",
+              display: "flex",
               flexDirection: "column",
-              // justifyContent: "space-around",
+              justifyContent: "center",
               alignItems: "center",
-              // flexWrap: "wrap",
-              height: "400px",
-              width: "320px",
+              //  border: "1px solid red",
+              marginBottom: "2rem",
             }}
           >
+            {/* <SmallCard /> */}
             <Box
               sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "space-around",
-              }}
-            >
-              {localVault != undefined ? (
-                smallCardValues.map((item, index) => (
-                  <SmallCard key={index} {...item} />
-                ))
-              ) : (
-                <div>loading</div>
-              )}
-            </Box>
-            <Box sx={{}}>
-              <HalfChart />
-            </Box>
-            <Box
-              sx={{
+                display: { xs: "flex", md: "static" },
+                flexDirection: "column",
+                // justifyContent: "space-around",
+                alignItems: "center",
+                // flexWrap: "wrap",
                 height: "400px",
-                width: "400px",
+                width: "auto",
+                border: "1px solid red",
               }}
             >
-              {/* <Box
+              <Box
                 sx={{
-                  position: "relative",
-                  top: "50%",
-                  left: "50%",
-                          width: "5px",
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "space-around",
                 }}
               >
-                Collateral Value
-              </Box> */}
+                {localVault != undefined ? (
+                  smallCardValues.map((item, index) => (
+                    <SmallCard key={index} {...item} />
+                  ))
+                ) : (
+                  <div>loading</div>
+                )}
+              </Box>
+              <Box sx={{}}>
+                <HalfChart />
+              </Box>
             </Box>
           </Box>
           <Box
             sx={{
-              width: "400px",
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+              border: "1px solid rgba(52, 52, 52, 0.3)",
+              boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+              borderRadius: "10px 10px 0px 0px",
               height: "400px",
+              width: "auto",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <FullChart />
