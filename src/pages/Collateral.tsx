@@ -192,7 +192,6 @@ const Collateral = () => {
         borderRadius: "10px 10px 0px 0px",
         minHeight: "100vh",
         height: "100%",
-        // border: "1px solid red",
       }}
     >
       {/* divide into 2 columns */}
@@ -311,7 +310,7 @@ const Collateral = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: { xs: "column", md: "column", lg: "row", xl: "row" },
           justifyContent: "space-between",
           alignItems: { xs: "center", md: "flex-start" },
           width: "100%",
@@ -319,7 +318,7 @@ const Collateral = () => {
       >
         <Box
           sx={{
-            width: { xs: "100%", md: "60%" },
+            width: { xs: "100%", md: "100%", lg: "50%", xl: "50%" },
           }}
         >
           {/* divide into 2 rows */}
@@ -331,39 +330,9 @@ const Collateral = () => {
               // flexDirection: "column",
               // justifyContent: "center",
               // alignItems: "flex-start",
-              // border: "1px solid red",
               width: "100%",
             }}
           >
-            {/* <Box
-              sx={{
-                background: " rgba(18, 18, 18, 0.5)",
-                boxShadow:
-                  " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-                borderRadius: "6.24932px",
-                cursor: "pointer",
-                width: "auto",
-              }}
-            >
-              <Box
-                sx={{
-                  margin: "2px",
-                  padding: "5px",
-                }}
-                className="glowingCard"
-                onClick={handleOpen}
-              >
-                + Deposit Collateral{" "}
-                <img
-                  style={{
-                    marginLeft: "1.5rem",
-                  }}
-                  src={QRicon}
-                  alt="qricon"
-                />
-              </Box>
-            </Box> */}
-            {/* <EmptyCard /> */}
             {/* list available tokens here */}
             {collateralOrDebt === 1 ? displayTokens() : displayDebt()}
             {/* {displayTokens()}{" "} */}
@@ -372,7 +341,7 @@ const Collateral = () => {
         {/*  row 2 */}
         <Box
           sx={{
-            width: { xs: "100%", md: "auto" },
+            width: { xs: "100%", md: "100%" },
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -386,13 +355,12 @@ const Collateral = () => {
               border: "1px solid rgba(52, 52, 52, 0.3)",
               boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
               borderRadius: "10px 10px 0px 0px",
-              width: { sm: "auto", md: "100%" },
+              width: { sm: "100%", md: "100%" },
               height: "420px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              //  border: "1px solid red",
               marginBottom: "2rem",
             }}
           >
@@ -405,7 +373,7 @@ const Collateral = () => {
                 alignItems: "center",
                 // flexWrap: "wrap",
                 height: "400px",
-                width: "320px",
+                width: { xs: "100%", md: "100%", lg: "80%", xl: "80%" },
               }}
             >
               <Box
@@ -426,19 +394,7 @@ const Collateral = () => {
               <Box sx={{}}>
                 <HalfChart />
               </Box>
-              <Box
-                sx={{
-                  height: "400px",
-                  width: "400px",
-                }}
-              ></Box>
             </Box>
-            <Box
-              sx={{
-                width: "400px",
-                height: "400px",
-              }}
-            ></Box>
           </Box>
           <Box
             sx={{
@@ -448,12 +404,11 @@ const Collateral = () => {
               boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
               borderRadius: "10px 10px 0px 0px",
               height: "400px",
-              width: "400px",
+              width: { xs: "100%", md: "100%", lg: "80%", xl: "80%" },
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              //  border: "1px solid red",
             }}
           >
             <FullChart />
