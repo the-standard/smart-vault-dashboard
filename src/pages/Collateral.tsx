@@ -7,6 +7,7 @@ import {
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 import QRicon from "../assets/qricon.png";
+// import EmptyCard from "../components/collateral/EmptyCard";
 import SmallCard from "../components/collateral/SmallCard";
 import FullChart from "../components/collateral/FullChart.tsx";
 import HalfChart from "../components/collateral/halfChart/index.tsx";
@@ -404,14 +405,12 @@ const Collateral = () => {
                 alignItems: "center",
                 // flexWrap: "wrap",
                 height: "400px",
-                width: "auto",
-                border: "1px solid red",
+                width: "320px",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
                   flexWrap: "wrap",
                   justifyContent: "space-around",
                 }}
@@ -427,7 +426,19 @@ const Collateral = () => {
               <Box sx={{}}>
                 <HalfChart />
               </Box>
+              <Box
+                sx={{
+                  height: "400px",
+                  width: "400px",
+                }}
+              ></Box>
             </Box>
+            <Box
+              sx={{
+                width: "400px",
+                height: "400px",
+              }}
+            ></Box>
           </Box>
           <Box
             sx={{
@@ -437,11 +448,12 @@ const Collateral = () => {
               boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
               borderRadius: "10px 10px 0px 0px",
               height: "400px",
-              width: "auto",
+              width: "400px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
+              //  border: "1px solid red",
             }}
           >
             <FullChart />
