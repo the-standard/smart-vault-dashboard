@@ -6,7 +6,8 @@ function GradientSVG() {
       <defs>
         <linearGradient id={idCSS} gradientTransform={gradientTransform}>
           <stop offset="2.29%" stopColor="black" />
-          <stop offset="85.56%" stopColor="#23EAE0" />
+          <stop offset="55.56%" stopColor="#23EAE0" />
+          <stop offset="95.56%" stopColor="#da2323" />
         </linearGradient>
       </defs>
     </svg>

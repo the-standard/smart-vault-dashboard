@@ -6,6 +6,7 @@ import GradientSVG from "./GradientSvg";
 
 import {
   CircularProgressbar,
+  buildStyles,
   // CircularProgressbarWithChildren,
   // buildStyles,
 } from "react-circular-progressbar";
@@ -31,7 +32,7 @@ const conditionBarText = (barValue: number) => {
 
 const index = () => {
   // when it gets to 100 the color should turn more red
-  const barValue = 70;
+  const barValue = 100;
   const idCSS = "gradientProgress";
   return (
     <Box
@@ -82,14 +83,14 @@ const index = () => {
           //  text={`${barValue}%`}
 
           circleRatio={0.5}
-          //   styles={buildStyles({
-          //     rotation: 0.25 * 3,
+          // styles={buildStyles({
+          //   rotation: 0.25 * 3,
 
-          //     strokeLinecap: "butt",
-          //     trailColor: "rgba(30, 29, 29, 0.9)",
-          //     pathColor: " hsl(180, 46.058091286307054%, 52.74509803921569%)",
-          //     textSize: "14px",
-          //   })}
+          //   strokeLinecap: "butt",
+          //   trailColor: "rgba(30, 29, 29, 0.9)",
+          //   pathColor: " hsl(180, 46.058091286307054%, 52.74509803921569%)",
+          //   textSize: "14px",
+          // })}
           styles={{
             path: {
               stroke: `url(#${idCSS})`,
