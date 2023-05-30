@@ -8,6 +8,7 @@ import { Box } from "@mui/material";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
 import smartVaultAbi from "../../../abis/smartVault";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface WithdrawProps {
   symbol: string;
@@ -19,19 +20,22 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
     console.log(e.target.value);
   };
 
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+
   const withdrawCollateral = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
     console.log(amount);
     console.log(address);
     try {
+      //setIsLoading(true); // Se
       console.log(symbol);
       let transactionResponse; // Declare a variable to hold the transaction response
 
@@ -59,10 +63,22 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
       console.log("Transaction Hash:", transactionHash);
       console.log("confirming transaction " + transactionHash.confirmations);
       getTransactionHash(transactionHash);
-
-      // Continue with transaction confirmation check or other logic
+      waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+      //  setIsLoading(false);
     } catch (error) {
       console.log(error);
+      // setIsLoading(false);
+    }
+  };
+
+  const waitForTransaction = async (_transactionHash: string) => {
+    try {
+      setIsLoading(true); // Set isLoading to true before waiting for the transaction
+      await provider.waitForTransaction(_transactionHash);
+      setIsLoading(false); // Set isLoading to false after the transaction is mined
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false); // Set isLoading to false if there's an error
     }
   };
 
@@ -76,6 +92,24 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
 
   return (
     <Box>
+      {isLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          <CircularProgress />
+        </Box>
+      )}
       <Box
         sx={{
           marginTop: "1rem",

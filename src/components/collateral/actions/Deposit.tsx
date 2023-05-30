@@ -9,6 +9,7 @@ import QRicon from "../../../assets/qricon.png";
 // import smartVaultAbi from "../../../abis/smartVault";
 import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Deposit = () => {
   //modal states
@@ -16,6 +17,7 @@ const Deposit = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [amount, setAmount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   //store
   const { vaultAddress } = useVaultAddressStore.getState();
@@ -48,9 +50,9 @@ const Deposit = () => {
     }
   };
 
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   const depositViaMetamask = async () => {
     try {
-      // const provider = new ethers.providers.Web3Provider(window.ethereum);
       // const signer = provider.getSigner();
       // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
       // Prompt user to enter the amount in MetaMask
@@ -69,13 +71,43 @@ const Deposit = () => {
 
       console.log("Transaction sent:", txHash);
       getTransactionHash(txHash);
+      waitForTransaction(txHash);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const waitForTransaction = async (_transactionHash: string) => {
+    try {
+      setIsLoading(true); // Set isLoading to true before waiting for the transaction
+      await provider.waitForTransaction(_transactionHash);
+      setIsLoading(false); // Set isLoading to false after the transaction is mined
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false); // Set isLoading to false if there's an error
+    }
+  };
+
   return (
     <Box>
-      {" "}
+      {isLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          <CircularProgress />
+        </Box>
+      )}
       <Box
         sx={{
           display: "flex",
