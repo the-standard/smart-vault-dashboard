@@ -20,9 +20,7 @@ const runApp = async () => {
 runApp();
 
 const History = () => {
-  // const [myVaults, setMyVaults] = useState<any>([]);
   const [matchedTransactions, setMatchedTransactions] = useState<any[]>([]);
-  //  const [vaultTransactions, setVaultTransactions] = useState<any[]>([]);
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
