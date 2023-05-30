@@ -6,7 +6,6 @@ import GradientSVG from "./GradientSvg";
 
 import {
   CircularProgressbar,
-  buildStyles,
   // CircularProgressbarWithChildren,
   // buildStyles,
 } from "react-circular-progressbar";
