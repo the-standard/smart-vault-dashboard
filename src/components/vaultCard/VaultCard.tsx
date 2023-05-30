@@ -31,10 +31,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //snackbar config
   const [open, setOpen] = React.useState(false);
 
-  // const handleClick = () => {
-  //   setOpen(true);
-  // };
-
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
     reason?: string
