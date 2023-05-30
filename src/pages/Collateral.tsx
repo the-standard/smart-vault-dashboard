@@ -318,7 +318,7 @@ const Collateral = () => {
       >
         <Box
           sx={{
-            width: { xs: "100%", md: "100%", lg: "50%", xl: "50%" },
+            width: { xs: "100%", md: "100%", lg: "75%", xl: "75%" },
           }}
         >
           {/* divide into 2 rows */}
@@ -353,8 +353,8 @@ const Collateral = () => {
             alignItems: {
               xs: "center",
               md: "flex-start",
-              lg: "center",
-              xl: "center",
+              lg: "flex-end",
+              xl: "flex-end",
             },
           }}
         >
@@ -365,7 +365,7 @@ const Collateral = () => {
               border: "1px solid rgba(52, 52, 52, 0.3)",
               boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
               borderRadius: "10px 10px 0px 0px",
-              width: { sm: "100%", md: "400px" },
+              width: { sm: "100%", md: "400px", lg: "80%" },
               height: "420px",
               display: "flex",
               flexDirection: "column",
@@ -410,7 +410,7 @@ const Collateral = () => {
             sx={{
               height: "400px",
               minWidth: "400px",
-              width: { xs: "100%", md: "100%", lg: "400px", xl: "400px" },
+              width: { xs: "100%", md: "100%", lg: "80%", xl: "80%" },
             }}
           >
             <Box
