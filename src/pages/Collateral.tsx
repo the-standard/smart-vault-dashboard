@@ -343,9 +343,19 @@ const Collateral = () => {
           sx={{
             width: { xs: "100%", md: "100%" },
             display: "flex",
-            flexDirection: "column",
+            flexDirection: {
+              xs: "column",
+              md: "row",
+              lg: "column",
+              xl: "column",
+            },
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: {
+              xs: "center",
+              md: "flex-start",
+              lg: "center",
+              xl: "center",
+            },
           }}
         >
           <Box
@@ -355,7 +365,7 @@ const Collateral = () => {
               border: "1px solid rgba(52, 52, 52, 0.3)",
               boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
               borderRadius: "10px 10px 0px 0px",
-              width: { sm: "100%", md: "100%" },
+              width: { sm: "100%", md: "400px" },
               height: "420px",
               display: "flex",
               flexDirection: "column",
@@ -398,20 +408,28 @@ const Collateral = () => {
           </Box>
           <Box
             sx={{
-              background:
-                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-              border: "1px solid rgba(52, 52, 52, 0.3)",
-              boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-              borderRadius: "10px 10px 0px 0px",
               height: "400px",
-              width: { xs: "100%", md: "100%", lg: "80%", xl: "80%" },
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
+              minWidth: "400px",
+              width: { xs: "100%", md: "100%", lg: "400px", xl: "400px" },
             }}
           >
-            <FullChart />
+            <Box
+              sx={{
+                background:
+                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                border: "1px solid rgba(52, 52, 52, 0.3)",
+                boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+                borderRadius: "10px 10px 0px 0px",
+                height: "420px",
+                width: { xs: "100%", sm: "100%", md: "100%" },
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <FullChart />
+            </Box>
           </Box>
         </Box>
       </Box>

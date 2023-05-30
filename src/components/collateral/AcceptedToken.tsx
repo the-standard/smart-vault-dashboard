@@ -40,7 +40,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
         border: "1px solid rgba(52, 52, 52, 0.3)",
         boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
         borderRadius: "10px 10px 0px 0px",
-        width: "auto", // "100%",
+        width: "auto",
         padding: "1rem",
         marginTop: "0.5rem",
         marginBottom: "1rem",
@@ -56,7 +56,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
+          flexDirection: "row",
           justifyContent: "space-between",
         }}
       >
