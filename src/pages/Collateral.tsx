@@ -144,6 +144,8 @@ const Collateral = () => {
   }, []);
 
   const [smallCardValues, setSmallCardValues] = useState<any[]>([]);
+  const [totalCollateralValueForChart, setTotalCollateralValueForChart] =
+    useState<string>("");
 
   useEffect(() => {
     if (localVault[5] != undefined) {
@@ -151,6 +153,7 @@ const Collateral = () => {
       const totalCollateralValue = ethers.BigNumber.from(
         localVault[5][2]
       ).toString();
+      setTotalCollateralValueForChart(totalCollateralValue);
       const totalDebtValue = ethers.BigNumber.from(localVault[5][0]).toString();
       const collateralRate = ethers.BigNumber.from(localVault[2].toString());
       const totalLiquidationValue =
@@ -430,6 +433,31 @@ const Collateral = () => {
               }}
             >
               <FullChart />
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "#fff",
+                  position: "relative",
+                  bottom: "15rem",
+                  left: "1rem",
+                }}
+              >
+                {" "}
+                €{totalCollateralValueForChart} <br></br>
+                <Typography
+                  sx={{
+                    color: "#fff",
+                    textAlign: "center",
+                    width: "200px",
+                  }}
+                >
+                  Collateral
+                </Typography>
+              </Typography>
+              {/* <Typography variant="body2" sx={{ color: "#fff" }}>
+                {" "}
+                Collateral
+              </Typography> */}
             </Box>
           </Box>
         </Box>
