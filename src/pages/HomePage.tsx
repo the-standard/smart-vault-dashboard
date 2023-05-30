@@ -6,7 +6,7 @@ import Datagrid from "../components/dataGrid/Datagrid";
 // import { ethers } from "ethers";
 // import abi from "../abis/tokenManagerABI.ts";
 // import { ethers } from "ethers";
-import abi from "../abis/vaultManager.ts";
+// import abi from "../abis/vaultManager.ts";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import seurologo from "../assets/seurologo.png";
@@ -15,6 +15,10 @@ import saudlogo from "../assets/saudlogo.png";
 import susdlogo from "../assets/susdlogo.png";
 // import { useVaultsStore } from "../store/Store.ts";
 import { useAccount } from "wagmi";
+import {
+  useVaultManagerAbiStore,
+  useContractAddressStore,
+} from "../store/Store.ts";
 
 const items = [
   {
@@ -53,6 +57,8 @@ const HomePage = () => {
   const [myVaults, setMyVaults] = useState<any[]>([]);
   const { connector: isConnected } = useAccount();
   // const [loading, setLoading] = useState(true); // Add this line
+  const { vaultManagerAbi } = useVaultManagerAbiStore();
+  const { contractAddress } = useContractAddressStore();
 
   useEffect(() => {
     if (isConnected) {
@@ -64,8 +70,8 @@ const HomePage = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
-      abi,
+      contractAddress,
+      vaultManagerAbi,
       signer
     );
     const vaults = await contract.vaults();
