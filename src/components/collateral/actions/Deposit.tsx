@@ -1,5 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import {
   useVaultAddressStore,
@@ -8,6 +8,7 @@ import {
 import QRicon from "../../../assets/qricon.png";
 // import smartVaultAbi from "../../../abis/smartVault";
 import { ethers } from "ethers";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const Deposit = () => {
   //modal states
@@ -23,6 +24,28 @@ const Deposit = () => {
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
     console.log(e.target.value);
+  };
+
+  const textRef = useRef<HTMLSpanElement>(null);
+
+  // Function to handle copying the text
+  const handleCopyText = () => {
+    const textElement = textRef.current;
+
+    // Check if the browser supports the Clipboard API
+    if (navigator.clipboard && textElement) {
+      const text = textElement.innerText;
+
+      // Copy the text to the clipboard
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          console.log("Text copied to clipboard:", text);
+        })
+        .catch((error) => {
+          console.error("Error copying text to clipboard:", error);
+        });
+    }
   };
 
   const depositViaMetamask = async () => {
@@ -160,6 +183,25 @@ const Deposit = () => {
             <Typography variant="body1" component="div" sx={{ mt: 2 }}>
               Scan QR code to deposit collateral
             </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <span ref={textRef}>{vaultAddress}</span>
+              <Box
+                sx={{
+                  cursor: "pointer",
+                }}
+                onClick={handleCopyText}
+              >
+                {" "}
+                <ContentCopyIcon />
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Modal>
