@@ -4,11 +4,14 @@ import { styles } from "../styles/dataGridStyles";
 // import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import abi from "../abis/vaultManager.ts";
+// import abi from "../abis/vaultManager.ts";
 // import axios from "axios";
-
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
+import {
+  useVaultManagerAbiStore,
+  useContractAddressStore,
+} from "../store/Store.ts";
 
 const runApp = async () => {
   await Moralis.start({
@@ -20,14 +23,16 @@ const runApp = async () => {
 runApp();
 
 const History = () => {
-  const [matchedTransactions, setMatchedTransactions] = useState<any[]>([]);
+  const [matchedTransactions, setMatchedTransactions] = useState<unknown[]>([]);
+  const { vaultManagerAbi } = useVaultManagerAbiStore();
+  const { contractAddress } = useContractAddressStore();
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
-      abi,
+      contractAddress,
+      vaultManagerAbi,
       signer
     );
     const vaults = await contract.vaults();

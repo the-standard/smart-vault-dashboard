@@ -12,17 +12,25 @@ import SmallCard from "../components/collateral/SmallCard";
 import FullChart from "../components/collateral/FullChart.tsx";
 import HalfChart from "../components/collateral/halfChart/index.tsx";
 import QRCode from "react-qr-code";
-import abi from "../abis/vaultManager.ts";
-import tokenmanagerabi from "../abis/tokenManagerABI.ts";
+// import abi from "../abis/vaultManager.ts";
+// import tokenmanagerabi from "../abis/tokenManagerABI.ts";
 import { ethers } from "ethers";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import Debt from "../components/collateral/Debt.tsx";
+import {
+  useContractAddressStore,
+  useVaultManagerAbiStore,
+} from "../store/Store";
 
 const Collateral = () => {
   const { vaultID } = useVaultIdStore();
   const { getVaultAddress } = useVaultAddressStore();
   const { getVaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();
+  // const { tokenManagerAbi } = useTokenManagerAbiStore();
+  const { contractAddress } = useContractAddressStore();
+  const { vaultManagerAbi } = useVaultManagerAbiStore();
+  // const { tokenManagerAddress } = useTokenManagerAddressStore();
   //local states
   const [vaultAddressLocal, setVaultAddressLocal] = useState("");
   const [localVault, setLocalVault] = useState<any[]>([]);
@@ -64,27 +72,28 @@ const Collateral = () => {
   useEffect(() => {
     listenToTransaction(transactionHash);
     console.log("transactionHash", transactionHash);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionHash]);
 
-  const returntokens = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(
-      "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
-      tokenmanagerabi,
-      signer
-    );
-    const tokens = await contract.getAcceptedTokens();
-    console.log(tokens[0][0]);
-    console.log(ethers.utils.parseBytes32String(tokens[1][0]));
-  };
+  // const returntokens = async () => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
+  //   const contract = new ethers.Contract(
+  //     tokenManagerAddress,
+  //     tokenManagerAbi,
+  //     signer
+  //   );
+  //   const tokens = await contract.getAcceptedTokens();
+  //   console.log(tokens[0][0]);
+  //   console.log(ethers.utils.parseBytes32String(tokens[1][0]));
+  // };
 
   const returnAcceptedTokensList = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
-      abi,
+      contractAddress,
+      vaultManagerAbi,
       signer
     );
     const vaults = await contract.vaults();
@@ -138,7 +147,7 @@ const Collateral = () => {
 
   useEffect(() => {
     console.log(vaultID + "my vault");
-    returntokens();
+    // returntokens();
     returnAcceptedTokensList();
     // console.log(tokenmanagerabi);
   }, []);

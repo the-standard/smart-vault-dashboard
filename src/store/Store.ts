@@ -2,7 +2,7 @@ import { create } from "zustand";
 import vaultManagerAbi from "../abis/vaultManager.ts";
 
 interface contractAddressState {
-  contractAddress: string;
+  contractAddress: any;
   getContractAddress: (contractAddress: string) => void;
 }
 
@@ -14,9 +14,22 @@ export const useContractAddressStore = create<contractAddressState>()(
   })
 );
 
+interface TokenManagerAddressState {
+  tokenManagerAddress: string;
+  getTokenManagerAddress: (tokenManagerAddress: string) => void;
+}
+
+export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
+  (set) => ({
+    tokenManagerAddress: "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
+    getTokenManagerAddress: (tokenManagerAddress) =>
+      set(() => ({ tokenManagerAddress: tokenManagerAddress })),
+  })
+);
+
 interface TokenManagerAbiState {
-  tokenManagerAbi: Array<unknown>;
-  getTokenManagerAbi: (tokenManagerAbi: Array<unknown>) => void;
+  tokenManagerAbi: Array<any>;
+  getTokenManagerAbi: (tokenManagerAbi: Array<any>) => void;
 }
 
 export const useTokenManagerAbiStore = create<TokenManagerAbiState>()(

@@ -10,6 +10,7 @@ import QRicon from "../../../assets/qricon.png";
 import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useAccount } from "wagmi";
 
 const Deposit = () => {
   //modal states
@@ -22,6 +23,8 @@ const Deposit = () => {
   //store
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
+
+  const { address } = useAccount();
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
@@ -59,7 +62,7 @@ const Deposit = () => {
       const txAmount = amount.toString();
       const transactionParameters = {
         to: vaultAddress,
-        from: "0x600044FE9A152C27f337BbB23803dC6A68E3eFB0",
+        from: address,
         value: ethers.utils.parseEther(txAmount).toString(),
       };
 

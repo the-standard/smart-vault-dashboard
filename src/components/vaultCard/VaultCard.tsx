@@ -1,9 +1,13 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import abi from "../../abis/vaultManager.ts";
+// import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { useEffect } from "react";
+import {
+  useContractAddressStore,
+  useVaultManagerAbiStore,
+} from "../../store/Store.ts";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -30,6 +34,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
 }) => {
   //snackbar config
   const [open, setOpen] = React.useState(false);
+  const { contractAddress } = useContractAddressStore();
+  const { vaultManagerAbi } = useVaultManagerAbiStore();
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
@@ -46,8 +52,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //call mint function and mint a smart vault NFT
 
   const { config } = usePrepareContractWrite({
-    address: "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
-    abi: abi,
+    address: contractAddress,
+    abi: vaultManagerAbi,
     functionName: "mint",
   });
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
