@@ -1,4 +1,3 @@
-import React from "react";
 import HalfChart from "./HalfChart";
 // import ChartBar from "./ChartBar";
 import { Box, Typography } from "@mui/material";
@@ -7,8 +6,8 @@ import GradientSVG from "./GradientSvg";
 
 import {
   CircularProgressbar,
-  CircularProgressbarWithChildren,
-  buildStyles,
+  // CircularProgressbarWithChildren,
+  // buildStyles,
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 

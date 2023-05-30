@@ -3,7 +3,7 @@ import React from "react";
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/pie
 import { ResponsivePie } from "@nivo/pie";
-import { linearGradientDef } from "@nivo/core";
+//import { linearGradientDef } from "@nivo/core";
 
 interface ChartBarProps {
   barValue: number;

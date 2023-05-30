@@ -6,7 +6,7 @@ import {
   useTransactionHashStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
-import QRicon from "../assets/qricon.png";
+// import QRicon from "../assets/qricon.png";
 // import EmptyCard from "../components/collateral/EmptyCard";
 import SmallCard from "../components/collateral/SmallCard";
 import FullChart from "../components/collateral/FullChart.tsx";
@@ -22,7 +22,7 @@ const Collateral = () => {
   const { vaultID } = useVaultIdStore();
   const { getVaultAddress } = useVaultAddressStore();
   const { getVaultStore } = useVaultStore();
-  const { getTransactionHash, transactionHash } = useTransactionHashStore();
+  const { transactionHash } = useTransactionHashStore();
   //local states
   const [vaultAddressLocal, setVaultAddressLocal] = useState("");
   const [localVault, setLocalVault] = useState<any[]>([]);
@@ -31,8 +31,9 @@ const Collateral = () => {
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
   //modal states
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  // console.log(handleOpen)
 
   const handleClick = (element: any) => {
     setActiveElement(element);
