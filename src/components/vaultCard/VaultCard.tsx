@@ -89,6 +89,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
           alignItems: "center",
           justifyContent: "space-between",
           padding: "1rem",
+          paddingLeft: "2rem",
         }}
       >
         <Box
