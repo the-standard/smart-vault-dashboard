@@ -37,9 +37,14 @@ const Navbar = () => {
       height: "100%",
     },
     bmMenu: {
-      background: "transparent",
+      //background: "transparent",
       padding: "2.5em 1.5em 0",
       fontSize: "1.15em",
+      background:
+        "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+      border: "1px solid rgba(52, 52, 52, 0.3)",
+      boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+      borderRadius: "10px 10px 0px 0px",
     },
     bmMorphShape: {
       fill: "#373a47",
@@ -53,7 +58,7 @@ const Navbar = () => {
       display: "flex",
     },
     bmOverlay: {
-      background: "rgba(0, 0, 0, 0.3)",
+      background: "rgba(0, 0, 0, 0.7)",
     },
   };
 

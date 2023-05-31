@@ -60,11 +60,11 @@ const NavbarMenu = () => {
         display: "flex",
         flexDirection: { xs: "column", sm: "row" },
         flexWrap: { sm: "wrap", md: "nowrap" },
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "space-evenly",
         background: { xs: "transparent", sm: "rgba(18, 18, 18, 0.5)" },
         boxShadow: { xs: "none" },
-        sm: "0px 1.29525px 1.29525px rgba(255, 255, 255, 0.5), inset 0px 1.29525px 0px rgba(0, 0, 0, 0.25)",
+        //   sm: "0px 1.29525px 1.29525px rgba(255, 255, 255, 0.5), inset 0px 1.29525px 0px rgba(0, 0, 0, 0.25)",
         borderRadius: "6.47627px",
         marginTop: { xs: "1rem", sm: "0" },
       }}
