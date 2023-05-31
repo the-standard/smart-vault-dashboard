@@ -20,7 +20,7 @@ const Deposit = () => {
   const [amount, setAmount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  //store
+  ///store
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
 
