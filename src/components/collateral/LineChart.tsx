@@ -75,24 +75,18 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
           chart: {
             type: "area",
             stacked: false,
-            //   height: 350,
-            zoom: {
-              type: "x",
-              enabled: true,
-              autoScaleYaxis: true,
-            },
             toolbar: {
-              autoSelected: "zoom",
+              show: false,
             },
           },
           dataLabels: {
             enabled: false,
           },
-          markers: {
-            size: 0,
-          },
+          // markers: {
+          //   size: 0,
+          // },
           title: {
-            text: "Stock Price Movement",
+            text: "Last 7 days",
             align: "left",
           },
           colors: [lineColor],
@@ -112,16 +106,31 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
           yaxis: {
             show: true,
             labels: {
-              formatter: function (val) {
-                return (val / 1000000).toFixed(0);
-              },
+              show: false,
             },
-            title: {
-              text: "Price",
-            },
+            // title: {
+            //   text: "Price",
+            // },
+          },
+          stroke: {
+            show: true,
+            curve: "smooth",
+            lineCap: "butt",
+            colors: undefined,
+            width: 2,
+            dashArray: 0,
           },
           xaxis: {
             type: "datetime",
+            labels: {
+              show: false,
+            },
+            axisBorder: {
+              show: false,
+            },
+            axisTicks: {
+              show: false,
+            },
           },
           tooltip: {
             shared: false,
