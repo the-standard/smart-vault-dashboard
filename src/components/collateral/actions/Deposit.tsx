@@ -32,6 +32,8 @@ const Deposit = () => {
   ///store
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
+  //local
+  const [snackbarValue, setSnackbarValue] = useState(0);
 
   //snackbar config
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -59,6 +61,7 @@ const Deposit = () => {
     console.log(e.target.value);
   };
 
+  //clipboard logic
   const textRef = useRef<HTMLSpanElement>(null);
 
   // Function to handle copying the text
@@ -74,6 +77,7 @@ const Deposit = () => {
         .writeText(text)
         .then(() => {
           console.log("Text copied to clipboard:", text);
+          setSnackbarValue(0);
           handleSnackbarClick();
         })
 
@@ -82,9 +86,11 @@ const Deposit = () => {
         });
     }
   };
+  //clipboard logic end
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const depositViaMetamask = async () => {
+    let txHashForError = "";
     try {
       // const signer = provider.getSigner();
       // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
@@ -101,11 +107,14 @@ const Deposit = () => {
         method: "eth_sendTransaction",
         params: [transactionParameters],
       });
+      //this value is used for error handling due to scoping issues
+      txHashForError = txHash;
 
       console.log("Transaction sent:", txHash);
       getTransactionHash(txHash);
       waitForTransaction(txHash);
     } catch (error) {
+      waitForTransaction(txHashForError);
       console.log(error);
     }
   };
@@ -115,9 +124,14 @@ const Deposit = () => {
       setIsLoading(true); // Set isLoading to true before waiting for the transaction
       await provider.waitForTransaction(_transactionHash);
       setIsLoading(false); // Set isLoading to false after the transaction is mined
+      setSnackbarValue(1);
+      handleSnackbarClick();
     } catch (error) {
       console.log(error);
       setIsLoading(false); // Set isLoading to false if there's an error
+      setSnackbarValue(2);
+
+      handleSnackbarClick();
     }
   };
 
@@ -128,14 +142,33 @@ const Deposit = () => {
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
       >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          Address copied to clipboard!
-        </Alert>
+        {snackbarValue === 0 ? (
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            <Box>Address copied to clipboard!</Box>
+          </Alert>
+        ) : snackbarValue === 1 ? (
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            <Box>Transaction successful!</Box>
+          </Alert>
+        ) : (
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            <Box>There was an error!</Box>
+          </Alert>
+        )}
       </Snackbar>
+
       {isLoading && (
         <Box
           sx={{
