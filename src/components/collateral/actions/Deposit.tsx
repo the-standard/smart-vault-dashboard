@@ -1,5 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import {
   useVaultAddressStore,
@@ -11,6 +11,16 @@ import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAccount } from "wagmi";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+//for snackbar
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Deposit = () => {
   //modal states
@@ -19,10 +29,28 @@ const Deposit = () => {
   const handleClose = () => setOpen(false);
   const [amount, setAmount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
   ///store
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
+
+  //snackbar config
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
+  const handleSnackbarClick = () => {
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+  //snackbar config end
 
   const { address } = useAccount();
 
@@ -46,7 +74,9 @@ const Deposit = () => {
         .writeText(text)
         .then(() => {
           console.log("Text copied to clipboard:", text);
+          handleSnackbarClick();
         })
+
         .catch((error) => {
           console.error("Error copying text to clipboard:", error);
         });
@@ -93,6 +123,19 @@ const Deposit = () => {
 
   return (
     <Box>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Address copied to clipboard!
+        </Alert>
+      </Snackbar>
       {isLoading && (
         <Box
           sx={{
