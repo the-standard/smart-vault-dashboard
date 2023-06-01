@@ -31,7 +31,6 @@ const conditionBarText = (barValue: number) => {
 
 const index = () => {
   // when it gets to 100 the color should turn more red
-  //adding it for deployment now, will delete this later
   const barValue = 100;
   const idCSS = "gradientProgress";
   return (

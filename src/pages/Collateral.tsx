@@ -322,56 +322,47 @@ const Collateral = () => {
         </Box>
       </Box>
       {/*  column 2, container */}
-
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "column", lg: "row", xl: "row" },
-          justifyContent: "space-between",
-          alignItems: { xs: "center", md: "flex-start" },
+          height: "100%",
           width: "100%",
+          display: { xs: "flex", lg: "grid" },
+          gridTemplateColumns:
+            " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
+          gap: "20px" /* Gap between the columns */,
+          gridAutoColumns: "1fr" /* Equal width for child components */,
+          // now flexbox
+          flexDirection: "column",
         }}
       >
-        {/* left side of the column */}
+        {/* left side of the container */}
         <Box
-          sx={{
-            width: { xs: "100%", md: "100%", lg: "50%", xl: "75%" },
-          }}
+          sx={
+            {
+              //change this value
+            }
+          }
         >
-          {/* divide into 2 rows */}
-          {/*  row 1 */}
-
+          {" "}
           <Box
             sx={{
-              width: "100%",
+              width: "auto",
             }}
           >
             {/* list available tokens here */}
             {collateralOrDebt === 1 ? displayTokens() : displayDebt()}
             {/* {displayTokens()}{" "} */}
           </Box>
-        </Box>
-        {/*  row 2 */}
-        {/* right side of the column */}
+        </Box>{" "}
+        {/* right side of the container */}
         <Box
-          sx={{
-            width: { xs: "100%", md: "100%" },
-            display: "flex",
-            flexDirection: {
-              xs: "column",
-              md: "row",
-              lg: "column",
-              xl: "column",
-            },
-            justifyContent: "center",
-            alignItems: {
-              xs: "center",
-              md: "flex-start",
-              lg: "flex-end",
-              xl: "flex-end",
-            },
-          }}
+          sx={
+            {
+              //change this value
+            }
+          }
         >
+          {/* half chart container */}
           <Box
             sx={{
               background:
@@ -379,99 +370,56 @@ const Collateral = () => {
               border: "1px solid rgba(52, 52, 52, 0.3)",
               boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
               borderRadius: "10px 10px 0px 0px",
-              width: { sm: "100%", md: "400px", lg: "90%" },
-              height: "420px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              marginBottom: "2rem",
+              height: "auto",
             }}
           >
-            {/* <SmallCard /> */}
             <Box
               sx={{
-                display: { xs: "flex", md: "static" },
-                flexDirection: "column",
-                // justifyContent: "space-around",
-                alignItems: "center",
-                // flexWrap: "wrap",
-                height: "400px",
-                width: { xs: "100%", md: "100%", lg: "100%", xl: "100%" },
+                display: "flex",
+                justifyContent: "space-around",
+                flexWrap: "wrap",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-around",
-                }}
-              >
-                {localVault != undefined ? (
-                  smallCardValues.map((item, index) => (
-                    <SmallCard key={index} {...item} />
-                  ))
-                ) : (
-                  <div>loading</div>
-                )}
-              </Box>
-              <Box sx={{}}>
-                <HalfChart />
-              </Box>
+              {localVault != undefined ? (
+                smallCardValues.map((item, index) => (
+                  <SmallCard key={index} {...item} />
+                ))
+              ) : (
+                <div>loading</div>
+              )}
             </Box>
+            <HalfChart />
           </Box>
+          {/* full chart container */}
           <Box
             sx={{
-              height: "400px",
-              minWidth: "400px",
-              width: { xs: "100%", md: "100%", lg: "90%", xl: "90%" },
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+              border: "1px solid rgba(52, 52, 52, 0.3)",
+              boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+              borderRadius: "10px 10px 0px 0px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <Box
               sx={{
-                background:
-                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-                border: "1px solid rgba(52, 52, 52, 0.3)",
-                boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-                borderRadius: "10px 10px 0px 0px",
-                height: "420px",
-                width: { xs: "100%", sm: "100%", md: "100%" },
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
+                width: "400px",
+                height: "400px",
               }}
             >
               <FullChart />
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "#fff",
-                  position: "relative",
-                  bottom: "15rem",
-                  left: "1rem",
-                }}
-              >
-                {" "}
-                €{totalCollateralValueForChart} <br></br>
-                <Typography
-                  sx={{
-                    color: "#fff",
-                    textAlign: "center",
-                    width: "200px",
-                  }}
-                >
-                  Collateral
-                </Typography>
-              </Typography>
-              {/* <Typography variant="body2" sx={{ color: "#fff" }}>
-                {" "}
-                Collateral
-              </Typography> */}
             </Box>
           </Box>
         </Box>
       </Box>
+
       <Modal
         open={open}
         onClose={handleClose}

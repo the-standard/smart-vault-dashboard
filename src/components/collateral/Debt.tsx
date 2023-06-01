@@ -171,7 +171,7 @@ const Debt = () => {
         border: "1px solid rgba(52, 52, 52, 0.3)",
         boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
         borderRadius: "10px 10px 0px 0px",
-        width: { xs: "auto", sm: "400px", xl: "auto" },
+        width: "auto",
         height: "auto",
         padding: "1rem",
         marginTop: "0.5rem",
