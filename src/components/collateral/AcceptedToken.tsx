@@ -129,6 +129,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             cursor: "pointer",
             width: "33%",
             textAlign: "center",
+            borderRadius: "6.24932px",
           }}
           className={activeElement === 1 ? "glowingCard" : ""}
           onClick={() => handleClick(1)}
@@ -142,6 +143,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             width: "33%",
             cursor: "pointer",
             textAlign: "center",
+            borderRadius: "6.24932px",
           }}
           className={activeElement === 2 ? "glowingCard" : ""}
           onClick={() => handleClick(2)}
@@ -155,6 +157,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             width: "33%",
             cursor: "pointer",
             textAlign: "center",
+            borderRadius: "6.24932px",
           }}
           className={activeElement === 3 ? "glowingCard" : ""}
           onClick={() => handleClick(3)}

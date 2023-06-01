@@ -59,6 +59,8 @@ const FullChart = () => (
       from: "color",
       modifiers: [["darker", 0.2]],
     }}
+    //empty values
+    valueFormat={(value) => ``}
     arcLinkLabelsSkipAngle={10}
     arcLinkLabelsTextColor="#ffffff"
     arcLinkLabelsThickness={2}

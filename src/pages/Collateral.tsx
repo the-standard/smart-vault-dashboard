@@ -180,7 +180,7 @@ const Collateral = () => {
           type: "sEURO",
         },
         {
-          title: "Vault Liquidation",
+          title: "Liquidates at",
           value: totalLiquidationValue,
           type: "sEURO",
         },
@@ -233,6 +233,7 @@ const Collateral = () => {
               margin: "2px 4px",
               padding: "5px",
               cursor: "pointer",
+              borderRadius: "6.24932px",
             }}
             className={activeElement === 1 ? "glowingCard" : ""}
             onClick={() => handleClick(1)}
@@ -243,6 +244,7 @@ const Collateral = () => {
             sx={{
               margin: "2px",
               padding: "5px",
+              borderRadius: "6.24932px",
 
               cursor: "pointer",
             }}

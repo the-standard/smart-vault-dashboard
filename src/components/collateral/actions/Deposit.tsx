@@ -13,6 +13,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useAccount } from "wagmi";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import MetamaskIcon from "../../../assets/metamasklogo.svg";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -193,6 +194,7 @@ const Deposit = () => {
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
+          marginTop: "1rem",
         }}
       >
         <Box
@@ -200,6 +202,7 @@ const Deposit = () => {
             margin: "2px",
             padding: "5px",
             cursor: "pointer",
+            height: "auto",
           }}
           className="glowingCard"
           onClick={handleOpen}
@@ -207,17 +210,17 @@ const Deposit = () => {
           {" "}
           <img
             style={{
-              marginRight: "1.5rem",
+              marginRight: "1rem",
             }}
             src={QRicon}
             alt="qricon"
           />
-          With QR Code{" "}
+          <Typography variant="body2"> With QR Code </Typography>
         </Box>
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -241,12 +244,17 @@ const Deposit = () => {
               margin: "2px",
               padding: "5px",
               cursor: "pointer",
+              width: "2.5rem",
             }}
             className="glowingCard"
             onClick={depositViaMetamask}
           >
             {" "}
-            With Metamask
+            <img
+              style={{ width: "1.5rem" }}
+              src={MetamaskIcon}
+              alt="metamaskicon"
+            />{" "}
           </Box>
         </Box>
       </Box>
