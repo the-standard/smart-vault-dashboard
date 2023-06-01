@@ -1,11 +1,26 @@
 import { Box, Typography } from "@mui/material";
-import { useState } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import React, { useState } from "react";
 import seurologo from "../../assets/seurologo.png";
 import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
-import { useVaultAddressStore, useVaultStore } from "../../store/Store";
+import {
+  useTransactionHashStore,
+  useVaultAddressStore,
+  useVaultStore,
+} from "../../store/Store";
+
+//for snackbar
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
@@ -13,6 +28,28 @@ const Debt = () => {
   const [amount, setAmount] = useState(0);
   const { vaultAddress } = useVaultAddressStore.getState();
   const { vaultStore }: any = useVaultStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [snackbarValue, setSnackbarValue] = useState(0);
+  const { getTransactionHash } = useTransactionHashStore.getState();
+
+  //snackbar config
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleSnackbarClick = () => {
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (
+    _event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+  //snackbar config end
 
   const debtValue = ethers.BigNumber.from(vaultStore[5][0]);
   console.log(debtValue.toString());
@@ -26,21 +63,43 @@ const Debt = () => {
     console.log(e.target.value);
   };
 
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+
   const borrowMoney = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
-    console.log(vaultAddress);
-    await contract.mint(address, amount);
+    let transactionResponse; // Declare a variable to hold the transaction response
+
+    try {
+      console.log(vaultAddress);
+      transactionResponse = await contract.mint(address, amount);
+      // Access the transaction hash from the transaction response
+      const transactionHash = transactionResponse.hash;
+      console.log("Transaction Hash:", transactionHash);
+      console.log("confirming transaction " + transactionHash.confirmations);
+      getTransactionHash(transactionHash);
+      waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const repayMoney = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+    let transactionResponse; // Declare a variable to hold the transaction response
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const signer = provider.getSigner();
+    // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
     console.log(vaultAddress);
-
-    await contract.burn(amount);
+    try {
+      const transactionResponse = await contract.burn(amount);
+      const transactionHash = transactionResponse.hash;
+      console.log("Transaction Hash:", transactionHash);
+      console.log("confirming transaction " + transactionHash.confirmations);
+      getTransactionHash(transactionHash);
+      waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleWithdraw = () => {
@@ -50,6 +109,21 @@ const Debt = () => {
     } else {
       console.log("paydown");
       repayMoney();
+    }
+  };
+
+  const waitForTransaction = async (_transactionHash: string) => {
+    try {
+      setIsLoading(true); // Set isLoading to true before waiting for the transaction
+      await provider.waitForTransaction(_transactionHash);
+      setIsLoading(false); // Set isLoading to false after the transaction is mined
+      setSnackbarValue(0);
+      handleSnackbarClick();
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false); // Set isLoading to false if there's an error
+      setSnackbarValue(1);
+      handleSnackbarClick();
     }
   };
 
@@ -106,6 +180,48 @@ const Debt = () => {
         color: "white",
       }}
     >
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        {snackbarValue === 0 ? (
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            <Box>Transaction successful!</Box>
+          </Alert>
+        ) : (
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            <Box>There was an error!</Box>
+          </Alert>
+        )}
+      </Snackbar>
+
+      {isLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          <CircularProgress />
+        </Box>
+      )}
       <Box
         sx={{
           backgroundImage: `url(${handshake})`,
