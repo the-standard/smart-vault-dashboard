@@ -321,7 +321,8 @@ const Collateral = () => {
           </Box>
         </Box>
       </Box>
-      {/*  column 2 */}
+      {/*  column 2, container */}
+
       <Box
         sx={{
           display: "flex",
@@ -331,6 +332,7 @@ const Collateral = () => {
           width: "100%",
         }}
       >
+        {/* left side of the column */}
         <Box
           sx={{
             width: { xs: "100%", md: "100%", lg: "50%", xl: "75%" },
@@ -341,10 +343,6 @@ const Collateral = () => {
 
           <Box
             sx={{
-              // display: "flex",
-              // flexDirection: "column",
-              // justifyContent: "center",
-              // alignItems: "flex-start",
               width: "100%",
             }}
           >
@@ -354,6 +352,7 @@ const Collateral = () => {
           </Box>
         </Box>
         {/*  row 2 */}
+        {/* right side of the column */}
         <Box
           sx={{
             width: { xs: "100%", md: "100%" },
