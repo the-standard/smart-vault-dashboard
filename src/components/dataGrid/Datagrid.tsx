@@ -15,15 +15,16 @@ import { Link } from "react-router-dom";
 import { useVaultIdStore } from "../../store/Store.ts";
 // import Decimal from "decimal.js";
 
-interface DataGridDemoProps {
+interface DataGridComponentProps {
   vaults: any[];
 }
 
-const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
+const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const [tokenToId, setTokenToId] = useState<any[]>([]);
   const [resolved, setResolved] = useState(false);
   const tokenToNFTMap = useRef(new Map());
   const tokenMap = useRef(new Map());
+  const [userInput, setUserInput] = useState("");
 
   //modal state
   const [open, setOpen] = useState(false);
@@ -203,8 +204,27 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
       renderCell: (params: GridRenderCellParams) => renderActions(params),
     },
   ];
+  const filteredVaults = vaults.filter((vault) => {
+    if (
+      ethers.BigNumber.from(vault[0])
+        .toString()
+        .includes(userInput.toString()) ||
+      ethers.BigNumber.from(vault[5][0])
+        .toString()
+        .includes(userInput.toString()) ||
+      ethers.BigNumber.from(vault[5][2])
+        .toString()
+        .includes(userInput.toString())
+    ) {
+      return true;
+    }
 
-  const myRows = vaults.map((vault, index) => {
+    return false;
+  });
+
+  console.log("filteredVaults", filteredVaults);
+
+  const myRows = filteredVaults.map((vault, index) => {
     console.log(Number(ethers.BigNumber.from(vault[5][0]).toString()));
     console.log(Number(ethers.BigNumber.from(vault[5][1]).toString()));
     console.log(
@@ -268,6 +288,9 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
           }}
           type="text"
           placeholder="Search"
+          onChange={(e) => {
+            setUserInput(e.target.value);
+          }}
         />
       </Box>
       <Box
@@ -343,4 +366,4 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   );
 };
 
-export default DataGridDemo;
+export default DataGridComponent;

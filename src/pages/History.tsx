@@ -26,6 +26,7 @@ const History = () => {
   const [matchedTransactions, setMatchedTransactions] = useState<unknown[]>([]);
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { contractAddress } = useContractAddressStore();
+  const [userInput, setUserInput] = useState("");
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -105,7 +106,29 @@ const History = () => {
     }
   };
 
-  const rows: GridRowsProp = matchedTransactions.map(
+  const filteredMatches = matchedTransactions.filter((_transaction: any) => {
+    if (
+      _transaction.token_id.toLowerCase().includes(userInput.toLowerCase()) ||
+      _transaction.from_address
+        .toLowerCase()
+        .includes(userInput.toLowerCase()) ||
+      _transaction.to_address.toLowerCase().includes(userInput.toLowerCase()) ||
+      _transaction.block_hash.toLowerCase().includes(userInput.toLowerCase()) ||
+      _transaction.block_number
+        .toString()
+        .toLowerCase()
+        .includes(userInput.toLowerCase()) ||
+      _transaction.block_timestamp
+        .toLowerCase()
+        .includes(userInput.toLowerCase())
+    ) {
+      return true;
+    }
+
+    return false;
+  });
+
+  const rows: GridRowsProp = filteredMatches.map(
     (transaction: any, index: number) => {
       return {
         id: index + 1,
@@ -208,6 +231,7 @@ const History = () => {
           }}
           type="text"
           placeholder="Search"
+          onChange={(e) => setUserInput(e.target.value)}
         />
         <button
           style={{
