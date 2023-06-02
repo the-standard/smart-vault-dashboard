@@ -153,10 +153,11 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "#", width: 90 },
+    { field: "id", headerName: "#", width: 90, editable: false },
     {
       field: "vaultNFT",
       headerName: "vaultNFT",
+      editable: false,
       width: 100,
       renderCell: (params) => (
         <img
@@ -170,24 +171,26 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
       field: "vaultID",
       headerName: "Vault ID",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       field: "ratio",
       headerName: "Ratio",
       // type: "number",
       width: 110,
-      editable: true,
+      editable: false,
     },
     {
       field: "debt",
       headerName: "Debt",
       width: 160,
+      editable: false,
     },
 
     {
       field: "debtRange",
       headerName: "Debt Range",
+      editable: false,
       width: 250,
       renderCell: (params: GridRenderCellParams) =>
         renderSlider(params, params.row.step),
@@ -195,6 +198,7 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
     {
       field: "actions",
       headerName: "Actions",
+      editable: false,
       width: 500,
       renderCell: (params: GridRenderCellParams) => renderActions(params),
     },
@@ -293,7 +297,8 @@ const DataGridDemo: React.FC<DataGridDemoProps> = ({ vaults }) => {
             },
           }}
           pageSizeOptions={[5]}
-          disableRowSelectionOnClick
+          disableRowSelectionOnClick={true}
+          disableVirtualization={true}
         />
       </Box>
       {/* modal */}
