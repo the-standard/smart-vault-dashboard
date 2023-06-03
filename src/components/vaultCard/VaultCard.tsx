@@ -102,7 +102,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
             alignItems: "center",
             justifyContent: "center",
             width: "250px",
-            // border: "1px solid red",
           }}
         >
           <img
@@ -110,8 +109,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
               fontSize: "3rem",
               marginRight: "1rem",
               background: " rgba(18, 18, 18, 0.5)",
-              boxShadow:
-                "0px 0px 10px #1A66FF, 0px 1.29525px 1.29525px rgba(255, 255, 255, 0.5), inset 0px 1.29525px 0px rgba(0, 0, 0, 0.25)",
               borderRadius: "10px",
               padding: "0.7rem",
             }}
@@ -122,7 +119,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
             <Typography
               sx={{
                 fontWeight: "300",
-                color: "#8E9BAE",
+                //color: "#8E9BAE",
               }}
               variant="h5"
             >
@@ -139,21 +136,19 @@ const VaultCard: React.FC<VaultCardProps> = ({
             >
               {para}
             </Typography>
+            <Typography
+              sx={{
+                fontWeight: "300",
+              }}
+              variant="body1"
+            >
+              {borrowRate}
+            </Typography>
           </Box>
         </Box>
-        <Typography
-          sx={{
-            fontWeight: "300",
-            color: "#8E9BAE",
-          }}
-          variant="body1"
-        >
-          {borrowRate}
-        </Typography>
       </Box>
       <Box
         sx={{
-          borderTop: "  1px solid rgba(52, 52, 52, 0.8);",
           padding: "1.5rem 1rem",
           margin: "1rem 0 0 0",
           display: "flex",
@@ -180,7 +175,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
               color: "#00FFF0",
             }}
           >
-            Create new smart vault
+            {isActive ? "Create Smart Vault" : "Coming Soon"}
           </Typography>
         </Button>
         {/* {isLoading && <div>Check Wallet</div>}
