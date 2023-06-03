@@ -57,11 +57,11 @@ const NavbarMenu = () => {
   return (
     <Box
       sx={{
-        display: "flex",
+        display: { xs: "flex", sm: "flex", md: "grid" },
+        gridTemplateColumns: { md: "repeat(5, 1fr)" },
         flexDirection: { xs: "column", sm: "row" },
         flexWrap: { sm: "wrap", md: "nowrap" },
-        alignItems: "flex-start",
-        justifyContent: "space-evenly",
+
         background: { xs: "transparent", sm: "rgba(18, 18, 18, 0.5)" },
         boxShadow: { xs: "none" },
         //   sm: "0px 1.29525px 1.29525px rgba(255, 255, 255, 0.5), inset 0px 1.29525px 0px rgba(0, 0, 0, 0.25)",
@@ -74,6 +74,8 @@ const NavbarMenu = () => {
           style={{
             textDecoration: "none",
             color: "white",
+            width: "100%",
+            overflow: "hidden",
           }}
           key={index}
           to={item.route ? `/${item.route}` : "/"}

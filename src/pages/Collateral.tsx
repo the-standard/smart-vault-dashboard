@@ -195,7 +195,7 @@ const Collateral = () => {
     <Box
       sx={{
         color: "#8E9BAE",
-        margin: "3% 9%",
+        margin: "3% 12%",
         padding: "1%",
         // marginTop: "50px",
         background:

@@ -1,6 +1,6 @@
 // import React, { ReactNode, useState } from "react";
 import { Box } from "@mui/material";
-import "../../styles/glowingStyle.css";
+import "../../styles/navbarStyle.css";
 
 interface MenuItemProps {
   text: string;
@@ -21,7 +21,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 }) => {
   return (
     <Box
-      className={` ${isWorking && isActive ? "glowingCard" : ""}`}
+      className={` nav-button ${isWorking && isActive ? "navBtnClicked" : ""}`}
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -31,14 +31,12 @@ const MenuItem: React.FC<MenuItemProps> = ({
         height: "full",
         padding: "0 0.7rem",
         width: { xs: "100%", sm: "auto" },
+
+        //  border: "5px solid red",
       }}
       onClick={handleClick}
     >
-      <div style={{ color: "red" }}>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+      <div style={{}}>
         {isWorking && isActive ? (
           <img src={icon2} alt="" />
         ) : (
@@ -48,6 +46,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       <p
         style={{
           marginLeft: "0.5rem",
+          fontSize: "1.2rem",
         }}
       >
         {" "}

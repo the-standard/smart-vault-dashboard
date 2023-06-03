@@ -203,7 +203,7 @@ const History = () => {
   return (
     <Box
       sx={{
-        margin: "3% 9%",
+        margin: "3% 12%",
         padding: "3%",
         // marginTop: "50px",
         background:
