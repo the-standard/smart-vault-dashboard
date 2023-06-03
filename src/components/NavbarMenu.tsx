@@ -83,8 +83,8 @@ const NavbarMenu = () => {
           {" "}
           <MenuItem
             text={item.text}
-            icon={item.icon}
-            icon2={item.icon2}
+            // icon={item.icon}
+            // icon2={item.icon2}
             isActive={activeIndex === index}
             isWorking={item.isWorking}
             handleClick={() => handleItemClick(index)}

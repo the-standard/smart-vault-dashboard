@@ -4,8 +4,8 @@ import "../../styles/navbarStyle.css";
 
 interface MenuItemProps {
   text: string;
-  icon: string;
-  icon2: string;
+  // icon: string;
+  // icon2: string;
   isActive: boolean;
   isWorking: boolean;
   handleClick: () => void;
@@ -13,8 +13,8 @@ interface MenuItemProps {
 
 const MenuItem: React.FC<MenuItemProps> = ({
   text,
-  icon,
-  icon2,
+  // icon,
+  // icon2,
   isActive,
   handleClick,
   isWorking,
@@ -36,13 +36,13 @@ const MenuItem: React.FC<MenuItemProps> = ({
       }}
       onClick={handleClick}
     >
-      <div style={{}}>
+      {/* <div style={{}}>
         {isWorking && isActive ? (
           <img src={icon2} alt="" />
         ) : (
           <img src={icon} alt="" />
         )}
-      </div>
+      </div> */}
       <p
         style={{
           marginLeft: "0.5rem",

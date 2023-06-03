@@ -138,8 +138,16 @@ const HomePage = () => {
         container
         spacing={2}
       >
-        {items.map((item, index) => (
-          <Grid item xs={12} sm={6} key={index}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr " },
+            width: "100%",
+            gap: "2rem",
+            marginRight: "1rem",
+          }}
+        >
+          {items.map((item, index) => (
             <VaultCard
               title={item.title}
               para={item.para}
@@ -147,8 +155,8 @@ const HomePage = () => {
               image={item.image}
               isActive={item.isActive}
             />
-          </Grid>
-        ))}
+          ))}
+        </Box>
       </Grid>
       <Typography
         variant="body1"
