@@ -4,7 +4,7 @@ import { Web3Button } from "@web3modal/react";
 import { Box, Typography } from "@mui/material";
 import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
-import logo from "../assets/standardiologo.png";
+import logo from "../assets/standardiologo.svg";
 
 const Navbar = () => {
   // const { address } = useAccount();
@@ -127,12 +127,13 @@ const Navbar = () => {
             src={logo}
             alt="logo"
             style={{
-              width: "2rem",
-              height: "2rem",
+              width: "auto",
+              height: "auto",
               marginRight: "1rem",
+              margin: "36px 0",
             }}
           />
-          <Typography
+          {/* <Typography
             sx={{
               // marginLeft: { xs: "5rem", sm: "5rem", lg: "5rem", xl: "5rem" },
               margin: "36px 0",
@@ -140,7 +141,7 @@ const Navbar = () => {
             }}
           >
             TheStandard.io
-          </Typography>
+          </Typography> */}
         </Box>
         {/* title ends */}
         <Box

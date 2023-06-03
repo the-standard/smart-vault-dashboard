@@ -7,14 +7,23 @@
   margin: 0; */
   font-family: "Poppins", sans-serif;
 }
+
 body {
-  /* background: linear-gradient(180deg, #434242 0%, #242424 39.96%); */
-  background: url("./assets/standardtrybg.png");
-  background-size: cover;
-  background-position: center center;
-  color: white;
-  padding: 0;
-  margin: 0;
   font-family: "Poppins", sans-serif;
-  /* overflow-x: hidden; */
+  overflow-y: scroll;
 }
+
+body:before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./assets/standardtrybg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+}
+
+/* Add any additional styles for your app */
