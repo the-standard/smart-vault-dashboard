@@ -39,8 +39,8 @@ const HalfChart = () => (
       },
     ]}
     margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-    startAngle={-90}
-    endAngle={90}
+    startAngle={-0}
+    endAngle={0}
     innerRadius={0.9}
     padAngle={1}
     cornerRadius={45}

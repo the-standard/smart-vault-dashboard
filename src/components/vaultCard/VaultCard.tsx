@@ -8,6 +8,7 @@ import {
   useContractAddressStore,
   useVaultManagerAbiStore,
 } from "../../store/Store.ts";
+import "../../styles/buttonStyle.css";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -171,7 +172,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
             // margin: "4rem 0 0.8rem 0",
             width: "100%",
           }}
-          className="glowingCard"
+          className="myBtn"
           onClick={() => write?.()}
         >
           <Typography

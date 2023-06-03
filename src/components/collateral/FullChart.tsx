@@ -60,7 +60,8 @@ const FullChart = () => (
       modifiers: [["darker", 0.2]],
     }}
     //empty values
-    valueFormat={(value) => ``}
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    valueFormat={() => ``}
     arcLinkLabelsSkipAngle={10}
     arcLinkLabelsTextColor="#ffffff"
     arcLinkLabelsThickness={2}
