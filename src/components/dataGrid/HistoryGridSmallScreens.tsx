@@ -10,9 +10,6 @@ const HistoryGrid: React.FC<HistoryGridProps> = ({
   props,
   TruncatedTableCell,
 }) => {
-  const titles = ["Vault", "From", "To", "Block Number", "Date"];
-  console.log(props);
-
   return (
     <>
       {props ? (

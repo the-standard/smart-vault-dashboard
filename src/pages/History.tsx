@@ -1,4 +1,3 @@
-import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import {
   Box,
   Pagination,
@@ -6,7 +5,6 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { styles } from "../styles/dataGridStyles";
 import "../styles/historyStyle.css";
 // import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
@@ -136,20 +134,6 @@ const History = () => {
     return false;
   });
 
-  const rows: GridRowsProp = filteredMatches.map(
-    (transaction: any, index: number) => {
-      return {
-        id: index + 1,
-        col1: transaction.token_id,
-        col2: transaction.from_address,
-        col3: transaction.to_address,
-        col4: transaction.block_hash,
-        col5: transaction.block_number,
-        col6: formatDate(transaction.block_timestamp),
-      };
-    }
-  );
-
   function formatDate(dateString: string) {
     const date = new Date(dateString);
 
@@ -174,7 +158,7 @@ const History = () => {
 
     return (
       <>
-        {paginatedMatches.map((match: any, index: number) => (
+        {paginatedMatches.map((match: any) => (
           <HistoryGridSmallScreens
             key={match.block_number}
             props={match}
@@ -239,7 +223,7 @@ const History = () => {
   const totalPages = Math.ceil(filteredMatches.length / itemsPerPage);
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
+    _event: React.ChangeEvent<unknown>,
     page: number
   ) => {
     setCurrentPage(page);
@@ -282,6 +266,17 @@ const History = () => {
         <Box>
           <table>
             <thead>
+              <input
+                style={{
+                  background: "transparent",
+                  width: "100%",
+                  height: "1.5rem",
+                  color: "white",
+                }}
+                type="text"
+                placeholder="Search"
+                onChange={(e) => setUserInput(e.target.value)}
+              />
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Vault</th>
