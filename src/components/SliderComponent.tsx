@@ -24,7 +24,7 @@ export default function RangeSlider(props: RangeSliderProps) {
         sx={{
           color: "black",
           background:
-            "linear-gradient(to right, #00ff00, #ffff00, #ffa500, #ff0000)",
+            "linear-gradient(to right, #00ff00, #ffff00, #ff0000, #ff0000)",
         }}
       />
     </Box>

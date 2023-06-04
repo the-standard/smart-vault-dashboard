@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 // import { Slider } from "@mui/material";
 import SliderComponent from "../SliderComponent";
-import "../../styles/glowingRed.css";
+import "../../styles/buttonStyle.css";
 import { ethers } from "ethers";
 import abi from "../../abis/vaultManager.ts";
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +13,7 @@ import { styles } from "../../styles/dataGridStyles.ts";
 // import { useAccount, useConnect } from "wagmi";
 import { Link } from "react-router-dom";
 import { useVaultIdStore } from "../../store/Store.ts";
+import { Typography } from "@mui/material";
 // import Decimal from "decimal.js";
 
 interface DataGridComponentProps {
@@ -24,7 +25,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const [resolved, setResolved] = useState(false);
   const tokenToNFTMap = useRef(new Map());
   const tokenMap = useRef(new Map());
-  const [userInput, setUserInput] = useState("");
 
   //modal state
   const [open, setOpen] = useState(false);
@@ -114,36 +114,37 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         <Link
           style={{
             textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
           to="Collateral"
           onClick={handleManageClick}
         >
           <button
             style={{
-              height: "2rem",
-              width: "10rem",
-              margin: "0 1rem",
               cursor: "pointer",
             }}
-            className="glowingCard"
+            className="myBtn"
           >
-            Manage
+            <Typography variant="body1" sx={{ color: "#fff" }}>
+              Manage
+            </Typography>
           </button>
         </Link>
         <button
           style={{
-            height: "2rem",
-            width: "10rem",
-            margin: "0 1rem",
             cursor: "pointer",
           }}
-          className="glowingCardRed"
+          className="myBtn"
           onClick={() => {
             handleOpen();
             handleManageClick();
           }}
         >
-          Sell NFT
+          <Typography variant="body1" sx={{ color: "#fff" }}>
+            Sell NFT
+          </Typography>
         </button>
       </Box>
     );
@@ -203,27 +204,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       renderCell: (params: GridRenderCellParams) => renderActions(params),
     },
   ];
-  const filteredVaults = vaults.filter((vault) => {
-    if (
-      ethers.BigNumber.from(vault[0])
-        .toString()
-        .includes(userInput.toString()) ||
-      ethers.BigNumber.from(vault[5][0])
-        .toString()
-        .includes(userInput.toString()) ||
-      ethers.BigNumber.from(vault[5][2])
-        .toString()
-        .includes(userInput.toString())
-    ) {
-      return true;
-    }
 
-    return false;
-  });
-
-  console.log("filteredVaults", filteredVaults);
-
-  const myRows = filteredVaults.map((vault, index) => {
+  const myRows = vaults.map((vault, index) => {
     console.log(Number(ethers.BigNumber.from(vault[5][0]).toString()));
     console.log(Number(ethers.BigNumber.from(vault[5][1]).toString()));
     console.log(
@@ -270,28 +252,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         borderRadius: "10px 10px 0px 0px",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-
-          alignItems: "center",
-          marginBottom: "1rem",
-        }}
-      >
-        <input
-          style={{
-            background: "transparent",
-            width: "100%",
-            height: "1.5rem",
-            color: "white",
-          }}
-          type="text"
-          placeholder="Search"
-          onChange={(e) => {
-            setUserInput(e.target.value);
-          }}
-        />
-      </Box>
       <Box
         sx={{
           height: 400,
