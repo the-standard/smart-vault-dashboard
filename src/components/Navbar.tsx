@@ -1,7 +1,7 @@
 import { Web3Button } from "@web3modal/react";
 // import { useAccount } from "wagmi";
 // import { useDisconnect } from "wagmi";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
 import logo from "../assets/standardiologo.svg";

@@ -147,7 +147,7 @@ const HomePage = () => {
             marginRight: "1rem",
           }}
         >
-          {items.map((item, index) => (
+          {items.map((item) => (
             <VaultCard
               title={item.title}
               para={item.para}
