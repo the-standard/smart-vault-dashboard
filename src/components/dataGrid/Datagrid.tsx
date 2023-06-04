@@ -236,7 +236,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     // const result = new Decimal(vault[5][0].toString())
     //   .dividedBy(vault[5][1].toString())
     //   .toNumber();
-    // console.log(result);
+
     return {
       id: index + 1,
       vaultNFT: tokenToNFTMap.current.get(
