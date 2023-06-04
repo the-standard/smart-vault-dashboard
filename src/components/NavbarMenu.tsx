@@ -40,7 +40,7 @@ const menuItems = [
     isWorking: true,
   },
   {
-    text: "Borrowing via Smart Vaults",
+    text: "Borrow via Smart Vaults",
     icon: borrowinglogo,
     icon2: borrowinglogo2,
     route: "",

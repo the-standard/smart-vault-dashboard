@@ -2,16 +2,17 @@ export const styles = `
 .no-border .MuiDataGrid-cell {
   border: none;
 }
-.css-wop1k0-MuiDataGrid-footerContainer{
+.MuiDataGrid-footerContainer{
   border: none;
+  border-top:none;
 }
 .css-1iyq7zh-MuiDataGrid-columnHeaders{
   border: none;
 }
-.css-wop1k0-MuiDataGrid-footerContainer{
-  background:#0C0C0C !important;
+.MuiDataGrid-footerContainer{
+  background:transparent !important;
 }
-.css-levciy-MuiTablePagination-displayedRows{
+.MuiTablePagination-displayedRows{
   color:white !important;
 
 }
@@ -22,7 +23,7 @@ export const styles = `
   color:white !important;
 }
 .MuiDataGrid-root{
-  background:#0C0C0C !important;
+  background:white !important;
   color:white !important;
 }
 .MuiDataGrid-row{
@@ -30,7 +31,7 @@ export const styles = `
 }
 .MuiDataGrid-root{
   border: none;
-  background: linear-gradient(110.28deg, rgba(12, 12, 12, 0.4) 17.56%, rgba(0, 0, 0, 0.4) 101.11%) !important;
+  background: transparent !important;
   box-shadow: 22.9696px 22.9696px 33.9814px rgba(0, 0, 0, 0.05);;
   box-shadow: 22.9696px 22.9696px 33.9814px rgba(0, 0, 0, 0.05);
 backdrop-filter: blur(25.486px);

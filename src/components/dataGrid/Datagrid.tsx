@@ -154,10 +154,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "#", width: 90, editable: false },
     {
       field: "vaultNFT",
-      headerName: "vaultNFT",
+      headerName: "Vault NFT",
       editable: false,
       width: 100,
       renderCell: (params) => (
@@ -302,13 +301,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         {" "}
         <style>{styles}</style>
         <DataGrid
-          sx={
-            {
-              // backgroundColor: "#0C0C0C",
-              // color: "white",
-              // border: "transparent",
-            }
-          }
+          sx={{}}
           rows={myRows}
           columns={columns}
           getRowClassName={getRowClassName}
