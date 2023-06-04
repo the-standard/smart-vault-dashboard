@@ -124,6 +124,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           <button
             style={{
               cursor: "pointer",
+              marginRight: "2rem",
             }}
             className="myBtn"
           >
@@ -171,7 +172,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     {
       field: "vaultID",
       headerName: "Vault ID",
-      width: 150,
+      width: 100,
       editable: false,
     },
     {
@@ -184,7 +185,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     {
       field: "debt",
       headerName: "Debt",
-      width: 160,
+      width: 100,
       editable: false,
     },
 
@@ -200,7 +201,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       field: "actions",
       headerName: "Actions",
       editable: false,
-      width: 500,
+      width: 350,
       renderCell: (params: GridRenderCellParams) => renderActions(params),
     },
   ];

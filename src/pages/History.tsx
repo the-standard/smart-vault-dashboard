@@ -1,11 +1,19 @@
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import {
+  Box,
+  Pagination,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { styles } from "../styles/dataGridStyles";
+import "../styles/historyStyle.css";
 // import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 // import abi from "../abis/vaultManager.ts";
 // import axios from "axios";
+import HistoryGridSmallScreens from "../components/dataGrid/HistoryGridSmallScreens.tsx";
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
 import {
@@ -142,16 +150,6 @@ const History = () => {
     }
   );
 
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "#", width: 90 },
-    { field: "col1", headerName: "Vault", width: 90 },
-    { field: "col2", headerName: "From", width: 250 },
-    { field: "col3", headerName: "To", width: 250 },
-    { field: "col4", headerName: "Block Hash", width: 250 },
-    { field: "col5", headerName: "Block Number", width: 120 },
-    { field: "col6", headerName: "Date", width: 250 },
-  ];
-
   function formatDate(dateString: string) {
     const date = new Date(dateString);
 
@@ -168,32 +166,92 @@ const History = () => {
     return date.toLocaleString("en-US", options);
   }
 
-  const getRowClassName = (_params: any) => {
-    return "no-border";
+  const returnNewDataGrid = () => {
+    const paginatedMatches = filteredMatches.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+
+    return (
+      <>
+        {paginatedMatches.map((match: any, index: number) => (
+          <HistoryGridSmallScreens
+            key={match.block_number}
+            props={match}
+            TruncatedTableCell={TruncatedTableCell}
+          />
+        ))}
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          sx={{
+            "& .MuiPaginationItem-page.Mui-selected": {
+              color: "white",
+            },
+          }}
+        />
+      </>
+    );
   };
 
-  function returnDataGrid() {
-    return (
-      <DataGrid
-        sx={{
-          height: "auto",
-          background: "rgba(26, 17, 17, 0.07)",
-        }}
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 10,
-            },
-          },
-        }}
-        pageSizeOptions={[10]}
-        getRowClassName={getRowClassName}
-        disableRowSelectionOnClick
-      />
-    );
+  const truncateValue = (value: string, length: number) => {
+    if (value.length <= length) {
+      return value;
+    }
+
+    const truncatedValue = `${value.substring(0, length - 3)}...`;
+    return truncatedValue;
+  };
+
+  interface TruncatedTableCellProps {
+    value: string; // Specify the type of the 'value' prop as string
+    length: number;
   }
+
+  const TruncatedTableCell: React.FC<TruncatedTableCellProps> = ({
+    value,
+    length,
+  }) => {
+    const truncatedValue = truncateValue(value, length);
+
+    return (
+      <td data-label={value}>
+        <Tooltip title={value}>
+          <Typography
+            sx={{
+              maxWidth: 100,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {truncatedValue}
+          </Typography>
+        </Tooltip>
+      </td>
+    );
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(filteredMatches.length / itemsPerPage);
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
+  };
+
+  const isMobile = useMediaQuery("(max-width:600px)");
+
+  useEffect(() => {
+    if (isMobile) {
+      returnNewDataGrid();
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     getVaults();
@@ -203,50 +261,74 @@ const History = () => {
   return (
     <Box
       sx={{
-        margin: "3% 12%",
-        padding: "3%",
-        // marginTop: "50px",
-        background:
-          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        border: "1px solid rgba(52, 52, 52, 0.3)",
-        boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        borderRadius: "10px 10px 0px 0px",
-        height: "100vh",
+        // margin: "3% 12%",
+        // padding: "3%",
+        // // marginTop: "50px",
+        // background:
+        //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+        // border: "1px solid rgba(52, 52, 52, 0.3)",
+        // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+        // borderRadius: "10px 10px 0px 0px",
+        // height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "1rem",
-        }}
-      >
-        <input
-          style={{
-            background: "transparent",
-            width: "20rem",
-            height: "1.5rem",
-            color: "white",
-          }}
-          type="text"
-          placeholder="Search"
-          onChange={(e) => setUserInput(e.target.value)}
-        />
-        <button
-          style={{
-            height: "2rem",
-            width: "10rem",
-            margin: "0 1rem",
-          }}
-          className="glowingCard"
-        >
-          + Add product
-        </button>
-      </Box>
-      <style>{styles}</style>
-
-      {returnDataGrid()}
+      {isMobile ? (
+        returnNewDataGrid()
+      ) : (
+        <Box>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Vault</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">BlockHash</th>
+                <th scope="col">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredMatches
+                .slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .map((match: any, index: number) => (
+                  <tr key={index}>
+                    <td data-label="#">
+                      {(currentPage - 1) * itemsPerPage + index + 1}
+                    </td>
+                    <TruncatedTableCell value={match.token_id} length={8} />
+                    <TruncatedTableCell
+                      value={match.from_address}
+                      length={12}
+                    />
+                    <TruncatedTableCell value={match.to_address} length={12} />
+                    <TruncatedTableCell value={match.block_hash} length={12} />
+                    <TruncatedTableCell
+                      value={formatDate(match.block_timestamp)}
+                      length={16}
+                    />
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            sx={{
+              "& .MuiPaginationItem-page.Mui-selected": {
+                color: "white",
+              },
+            }}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

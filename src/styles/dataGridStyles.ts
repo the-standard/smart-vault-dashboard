@@ -33,7 +33,6 @@ export const styles = `
   border: none;
   background: transparent !important;
   box-shadow: 22.9696px 22.9696px 33.9814px rgba(0, 0, 0, 0.05);;
-  box-shadow: 22.9696px 22.9696px 33.9814px rgba(0, 0, 0, 0.05);
 backdrop-filter: blur(25.486px);
 
 /* Note: backdrop-filter has minimal browser support */
