@@ -1,6 +1,4 @@
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-// import { Slider } from "@mui/material";
 import SliderComponent from "../SliderComponent";
 import "../../styles/buttonStyle.css";
 import { ethers } from "ethers";
@@ -9,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import Modal from "@mui/material/Modal";
 // import ManageSteps from "../ManageSteps.tsx";
 import ManageSteps from "../listNFTModal/ManageSteps.tsx";
-import { styles } from "../../styles/dataGridStyles.ts";
 // import { useAccount, useConnect } from "wagmi";
 import { Link } from "react-router-dom";
 import { useVaultIdStore } from "../../store/Store.ts";
@@ -20,8 +17,8 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-// import "../../styles/historyStyle.css";
-// import Decimal from "decimal.js";
+import "../../styles/progressBarStyle.css";
+import ProgressBar from "../ProgressBar.tsx";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -111,6 +108,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       image: tokenDecoded.image,
     };
   }
+  // alert(
+  //   parseFloat(
+  //     Number(ethers.BigNumber.from(vaults[0][5][0])) /
+  //       Number(ethers.BigNumber.from(vaults[0][5][1]))
+  //   ).toString() * 100
+  // );
 
   useEffect(() => {
     async function fetchNFTs() {
@@ -314,13 +317,17 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     value={ethers.BigNumber.from(vault[5][2]).toString()}
                     length={12}
                   />
+
                   <td>{ethers.BigNumber.from(vault[5][0]).toString()}</td>
                   <td>
-                    {renderSlider(
-                      (Number(ethers.BigNumber.from(vault[5][0])) /
-                        Number(ethers.BigNumber.from(vault[5][1]))) *
+                    {/* returns NaN */}
+                    <ProgressBar
+                      progressValue={
+                        (Number(ethers.BigNumber.from(vault[5][0])) /
+                          Number(ethers.BigNumber.from(vault[5][1]))) *
                         100
-                    )}
+                      }
+                    />
                   </td>
                   <td>
                     {" "}

@@ -1,0 +1,30 @@
+.progress-container {
+  width: 250px;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  position: absolute;
+  transition: 1s;
+  backdrop-filter: blur(4px);
+}
+
+.percentage {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+}
