@@ -104,7 +104,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             minWidth: { xs: "100%", lg: "400px" },
             width: "auto",
             height: { xs: "100px", sm: "150px", md: "200px" },
-            // border: "1px solid #8E9BAE",
           }}
         >
           {renderLineChart()} {/* <LineChart /> */}
