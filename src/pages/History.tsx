@@ -165,16 +165,24 @@ const History = () => {
             TruncatedTableCell={TruncatedTableCell}
           />
         ))}
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
+        <Box
           sx={{
-            "& .MuiPaginationItem-page.Mui-selected": {
-              color: "white",
-            },
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
+        >
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            sx={{
+              "& .MuiPaginationItem-page.Mui-selected": {
+                color: "white",
+              },
+            }}
+          />
+        </Box>
       </>
     );
   };
@@ -256,8 +264,8 @@ const History = () => {
         // height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        // justifyContent: "center",
+        // alignItems: "center",
       }}
     >
       {isMobile ? (
@@ -312,16 +320,24 @@ const History = () => {
                 ))}
             </tbody>
           </table>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
+          <Box
             sx={{
-              "& .MuiPaginationItem-page.Mui-selected": {
-                color: "white",
-              },
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-          />
+          >
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{
+                "& .MuiPaginationItem-page.Mui-selected": {
+                  color: "white",
+                },
+              }}
+            />
+          </Box>
         </Box>
       )}
     </Box>

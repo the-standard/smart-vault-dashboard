@@ -1,5 +1,5 @@
 // import React, { ReactNode, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import "../../styles/navbarStyle.css";
 
 interface MenuItemProps {
@@ -30,7 +30,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
         marginRight: "1rem",
         height: "full",
         padding: "0 0.7rem",
-        width: { xs: "100%", sm: "auto" },
+        width: { xs: "100%", sm: "85%" },
+        //   border: "2px solid red",
 
         //  border: "5px solid red",
       }}
@@ -43,15 +44,16 @@ const MenuItem: React.FC<MenuItemProps> = ({
           <img src={icon} alt="" />
         )}
       </div> */}
-      <p
-        style={{
+      <Typography
+        variant="body1"
+        sx={{
           marginLeft: "0.5rem",
-          fontSize: "1.2rem",
+          fontSize: { xs: "1rem", sm: "1rem" },
         }}
       >
         {" "}
         {text}{" "}
-      </p>
+      </Typography>
     </Box>
   );
 };

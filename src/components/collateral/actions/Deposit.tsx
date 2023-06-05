@@ -202,9 +202,13 @@ const Deposit = () => {
             margin: "2px",
             padding: "5px",
             cursor: "pointer",
-            height: "auto",
+            height: "2rem",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          className="glowingCard"
+          className="myBtn"
           onClick={handleOpen}
         >
           {" "}
@@ -215,7 +219,15 @@ const Deposit = () => {
             src={QRicon}
             alt="qricon"
           />
-          <Typography variant="body2"> With QR Code </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              fontSize: "0.8rem",
+            }}
+          >
+            {" "}
+            With QR Code{" "}
+          </Typography>
         </Box>
         <Box
           sx={{
