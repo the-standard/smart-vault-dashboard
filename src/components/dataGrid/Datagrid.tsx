@@ -13,7 +13,13 @@ import { styles } from "../../styles/dataGridStyles.ts";
 // import { useAccount, useConnect } from "wagmi";
 import { Link } from "react-router-dom";
 import { useVaultIdStore } from "../../store/Store.ts";
-import { Button, Pagination, Typography, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  Pagination,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 // import "../../styles/historyStyle.css";
 // import Decimal from "decimal.js";
 
@@ -33,6 +39,49 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const handleClose = () => setOpen(false);
   //modal child state
   const [modalChildState, setModalChildState] = useState();
+
+  const truncateValue = (value: string, length: number) => {
+    if (value.length <= length) {
+      return value;
+    }
+
+    const prefixLength = Math.floor(length / 3);
+    const suffixLength = length - prefixLength - 3;
+    const truncatedValue = `${value.substring(
+      0,
+      prefixLength
+    )}...${value.substring(value.length - suffixLength)}`;
+    return truncatedValue;
+  };
+
+  interface TruncatedTableCellProps {
+    value: string; // Specify the type of the 'value' prop as string
+    length: number;
+  }
+
+  const TruncatedTableCell: React.FC<TruncatedTableCellProps> = ({
+    value,
+    length,
+  }) => {
+    const truncatedValue = truncateValue(value, length);
+
+    return (
+      <td data-label={value}>
+        <Tooltip title={value}>
+          <Typography
+            sx={{
+              maxWidth: 100,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {truncatedValue}
+          </Typography>
+        </Tooltip>
+      </td>
+    );
+  };
 
   //get this contract and abi from store
   async function getNFT(vault: any) {
@@ -192,22 +241,26 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   return (
     <Box
-      sx={{
-        margin: "3% 12%",
-        padding: "3%",
-        background:
-          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        border: "1px solid rgba(52, 52, 52, 0.3)",
-        boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        borderRadius: "10px 10px 0px 0px",
-        border: "2px solid red",
-      }}
+      sx={
+        {
+          // margin: "3% 12%",
+          // padding: "3%",
+          // background:
+          //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+          // border: "1px solid rgba(52, 52, 52, 0.3)",
+          // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+          // borderRadius: "10px 10px 0px 0px",
+          // border: "2px solid red",
+        }
+      }
     >
       <Box
-        sx={{
-          height: 400,
-          width: "100%",
-        }}
+        sx={
+          {
+            // height: 400,
+            // width: "100%",
+          }
+        }
       >
         <table>
           <thead>
@@ -257,7 +310,10 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     ) : null}
                   </td>
                   <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
-                  <td>{ethers.BigNumber.from(vault[5][2]).toString()}</td>
+                  <TruncatedTableCell
+                    value={ethers.BigNumber.from(vault[5][2]).toString()}
+                    length={12}
+                  />
                   <td>{ethers.BigNumber.from(vault[5][0]).toString()}</td>
                   <td>
                     {renderSlider(
