@@ -130,7 +130,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             textAlign: "center",
             borderRadius: "6.24932px",
           }}
-          className={activeElement === 1 ? "glowingCard" : ""}
+          className={activeElement === 1 ? "myBtnNoAnimation" : ""}
           onClick={() => handleClick(1)}
         >
           Deposit
@@ -144,7 +144,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             textAlign: "center",
             borderRadius: "6.24932px",
           }}
-          className={activeElement === 2 ? "glowingCard" : ""}
+          className={activeElement === 2 ? "myBtnNoAnimation" : ""}
           onClick={() => handleClick(2)}
         >
           Withdraw
@@ -158,7 +158,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             textAlign: "center",
             borderRadius: "6.24932px",
           }}
-          className={activeElement === 3 ? "glowingCard" : ""}
+          className={activeElement === 3 ? "myBtnNoAnimation" : ""}
           onClick={() => handleClick(3)}
         >
           Swap

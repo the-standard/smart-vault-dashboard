@@ -78,6 +78,9 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
             toolbar: {
               show: false,
             },
+            zoom: {
+              enabled: false,
+            },
           },
           dataLabels: {
             enabled: false,
@@ -88,7 +91,11 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
           title: {
             text: "Last 7 days",
             align: "left",
+            style: {
+              color: "#fff",
+            },
           },
+
           colors: [lineColor],
           fill: {
             type: "gradient",
