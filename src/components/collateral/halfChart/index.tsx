@@ -45,7 +45,7 @@ const index = () => {
         sx={{
           width: "16rem",
           height: "8rem",
-          backgroundColor: "rgba(18, 18, 18, 0.8)",
+          backgroundColor: "transparent",
           borderRadius: "8rem 8rem 0 0",
           borderTop: "1px solid #23EAE0",
           position: "absolute",
@@ -67,7 +67,8 @@ const index = () => {
           zIndex: 0,
         }}
       ></Box>
-      <HalfChart />
+      {/* seems like it's not necessary anymore */}
+      {/* <HalfChart /> */}
       <Box
         sx={{
           height: "250px",

@@ -4,11 +4,13 @@ import React from "react";
 interface HistoryGridProps {
   props: any;
   TruncatedTableCell: any;
+  formatDate: any;
 }
 
 const HistoryGrid: React.FC<HistoryGridProps> = ({
   props,
   TruncatedTableCell,
+  formatDate,
 }) => {
   return (
     <>
@@ -103,7 +105,7 @@ const HistoryGrid: React.FC<HistoryGridProps> = ({
               Date{" "}
             </Typography>
             <Typography variant="body1" sx={{ color: "white" }}>
-              {props.block_timestamp}
+              {formatDate(props.block_timestamp)}
               {/* <TruncatedTableCell value={props.block_timestamp} length={12} /> */}
             </Typography>
           </Box>

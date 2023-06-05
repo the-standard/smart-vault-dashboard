@@ -163,6 +163,7 @@ const History = () => {
             key={match.block_number}
             props={match}
             TruncatedTableCell={TruncatedTableCell}
+            formatDate={formatDate}
           />
         ))}
         <Box
@@ -192,7 +193,12 @@ const History = () => {
       return value;
     }
 
-    const truncatedValue = `${value.substring(0, length - 3)}...`;
+    const prefixLength = Math.floor(length / 3);
+    const suffixLength = length - prefixLength - 3;
+    const truncatedValue = `${value.substring(
+      0,
+      prefixLength
+    )}...${value.substring(value.length - suffixLength)}`;
     return truncatedValue;
   };
 
@@ -312,10 +318,10 @@ const History = () => {
                     />
                     <TruncatedTableCell value={match.to_address} length={12} />
                     <TruncatedTableCell value={match.block_hash} length={12} />
-                    <TruncatedTableCell
-                      value={formatDate(match.block_timestamp)}
-                      length={16}
-                    />
+
+                    <td data-label="Time">
+                      {formatDate(match.block_timestamp)}
+                    </td>
                   </tr>
                 ))}
             </tbody>
