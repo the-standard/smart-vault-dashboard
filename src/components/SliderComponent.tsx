@@ -15,7 +15,7 @@ export default function RangeSlider(props: RangeSliderProps) {
   console.log(value);
 
   return (
-    <Box sx={{ width: 300 }}>
+    <Box sx={{ width: 200 }}>
       <Slider
         getAriaLabel={() => "Disabled slider"}
         value={isNaN(value) ? 0 : value}

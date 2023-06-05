@@ -13,7 +13,8 @@ import { styles } from "../../styles/dataGridStyles.ts";
 // import { useAccount, useConnect } from "wagmi";
 import { Link } from "react-router-dom";
 import { useVaultIdStore } from "../../store/Store.ts";
-import { Typography } from "@mui/material";
+import { Button, Pagination, Typography, useMediaQuery } from "@mui/material";
+// import "../../styles/historyStyle.css";
 // import Decimal from "decimal.js";
 
 interface DataGridComponentProps {
@@ -33,6 +34,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   //modal child state
   const [modalChildState, setModalChildState] = useState();
 
+  //get this contract and abi from store
   async function getNFT(vault: any) {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -88,7 +90,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   console.log("vaults", vaults);
   // console.log("vault sth", ethers.BigNumber.from(vaults[0][1]).toNumber());
 
-  const renderSlider = (_params: GridRenderCellParams, step: number) => {
+  const renderSlider = (step: number) => {
     return (
       <Box>
         <SliderComponent step={step} />
@@ -96,12 +98,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     );
   };
 
-  const renderActions = (params: GridRenderCellParams) => {
+  const renderActions = (params: any) => {
     const handleManageClick = () => {
-      console.log(params.row.vaultID);
-      setModalChildState(params.row.vaultID);
+      console.log(params.vaultID);
+      setModalChildState(params.vaultID);
       const { getVaultID } = useVaultIdStore.getState();
-      getVaultID(params.row.vaultID);
+      getVaultID(params.vaultID);
     };
 
     return (
@@ -125,10 +127,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             style={{
               cursor: "pointer",
               marginRight: "2rem",
+              height: "3rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
             className="myBtn"
           >
-            <Typography variant="body1" sx={{ color: "#fff" }}>
+            <Typography variant="body2" sx={{ color: "#fff" }}>
               Manage
             </Typography>
           </button>
@@ -136,6 +142,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         <button
           style={{
             cursor: "pointer",
+            height: "3rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "8rem",
+            padding: 0, // Add this line to remove padding
           }}
           className="myBtn"
           onClick={() => {
@@ -143,7 +155,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             handleManageClick();
           }}
         >
-          <Typography variant="body1" sx={{ color: "#fff" }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#fff",
+              textAlign: "center", // Add this line to center the text horizontally
+              width: "100%", // Add this line to fill the available width
+            }}
+          >
             Sell NFT
           </Typography>
         </button>
@@ -151,95 +170,25 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     );
   };
 
-  const getRowClassName = (_params: any) => {
-    return "no-border";
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(vaults.length / itemsPerPage);
+
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
   };
 
-  const columns: GridColDef[] = [
-    {
-      field: "vaultNFT",
-      headerName: "Vault NFT",
-      editable: false,
-      width: 100,
-      renderCell: (params) => (
-        <img
-          src={params.row.vaultNFT}
-          alt="Product"
-          style={{ width: "100%", height: "80px" }}
-        />
-      ),
-    },
-    {
-      field: "vaultID",
-      headerName: "Vault ID",
-      width: 100,
-      editable: false,
-    },
-    {
-      field: "ratio",
-      headerName: "Ratio",
-      // type: "number",
-      width: 110,
-      editable: false,
-    },
-    {
-      field: "debt",
-      headerName: "Debt",
-      width: 100,
-      editable: false,
-    },
+  const isMobile = useMediaQuery("(max-width:600px)");
 
-    {
-      field: "debtRange",
-      headerName: "Debt Range",
-      editable: false,
-      width: 250,
-      renderCell: (params: GridRenderCellParams) =>
-        renderSlider(params, params.row.step),
-    },
-    {
-      field: "actions",
-      headerName: "Actions",
-      editable: false,
-      width: 350,
-      renderCell: (params: GridRenderCellParams) => renderActions(params),
-    },
-  ];
-
-  const myRows = vaults.map((vault, index) => {
-    console.log(Number(ethers.BigNumber.from(vault[5][0]).toString()));
-    console.log(Number(ethers.BigNumber.from(vault[5][1]).toString()));
-    console.log(
-      (
-        (Number(ethers.BigNumber.from(vault[5][0]).toString()) /
-          Number(ethers.BigNumber.from(vault[5][1]).toString())) *
-        100
-      ).toFixed(18)
-    );
-    // const result = new Decimal(vault[5][0].toString())
-    //   .dividedBy(vault[5][1].toString())
-    //   .toNumber();
-
-    return {
-      id: index + 1,
-      vaultNFT: tokenToNFTMap.current.get(
-        ethers.BigNumber.from(vault[0]).toString()
-      ),
-      vaultID: ethers.BigNumber.from(vault[0]).toString(),
-      ratio: ethers.BigNumber.from(vault[5][2]).toString(),
-      debt: ethers.BigNumber.from(vault[5][0]).toString(),
-      // step: new Decimal(vault[5][0].toString())
-      //   .dividedBy(vault[5][1].toString())
-      //   .toNumber(),
-      step:
-        (Number(ethers.BigNumber.from(vault[5][0]).toString()) /
-          Number(ethers.BigNumber.from(vault[5][1]).toString())) *
-        100,
-      // step:
-      // ethers.BigNumber.from(vault[5][2]).toNumber() /
-      // ethers.BigNumber.from(vault[5][1]).toNumber(),
-    };
-  });
+  useEffect(() => {
+    if (isMobile) {
+      // returnNewDataGrid();
+    }
+  }, [isMobile]);
 
   return (
     <Box
@@ -251,6 +200,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         border: "1px solid rgba(52, 52, 52, 0.3)",
         boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
         borderRadius: "10px 10px 0px 0px",
+        border: "2px solid red",
       }}
     >
       <Box
@@ -259,24 +209,91 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           width: "100%",
         }}
       >
-        {" "}
-        <style>{styles}</style>
-        <DataGrid
-          sx={{}}
-          rows={myRows}
-          columns={columns}
-          getRowClassName={getRowClassName}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
+        <table>
+          <thead>
+            <input
+              style={{
+                background: "transparent",
+                width: "100%",
+                height: "1.5rem",
+                color: "white",
+              }}
+              type="text"
+              placeholder="Search"
+              // onChange={(e) => setUserInput(e.target.value)}
+            />
+            <tr>
+              <th scope="col">Vault NFT</th>
+              <th scope="col">Vault ID</th>
+              <th scope="col">Ratio</th>
+              <th scope="col">Debt</th>
+              <th scope="col">Debt Range</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vaults
+              .slice(
+                (currentPage - 1) * itemsPerPage,
+                currentPage * itemsPerPage
+              )
+              .map((vault: any, index: number) => (
+                <tr key={index}>
+                  {/* <td data-label="#">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </td> */}
+                  <td>
+                    {tokenToNFTMap.current.has(
+                      ethers.BigNumber.from(vault[0]).toString()
+                    ) ? (
+                      <img
+                        src={tokenToNFTMap.current.get(
+                          ethers.BigNumber.from(vault[0]).toString()
+                        )}
+                        alt="NFT"
+                        width={50}
+                        height={50}
+                      />
+                    ) : null}
+                  </td>
+                  <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
+                  <td>{ethers.BigNumber.from(vault[5][2]).toString()}</td>
+                  <td>{ethers.BigNumber.from(vault[5][0]).toString()}</td>
+                  <td>
+                    {renderSlider(
+                      (Number(ethers.BigNumber.from(vault[5][0])) /
+                        Number(ethers.BigNumber.from(vault[5][1]))) *
+                        100
+                    )}
+                  </td>
+                  <td>
+                    {" "}
+                    {renderActions({
+                      vaultID: ethers.BigNumber.from(vault[0]).toString(),
+                    })}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>{" "}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick={true}
-          disableVirtualization={true}
-        />
+        >
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            sx={{
+              "& .MuiPaginationItem-page.Mui-selected": {
+                color: "white",
+              },
+            }}
+          />
+        </Box>
       </Box>
       {/* modal */}
       <Box>
