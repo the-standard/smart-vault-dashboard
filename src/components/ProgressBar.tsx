@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "../styles/progressBarStyle.css";
+import { Box } from "@mui/material";
 
 interface ProgressBarProps {
   progressValue: number;
@@ -7,10 +8,10 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
   const progressBar = document.getElementById("progress-bar");
-  const percentageDiv = document.getElementById("percentage");
+  // const percentageDiv = document.getElementById("percentage");
 
   // Set the percentage value
-  const percentage = 30;
+  const percentage = 70;
 
   // Calculate the color
   let hue;
@@ -22,7 +23,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
     hue = 39 - ((percentage - 50) / 50) * 39;
   }
 
-  if (progressBar != null && percentageDiv != null) {
+  if (progressBar != null) {
     // Set the color and width of the progress bar
     progressBar.style.backgroundColor = `hsla(${hue}, 100%, 50%, 0.6)`;
     progressBar.style.width = `${percentage}%`;
@@ -33,43 +34,43 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
   const end = percentage;
   const duration = 1000;
   const range = end - start;
-  const minTimer = 50;
-  let stepTime = Math.abs(Math.floor(duration / range));
+  // const minTimer = 50;
+  // let stepTime = Math.abs(Math.floor(duration / range));
 
-  // Clamp the timer to our minimum
-  stepTime = Math.max(stepTime, minTimer);
+  // // Clamp the timer to our minimum
+  // stepTime = Math.max(stepTime, minTimer);
 
   const startTime = new Date().getTime();
   const endTime = startTime + duration;
   // eslint-disable-next-line prefer-const
   let timer: string | number | NodeJS.Timeout | undefined;
 
-  function run() {
-    if (percentageDiv == null) return;
-    const now = new Date().getTime();
-    const remaining = Math.max((endTime - now) / duration, 0);
-    const value = Math.round(end - remaining * range);
-    percentageDiv.innerHTML = `${value}%`;
-    if (value === end) {
-      clearInterval(timer);
-    }
+  const now = new Date().getTime();
+  const remaining = Math.max((endTime - now) / duration, 0);
+  const value = Math.round(end - remaining * range);
+  // percentageDiv.innerHTML = `${value}%`;
+  if (value === end) {
+    clearInterval(timer);
   }
 
-  timer = setInterval(run, stepTime);
-
-  useEffect(() => {
-    run();
-  }, []);
+  // timer = setInterval(run, stepTime);
 
   return (
-    <div>
-      <div className="progress-container">
-        <div className="progress-bar" id="progress-bar"></div>
-        <div className="percentage" id="percentage">
-          0%
-        </div>
-      </div>
-    </div>
+    <Box>
+      <Box className="progress-container">
+        <Box
+          className="progress-bar"
+          id="progress-bar"
+          sx={{
+            backgroundColor: `hsla(${hue}, 100%, 50%, 0.6)`,
+            width: `${percentage}%`,
+          }}
+        ></Box>
+        <Box className="percentage" id="percentage">
+          {percentage}%
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
