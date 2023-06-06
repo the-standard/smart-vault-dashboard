@@ -142,13 +142,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   console.log("vaults", vaults);
   // console.log("vault sth", ethers.BigNumber.from(vaults[0][1]).toNumber());
 
-  const renderSlider = (step: number) => {
-    return (
-      <Box>
-        <SliderComponent step={step} />
-      </Box>
-    );
-  };
+  // const renderSlider = (step: number) => {
+  //   return (
+  //     <Box>
+  //       <SliderComponent step={step} />
+  //     </Box>
+  //   );
+  // };
 
   const renderActions = (params: any) => {
     const handleManageClick = () => {
@@ -163,6 +163,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         sx={{
           display: "flex",
           flexDirection: "row",
+          margin: "0",
+          padding: "0",
         }}
       >
         <Link
@@ -175,31 +177,36 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           to="Collateral"
           onClick={handleManageClick}
         >
-          <button
-            style={{
+          <Button
+            sx={{
               cursor: "pointer",
               marginRight: "2rem",
               height: "3rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              width: { xs: "4rem", md: "8rem" },
             }}
             className="myBtn"
           >
-            <Typography variant="body2" sx={{ color: "#fff" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#fff", fontSize: { xs: "0.8rem", md: "1rem" } }}
+            >
               Manage
             </Typography>
-          </button>
+          </Button>
         </Link>
-        <button
-          style={{
+        <Button
+          sx={{
             cursor: "pointer",
             height: "3rem",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "8rem",
-            padding: 0, // Add this line to remove padding
+            width: { xs: "4rem", md: "8rem" },
+            padding: 0,
+            margin: 0,
           }}
           className="myBtn"
           onClick={() => {
@@ -211,13 +218,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             variant="body2"
             sx={{
               color: "#fff",
-              textAlign: "center", // Add this line to center the text horizontally
-              width: "100%", // Add this line to fill the available width
+              textAlign: "center",
+              width: "100%",
+              fontSize: { xs: "0.8rem", md: "1rem" },
             }}
           >
             Sell NFT
           </Typography>
-        </button>
+        </Button>
       </Box>
     );
   };
@@ -257,6 +265,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         }
       }
     >
+      {/* responsive table container */}
       <Box
         sx={
           {
@@ -265,80 +274,193 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           }
         }
       >
-        <table>
-          <thead>
-            <input
-              style={{
-                background: "transparent",
-                width: "100%",
-                height: "1.5rem",
-                color: "white",
-              }}
-              type="text"
-              placeholder="Search"
-              // onChange={(e) => setUserInput(e.target.value)}
-            />
-            <tr>
-              <th scope="col">Vault NFT</th>
-              <th scope="col">Vault ID</th>
-              <th scope="col">Ratio</th>
-              <th scope="col">Debt</th>
-              <th scope="col">Debt Range</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {vaults
-              .slice(
-                (currentPage - 1) * itemsPerPage,
-                currentPage * itemsPerPage
-              )
-              .map((vault: any, index: number) => (
-                <tr key={index}>
-                  {/* <td data-label="#">
+        {" "}
+        {/* small screen table */}
+        <Box
+          sx={{
+            display: { xs: "block", md: "none" },
+          }}
+        >
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Debt Range</th>
+                {/* width is not actually 20px, but it makes the table look good */}
+                <th style={{ width: "20px" }} scope="col">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {vaults
+                .slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .map((vault: any, index: number) => (
+                  <tr key={index}>
+                    <td>
+                      {/* returns NaN */}
+                      <ProgressBar
+                        progressValue={
+                          (Number(ethers.BigNumber.from(vault[5][0])) /
+                            Number(ethers.BigNumber.from(vault[5][1]))) *
+                          100
+                        }
+                      />
+                    </td>
+                    <td style={{}}>
+                      {" "}
+                      {renderActions({
+                        vaultID: ethers.BigNumber.from(vault[0]).toString(),
+                      })}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>{" "}
+        </Box>
+        {/* medium screen table */}
+        <Box
+          sx={{
+            display: { xs: "none", md: "block", lg: "none" },
+          }}
+        >
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Vault NFT</th>
+                <th scope="col">Vault ID</th>
+
+                <th scope="col">Debt Range</th>
+                {/* width is not actually 20px, but it makes the table look good */}
+                <th style={{ width: "20px" }} scope="col">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {vaults
+                .slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .map((vault: any, index: number) => (
+                  <tr key={index}>
+                    {/* <td data-label="#">
                     {(currentPage - 1) * itemsPerPage + index + 1}
                   </td> */}
-                  <td>
-                    {tokenToNFTMap.current.has(
-                      ethers.BigNumber.from(vault[0]).toString()
-                    ) ? (
-                      <img
-                        src={tokenToNFTMap.current.get(
-                          ethers.BigNumber.from(vault[0]).toString()
-                        )}
-                        alt="NFT"
-                        width={50}
-                        height={50}
-                      />
-                    ) : null}
-                  </td>
-                  <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
-                  <TruncatedTableCell
-                    value={ethers.BigNumber.from(vault[5][2]).toString()}
-                    length={12}
-                  />
+                    <td>
+                      {tokenToNFTMap.current.has(
+                        ethers.BigNumber.from(vault[0]).toString()
+                      ) ? (
+                        <img
+                          src={tokenToNFTMap.current.get(
+                            ethers.BigNumber.from(vault[0]).toString()
+                          )}
+                          alt="NFT"
+                          width={50}
+                          height={50}
+                        />
+                      ) : null}
+                    </td>
+                    <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
 
-                  <td>{ethers.BigNumber.from(vault[5][0]).toString()}</td>
-                  <td>
-                    {/* returns NaN */}
-                    <ProgressBar
-                      progressValue={
-                        (Number(ethers.BigNumber.from(vault[5][0])) /
-                          Number(ethers.BigNumber.from(vault[5][1]))) *
-                        100
-                      }
+                    <td>
+                      {/* returns NaN */}
+                      <ProgressBar
+                        progressValue={
+                          (Number(ethers.BigNumber.from(vault[5][0])) /
+                            Number(ethers.BigNumber.from(vault[5][1]))) *
+                          100
+                        }
+                      />
+                    </td>
+                    <td style={{}}>
+                      {" "}
+                      {renderActions({
+                        vaultID: ethers.BigNumber.from(vault[0]).toString(),
+                      })}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>{" "}
+        </Box>
+        {/* big screen table */}
+        <Box
+          sx={{
+            display: { xs: "none", lg: "block" },
+          }}
+        >
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Vault NFT</th>
+                <th scope="col">Vault ID</th>
+                <th scope="col">Ratio</th>
+                <th scope="col">Debt</th>
+                <th scope="col">Debt Range</th>
+                {/* width is not actually 20px, but it makes the table look good */}
+                <th style={{ width: "20px" }} scope="col">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {vaults
+                .slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .map((vault: any, index: number) => (
+                  <tr key={index}>
+                    {/* <td data-label="#">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </td> */}
+                    <td>
+                      {tokenToNFTMap.current.has(
+                        ethers.BigNumber.from(vault[0]).toString()
+                      ) ? (
+                        <img
+                          src={tokenToNFTMap.current.get(
+                            ethers.BigNumber.from(vault[0]).toString()
+                          )}
+                          alt="NFT"
+                          width={50}
+                          height={50}
+                        />
+                      ) : null}
+                    </td>
+                    <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
+                    <TruncatedTableCell
+                      value={ethers.BigNumber.from(vault[5][2]).toString()}
+                      length={12}
                     />
-                  </td>
-                  <td>
-                    {" "}
-                    {renderActions({
-                      vaultID: ethers.BigNumber.from(vault[0]).toString(),
-                    })}
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>{" "}
+
+                    <td>{ethers.BigNumber.from(vault[5][0]).toString()}</td>
+                    <td>
+                      {/* returns NaN */}
+                      <ProgressBar
+                        progressValue={
+                          (Number(ethers.BigNumber.from(vault[5][0])) /
+                            Number(ethers.BigNumber.from(vault[5][1]))) *
+                          100
+                        }
+                      />
+                    </td>
+                    <td style={{}}>
+                      {" "}
+                      {renderActions({
+                        vaultID: ethers.BigNumber.from(vault[0]).toString(),
+                      })}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>{" "}
+        </Box>
+        {/* big screen table ends */}
         <Box
           sx={{
             display: "flex",

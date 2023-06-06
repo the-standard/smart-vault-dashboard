@@ -1,5 +1,5 @@
 .progress-container {
-  width: 250px;
+  width: auto;
   height: 30px;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -23,7 +23,7 @@
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 20px;
+  font-size: 19px;
   color: #fff;
   font-family: "Poppins", sans-serif;
   font-weight: 300;

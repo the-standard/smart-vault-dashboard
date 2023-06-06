@@ -7,7 +7,7 @@ interface ProgressBarProps {
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
-  const progressBar = document.getElementById("progress-bar");
+  // const progressBar = document.getElementById("progress-bar");
   // const percentageDiv = document.getElementById("percentage");
 
   // Set the percentage value
@@ -23,11 +23,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
     hue = 39 - ((percentage - 50) / 50) * 39;
   }
 
-  if (progressBar != null) {
-    // Set the color and width of the progress bar
-    progressBar.style.backgroundColor = `hsla(${hue}, 100%, 50%, 0.6)`;
-    progressBar.style.width = `${percentage}%`;
-  }
+  // if (progressBar != null) {
+  //   // Set the color and width of the progress bar
+  //   progressBar.style.backgroundColor = `hsla(${hue}, 100%, 50%, 0.6)`;
+  //   progressBar.style.width = `${percentage}%`;
+  // }
 
   // Animate the number
   const start = 0;
@@ -56,7 +56,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
   // timer = setInterval(run, stepTime);
 
   return (
-    <Box>
+    <Box sx={{}}>
       <Box className="progress-container">
         <Box
           className="progress-bar"
