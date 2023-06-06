@@ -8,7 +8,7 @@ import priceFeed from "../../feed/priceFeed";
 
 interface AcceptedTokenProps {
   amount: string;
-  symbol: string;
+  symbol: any;
 }
 
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
