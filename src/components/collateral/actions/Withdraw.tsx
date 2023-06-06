@@ -215,29 +215,76 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
             background: " rgba(18, 18, 18, 0.5)",
             border: "none",
             height: "2rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           {shortenedAddress}
         </Box>
       </Box>
       <Box
-        sx={{
-          marginTop: "1rem",
-          display: "flex",
-          alignItems: "center",
-          background: " rgba(18, 18, 18, 0.5)",
-          boxShadow:
-            " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          borderRadius: "6.24932px",
-          // padding: "1%",
-        }}
+        sx={
+          {
+            // marginTop: "1rem",
+            // display: "flex",
+            // alignItems: "center",
+            // background: " rgba(18, 18, 18, 0.5)",
+            // boxShadow:
+            //   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
+            // borderRadius: "6.24932px",
+            // padding: "1%",
+          }
+        }
       >
         <Box
           sx={{
-            margin: "2px 4px",
+            margin: "10px",
             padding: "5px",
+            width: "auto",
             cursor: "pointer",
-            width: "100%",
+            textAlign: "center",
+            borderRadius: "6.24932px",
+            marginLeft: "10px",
+            border: "2px solid rgba(255, 255, 255, 0.2)",
+            boxShadow:
+              "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+            fontFamily: '"Poppins", sans-serif',
+            color: "#ffffff",
+            fontSize: "1rem",
+            letterSpacing: "1px",
+            backdropFilter: "blur(8px)",
+            transition: "0.5s",
+            position: "relative",
+            "&:after": {
+              content: '""',
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              top: "0",
+              left: "0",
+              background:
+                "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+              backgroundSize: "200% 100%",
+              backgroundPosition: "165% 0",
+              transition: "0.7s",
+            },
+            "&:hover:after": {
+              backgroundPosition: "-20% 0",
+            },
+            "&:hover": {
+              boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+              transform: "translateY(-5px)",
+            },
+            "&:active": {
+              transform: "translateY(0)",
+              border: "2px solid rgba(152, 250, 250, 0.5)",
+              boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+            },
+            "&.activeBtn": {
+              background:
+                "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+            },
           }}
           className="glowingCard"
           onClick={withdrawCollateral}

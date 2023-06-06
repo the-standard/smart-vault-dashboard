@@ -225,10 +225,10 @@ const Collateral = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            background: " rgba(18, 18, 18, 0.5)",
-            boxShadow:
-              " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-            borderRadius: "6.24932px",
+            // background: " rgba(18, 18, 18, 0.5)",
+            // boxShadow:
+            //   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
+            // borderRadius: "6.24932px",
             padding: "1%",
           }}
         >
