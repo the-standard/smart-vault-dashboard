@@ -92,7 +92,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     const tokenURI = await contract.tokenURI(vault[0]);
     const tokenDecoded = JSON.parse(atob(tokenURI.split(",")[1]));
     // console.log(tokenDecoded.image);
-    // console.log(tokenDecoded);
 
     tokenToNFTMap.current.set(
       ethers.BigNumber.from(vault[0]).toString(),
