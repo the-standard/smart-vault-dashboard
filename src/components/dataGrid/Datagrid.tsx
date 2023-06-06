@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 // import SliderComponent from "../SliderComponent";
 import "../../styles/buttonStyle.css";
 import { ethers } from "ethers";
-import abi from "../../abis/vaultManager.ts";
+// import abi from "../../abis/vaultManager.ts";
 import { useEffect, useRef, useState } from "react";
 import Modal from "@mui/material/Modal";
 // import ManageSteps from "../ManageSteps.tsx";
