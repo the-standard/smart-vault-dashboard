@@ -72,7 +72,7 @@ const Navbar = () => {
       {/* sidebar starts */}
       <Box
         sx={{
-          display: { xs: "block", sm: "none" },
+          display: { xs: "block", md: "none" },
         }}
       >
         <Menu styles={styles}>
@@ -162,7 +162,7 @@ const Navbar = () => {
       </Box>
       <Box
         sx={{
-          display: { xs: "none", sm: "block" },
+          display: { xs: "none", md: "block" },
         }}
       >
         <NavbarMenu />

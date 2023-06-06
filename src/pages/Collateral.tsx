@@ -337,7 +337,7 @@ const Collateral = () => {
             alignItems: "flex-start",
           }}
         >
-          <Box
+          {/* <Box
             sx={{
               background: " rgba(18, 18, 18, 0.5)",
               boxShadow:
@@ -357,7 +357,7 @@ const Collateral = () => {
             >
               + Add Token
             </Box>
-          </Box>{" "}
+          </Box>{" "} */}
           <Box
             sx={{
               display: "flex",
@@ -366,7 +366,7 @@ const Collateral = () => {
               alignItems: "flex-end",
             }}
           >
-            <Box
+            {/* <Box
               sx={{
                 background: " rgba(18, 18, 18, 0.5)",
                 boxShadow:
@@ -386,7 +386,7 @@ const Collateral = () => {
               >
                 List of Open Smart Vaults
               </Box>
-            </Box>
+            </Box> */}
             <Box
               sx={{
                 marginTop: "1rem",

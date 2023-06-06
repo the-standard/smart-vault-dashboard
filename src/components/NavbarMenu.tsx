@@ -67,6 +67,7 @@ const NavbarMenu = () => {
         //   sm: "0px 1.29525px 1.29525px rgba(255, 255, 255, 0.5), inset 0px 1.29525px 0px rgba(0, 0, 0, 0.25)",
         borderRadius: "6.47627px",
         marginTop: { xs: "1rem", sm: "0" },
+        // border: "2px solid red",
       }}
     >
       {menuItems.map((item, index) => (
