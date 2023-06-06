@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../styles/progressBarStyle.css";
 import { Box } from "@mui/material";
 
@@ -9,6 +9,7 @@ interface ProgressBarProps {
 const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
   // const progressBar = document.getElementById("progress-bar");
   // const percentageDiv = document.getElementById("percentage");
+  console.log(progressValue);
 
   // Set the percentage value
   const percentage = 70;

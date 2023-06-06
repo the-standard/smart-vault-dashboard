@@ -13,11 +13,11 @@ const Navbar = () => {
 
   const styles = {
     bmBurgerButton: {
-      position: "fixed",
+      position: "absolute",
       width: "36px",
       height: "30px",
-      left: "36px",
       top: "36px",
+      right: "36px",
     },
     bmBurgerBars: {
       background: "white",
@@ -66,7 +66,6 @@ const Navbar = () => {
     <Box
       sx={{
         padding: "0 12%",
-        // border: "10px solid red",
       }}
     >
       {/* sidebar starts */}
@@ -89,7 +88,7 @@ const Navbar = () => {
             sx={{
               width: "100%",
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               alignItems: "center",
             }}
           >

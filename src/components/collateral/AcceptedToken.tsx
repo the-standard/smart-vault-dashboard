@@ -5,10 +5,11 @@ import Actions from "./Actions";
 import { useCollateralSymbolStore } from "../../store/Store";
 import LineChart from "./LineChart";
 import priceFeed from "../../feed/priceFeed";
+import ethereumlogo from "../../assets/ethereumlogo.svg";
 
 interface AcceptedTokenProps {
   amount: string;
-  symbol: any;
+  symbol: string;
 }
 
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
@@ -74,7 +75,15 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
               cursor: "pointer",
             }}
           >
-            <Typography variant="body2"> {symbol}</Typography>
+            {symbol === "ETH" ? (
+              <img
+                style={{ height: "3rem", width: "3rem" }}
+                src={ethereumlogo}
+                alt="ethereum logo"
+              />
+            ) : (
+              <Typography variant="body2"> {symbol}</Typography>
+            )}
           </Box>
           <Typography
             sx={{

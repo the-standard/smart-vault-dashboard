@@ -14,16 +14,17 @@ const SmallCard: React.FC<SmallCardProps> = ({ title, value, type }) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
         color: "#8E9BAE",
         background:
           "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
         border: "1px solid rgba(52, 52, 52, 0.3)",
         boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        borderRadius: "10px 10px 0px 0px",
+        borderRadius: "10px ",
         minWidth: "8rem",
-        padding: "5px",
+        padding: "10px",
+        margin: "1rem 1rem 0 0",
       }}
     >
       <Typography variant="body2">{title}</Typography>

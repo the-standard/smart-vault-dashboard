@@ -390,6 +390,7 @@ const Collateral = () => {
             <Box
               sx={{
                 marginTop: "1rem",
+                color: "#ffffff",
               }}
             >
               sEuro Smart Vault #0
@@ -408,7 +409,7 @@ const Collateral = () => {
           gap: "20px" /* Gap between the columns */,
           gridAutoColumns: "1fr" /* Equal width for child components */,
           // now flexbox
-          flexDirection: "column",
+          flexDirection: "column-reverse",
         }}
       >
         {/* left side of the container */}
@@ -432,11 +433,9 @@ const Collateral = () => {
         </Box>{" "}
         {/* right side of the container */}
         <Box
-          sx={
-            {
-              //change this value
-            }
-          }
+          sx={{
+            marginTop: "8px",
+          }}
         >
           {/* half chart container */}
           <Box
@@ -457,7 +456,7 @@ const Collateral = () => {
               sx={{
                 display: "flex",
                 justifyContent: "space-around",
-                flexWrap: "wrap",
+                flexDirection: { xs: "column", xl: "row" },
               }}
             >
               {localVault != undefined ? (
@@ -486,8 +485,8 @@ const Collateral = () => {
           >
             <Box
               sx={{
-                width: "400px",
-                height: "400px",
+                width: "500px",
+                height: "500px",
               }}
             >
               <FullChart />

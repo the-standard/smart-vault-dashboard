@@ -32,7 +32,7 @@ const History = () => {
   const [matchedTransactions, setMatchedTransactions] = useState<unknown[]>([]);
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { contractAddress } = useContractAddressStore();
-  const [userInput, setUserInput] = useState("");
+  // const [userInput, setUserInput] = useState("");
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -112,27 +112,27 @@ const History = () => {
     }
   };
 
-  const filteredMatches = matchedTransactions.filter((_transaction: any) => {
-    if (
-      _transaction.token_id.toLowerCase().includes(userInput.toLowerCase()) ||
-      _transaction.from_address
-        .toLowerCase()
-        .includes(userInput.toLowerCase()) ||
-      _transaction.to_address.toLowerCase().includes(userInput.toLowerCase()) ||
-      _transaction.block_hash.toLowerCase().includes(userInput.toLowerCase()) ||
-      _transaction.block_number
-        .toString()
-        .toLowerCase()
-        .includes(userInput.toLowerCase()) ||
-      _transaction.block_timestamp
-        .toLowerCase()
-        .includes(userInput.toLowerCase())
-    ) {
-      return true;
-    }
+  // const filteredMatches = matchedTransactions.filter((_transaction: any) => {
+  //   if (
+  //     _transaction.token_id.toLowerCase().includes(userInput.toLowerCase()) ||
+  //     _transaction.from_address
+  //       .toLowerCase()
+  //       .includes(userInput.toLowerCase()) ||
+  //     _transaction.to_address.toLowerCase().includes(userInput.toLowerCase()) ||
+  //     _transaction.block_hash.toLowerCase().includes(userInput.toLowerCase()) ||
+  //     _transaction.block_number
+  //       .toString()
+  //       .toLowerCase()
+  //       .includes(userInput.toLowerCase()) ||
+  //     _transaction.block_timestamp
+  //       .toLowerCase()
+  //       .includes(userInput.toLowerCase())
+  //   ) {
+  //     return true;
+  //   }
 
-    return false;
-  });
+  //   return false;
+  // });
 
   function formatDate(dateString: string) {
     const date = new Date(dateString);
@@ -151,7 +151,7 @@ const History = () => {
   }
 
   const returnNewDataGrid = () => {
-    const paginatedMatches = filteredMatches.slice(
+    const paginatedMatches = matchedTransactions.slice(
       (currentPage - 1) * itemsPerPage,
       currentPage * itemsPerPage
     );
@@ -234,7 +234,7 @@ const History = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const totalPages = Math.ceil(filteredMatches.length / itemsPerPage);
+  const totalPages = Math.ceil(matchedTransactions.length / itemsPerPage);
 
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
@@ -280,7 +280,7 @@ const History = () => {
         <Box>
           <table>
             <thead>
-              <input
+              {/* <input
                 style={{
                   background: "transparent",
                   width: "100%",
@@ -290,7 +290,7 @@ const History = () => {
                 type="text"
                 placeholder="Search"
                 onChange={(e) => setUserInput(e.target.value)}
-              />
+              /> */}
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Vault</th>
@@ -301,7 +301,7 @@ const History = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredMatches
+              {matchedTransactions
                 .slice(
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage

@@ -172,7 +172,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
         >
           <Typography
             sx={{
-              color: "#00FFF0",
+              color: "#f1fbfa",
             }}
           >
             {isActive ? "Create Smart Vault" : "Coming Soon"}

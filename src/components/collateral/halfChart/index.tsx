@@ -1,4 +1,4 @@
-import HalfChart from "./HalfChart";
+// import HalfChart from "./HalfChart";
 // import ChartBar from "./ChartBar";
 import { Box, Typography } from "@mui/material";
 // import ReactSpeedometer from "react-d3-speedometer";
