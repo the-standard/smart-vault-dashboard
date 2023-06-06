@@ -22,15 +22,19 @@ const HistoryGrid: React.FC<HistoryGridProps> = ({
             justifyContent: "space-between",
             width: "90%",
             borderCollapse: "collapse",
-            backdropFilter: "blur(10px)",
+            // backdropFilter: "blur(10px)",
             borderTopLeftRadius: "1rem",
             borderTopRightRadius: "1rem",
-            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-            border: "1px solid rgba(255, 255, 255, 0.18)",
+            //  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+            // border: "1px solid rgba(255, 255, 255, 0.18)",
             color: "#afafaf",
             padding: "1rem",
             marginBlock: "1rem",
             background: " rgba(0, 0, 0, 0.4)",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(13.9px)",
+            WebkitBackdropFilter: "blur(13.9px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
           }}
         >
           <Box
