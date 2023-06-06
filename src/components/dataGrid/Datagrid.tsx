@@ -9,7 +9,11 @@ import Modal from "@mui/material/Modal";
 import ManageSteps from "../listNFTModal/ManageSteps.tsx";
 // import { useAccount, useConnect } from "wagmi";
 import { Link } from "react-router-dom";
-import { useVaultIdStore } from "../../store/Store.ts";
+import {
+  useVaultIdStore,
+  useContractAddressStore,
+  useVaultManagerAbiStore,
+} from "../../store/Store.ts";
 import {
   Button,
   Pagination,
@@ -29,7 +33,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const [resolved, setResolved] = useState(false);
   const tokenToNFTMap = useRef(new Map());
   const tokenMap = useRef(new Map());
-
+  //store values
+  const { vaultManagerAbi } = useVaultManagerAbiStore();
+  const { contractAddress } = useContractAddressStore();
   //modal state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -85,8 +91,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
-      abi,
+      contractAddress,
+      vaultManagerAbi,
       signer
     );
     const tokenURI = await contract.tokenURI(vault[0]);
