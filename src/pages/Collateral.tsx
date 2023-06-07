@@ -164,12 +164,17 @@ const Collateral = () => {
       const totalCollateralValue = ethers.BigNumber.from(
         localVault[5][2]
       ).toString();
+<<<<<<< HEAD
       setTotalCollateralValueForChart(
         ethers.utils.formatEther(totalCollateralValue)
       );
       console.log(ethers.utils.formatEther(totalCollateralValue));
       console.log(localVault);
       //fix this issue
+=======
+      setTotalCollateralValueForChart(totalCollateralValue);
+
+>>>>>>> main
       console.log(totalCollateralValueForChart);
       //minted
       const totalDebtValue = ethers.BigNumber.from(localVault[5][0]).toString();
