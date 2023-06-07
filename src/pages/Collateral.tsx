@@ -164,25 +164,34 @@ const Collateral = () => {
       const totalCollateralValue = ethers.BigNumber.from(
         localVault[5][2]
       ).toString();
-      setTotalCollateralValueForChart(totalCollateralValue);
-
+      setTotalCollateralValueForChart(
+        ethers.utils.formatEther(totalCollateralValue)
+      );
+      console.log(ethers.utils.formatEther(totalCollateralValue));
+      console.log(localVault);
+      //fix this issue
       console.log(totalCollateralValueForChart);
+      //minted
       const totalDebtValue = ethers.BigNumber.from(localVault[5][0]).toString();
-      const collateralRate = ethers.BigNumber.from(localVault[2].toString());
-      const totalLiquidationValue =
-        Number(totalDebtValue) * Number(collateralRate);
+      //collateralrate
+      // const collateralRate = ethers.BigNumber.from(localVault[2].toString());
+      //this is wrong
+      const totalLiquidationValue = Number(totalDebtValue) * 1.1;
 
       setSmallCardValues([
+        //everything that's in the vault added up together and priced in euros
         {
           title: "Total Collateral",
-          value: totalCollateralValue,
+          value: ethers.utils.formatEther(totalCollateralValue),
           type: "sEURO",
         },
+        //the total amount minted so far
         {
           title: "Debt",
           value: totalDebtValue,
           type: "sEURO",
         },
+        //if you take total collateral amount, minus the debt, the above minted divited by 0.9091
         {
           title: "Liquidates at",
           value: totalLiquidationValue,

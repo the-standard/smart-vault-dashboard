@@ -3,7 +3,7 @@ import "../styles/progressBarStyle.css";
 import { Box } from "@mui/material";
 
 interface ProgressBarProps {
-  progressValue: number;
+  progressValue: any;
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
@@ -12,7 +12,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
   console.log(progressValue);
 
   // Set the percentage value
-  const percentage = 70;
+  const percentage = progressValue;
 
   // Calculate the color
   let hue;
