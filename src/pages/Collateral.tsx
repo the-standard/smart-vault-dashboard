@@ -165,7 +165,7 @@ const Collateral = () => {
         localVault[5][2]
       ).toString();
       setTotalCollateralValueForChart(totalCollateralValue);
-      //fix this issue
+
       console.log(totalCollateralValueForChart);
       const totalDebtValue = ethers.BigNumber.from(localVault[5][0]).toString();
       const collateralRate = ethers.BigNumber.from(localVault[2].toString());
