@@ -249,6 +249,34 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   const isMobile = useMediaQuery("(max-width:600px)");
 
+  const computeProgressBar = (totalDebt: any, collateralValue: any) => {
+    // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
+    console.log("totalDebt", totalDebt);
+    console.log("collateralValue", collateralValue);
+    const totalDebtBN = ethers.BigNumber.from(totalDebt.toString());
+    const collateralValueBN = ethers.BigNumber.from(collateralValue.toString());
+    console.log("totalDebtBN", totalDebtBN);
+    console.log("collateralValueBN", collateralValueBN);
+    // const totalDebtFormatted = ethers.utils.formatEther(totalDebtBN);
+    const collateralValueFormatted =
+      ethers.utils.formatEther(collateralValueBN);
+    console.log("totalDebtFormatted", totalDebt);
+    console.log("collateralValueFormatted", collateralValueFormatted);
+    const ratio =
+      collateralValue !== 0
+        ? Number(totalDebt) / Number(collateralValueFormatted)
+        : 0;
+    console.log("ratio", ratio);
+    return (ratio * 100).toFixed(2);
+
+    // const ratio =
+    //   collateralValue !== 0 ? totalDebtBN.div(collateralValueBN) : 0;
+    // console.log("ratio", ratio);
+
+    //   return ((totalDebt / collateralValue) * 100).toFixed(2);
+  };
+  // alert(computeProgressBar(300, 100));
+
   useEffect(() => {
     if (isMobile) {
       // returnNewDataGrid();
@@ -308,9 +336,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       {/* returns NaN */}
                       <ProgressBar
                         progressValue={
-                          (Number(ethers.BigNumber.from(vault[5][0])) /
-                            Number(ethers.BigNumber.from(vault[5][1]))) *
-                          100
+                          // (Number(ethers.BigNumber.from(vault[5][0])) /
+                          //   Number(ethers.BigNumber.from(vault[5][1]))) *
+                          // 100
+                          computeProgressBar(
+                            Number(ethers.BigNumber.from(vault[5][0])),
+                            Number(ethers.BigNumber.from(vault[5][2]))
+                          )
                         }
                       />
                     </td>
@@ -373,13 +405,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
                     <td>
                       {/* returns NaN */}
+                      {/* how to get the debt range */}
                       <ProgressBar
-                        progressValue={
-                          (Number(ethers.BigNumber.from(vault[5][0])) /
-                            Number(ethers.BigNumber.from(vault[5][1]))) *
-                          100
-                        }
-                      />
+                        progressValue={computeProgressBar(
+                          Number(ethers.BigNumber.from(vault[5][0])),
+                          Number(ethers.BigNumber.from(vault[5][2]))
+                        )}
+                      />{" "}
                     </td>
                     <td style={{}}>
                       {" "}
@@ -447,11 +479,10 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td>
                       {/* returns NaN */}
                       <ProgressBar
-                        progressValue={
-                          (Number(ethers.BigNumber.from(vault[5][0])) /
-                            Number(ethers.BigNumber.from(vault[5][1]))) *
-                          100
-                        }
+                        progressValue={computeProgressBar(
+                          Number(ethers.BigNumber.from(vault[5][0])),
+                          Number(ethers.BigNumber.from(vault[5][2]))
+                        )}
                       />
                     </td>
                     <td style={{}}>
