@@ -174,8 +174,7 @@ const Collateral = () => {
       //minted
       const totalDebtValue = ethers.BigNumber.from(localVault[5][0]).toString();
       //collateralrate
-      const collateralRate = ethers.BigNumber.from(localVault[2].toString());
-      //this is wrong
+      // const collateralRate = ethers.BigNumber.from(localVault[2].toString());
       const totalLiquidationValue = Number(totalDebtValue) * 1.1;
 
       setSmallCardValues([
