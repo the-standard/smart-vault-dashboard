@@ -22,7 +22,7 @@ import {
   useVaultManagerAbiStore,
 } from "../store/Store";
 import "../styles/buttonStyle.css";
-import { fromHex } from "viem";
+import { formatEther, fromHex } from "viem";
 
 const Collateral = () => {
   const { vaultID } = useVaultIdStore();
@@ -187,13 +187,13 @@ const Collateral = () => {
       //fix this issue
       console.log(totalCollateralValueForChart);
       //minted
-      const totalDebtValue = fromHex(localVault[5][0]._hex, "number");
+      const totalDebtValue = formatEther(localVault[5][0]);
       console.log(localVault[5][0]);
       console.log(totalDebtValue);
       //collateralrate
       // const collateralRate = ethers.BigNumber.from(localVault[2].toString());
       //this is wrong
-      const totalLiquidationValue = totalDebtValue * 1.1;
+      const totalLiquidationValue = Number(totalDebtValue) * 1.1;
 
       setSmallCardValues([
         //everything that's in the vault added up together and priced in euros

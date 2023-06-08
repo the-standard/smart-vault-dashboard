@@ -10,7 +10,7 @@ import QRicon from "../../../assets/qricon.png";
 import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
@@ -58,7 +58,7 @@ const Deposit = () => {
   };
   //snackbar config end
 
-  const { address } = useAccount();
+  // const { address } = useAccount();
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));

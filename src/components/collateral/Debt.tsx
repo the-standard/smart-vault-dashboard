@@ -13,7 +13,7 @@ import {
   useVaultAddressStore,
   useVaultStore,
 } from "../../store/Store";
-import { formatEther, parseEther, toHex } from "viem";
+import { formatEther, parseEther } from "viem";
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -51,7 +51,7 @@ const Debt = () => {
   };
   //snackbar config end
 
-  const debtValue = ethers.BigNumber.from(vaultStore[5][0]);
+  const debtValue: any = ethers.BigNumber.from(vaultStore[5][0]);
   console.log(debtValue.toString());
 
   const handleClick = (element: any) => {
@@ -75,7 +75,7 @@ const Debt = () => {
     try {
       console.log(vaultAddress);
       transactionResponse = await contract.mint(
-        "0x600044fe9a152c27f337bbb23803dc6a68e3efb0",
+        address,
         parseEther(amount.toString())
       );
       // Access the transaction hash from the transaction response
@@ -95,8 +95,10 @@ const Debt = () => {
     // const signer = provider.getSigner();
     // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
     console.log(vaultAddress);
+    console.log(amount.toString());
+
     try {
-      const transactionResponse = await contract.burn(amount);
+      const transactionResponse = await contract.burn(amount.toString());
       const transactionHash = transactionResponse.hash;
       console.log("Transaction Hash:", transactionHash);
       console.log("confirming transaction " + transactionHash.confirmations);
