@@ -435,9 +435,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               <tr>
                 <th scope="col">Vault NFT</th>
                 <th scope="col">Vault ID</th>
-                <th scope="col">Ratio</th>
+                <th scope="col">Collateral</th>
                 <th scope="col">Debt</th>
-                <th scope="col">Debt Range</th>
+                <th scope="col">Ratio</th>
                 {/* width is not actually 20px, but it makes the table look good */}
                 <th style={{ width: "20px" }} scope="col">
                   Actions
@@ -471,7 +471,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     </td>
                     <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
                     <TruncatedTableCell
-                      value={ethers.BigNumber.from(vault[5][2]).toString()}
+                      value={ethers.utils.formatEther(
+                        ethers.BigNumber.from(vault[5][2]).toString()
+                      )}
                       length={12}
                     />
 

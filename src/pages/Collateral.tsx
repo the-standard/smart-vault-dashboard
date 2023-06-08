@@ -22,6 +22,7 @@ import {
   useVaultManagerAbiStore,
 } from "../store/Store";
 import "../styles/buttonStyle.css";
+import { fromHex } from "viem";
 
 const Collateral = () => {
   const { vaultID } = useVaultIdStore();
@@ -158,12 +159,26 @@ const Collateral = () => {
   const [totalCollateralValueForChart, setTotalCollateralValueForChart] =
     useState<string>("");
 
+  function removeLast18Digits(num: number) {
+    // Convert the number to a string
+    const str = num.toString();
+
+    // Remove the last 18 characters using slice()
+    const resultStr = str.slice(0, -18);
+
+    // Convert the resulting string back to a number
+    const resultNum = Number(resultStr);
+
+    return resultNum;
+  }
+
   useEffect(() => {
     if (localVault[5] != undefined) {
       console.log(localVault[5][2]);
-      const totalCollateralValue = ethers.BigNumber.from(
-        localVault[5][2]
-      ).toString();
+      const totalCollateralValue = removeLast18Digits(
+        fromHex(localVault[5][2]._hex, "number")
+      );
+      console.log(removeLast18Digits(fromHex(localVault[5][2]._hex, "number")));
       setTotalCollateralValueForChart(
         ethers.utils.formatEther(totalCollateralValue)
       );
@@ -172,17 +187,19 @@ const Collateral = () => {
       //fix this issue
       console.log(totalCollateralValueForChart);
       //minted
-      const totalDebtValue = ethers.BigNumber.from(localVault[5][0]).toString();
+      const totalDebtValue = fromHex(localVault[5][0]._hex, "number");
+      console.log(localVault[5][0]);
+      console.log(totalDebtValue);
       //collateralrate
       // const collateralRate = ethers.BigNumber.from(localVault[2].toString());
       //this is wrong
-      const totalLiquidationValue = Number(totalDebtValue) * 1.1;
+      const totalLiquidationValue = totalDebtValue * 1.1;
 
       setSmallCardValues([
         //everything that's in the vault added up together and priced in euros
         {
           title: "Total Collateral",
-          value: ethers.utils.formatEther(totalCollateralValue),
+          value: totalCollateralValue,
           type: "sEURO",
         },
         //the total amount minted so far

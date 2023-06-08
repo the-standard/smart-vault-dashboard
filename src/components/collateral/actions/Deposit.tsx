@@ -14,6 +14,9 @@ import { useAccount } from "wagmi";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
+import { parseEther } from "viem";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -89,26 +92,41 @@ const Deposit = () => {
   };
   //clipboard logic end
 
+  const walletClient = createWalletClient({
+    chain: sepolia,
+    transport: custom(window.ethereum),
+  });
+
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const depositViaMetamask = async () => {
+    const [account] = await walletClient.getAddresses();
+
     let txHashForError = "";
     try {
       // const signer = provider.getSigner();
       // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
       // Prompt user to enter the amount in MetaMask
-      const txAmount = amount.toString();
-      const transactionParameters = {
-        to: vaultAddress,
-        from: address,
-        value: ethers.utils.parseEther(txAmount).toString(),
-      };
+      const txAmount: any = amount;
+      console.log(txAmount);
+      // const transactionParameters = {
+      //   to: vaultAddress,
+      //   from: address,
+      //   value: parseEther("0.1"),
+      // };
 
       // Send funds using MetaMask
-      const txHash = await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [transactionParameters],
-      });
+      // const txHash = await window.ethereum.request({
+      //   method: "eth_sendTransaction",
+      //   params: [transactionParameters],
+      // });
       //this value is used for error handling due to scoping issues
+      const toAddress: any = vaultAddress;
+
+      const txHash = await walletClient.sendTransaction({
+        account,
+        to: toAddress,
+        value: parseEther(txAmount.toString()),
+      });
       txHashForError = txHash;
 
       console.log("Transaction sent:", txHash);
