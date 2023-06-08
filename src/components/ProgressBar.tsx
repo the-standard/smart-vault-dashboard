@@ -57,7 +57,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
   // timer = setInterval(run, stepTime);
 
   return (
-    <Box sx={{}}>
+    <Box
+      sx={{
+        minWidth: "150px",
+      }}
+    >
       <Box className="progress-container">
         <Box
           className="progress-bar"

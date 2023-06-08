@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import "../../styles/progressBarStyle.css";
 import ProgressBar from "../ProgressBar.tsx";
+import { formatEther, formatUnits } from "viem";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -253,21 +254,30 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
     console.log("totalDebt", totalDebt);
     console.log("collateralValue", collateralValue);
-    const totalDebtBN = ethers.BigNumber.from(totalDebt.toString());
-    const collateralValueBN = ethers.BigNumber.from(collateralValue.toString());
-    console.log("totalDebtBN", totalDebtBN);
-    console.log("collateralValueBN", collateralValueBN);
-    // const totalDebtFormatted = ethers.utils.formatEther(totalDebtBN);
-    const collateralValueFormatted =
-      ethers.utils.formatEther(collateralValueBN);
-    console.log("totalDebtFormatted", totalDebt);
-    console.log("collateralValueFormatted", collateralValueFormatted);
+    console.log(formatUnits(totalDebt, 18));
+    console.log(formatUnits(collateralValue, 18));
     const ratio =
-      collateralValue !== 0
-        ? Number(totalDebt) / Number(collateralValueFormatted)
-        : 0;
-    console.log("ratio", ratio);
+      Number(formatUnits(totalDebt, 18)) /
+      Number(formatUnits(collateralValue, 18));
+    console.log("ratio", ratio.toFixed(2));
+    console.log("ratio", (ratio * 100).toFixed(2));
     return (ratio * 100).toFixed(2);
+
+    // const totalDebtBN = ethers.BigNumber.from(totalDebt.toString());
+    // const collateralValueBN = ethers.BigNumber.from(collateralValue.toString());
+    // console.log("totalDebtBN", totalDebtBN);
+    // console.log("collateralValueBN", collateralValueBN);
+    // // const totalDebtFormatted = ethers.utils.formatEther(totalDebtBN);
+    // const collateralValueFormatted =
+    //   ethers.utils.formatEther(collateralValueBN);
+    // console.log("totalDebtFormatted", totalDebt);
+    // console.log("collateralValueFormatted", collateralValueFormatted);
+    // const ratio =
+    //   collateralValue !== 0
+    //     ? Number(totalDebt) / Number(collateralValueFormatted)
+    //     : 0;
+    // console.log("ratio", Math.round(ratio * 100));
+    // return (ratio * 100).toFixed(2);
 
     // const ratio =
     //   collateralValue !== 0 ? totalDebtBN.div(collateralValueBN) : 0;
@@ -369,7 +379,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 <th scope="col">Vault NFT</th>
                 <th scope="col">Vault ID</th>
 
-                <th scope="col">Debt Range</th>
+                <th scope="col">Ratio</th>
                 {/* width is not actually 20px, but it makes the table look good */}
                 <th style={{ width: "20px" }} scope="col">
                   Actions
@@ -477,7 +487,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       length={12}
                     />
 
-                    <td>{ethers.BigNumber.from(vault[5][0]).toString()}</td>
+                    <td>{formatEther(vault[5][0].toString())}</td>
                     <td>
                       {/* returns NaN */}
                       <ProgressBar
