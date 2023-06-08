@@ -12,6 +12,8 @@ import {
   useTransactionHashStore,
   useVaultAddressStore,
   useVaultStore,
+  usesEuroAbiStore,
+  usesEuroAddressStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
 //for snackbar
@@ -28,6 +30,8 @@ const Debt = () => {
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore.getState();
   const { vaultStore }: any = useVaultStore();
+  const { sEuroAddress } = usesEuroAddressStore.getState();
+  const { sEuroAbi } = usesEuroAbiStore.getState();
   const [isLoading, setIsLoading] = useState(false);
   const [snackbarValue, setSnackbarValue] = useState(0);
   const { getTransactionHash } = useTransactionHashStore.getState();
@@ -96,9 +100,20 @@ const Debt = () => {
     // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
     console.log(vaultAddress);
     console.log(amount.toString());
+    const sEuroFee: any = (amount * 0.01).toString();
+    console.log(parseEther(sEuroFee));
+
+    const signer = provider.getSigner();
+    const sEuroContract = new ethers.Contract(sEuroAddress, sEuroAbi, signer);
 
     try {
-      const transactionResponse = await contract.burn(amount.toString());
+      // Approve the transfer of the fee amount
+      const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
+      await sEuroContract.approve(vaultAddress, feeAmount);
+
+      const transactionResponse = await contract.burn(
+        parseEther(amount.toString())
+      );
       const transactionHash = transactionResponse.hash;
       console.log("Transaction Hash:", transactionHash);
       console.log("confirming transaction " + transactionHash.confirmations);

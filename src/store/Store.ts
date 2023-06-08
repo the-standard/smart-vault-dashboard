@@ -1,5 +1,27 @@
 import { create } from "zustand";
 import vaultManagerAbi from "../abis/vaultManager.ts";
+import sEuroAbi from "../abis/testTokens/sEuro.ts";
+
+interface sEuroAddressState {
+  sEuroAddress: string;
+  getsEuroAddress: (sEuroAddress: string) => void;
+}
+
+export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
+  sEuroAddress: "0xf23F59316A2700D88F6F503B24aEE01118255645",
+  getsEuroAddress: (sEuroAddress) =>
+    set(() => ({ sEuroAddress: sEuroAddress })),
+}));
+
+interface sEuroAbiState {
+  sEuroAbi: Array<any>;
+  getsEuroAbi: (sEuroAbi: Array<any>) => void;
+}
+
+export const usesEuroAbiStore = create<sEuroAbiState>()((set) => ({
+  sEuroAbi: sEuroAbi,
+  getsEuroAbi: (sEuroAbi) => set(() => ({ sEuroAbi: sEuroAbi })),
+}));
 
 interface contractAddressState {
   contractAddress: any;
