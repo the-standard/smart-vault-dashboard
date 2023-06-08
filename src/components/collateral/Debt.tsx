@@ -13,7 +13,7 @@ import {
   useVaultAddressStore,
   useVaultStore,
 } from "../../store/Store";
-
+import { formatEther, parseEther, toHex } from "viem";
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -25,7 +25,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
   const { address } = useAccount();
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore.getState();
   const { vaultStore }: any = useVaultStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -69,10 +69,15 @@ const Debt = () => {
 
   const borrowMoney = async () => {
     let transactionResponse; // Declare a variable to hold the transaction response
+    console.log(parseEther(amount.toString()));
+    console.log(ethers.BigNumber.from(amount));
 
     try {
       console.log(vaultAddress);
-      transactionResponse = await contract.mint(address, amount);
+      transactionResponse = await contract.mint(
+        "0x600044fe9a152c27f337bbb23803dc6a68e3efb0",
+        parseEther(amount.toString())
+      );
       // Access the transaction hash from the transaction response
       const transactionHash = transactionResponse.hash;
       console.log("Transaction Hash:", transactionHash);
@@ -245,7 +250,10 @@ const Debt = () => {
           }}
         >
           <Typography variant="body1">sEURO </Typography>
-          <Typography variant="body1"> € {debtValue.toString()} </Typography>
+          <Typography variant="body1">
+            {" "}
+            € {formatEther(debtValue.toString())}{" "}
+          </Typography>
         </Box>
       </Box>
       <Box
