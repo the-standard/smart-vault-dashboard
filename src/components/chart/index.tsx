@@ -29,6 +29,11 @@ const Index = () => {
     return (ratio * 100).toFixed(2);
   };
 
+  function truncateToTwoDecimals(num: any) {
+    const withTwoDecimals = num.toString().match(/^-?\d+(?:\.\d{0,2})?/);
+    return withTwoDecimals ? withTwoDecimals[0] : num;
+  }
+
   function removeLast18Digits(num: number) {
     // Convert the number to a string
     const str = num.toString();
@@ -57,22 +62,22 @@ const Index = () => {
       setProgressValues([
         {
           title: "Debt Minted",
-          value: totalDebt,
+          value: truncateToTwoDecimals(totalDebt),
           currency: "sEURO",
         },
         {
           title: "Vault Collateral Value",
-          value: totalCollateralValue,
+          value: truncateToTwoDecimals(totalCollateralValue),
           currency: "sEURO",
         },
         {
           title: "Vault Collateral Value Liquidation Trigger",
-          value: totalLiquidationValue,
+          value: truncateToTwoDecimals(totalLiquidationValue),
           currency: "sEURO",
         },
         {
           title: "You can borrow up to:",
-          value: borrowLimit,
+          value: truncateToTwoDecimals(borrowLimit),
           currency: "sEURO",
         },
       ]);

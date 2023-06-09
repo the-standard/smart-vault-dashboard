@@ -264,6 +264,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     return (ratio * 100).toFixed(2);
   };
 
+  function truncateToTwoDecimals(num: any) {
+    const withTwoDecimals = num.toString().match(/^-?\d+(?:\.\d{0,2})?/);
+    return withTwoDecimals ? withTwoDecimals[0] : num;
+  }
+
   useEffect(() => {
     if (isMobile) {
       // returnNewDataGrid();
@@ -464,7 +469,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       length={12}
                     />
 
-                    <td>{formatEther(vault[5][0].toString())}</td>
+                    <td>
+                      {truncateToTwoDecimals(
+                        formatEther(vault[5][0].toString())
+                      )}
+                    </td>
                     <td>
                       {/* returns NaN */}
                       <ProgressBar
