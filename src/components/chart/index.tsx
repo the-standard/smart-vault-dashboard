@@ -107,10 +107,11 @@ const Index = () => {
           sx={{
             padding: "0",
             width: "auto",
-            display: "flex",
-            flexDirection: { xs: "row", sm: "column" },
-            justifyContent: { xs: "center", sm: "flex-start" },
-            alignItems: { xs: "center", sm: "flex-start" },
+            display: { xs: "grid", sm: "flex" },
+            flexDirection: { sm: "column" },
+            justifyContent: { sm: "flex-start" },
+            alignItems: { sm: "flex-start" },
+            gridTemplateColumns: { xs: "1fr 1fr" },
           }}
         >
           {loading ? (
