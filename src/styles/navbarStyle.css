@@ -79,6 +79,9 @@ body {
 .nav-button:hover::before {
   left: 115%;
 }
+.navBtnClicked:active {
+  transform: scale(0.5);
+}
 
 @media (max-width: 600px) {
   .navbar {
@@ -99,6 +102,9 @@ body {
 .navBtnClicked {
   background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
+}
+.navBtnClicked:active {
+  transform: scale(0.5);
 }
 .nav-button:hover::after {
   content: "";

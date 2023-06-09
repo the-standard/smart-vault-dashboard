@@ -1,61 +1,49 @@
-// import React, { ReactNode, useState } from "react";
-import { Box, Typography } from "@mui/material";
-import "../../styles/navbarStyle.css";
+import React from "react";
+import { Button } from "@mui/material";
 
-interface MenuItemProps {
+interface NavButtonProps {
   text: string;
-  // icon: string;
-  // icon2: string;
   isActive: boolean;
-  isWorking: boolean;
   handleClick: () => void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({
+const NavButton: React.FC<NavButtonProps> = ({
   text,
-  // icon,
-  // icon2,
   isActive,
   handleClick,
-  isWorking,
 }) => {
   return (
-    <Box
-      className={` nav-button ${isWorking && isActive ? "navBtnClicked" : ""}`}
+    <Button
       sx={{
+        background: "none",
+        fontFamily: "Poppins, sans-serif",
+        fontWeight: 200,
+        fontSize: "1rem",
+        border: "none",
+        height: "65px",
+        width: "100%",
+        color: "#afafaf",
+        cursor: "pointer",
+        textDecoration: "none",
+        transition: "all 0.3s ease",
         display: "flex",
-        flexDirection: "row",
+        justifyContent: "center",
         alignItems: "center",
-        justifyContent: "flex-start",
-        marginRight: "1rem",
-        height: "full",
-        padding: "0 0.7rem",
-        width: { xs: "100%", sm: "85%" },
-        //   border: "2px solid red",
-
-        //  border: "5px solid red",
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "10px",
+        "&:hover": {
+          background: "rgba(0, 0, 0, 0.4)",
+          transform: "scale(1.2)",
+          boxShadow: "0 10px 20px rgba(0, 0, 0, 0.5)",
+          borderRadius: "10px",
+        },
       }}
       onClick={handleClick}
     >
-      {/* <div style={{}}>
-        {isWorking && isActive ? (
-          <img src={icon2} alt="" />
-        ) : (
-          <img src={icon} alt="" />
-        )}
-      </div> */}
-      <Typography
-        variant="body1"
-        sx={{
-          marginLeft: "0.5rem",
-          fontSize: { xs: "1rem", sm: "1rem" },
-        }}
-      >
-        {" "}
-        {text}{" "}
-      </Typography>
-    </Box>
+      {text}
+    </Button>
   );
 };
 
-export default MenuItem;
+export default NavButton;

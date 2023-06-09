@@ -40,7 +40,7 @@ const menuItems = [
     isWorking: true,
   },
   {
-    text: "Borrow via Smart Vaults",
+    text: "Borrow for 0%",
     icon: borrowinglogo,
     icon2: borrowinglogo2,
     route: "",
@@ -57,17 +57,18 @@ const NavbarMenu = () => {
   return (
     <Box
       sx={{
-        display: { xs: "flex", sm: "flex", md: "grid" },
-        gridTemplateColumns: { md: "repeat(5, 1fr)" },
-        flexDirection: { xs: "column", sm: "row" },
-        flexWrap: { sm: "wrap", md: "nowrap" },
-
-        background: { xs: "transparent", sm: "rgba(18, 18, 18, 0.5)" },
-        boxShadow: { xs: "none" },
-        //   sm: "0px 1.29525px 1.29525px rgba(255, 255, 255, 0.5), inset 0px 1.29525px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "6.47627px",
-        marginTop: { xs: "1rem", sm: "0" },
-        // border: "2px solid red",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+        height: "70px",
+        alignItems: "center",
+        background: "rgba(0, 0, 0, 0.6)",
+        backdropFilter: "blur(10px)",
+        borderRadius: "10px",
+        // margin: "40px",
+        boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+        border: "1px solid rgba(255, 255, 255, 0.18)",
+        gridGap: "0",
+        overflow: "hidden",
       }}
     >
       {menuItems.map((item, index) => (
@@ -81,13 +82,9 @@ const NavbarMenu = () => {
           key={index}
           to={item.route ? `/${item.route}` : "/"}
         >
-          {" "}
           <MenuItem
             text={item.text}
-            // icon={item.icon}
-            // icon2={item.icon2}
             isActive={activeIndex === index}
-            isWorking={item.isWorking}
             handleClick={() => handleItemClick(index)}
           />
         </Link>
