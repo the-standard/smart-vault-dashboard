@@ -8,9 +8,9 @@ import {
 import { Box, Modal, Typography } from "@mui/material";
 // import QRicon from "../assets/qricon.png";
 // import EmptyCard from "../components/collateral/EmptyCard";
-import SmallCard from "../components/collateral/SmallCard";
-import FullChart from "../components/chart/FullChart.tsx";
-import HalfChart from "../components/collateral/halfChart/index.tsx";
+// import SmallCard from "../components/collateral/SmallCard";
+// import FullChart from "../components/chart/FullChart.tsx";
+// import HalfChart from "../components/collateral/halfChart/index.tsx";
 import QRCode from "react-qr-code";
 // import abi from "../abis/vaultManager.ts";
 // import tokenmanagerabi from "../abis/tokenManagerABI.ts";
@@ -157,6 +157,7 @@ const Collateral = () => {
   }, []);
 
   const [smallCardValues, setSmallCardValues] = useState<any[]>([]);
+  console.log(smallCardValues);
   const [totalCollateralValueForChart, setTotalCollateralValueForChart] =
     useState<string>("");
 
