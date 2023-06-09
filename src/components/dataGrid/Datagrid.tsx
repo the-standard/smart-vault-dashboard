@@ -262,30 +262,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     console.log("ratio", ratio.toFixed(2));
     console.log("ratio", (ratio * 100).toFixed(2));
     return (ratio * 100).toFixed(2);
-
-    // const totalDebtBN = ethers.BigNumber.from(totalDebt.toString());
-    // const collateralValueBN = ethers.BigNumber.from(collateralValue.toString());
-    // console.log("totalDebtBN", totalDebtBN);
-    // console.log("collateralValueBN", collateralValueBN);
-    // // const totalDebtFormatted = ethers.utils.formatEther(totalDebtBN);
-    // const collateralValueFormatted =
-    //   ethers.utils.formatEther(collateralValueBN);
-    // console.log("totalDebtFormatted", totalDebt);
-    // console.log("collateralValueFormatted", collateralValueFormatted);
-    // const ratio =
-    //   collateralValue !== 0
-    //     ? Number(totalDebt) / Number(collateralValueFormatted)
-    //     : 0;
-    // console.log("ratio", Math.round(ratio * 100));
-    // return (ratio * 100).toFixed(2);
-
-    // const ratio =
-    //   collateralValue !== 0 ? totalDebtBN.div(collateralValueBN) : 0;
-    // console.log("ratio", ratio);
-
-    //   return ((totalDebt / collateralValue) * 100).toFixed(2);
   };
-  // alert(computeProgressBar(300, 100));
 
   useEffect(() => {
     if (isMobile) {

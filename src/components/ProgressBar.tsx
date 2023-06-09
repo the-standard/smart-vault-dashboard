@@ -60,6 +60,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
     <Box
       sx={{
         minWidth: "150px",
+        color: "white",
       }}
     >
       <Box className="progress-container">
@@ -71,7 +72,13 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
             width: `${percentage}%`,
           }}
         ></Box>
-        <Box className="percentage" id="percentage">
+        <Box
+          className="percentage"
+          id="percentage"
+          sx={{
+            fontSize: "1.4rem",
+          }}
+        >
           {percentage}%
         </Box>
       </Box>

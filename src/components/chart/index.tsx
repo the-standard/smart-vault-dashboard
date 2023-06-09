@@ -2,6 +2,9 @@
 import FullChart from "./FullChart";
 import { Box, Typography } from "@mui/material";
 import ProgressBar from "../ProgressBar";
+import { useVaultStore } from "../../store/Store";
+import { ethers } from "ethers";
+import { formatUnits } from "viem";
 
 const dummyData = [
   {
@@ -27,12 +30,29 @@ const dummyData = [
 ];
 
 const Index = () => {
+  const { getVaultStore, vaultStore } = useVaultStore();
+  console.log(vaultStore);
+
+  const computeProgressBar = (totalDebt: any, collateralValue: any) => {
+    // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
+    console.log("totalDebt", totalDebt);
+    console.log("collateralValue", collateralValue);
+    console.log(formatUnits(totalDebt, 18));
+    console.log(formatUnits(collateralValue, 18));
+    const ratio =
+      Number(formatUnits(totalDebt, 18)) /
+      Number(formatUnits(collateralValue, 18));
+    console.log("ratio", ratio.toFixed(2));
+    console.log("ratio", (ratio * 100).toFixed(2));
+    return (ratio * 100).toFixed(2);
+  };
+
   return (
     <Box
       sx={{
         padding: "10px",
         width: "100%",
-        color: "white",
+        color: "#8E9BAE",
       }}
     >
       <Box
@@ -64,7 +84,16 @@ const Index = () => {
               key={index}
             >
               <Typography variant="body2">{item.title}</Typography>
-              <Typography variant="body2">{item.value}</Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  color: "#fff",
+                }}
+              >
+                {item.value}
+              </Typography>
               <Typography variant="body2">{item.currency}</Typography>
             </Box>
           ))}
@@ -78,7 +107,12 @@ const Index = () => {
           <FullChart />
         </Box>
       </Box>
-      <ProgressBar progressValue={16} />
+      <ProgressBar
+        progressValue={computeProgressBar(
+          Number(ethers.BigNumber.from(vaultStore[5][0])),
+          Number(ethers.BigNumber.from(vaultStore[5][2]))
+        )}
+      />
     </Box>
   );
 };

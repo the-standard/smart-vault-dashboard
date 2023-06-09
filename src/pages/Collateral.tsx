@@ -4,6 +4,8 @@ import {
   useVaultAddressStore,
   useVaultStore,
   useTransactionHashStore,
+  useContractAddressStore,
+  useVaultManagerAbiStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 // import QRicon from "../assets/qricon.png";
@@ -17,10 +19,6 @@ import QRCode from "react-qr-code";
 import { ethers } from "ethers";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import Debt from "../components/collateral/Debt.tsx";
-import {
-  useContractAddressStore,
-  useVaultManagerAbiStore,
-} from "../store/Store";
 import "../styles/buttonStyle.css";
 import { formatEther, fromHex } from "viem";
 import ChartComponent from "../components/chart/index.tsx";
