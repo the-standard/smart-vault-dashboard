@@ -9,7 +9,7 @@ import { Box, Modal, Typography } from "@mui/material";
 // import QRicon from "../assets/qricon.png";
 // import EmptyCard from "../components/collateral/EmptyCard";
 import SmallCard from "../components/collateral/SmallCard";
-import FullChart from "../components/collateral/FullChart.tsx";
+import FullChart from "../components/chart/FullChart.tsx";
 import HalfChart from "../components/collateral/halfChart/index.tsx";
 import QRCode from "react-qr-code";
 // import abi from "../abis/vaultManager.ts";
@@ -23,6 +23,7 @@ import {
 } from "../store/Store";
 import "../styles/buttonStyle.css";
 import { formatEther, fromHex } from "viem";
+import ChartComponent from "../components/chart/index.tsx";
 
 const Collateral = () => {
   const { vaultID } = useVaultIdStore();
@@ -464,7 +465,7 @@ const Collateral = () => {
           }}
         >
           {/* half chart container */}
-          <Box
+          {/* <Box
             sx={{
               background:
                 "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
@@ -498,7 +499,7 @@ const Collateral = () => {
               )}
             </Box>
             <HalfChart />
-          </Box>
+          </Box> */}
           {/* full chart container */}
           <Box
             sx={{
@@ -517,14 +518,9 @@ const Collateral = () => {
               border: "1px solid rgba(255, 255, 255, 0.3)",
             }}
           >
-            <Box
-              sx={{
-                width: "500px",
-                height: "500px",
-              }}
-            >
-              <FullChart />
-            </Box>
+            {/* full chart and the progress bar here */}
+
+            <ChartComponent />
           </Box>
         </Box>
       </Box>

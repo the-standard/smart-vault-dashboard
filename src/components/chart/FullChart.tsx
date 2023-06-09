@@ -42,7 +42,7 @@ const FullChart = () => (
         color: "hsl(304, 70%, 50%)",
       },
     ]}
-    margin={{ top: 80, right: 80, bottom: 80, left: 80 }}
+    margin={{ top: 40, right: 0, bottom: 40, left: 0 }}
     innerRadius={0.82}
     padAngle={4}
     cornerRadius={45}
@@ -67,6 +67,7 @@ const FullChart = () => (
     arcLinkLabelsThickness={2}
     arcLinkLabelsColor={{ from: "color" }}
     arcLabelsSkipAngle={10}
+    arcLinkLabelsDiagonalLength={5}
     arcLabelsTextColor={{
       from: "color",
       modifiers: [["darker", 2]],
