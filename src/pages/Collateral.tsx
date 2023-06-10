@@ -353,7 +353,7 @@ const Collateral = () => {
             className={activeElement === 2 ? "activeBtn" : ""}
             onClick={() => handleClick(2)}
           >
-            Debt
+            Borrow/Repay
           </Box>
         </Box>
         {/* right side of the upper column */}

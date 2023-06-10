@@ -93,6 +93,8 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
             align: "left",
             style: {
               color: "#fff",
+              fontFamily: "Poppins",
+              fontWeight: 300,
             },
           },
 

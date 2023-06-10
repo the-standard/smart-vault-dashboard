@@ -463,8 +463,10 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     </td>
                     <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
                     <TruncatedTableCell
-                      value={ethers.utils.formatEther(
-                        ethers.BigNumber.from(vault[5][2]).toString()
+                      value={truncateToTwoDecimals(
+                        ethers.utils.formatEther(
+                          ethers.BigNumber.from(vault[5][2]).toString()
+                        )
                       )}
                       length={12}
                     />

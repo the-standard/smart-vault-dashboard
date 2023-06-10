@@ -21,7 +21,6 @@ const NavButton: React.FC<NavButtonProps> = ({
         fontSize: "1rem",
         border: "none",
         padding: "10px",
-        marginTop: "10px",
         height: "65px",
         width: "100%",
         color: "#afafaf",
