@@ -13,7 +13,7 @@ const Navbar = () => {
   // const { disconnect } = useDisconnect();
   const { right, top } = usePositionStore((state) => state);
 
-  const styles = {
+  const styles: any = {
     bmBurgerButton: {
       position: "absolute",
       width: "36px",
@@ -110,9 +110,9 @@ const Navbar = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
+          flexDirection: { sm: "column", md: "row" },
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: { sm: "flex-start", md: "center" },
         }}
       >
         {" "}
@@ -155,6 +155,9 @@ const Navbar = () => {
           <Box
             sx={{
               display: { xs: "none", sm: "flex" },
+              position: { xs: "absolute", sm: "static" },
+              float: "right",
+              right: { xs: "0", sm: "0", md: "0", lg: "0", xl: "0" },
             }}
           >
             <Web3Button />
