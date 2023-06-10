@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 interface NavButtonProps {
   text: string;
@@ -20,6 +20,8 @@ const NavButton: React.FC<NavButtonProps> = ({
         fontWeight: 200,
         fontSize: "1rem",
         border: "none",
+        padding: "10px",
+        marginTop: "10px",
         height: "65px",
         width: "100%",
         color: "#afafaf",
@@ -41,7 +43,17 @@ const NavButton: React.FC<NavButtonProps> = ({
       }}
       onClick={handleClick}
     >
-      {text}
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        {text}
+      </Box>
     </Button>
   );
 };

@@ -7,7 +7,7 @@ import Datagrid from "../components/dataGrid/Datagrid";
 // import abi from "../abis/tokenManagerABI.ts";
 // import { ethers } from "ethers";
 // import abi from "../abis/vaultManager.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { ethers } from "ethers";
 import seurologo from "../assets/seurologo.png";
 import sarslogo from "../assets/sarslogo.png";
@@ -18,6 +18,7 @@ import { useAccount } from "wagmi";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
+  usePositionStore,
 } from "../store/Store.ts";
 
 const items = [
@@ -59,6 +60,23 @@ const HomePage = () => {
   // const [loading, setLoading] = useState(true); // Add this line
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { contractAddress } = useContractAddressStore();
+
+  const rectangleRef = useRef<HTMLDivElement | null>(null);
+  const setPosition = usePositionStore((state) => state.setPosition);
+
+  useLayoutEffect(() => {
+    function updatePosition() {
+      if (rectangleRef.current) {
+        const { right, top } = rectangleRef.current.getBoundingClientRect();
+        setPosition({ right, top });
+      }
+    }
+
+    window.addEventListener("resize", updatePosition);
+    updatePosition();
+
+    return () => window.removeEventListener("resize", updatePosition);
+  }, [setPosition]);
 
   useEffect(() => {
     if (isConnected) {
@@ -145,7 +163,9 @@ const HomePage = () => {
             width: "100%",
             gap: "2rem",
             marginRight: "1rem",
+            // border: "2px solid red",
           }}
+          ref={rectangleRef}
         >
           {items.map((item) => (
             <VaultCard

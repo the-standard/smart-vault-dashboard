@@ -5,19 +5,21 @@ import { Box } from "@mui/material";
 import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
 import logo from "../assets/standardiologo.svg";
+import { usePositionStore } from "../store/Store";
 
 const Navbar = () => {
   // const { address } = useAccount();
   // const { data: ensName } = useEnsName({ address });
   // const { disconnect } = useDisconnect();
+  const { right, top } = usePositionStore((state) => state);
 
   const styles = {
     bmBurgerButton: {
       position: "absolute",
       width: "36px",
       height: "30px",
-      top: "36px",
-      right: "36px",
+      top: "48px",
+      right: window.innerWidth - right,
     },
     bmBurgerBars: {
       background: "white",

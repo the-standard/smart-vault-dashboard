@@ -143,3 +143,14 @@ export const useTransactionHashStore = create<TransactionHashState>()(
       set(() => ({ transactionHash: transactionHash })),
   })
 );
+
+interface PositionState {
+  right: number;
+  top: number;
+}
+
+export const usePositionStore = create<PositionState>((set) => ({
+  right: 0,
+  top: 0,
+  setPosition: (position: PositionState) => set(position),
+}));

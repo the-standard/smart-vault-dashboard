@@ -57,9 +57,13 @@ const NavbarMenu = () => {
   return (
     <Box
       sx={{
-        display: "grid",
+        display: { xs: "flex", md: "grid" },
         gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
-        height: "70px",
+
+        flexDirection: "column",
+        marginTop: { xs: "20px", sm: "20px", md: "0px" },
+
+        height: { xs: "100%", sm: "100%" },
         alignItems: "center",
         background: "rgba(0, 0, 0, 0.6)",
         backdropFilter: "blur(10px)",
