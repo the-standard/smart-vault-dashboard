@@ -169,6 +169,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             "&.activeBtn": {
               background:
                 "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+              border: "2px solid white",
+              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
             },
           }}
           className={activeElement === 1 ? "activeBtn" : ""}
@@ -223,6 +225,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             "&.activeBtn": {
               background:
                 "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+              border: "2px solid white",
+              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
             },
           }}
           className={activeElement === 2 ? "activeBtn" : ""}
@@ -277,6 +281,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             "&.activeBtn": {
               background:
                 "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+              border: "2px solid white",
+              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
             },
           }}
           className={activeElement === 3 ? "activeBtn" : ""}
