@@ -18,7 +18,7 @@ const Navbar = () => {
       position: "absolute",
       width: "36px",
       height: "30px",
-      top: "48px",
+      top: "46px",
       right: window.innerWidth - right,
     },
     bmBurgerBars: {
@@ -110,9 +110,9 @@ const Navbar = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { sm: "column", md: "row" },
-          justifyContent: "space-between",
-          alignItems: { sm: "flex-start", md: "center" },
+          // flexDirection: { sm: "column", md: "row" },
+          // justifyContent: "space-between",
+          // alignItems: { sm: "flex-start", md: "center" },
         }}
       >
         {" "}
@@ -122,14 +122,16 @@ const Navbar = () => {
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
+            width: { xs: "1000px", sm: "400px" },
+            height: "100%",
           }}
         >
           <img
             src={logo}
             alt="logo"
             style={{
-              width: "auto",
-              height: "auto",
+              width: "100%",
+              height: "100%",
               marginRight: "1rem",
               margin: "36px 0",
             }}
@@ -148,13 +150,14 @@ const Navbar = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center",
+            justifyContent: { xs: "center", md: "flex-end" },
             alignItems: "center",
+            width: "100%",
           }}
         >
           <Box
             sx={{
-              display: { xs: "none", sm: "flex" },
+              display: { xs: "none", sm: "fixed" },
               position: { xs: "absolute", sm: "static" },
               float: "right",
               right: { xs: "0", sm: "0", md: "0", lg: "0", xl: "0" },

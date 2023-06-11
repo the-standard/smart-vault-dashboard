@@ -49,6 +49,11 @@ const NavButton: React.FC<NavButtonProps> = ({
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "center",
+          fontSize: { xs: "1rem", md: "0.8rem", lg: "1rem" },
+          "&:hover": {
+            color: "#fff",
+            paddingLeft: "20px",
+          },
         }}
       >
         {text}

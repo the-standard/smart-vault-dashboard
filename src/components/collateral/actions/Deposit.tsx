@@ -247,6 +247,15 @@ const Deposit = () => {
             With QR Code{" "}
           </Typography>
         </Box>
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "1rem",
+            margin: "0 1rem",
+          }}
+        >
+          or
+        </Typography>
         <Box
           sx={{
             display: "flex",
