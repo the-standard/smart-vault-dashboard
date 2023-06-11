@@ -82,6 +82,8 @@ const Actions: React.FC<ActionsProps> = ({ activeElement, symbol }) => {
               height: "3rem",
               display: "flex",
               justifyContent: "center",
+              marginTop: "1rem",
+
               alignItems: "center",
               cursor: "pointer",
               textAlign: "center",

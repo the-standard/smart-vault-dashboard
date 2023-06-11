@@ -1,7 +1,7 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/pie
 import { ResponsivePie } from "@nivo/pie";
-import { linearGradientDef } from "@nivo/core";
+// import { linearGradientDef } from "@nivo/core";
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and

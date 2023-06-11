@@ -9,7 +9,7 @@ interface NavButtonProps {
 
 const NavButton: React.FC<NavButtonProps> = ({
   text,
-  isActive,
+  // isActive,
   handleClick,
 }) => {
   return (

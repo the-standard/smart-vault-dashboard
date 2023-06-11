@@ -11,7 +11,7 @@ const Navbar = () => {
   // const { address } = useAccount();
   // const { data: ensName } = useEnsName({ address });
   // const { disconnect } = useDisconnect();
-  const { right, top } = usePositionStore((state) => state);
+  const { right } = usePositionStore((state) => state);
 
   const styles: any = {
     bmBurgerButton: {
