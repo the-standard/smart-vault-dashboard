@@ -188,8 +188,10 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
           sx={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "center",
+            justifyContent: "space-between",
+            width: "auto",
             alignItems: "center",
+            marginLeft: "10px",
           }}
         >
           <input
@@ -201,23 +203,36 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
               fontWeight: "bold",
               height: "2rem",
               marginRight: "0.5rem",
-              width: "100%",
+              width: "10rem",
+              borderRadius: "10px",
             }}
             type="text"
             onChange={handleAmount}
+            placeholder="Amount"
           />
-          {collateralSymbol}
+          <Box
+            sx={{
+              width: "8rem",
+              marginLeft: "3rem",
+              fontSize: "0.8rem",
+            }}
+          >
+            {collateralSymbol} to address
+          </Box>
         </Box>
         <Box
           sx={{
-            width: "100%",
+            width: "auto",
             textAlign: "center",
-            background: " rgba(18, 18, 18, 0.5)",
             border: "none",
             height: "2rem",
             display: "flex",
+
             justifyContent: "center",
             alignItems: "center",
+            borderRadius: "10px",
+            marginLeft: "0.5rem",
+            marginRight: "5px",
           }}
         >
           {shortenedAddress}

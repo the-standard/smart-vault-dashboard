@@ -213,6 +213,7 @@ const Deposit = () => {
           justifyContent: "space-around",
           alignItems: "center",
           marginTop: "1rem",
+          marginLeft: "6px",
         }}
       >
         <Box
@@ -221,6 +222,7 @@ const Deposit = () => {
             padding: "5px",
             cursor: "pointer",
             height: "2rem",
+            width: "10.8rem",
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -274,9 +276,11 @@ const Deposit = () => {
               height: "2rem",
               margin: "0.5rem",
               width: "100%",
+              borderRadius: "10px",
             }}
             type="text"
             onChange={handleAmount}
+            placeholder="Enter amount"
           />
           <Box
             sx={{
@@ -290,7 +294,7 @@ const Deposit = () => {
           >
             {" "}
             <img
-              style={{ width: "1.5rem" }}
+              style={{ width: "100%", height: "100%" }}
               src={MetamaskIcon}
               alt="metamaskicon"
             />{" "}

@@ -145,6 +145,7 @@ export const useTransactionHashStore = create<TransactionHashState>()(
 );
 
 interface PositionState {
+  setPosition: any;
   right: number;
   top: number;
 }
