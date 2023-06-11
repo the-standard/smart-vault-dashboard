@@ -23,6 +23,7 @@ const Navbar = () => {
     },
     bmBurgerBars: {
       background: "white",
+      borderRadius: "10px",
     },
     bmBurgerBarsHover: {
       background: "#a90000",

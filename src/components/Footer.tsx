@@ -13,7 +13,7 @@ const links = [
   { name: "Ecosystem", link: "/ecosystem" },
   { name: "Careers", link: "/careers" },
   { name: "FAQ", link: "/faq" },
-  { name: "Shitepaper", link: "/shitepaper" },
+  { name: "Whitepaper", link: "/whitepaper" },
   { name: "Blog", link: "/blog" },
 ];
 

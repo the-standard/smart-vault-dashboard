@@ -151,7 +151,7 @@ const HomePage = () => {
       <Grid
         sx={{
           padding: "0 12%",
-          margin: "5rem 0",
+          margin: "1.5rem 0",
         }}
         container
         spacing={2}
