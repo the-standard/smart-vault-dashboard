@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { ethers } from "ethers";
-import React, { useState } from "react";
+import React, { useState, useCallback, useLayoutEffect, useRef } from "react";
 import Actions from "./Actions";
-import { useCollateralSymbolStore } from "../../store/Store";
+import { useCollateralSymbolStore, useWidthStore } from "../../store/Store";
 import LineChart from "./LineChart";
 import priceFeed from "../../feed/priceFeed";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
@@ -12,9 +12,31 @@ interface AcceptedTokenProps {
   symbol: string;
 }
 
+const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
+  const setWidth = useWidthStore((state) => state.setWidth);
+
+  useLayoutEffect(() => {
+    const updateWidth = () => {
+      if (ref.current) {
+        setWidth(ref.current.offsetWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, [ref, setWidth]);
+};
+
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore.getState();
+  //ref ro width sharing
+  const ref = useRef<HTMLDivElement>(null);
+  useSyncWidth(ref);
 
   const renderLineChart = () => {
     if (symbol === "ETH") {
@@ -117,7 +139,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
           // background: " rgba(18, 18, 18, 0.5)",
           // boxShadow:
           //   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          // borderRadius: "6.24932px",
+          // borderRadius: "10px",
           // padding: "1%",
           marginTop: "2rem",
         }}
@@ -129,7 +151,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             width: "33%",
             cursor: "pointer",
             textAlign: "center",
-            borderRadius: "6.24932px",
+            borderRadius: "10px",
             marginLeft: "10px",
             border: "2px solid rgba(255, 255, 255, 0.2)",
             boxShadow:
@@ -175,6 +197,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
           }}
           className={activeElement === 1 ? "activeBtn" : ""}
           onClick={() => handleClick(1)}
+          ref={ref}
         >
           Deposit
         </Box>
@@ -185,7 +208,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             width: "33%",
             cursor: "pointer",
             textAlign: "center",
-            borderRadius: "6.24932px",
+            borderRadius: "10px",
             marginLeft: "10px",
             border: "2px solid rgba(255, 255, 255, 0.2)",
             boxShadow:
@@ -241,7 +264,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             width: "33%",
             cursor: "pointer",
             textAlign: "center",
-            borderRadius: "6.24932px",
+            borderRadius: "10px",
             marginLeft: "10px",
             border: "2px solid rgba(255, 255, 255, 0.2)",
             boxShadow:

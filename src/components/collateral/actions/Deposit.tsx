@@ -210,19 +210,21 @@ const Deposit = () => {
         sx={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
           alignItems: "center",
           marginTop: "1rem",
-          marginLeft: "6px",
+          // marginLeft: "6px",
+          // border: "2px solid red",
+          padding: "0",
         }}
       >
         <Box
           sx={{
-            margin: "2px",
-            padding: "5px",
+            //    margin: "2px",
+            padding: "5px 0",
             cursor: "pointer",
             height: "2rem",
-            width: "10.8rem",
+            minWidth: `33%`,
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -271,12 +273,14 @@ const Deposit = () => {
               background: " rgba(18, 18, 18, 0.5)",
               border: "1px solid #8E9BAE",
               color: "white",
-              fontSize: "1.1rem",
-              fontWeight: "bold",
+              fontSize: "1rem",
+              fontWeight: "normal",
+              fontFamily: "Poppins",
               height: "2rem",
               margin: "0.5rem",
               width: "100%",
               borderRadius: "10px",
+              paddingLeft: "0.5rem",
             }}
             type="text"
             onChange={handleAmount}

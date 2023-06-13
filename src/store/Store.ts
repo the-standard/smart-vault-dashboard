@@ -155,3 +155,13 @@ export const usePositionStore = create<PositionState>((set) => ({
   top: 0,
   setPosition: (position: PositionState) => set(position),
 }));
+
+type WidthState = {
+  width: number;
+  setWidth: (width: number) => void;
+};
+
+export const useWidthStore = create<WidthState>((set) => ({
+  width: 0,
+  setWidth: (width) => set({ width }),
+}));
