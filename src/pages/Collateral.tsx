@@ -250,7 +250,7 @@ const Collateral = () => {
           "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
         border: "1px solid rgba(52, 52, 52, 0.3)",
         boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        borderRadius: "10px 10px 0px 0px",
+        borderRadius: "10px",
         minHeight: "100vh",
         height: "100%",
       }}
@@ -525,7 +525,7 @@ const Collateral = () => {
                 "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
               //     border: "1px solid rgba(52, 52, 52, 0.3)",
               //     boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-              borderRadius: "10px 10px 0px 0px",
+              borderRadius: "10px ",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -534,6 +534,7 @@ const Collateral = () => {
               backdropFilter: "blur(13.9px)",
               WebkitBackdropFilter: "blur(13.9px)",
               border: "1px solid rgba(255, 255, 255, 0.3)",
+              padding: "1.5rem",
             }}
           >
             {/* full chart and the progress bar here */}

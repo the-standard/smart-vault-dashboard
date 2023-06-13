@@ -71,7 +71,7 @@ const Index = () => {
           currency: "sEURO",
         },
         {
-          title: "Vault Collateral Value Liquidation Trigger",
+          title: "Collateral Value Liquidation Trigger",
           value: truncateToTwoDecimals(totalLiquidationValue),
           currency: "sEURO",
         },

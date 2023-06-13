@@ -62,7 +62,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
           "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
         //  border: "1px solid rgba(52, 52, 52, 0.3)",
         //  boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        borderRadius: "10px 10px 0px 0px",
+        borderRadius: "10px",
         width: "auto",
         padding: "1rem",
         marginTop: "0.5rem",
