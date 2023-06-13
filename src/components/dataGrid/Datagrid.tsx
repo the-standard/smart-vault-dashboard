@@ -24,6 +24,7 @@ import {
 import "../../styles/progressBarStyle.css";
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther, formatUnits } from "viem";
+import { useTheme } from "@mui/material/styles";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -43,6 +44,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const handleClose = () => setOpen(false);
   //modal child state
   const [modalChildState, setModalChildState] = useState();
+  //theme hook
+  const theme = useTheme();
 
   const truncateValue = (value: string, length: number) => {
     if (value.length <= length) {
@@ -74,7 +77,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         <Tooltip title={value}>
           <Typography
             sx={{
-              maxWidth: 100,
+              // maxWidth: 100,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
@@ -197,7 +200,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           >
             <Typography
               variant="body2"
-              sx={{ color: "#fff", fontSize: { xs: "0.8rem", md: "1rem" } }}
+              sx={{
+                textAlign: "center",
+                width: "100%",
+                fontSize: { xs: "0.8rem", md: "1rem" },
+                color: "#afafaf",
+                fontFamily: "Poppins",
+                fontWeight: 300,
+              }}
             >
               Manage
             </Typography>
@@ -223,10 +233,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           <Typography
             variant="body2"
             sx={{
-              color: "#fff",
               textAlign: "center",
               width: "100%",
               fontSize: { xs: "0.8rem", md: "1rem" },
+              color: "#afafaf",
+              fontFamily: "Poppins",
+              fontWeight: 300,
             }}
           >
             Sell NFT
@@ -277,18 +289,19 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   return (
     <Box
-      sx={
-        {
-          // margin: "3% 12%",
-          // padding: "3%",
-          // background:
-          //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-          // border: "1px solid rgba(52, 52, 52, 0.3)",
-          // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-          // borderRadius: "10px 10px 0px 0px",
-          // border: "2px solid red",
-        }
-      }
+      sx={{
+        // margin: "3% 12%",
+        // padding: "3%",
+        // background:
+        //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+        // border: "1px solid rgba(52, 52, 52, 0.3)",
+        // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+        // borderRadius: "10px 10px 0px 0px",
+        color: "#afafaf",
+        fontFamily: "Poppins",
+        fontWeight: 300,
+        fontSize: "1rem",
+      }}
     >
       {/* responsive table container */}
       <Box

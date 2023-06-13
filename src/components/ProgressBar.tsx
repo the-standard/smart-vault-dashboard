@@ -76,7 +76,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
           className="percentage"
           id="percentage"
           sx={{
-            fontSize: "1.4rem",
+            color: "#afafaf",
+            fontFamily: "Poppins",
+            fontWeight: 300,
+            fontSize: "1rem",
           }}
         >
           {percentage}%
