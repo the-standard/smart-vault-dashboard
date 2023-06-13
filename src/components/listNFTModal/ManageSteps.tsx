@@ -53,7 +53,7 @@ const ManageSteps: React.FC<ModalProps> = ({ modalChildState, tokenMap }) => {
         onDataFromChild={handleDataFromChild}
       />{" "} */}
       {renderByState()}
-      <p>Data from child: {dataFromChild}</p>
+      {/* <p>Data from child: {dataFromChild}</p> */}
     </div>
   );
 };
