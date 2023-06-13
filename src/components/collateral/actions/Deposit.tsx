@@ -289,11 +289,11 @@ const Deposit = () => {
           <Box
             sx={{
               margin: "2px",
-              padding: "5px",
+              padding: "10px",
               cursor: "pointer",
               width: "2.5rem",
             }}
-            className="glowingCard"
+            className="myBtn"
             onClick={depositViaMetamask}
           >
             {" "}

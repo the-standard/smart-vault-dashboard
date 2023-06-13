@@ -4,7 +4,7 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import React, { useState } from "react";
 import seurologo from "../../assets/seurologo.png";
-import handshake from "../../assets/handshake.png";
+// import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
@@ -149,7 +149,19 @@ const Debt = () => {
     }
   };
 
+  const shortenAddress = (address: any) => {
+    const prefix = address.slice(0, 6);
+    const suffix = address.slice(-8);
+    return `${prefix}...${suffix}`;
+  };
+
+  const shortenedAddress = shortenAddress(address);
+
   const borrowValues = [
+    {
+      key: "Mint to address",
+      value: shortenedAddress,
+    },
     {
       key: "Minting Fee (1%)",
       value: amount * 0.01,
@@ -178,21 +190,17 @@ const Debt = () => {
     },
   ];
 
-  const shortenAddress = (address: any) => {
-    const prefix = address.slice(0, 6);
-    const suffix = address.slice(-8);
-    return `${prefix}...${suffix}`;
-  };
-
-  const shortenedAddress = shortenAddress(address);
   return (
     <Box
       sx={{
         background:
           "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        border: "1px solid rgba(52, 52, 52, 0.3)",
-        boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        borderRadius: "10px 10px 0px 0px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(13.9px)",
+        WebkitBackdropFilter: "blur(13.9px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+
+        borderRadius: "10px ",
         width: "auto",
         height: "auto",
         padding: "1rem",
@@ -244,55 +252,121 @@ const Debt = () => {
           <CircularProgress />
         </Box>
       )}
-      <Box
-        sx={{
-          backgroundImage: `url(${handshake})`,
-        }}
-      >
-        <img
-          style={{
-            width: "3.5rem",
-            height: "3.5rem",
-            borderRadius: "31.9031px",
-          }}
-          src={seurologo}
-          alt="seurologo"
-        />
+      <Box>
         <Box
           sx={{
+            //  backgroundImage: `url(${handshake})`,
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "1rem",
+            flexDirection: "row",
           }}
         >
-          <Typography variant="body1">sEURO </Typography>
-          <Typography variant="body1">
-            {" "}
-            € {formatEther(debtValue.toString())}{" "}
-          </Typography>
+          <img
+            style={{
+              width: "3.5rem",
+              height: "3.5rem",
+              borderRadius: "31.9031px",
+            }}
+            src={seurologo}
+            alt="seurologo"
+          />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "1rem",
+            }}
+          >
+            <Typography
+              sx={{
+                margin: "0 10px",
+              }}
+              variant="body1"
+            >
+              sEURO minted:{" "}
+            </Typography>
+            <Typography variant="body1">
+              {" "}
+              € {formatEther(debtValue.toString())}{" "}
+            </Typography>
+          </Box>
         </Box>
+        <Typography
+          variant="body1"
+          sx={{ margin: "1rem 0 0 5px", color: "#afafaf" }}
+        >
+          interest: fixed 0%
+        </Typography>
       </Box>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          background: " rgba(18, 18, 18, 0.5)",
-          boxShadow:
-            " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          borderRadius: "6.24932px",
+          // background: " rgba(18, 18, 18, 0.5)",
+          // boxShadow:
+          //   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
+          // borderRadius: "6.24932px",
           // padding: "1%",
         }}
       >
         <Box
           sx={{
-            margin: "2px 4px",
+            margin: "2px",
             padding: "5px",
             width: "50%",
+            height: "1.5rem",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "1rem",
+
+            alignItems: "center",
             cursor: "pointer",
             textAlign: "center",
+            borderRadius: "6.24932px",
+            marginLeft: "10px",
+            border: "2px solid rgba(255, 255, 255, 0.2)",
+            boxShadow:
+              "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+            fontFamily: '"Poppins", sans-serif',
+            color: "#ffffff",
+            fontSize: "1rem",
+            letterSpacing: "1px",
+            backdropFilter: "blur(8px)",
+            transition: "0.5s",
+            position: "relative",
+            "&:after": {
+              content: '""',
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              top: "0",
+              left: "0",
+              background:
+                "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+              backgroundSize: "200% 100%",
+              backgroundPosition: "165% 0",
+              transition: "0.7s",
+            },
+            "&:hover:after": {
+              backgroundPosition: "-20% 0",
+            },
+            "&:hover": {
+              boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+              transform: "translateY(-5px)",
+            },
+            "&:active": {
+              transform: "translateY(0)",
+              border: "2px solid rgba(152, 250, 250, 0.5)",
+              boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+            },
+            "&.activeBtn": {
+              background:
+                "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+              border: "2px solid white",
+              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
+            },
           }}
-          className={activeElement === 1 ? "glowingCard" : ""}
+          className={activeElement === 1 ? "activeBtn" : ""}
           onClick={() => handleClick(1)}
         >
           Borrow
@@ -302,13 +376,62 @@ const Debt = () => {
             margin: "2px",
             padding: "5px",
             width: "50%",
+            height: "1.5rem",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "1rem",
+
+            alignItems: "center",
             cursor: "pointer",
             textAlign: "center",
+            borderRadius: "6.24932px",
+            marginLeft: "10px",
+            border: "2px solid rgba(255, 255, 255, 0.2)",
+            boxShadow:
+              "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+            fontFamily: '"Poppins", sans-serif',
+            color: "#ffffff",
+            fontSize: "1rem",
+            letterSpacing: "1px",
+            backdropFilter: "blur(8px)",
+            transition: "0.5s",
+            position: "relative",
+            "&:after": {
+              content: '""',
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              top: "0",
+              left: "0",
+              background:
+                "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+              backgroundSize: "200% 100%",
+              backgroundPosition: "165% 0",
+              transition: "0.7s",
+            },
+            "&:hover:after": {
+              backgroundPosition: "-20% 0",
+            },
+            "&:hover": {
+              boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+              transform: "translateY(-5px)",
+            },
+            "&:active": {
+              transform: "translateY(0)",
+              border: "2px solid rgba(152, 250, 250, 0.5)",
+              boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+            },
+            "&.activeBtn": {
+              background:
+                "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+              border: "2px solid white",
+              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
+            },
           }}
-          className={activeElement === 2 ? "glowingCard" : ""}
+          className={activeElement === 2 ? "activeBtn" : ""}
           onClick={() => handleClick(2)}
         >
-          Pay down
+          Pay back
         </Box>
       </Box>
       <Box
@@ -336,46 +459,18 @@ const Debt = () => {
           style={{
             background: " rgba(18, 18, 18, 0.5)",
             border: "none",
-            color: "white",
-            fontSize: "1.1rem",
-            fontWeight: "bold",
+            color: "#afafaf",
+            fontSize: "1rem",
+            fontWeight: "normal",
+            width: "100%",
+            paddingLeft: "5px",
           }}
+          placeholder="€ amount of sEURO to borrow"
           type="text"
           onChange={handleAmount}
         />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            width: "auto",
-            paddingRight: "1rem",
-            // border: "2px solid red",
-          }}
-        >
-          <img
-            style={{
-              width: "2rem",
-              height: "2rem",
-              borderRadius: "31.9031px",
-            }}
-            src={seurologo}
-            alt="seurologo"
-          />
-        </Box>
       </Box>
-      <Box
-        sx={{
-          background: " rgba(18, 18, 18, 0.5)",
-          boxShadow:
-            " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          borderRadius: "6.24932px",
-          padding: "1rem",
-          marginTop: "1rem",
-        }}
-      >
-        {shortenedAddress}
-      </Box>
+
       <Box
         sx={{
           background: " rgba(18, 18, 18, 0.5)",
@@ -429,7 +524,7 @@ const Debt = () => {
             ))}
       </Box>
 
-      {activeElement === 1 ? (
+      {/* {activeElement === 1 ? (
         <Typography variant="body1" sx={{ color: "red", marginTop: "1rem" }}>
           Note: Stake LP tokens to earn & make Minting fee 0%{" "}
           <a
@@ -441,7 +536,7 @@ const Debt = () => {
         </Typography>
       ) : (
         <div></div>
-      )}
+      )} */}
       <Box
         sx={{
           display: "flex",
@@ -455,13 +550,61 @@ const Debt = () => {
       >
         <Box
           sx={{
-            margin: "2px 4px",
+            margin: "2px",
             padding: "5px",
             width: "100%",
+            height: "1.5rem",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "1rem",
+
+            alignItems: "center",
             cursor: "pointer",
             textAlign: "center",
+            borderRadius: "6.24932px",
+            marginLeft: "10px",
+            border: "2px solid rgba(255, 255, 255, 0.2)",
+            boxShadow:
+              "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+            fontFamily: '"Poppins", sans-serif',
+            color: "#ffffff",
+            fontSize: "1rem",
+            letterSpacing: "1px",
+            backdropFilter: "blur(8px)",
+            transition: "0.5s",
+            position: "relative",
+            "&:after": {
+              content: '""',
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              top: "0",
+              left: "0",
+              background:
+                "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+              backgroundSize: "200% 100%",
+              backgroundPosition: "165% 0",
+              transition: "0.7s",
+            },
+            "&:hover:after": {
+              backgroundPosition: "-20% 0",
+            },
+            "&:hover": {
+              boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+              transform: "translateY(-5px)",
+            },
+            "&:active": {
+              transform: "translateY(0)",
+              border: "2px solid rgba(152, 250, 250, 0.5)",
+              boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+            },
+            "&.activeBtn": {
+              background:
+                "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+              border: "2px solid white",
+              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
+            },
           }}
-          className="glowingCard"
           onClick={handleWithdraw}
         >
           Withdraw
