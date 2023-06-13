@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import {
   useVaultIdStore,
   useVaultAddressStore,
@@ -6,6 +6,7 @@ import {
   useTransactionHashStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
+  usePositionStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 // import QRicon from "../assets/qricon.png";
@@ -43,6 +44,23 @@ const Collateral = () => {
   // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // console.log(handleOpen)
+
+  const rectangleRef = useRef<HTMLDivElement | null>(null);
+  const setPosition = usePositionStore((state) => state.setPosition);
+
+  useLayoutEffect(() => {
+    function updatePosition() {
+      if (rectangleRef.current) {
+        const { right, top } = rectangleRef.current.getBoundingClientRect();
+        setPosition({ right, top });
+      }
+    }
+
+    window.addEventListener("resize", updatePosition);
+    updatePosition();
+
+    return () => window.removeEventListener("resize", updatePosition);
+  }, [setPosition]);
 
   const handleClick = (element: any) => {
     setActiveElement(element);
@@ -236,6 +254,7 @@ const Collateral = () => {
         minHeight: "100vh",
         height: "100%",
       }}
+      ref={rectangleRef}
     >
       {/* divide into 2 columns */}
       {/*  column 1 */}
