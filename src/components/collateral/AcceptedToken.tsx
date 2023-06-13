@@ -77,9 +77,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
         border: "1px solid rgba(255, 255, 255, 0.3)",
       }}
     >
-      {/* {" "}
-      amount: {ethers.utils.formatEther(amount)}
-      symbol: {symbol} */}
       <Box
         sx={{
           display: "flex",
