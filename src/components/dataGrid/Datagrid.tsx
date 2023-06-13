@@ -24,7 +24,6 @@ import {
 import "../../styles/progressBarStyle.css";
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther, formatUnits } from "viem";
-import { useTheme } from "@mui/material/styles";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -44,8 +43,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const handleClose = () => setOpen(false);
   //modal child state
   const [modalChildState, setModalChildState] = useState();
-  //theme hook
-  const theme = useTheme();
 
   const truncateValue = (value: string, length: number) => {
     if (value.length <= length) {

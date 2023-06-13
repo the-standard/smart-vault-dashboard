@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { ethers } from "ethers";
-import React, { useState, useCallback, useLayoutEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import Actions from "./Actions";
 import { useCollateralSymbolStore, useWidthStore } from "../../store/Store";
 import LineChart from "./LineChart";
