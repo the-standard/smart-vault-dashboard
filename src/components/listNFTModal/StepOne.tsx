@@ -92,11 +92,13 @@ const StepOne: React.FC<StepProps> = ({
         </Typography>
         <Card
           sx={{
-            background: "#121212",
-            boxShadow:
-              "0px 1.29525px 1.29525px rgba(255, 255, 255, 0.5), inset 0px 1.29525px 0px rgba(0, 0, 0, 0.25)",
-            borderRadius: "6.47627px",
-            color: "#FFFFFF",
+            background:
+              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+            borderRadius: "10px",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(13.9px)",
+            WebkitBackdropFilter: "blur(13.9px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
           }}
         >
           <CardContent
@@ -273,11 +275,13 @@ const StepOne: React.FC<StepProps> = ({
         </Typography>
         <Card
           sx={{
-            background: "#121212",
-            boxShadow:
-              "0px 1.29525px 1.29525px rgba(255, 255, 255, 0.5), inset 0px 1.29525px 0px rgba(0, 0, 0, 0.25)",
-            borderRadius: "6.47627px",
-            color: "#FFFFFF",
+            background:
+              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+            borderRadius: "10px",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(13.9px)",
+            WebkitBackdropFilter: "blur(13.9px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
           }}
         >
           <CardContent
@@ -430,19 +434,54 @@ const StepOne: React.FC<StepProps> = ({
           <Button
             onClick={handleClick}
             sx={{
-              background:
-                "linear-gradient(119.96deg, rgba(255, 255, 255, 0.1) 26.6%, rgba(255, 255, 255, 0) 64.62%)",
-              border: "1px solid rgba(70, 205, 235, 0.3)",
-              borderRadius: "3.88576px",
-              // margin: "4rem 0 0.8rem 0",
-              width: "100%",
+              marginLeft: "10px",
+              padding: "10px 10px",
+              border: "2px solid rgba(255, 255, 255, 0.2)",
+              boxShadow:
+                "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+              fontFamily: '"Poppins", sans-serif',
+              color: "#ffffff",
+              fontSize: "1rem",
+              letterSpacing: "1px",
+              backdropFilter: "blur(8px)",
+              cursor: "pointer",
+              borderRadius: "10px",
+              transition: "0.5s",
+              position: "relative",
+              "&:after": {
+                content: '""',
+                position: "absolute",
+                height: "100%",
+                width: "100%",
+                top: "0",
+                left: "0",
+                background:
+                  "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+                backgroundSize: "200% 100%",
+                backgroundPosition: "165% 0",
+                transition: "0.7s",
+              },
+              "&:hover:after": {
+                backgroundPosition: "-20% 0",
+              },
+              "&:hover": {
+                boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+                transform: "translateY(-5px)",
+              },
+              "&:active": {
+                transform: "translateY(0)",
+                border: "2px solid rgba(152, 250, 250, 0.5)",
+                boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+              },
+              "&.activeBtn": {
+                background:
+                  "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+              },
             }}
-            className="glowingCard"
-            // onClick={() => write?.()}
           >
             <Typography
               sx={{
-                color: "#00FFF0",
+                color: "#afafaf",
               }}
             >
               List on opensea

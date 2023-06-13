@@ -545,8 +545,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 sm: "50%",
                 md: "40%",
               },
-              bgcolor: "#0C0C0C",
-              border: "2px solid #000",
+              bgcolor: "rgba(0,0,0,0.4)",
+              border: "1px solid #afafaf",
               boxShadow: 24,
               p: 4,
               maxHeight: {
