@@ -36,7 +36,7 @@ const Debt = () => {
   const [snackbarValue, setSnackbarValue] = useState(0);
   const { getTransactionHash } = useTransactionHashStore.getState();
   const inputRef: any = useRef<HTMLInputElement>(null);
-  const { circularProgress, getCircularProgress } = useCircularProgressStore();
+  const { getCircularProgress } = useCircularProgressStore();
 
   //snackbar config
   const [snackbarOpen, setSnackbarOpen] = useState(false);

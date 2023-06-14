@@ -4,6 +4,7 @@ import QRCode from "react-qr-code";
 import {
   useVaultAddressStore,
   useTransactionHashStore,
+  useCircularProgressStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
 // import smartVaultAbi from "../../../abis/smartVault";
@@ -17,7 +18,7 @@ import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther } from "viem";
 import { createWalletClient, custom } from "viem";
 import { sepolia } from "viem/chains";
-import { polygonMumbai } from "wagmi/chains";
+// import { polygonMumbai } from "wagmi/chains";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -33,7 +34,6 @@ const Deposit = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [amount, setAmount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   ///store
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
@@ -42,6 +42,8 @@ const Deposit = () => {
 
   //snackbar config
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
+  const { getCircularProgress } = useCircularProgressStore();
 
   const handleSnackbarClick = () => {
     setSnackbarOpen(true);
@@ -142,14 +144,14 @@ const Deposit = () => {
 
   const waitForTransaction = async (_transactionHash: string) => {
     try {
-      setIsLoading(true); // Set isLoading to true before waiting for the transaction
+      getCircularProgress(true);
       await provider.waitForTransaction(_transactionHash);
-      setIsLoading(false); // Set isLoading to false after the transaction is mined
+      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       setSnackbarValue(1);
       handleSnackbarClick();
     } catch (error) {
       console.log(error);
-      setIsLoading(false); // Set isLoading to false if there's an error
+      getCircularProgress(false);
       setSnackbarValue(2);
 
       handleSnackbarClick();
@@ -190,25 +192,6 @@ const Deposit = () => {
         )}
       </Snackbar>
 
-      {isLoading && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            background: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-          }}
-        >
-          {" "}
-          <CircularProgress />
-        </Box>
-      )}
       <Box
         sx={{
           display: "flex",

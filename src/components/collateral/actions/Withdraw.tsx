@@ -3,6 +3,7 @@ import {
   useCollateralSymbolStore,
   useVaultAddressStore,
   useTransactionHashStore,
+  useCircularProgressStore,
 } from "../../../store/Store";
 import { Box } from "@mui/material";
 import { useAccount } from "wagmi";
@@ -30,7 +31,6 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
@@ -40,6 +40,8 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   //snackbar config
   const [snackbarValue, setSnackbarValue] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
+  const { getCircularProgress } = useCircularProgressStore();
 
   const handleSnackbarClick = () => {
     setSnackbarOpen(true);
@@ -103,14 +105,14 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
 
   const waitForTransaction = async (_transactionHash: string) => {
     try {
-      setIsLoading(true); // Set isLoading to true before waiting for the transaction
+      getCircularProgress(true); // Set getCircularProgress to true before waiting for the transaction
       await provider.waitForTransaction(_transactionHash);
-      setIsLoading(false); // Set isLoading to false after the transaction is mined
+      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       setSnackbarValue(0);
       handleSnackbarClick();
     } catch (error) {
       console.log(error);
-      setIsLoading(false); // Set isLoading to false if there's an error
+      getCircularProgress(false); // Set getCircularProgress to false if there's an error
       setSnackbarValue(1);
       handleSnackbarClick();
     }
@@ -157,25 +159,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
           </Alert>
         )}
       </Snackbar>
-      {isLoading && (
-        <Box
-          sx={{
-            position: "fixed",
-            top: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            background: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-          }}
-        >
-          {" "}
-          <CircularProgress />
-        </Box>
-      )}
+
       <Box
         sx={{
           marginTop: "1rem",
@@ -297,5 +281,3 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
     </Box>
   );
 };
-
-export default Withdraw;
