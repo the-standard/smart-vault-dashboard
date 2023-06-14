@@ -211,6 +211,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
             type="text"
             onChange={handleAmount}
             placeholder="Amount"
+            autoFocus
           />
           <Box
             sx={{

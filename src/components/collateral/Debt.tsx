@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import seurologo from "../../assets/seurologo.png";
 // import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
@@ -35,6 +35,7 @@ const Debt = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [snackbarValue, setSnackbarValue] = useState(0);
   const { getTransactionHash } = useTransactionHashStore.getState();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   //snackbar config
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -60,6 +61,7 @@ const Debt = () => {
 
   const handleClick = (element: any) => {
     setActiveElement(element);
+    handleInputFocus();
   };
 
   const handleAmount = (e: any) => {
@@ -147,6 +149,10 @@ const Debt = () => {
       setSnackbarValue(1);
       handleSnackbarClick();
     }
+  };
+
+  const handleInputFocus = () => {
+    inputRef.current.focus();
   };
 
   const shortenAddress = (address: any) => {
@@ -468,6 +474,8 @@ const Debt = () => {
           placeholder="€ amount of sEURO to borrow"
           type="text"
           onChange={handleAmount}
+          autoFocus
+          ref={inputRef}
         />
       </Box>
 

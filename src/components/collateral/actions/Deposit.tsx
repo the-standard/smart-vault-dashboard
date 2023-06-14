@@ -287,6 +287,7 @@ const Deposit = () => {
             type="text"
             onChange={handleAmount}
             placeholder="Enter amount"
+            autoFocus
           />
           <Box
             sx={{

@@ -36,7 +36,7 @@ const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore.getState();
-  const [euroValueConverted, setEuroValueConverted] = useState(undefined);
+  const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
 
   //ref ro width sharing
   const ref = useRef<HTMLDivElement>(null);
