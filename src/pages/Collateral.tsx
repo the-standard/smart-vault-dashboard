@@ -435,10 +435,10 @@ const Collateral = () => {
             <Box
               sx={{
                 marginTop: "1rem",
-                color: "#ffffff",
+                color: "#afafaf",
               }}
             >
-              sEuro Smart Vault #0
+              sEuro Smart Vault #{vaultID}
             </Box>
           </Box>
         </Box>

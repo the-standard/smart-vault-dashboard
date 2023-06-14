@@ -79,11 +79,11 @@ const VaultCard: React.FC<VaultCardProps> = ({
         background:
           "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
         borderRadius: "10px",
-        padding: "0",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(13.9px)",
         WebkitBackdropFilter: "blur(13.9px)",
         border: "1px solid rgba(255, 255, 255, 0.3)",
+        padding: "0",
         // border: "1px solid rgba(52, 52, 52, 0.3)",
         // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
       }}
