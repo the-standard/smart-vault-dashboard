@@ -1,8 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
 // import CircularProgress from "@mui/material/CircularProgress";
-import React, { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import seurologo from "../../assets/seurologo.png";
 // import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
@@ -18,13 +17,6 @@ import {
   useSnackBarStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
-//for snackbar
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);

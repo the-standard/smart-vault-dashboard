@@ -1,5 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import {
   useVaultAddressStore,
@@ -12,21 +12,11 @@ import QRicon from "../../../assets/qricon.png";
 import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 // import { useAccount } from "wagmi";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther } from "viem";
 import { createWalletClient, custom } from "viem";
 import { sepolia } from "viem/chains";
 // import { polygonMumbai } from "wagmi/chains";
-
-//for snackbar
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const Deposit = () => {
   //modal states

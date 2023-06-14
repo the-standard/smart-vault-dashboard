@@ -42,17 +42,11 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const ref = useRef<HTMLDivElement>(null);
   useSyncWidth(ref);
 
-  // const getPriceInUSD = async () => {
-  //   const price = await getETHPrice();
-  //   console.log(price);
-  // };
-
-  // console.log(getPriceInUSD());
-
   const convertUsdToEuro = async () => {
     const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
     try {
       const usdPrice = await getETHPrice();
+      console.log(usdPrice);
 
       const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
 
@@ -64,8 +58,14 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
 
       const usdToEuro = usdPrice * euroPrice;
 
-      console.log(usdToEuro.toFixed(2));
-      setEuroValueConverted(usdToEuro.toFixed(2));
+      console.log(usdToEuro);
+      console.log(ethers.utils.formatEther(amount));
+      console.log(
+        (usdToEuro * Number(ethers.utils.formatEther(amount))).toFixed(2)
+      );
+      setEuroValueConverted(
+        (usdToEuro * Number(ethers.utils.formatEther(amount))).toFixed(2)
+      );
       return usdToEuro.toFixed(2);
     } catch (error) {
       console.log(error);
@@ -73,7 +73,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   };
 
   useEffect(() => {
-    convertUsdToEuro();
+    amount ? convertUsdToEuro() : null;
   }, []);
 
   const renderLineChart = () => {
