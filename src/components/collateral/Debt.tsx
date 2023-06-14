@@ -34,11 +34,10 @@ const Debt = () => {
   const { vaultStore }: any = useVaultStore();
   const { sEuroAddress } = usesEuroAddressStore.getState();
   const { sEuroAbi } = usesEuroAbiStore.getState();
-  const [snackbarValue, setSnackbarValue] = useState(0);
   const { getTransactionHash } = useTransactionHashStore.getState();
   const inputRef: any = useRef<HTMLInputElement>(null);
   const { getCircularProgress } = useCircularProgressStore();
-  const { snackBar, getSnackBar } = useSnackBarStore();
+  const { getSnackBar } = useSnackBarStore();
 
   const debtValue: any = ethers.BigNumber.from(vaultStore[5][0]);
   console.log(debtValue.toString());
@@ -130,7 +129,6 @@ const Debt = () => {
     } catch (error) {
       console.log(error);
       getCircularProgress(false);
-
       getSnackBar(1);
       //  handleSnackbarClick();
     }

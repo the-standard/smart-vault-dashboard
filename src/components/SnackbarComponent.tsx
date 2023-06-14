@@ -1,6 +1,15 @@
-import { Alert, Box, Snackbar } from "@mui/material";
+import { Box, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSnackBarStore } from "../store/Store";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+//for snackbar
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const SnackbarComponent = () => {
   const { snackBar, getSnackBar } = useSnackBarStore();
@@ -10,6 +19,11 @@ const SnackbarComponent = () => {
 
   useEffect(() => {
     setSnackbarOpen(true);
+    const timer = setTimeout(() => {
+      setSnackbarOpen(false);
+      getSnackBar(55);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [snackBar]);
 
   //   const handleSnackbarClick = () => {
