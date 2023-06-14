@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
-import React, { useRef, useState } from "react";
+// import CircularProgress from "@mui/material/CircularProgress";
+import React, { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/seurologo.png";
 // import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
@@ -14,6 +14,7 @@ import {
   useVaultStore,
   usesEuroAbiStore,
   usesEuroAddressStore,
+  useCircularProgressStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
 //for snackbar
@@ -32,10 +33,10 @@ const Debt = () => {
   const { vaultStore }: any = useVaultStore();
   const { sEuroAddress } = usesEuroAddressStore.getState();
   const { sEuroAbi } = usesEuroAbiStore.getState();
-  const [isLoading, setIsLoading] = useState(false);
   const [snackbarValue, setSnackbarValue] = useState(0);
   const { getTransactionHash } = useTransactionHashStore.getState();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef: any = useRef<HTMLInputElement>(null);
+  const { circularProgress, getCircularProgress } = useCircularProgressStore();
 
   //snackbar config
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -138,18 +139,23 @@ const Debt = () => {
 
   const waitForTransaction = async (_transactionHash: string) => {
     try {
-      setIsLoading(true); // Set isLoading to true before waiting for the transaction
+      getCircularProgress(true);
       await provider.waitForTransaction(_transactionHash);
-      setIsLoading(false); // Set isLoading to false after the transaction is mined
+      getCircularProgress(false); // Set isLoading to false after the transaction is mined
       setSnackbarValue(0);
       handleSnackbarClick();
     } catch (error) {
       console.log(error);
-      setIsLoading(false); // Set isLoading to false if there's an error
+      getCircularProgress(false);
+
       setSnackbarValue(1);
       handleSnackbarClick();
     }
   };
+
+  // useEffect(() => {
+  //   console.log(circularProgress);
+  // }, []);
 
   const handleInputFocus = () => {
     inputRef.current.focus();
@@ -205,7 +211,6 @@ const Debt = () => {
         backdropFilter: "blur(13.9px)",
         WebkitBackdropFilter: "blur(13.9px)",
         border: "1px solid rgba(255, 255, 255, 0.3)",
-
         borderRadius: "10px ",
         width: "auto",
         height: "auto",
@@ -240,24 +245,6 @@ const Debt = () => {
         )}
       </Snackbar>
 
-      {isLoading && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            background: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {" "}
-          <CircularProgress />
-        </Box>
-      )}
       <Box>
         <Box
           sx={{
@@ -304,6 +291,7 @@ const Debt = () => {
           interest: fixed 0%
         </Typography>
       </Box>
+
       <Box
         sx={{
           display: "flex",

@@ -160,7 +160,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
       {isLoading && (
         <Box
           sx={{
-            position: "absolute",
+            position: "fixed",
             top: "0",
             left: "0",
             width: "100%",
@@ -169,6 +169,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            zIndex: 9999,
           }}
         >
           {" "}

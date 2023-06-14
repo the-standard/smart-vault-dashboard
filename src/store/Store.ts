@@ -189,3 +189,15 @@ export const useWidthStore = create<WidthState>((set) => ({
   width: 0,
   setWidth: (width) => set({ width }),
 }));
+
+interface CirccularProgressState {
+  circularProgress: boolean;
+  getCircularProgress: (circularProgress: boolean) => void;
+}
+
+export const useCircularProgressStore = create<CirccularProgressState>(
+  (set) => ({
+    circularProgress: false,
+    getCircularProgress: (circularProgress) => set({ circularProgress }),
+  })
+);

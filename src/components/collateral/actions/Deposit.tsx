@@ -202,6 +202,7 @@ const Deposit = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            zIndex: 9999,
           }}
         >
           {" "}

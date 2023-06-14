@@ -25,8 +25,14 @@ import { Box } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import History from "./pages/History.tsx";
 import Collateral from "./pages/Collateral.tsx";
+import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
+import { useCircularProgressStore } from "./store/Store.ts";
+import { useEffect } from "react";
 
 function App() {
+  const { circularProgress } = useCircularProgressStore();
+  console.log(circularProgress);
+
   return (
     <Box
       sx={{
@@ -36,6 +42,8 @@ function App() {
         },
       }}
     >
+      <CircularProgressComponent />
+
       <WagmiConfig config={wagmiConfig}>
         <Navbar />
         <Routes>
@@ -45,7 +53,6 @@ function App() {
         </Routes>
         <Footer />
       </WagmiConfig>
-
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </Box>
   );
