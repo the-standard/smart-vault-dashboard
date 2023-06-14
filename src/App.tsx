@@ -27,7 +27,7 @@ import History from "./pages/History.tsx";
 import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
 import { useCircularProgressStore } from "./store/Store.ts";
-import { useEffect } from "react";
+import SnackbarComponent from "./components/SnackbarComponent.tsx";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
@@ -43,6 +43,8 @@ function App() {
       }}
     >
       <CircularProgressComponent />
+
+      <SnackbarComponent />
 
       <WagmiConfig config={wagmiConfig}>
         <Navbar />

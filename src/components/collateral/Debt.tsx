@@ -15,6 +15,7 @@ import {
   usesEuroAbiStore,
   usesEuroAddressStore,
   useCircularProgressStore,
+  useSnackBarStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
 //for snackbar
@@ -37,25 +38,7 @@ const Debt = () => {
   const { getTransactionHash } = useTransactionHashStore.getState();
   const inputRef: any = useRef<HTMLInputElement>(null);
   const { getCircularProgress } = useCircularProgressStore();
-
-  //snackbar config
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-  const handleSnackbarClick = () => {
-    setSnackbarOpen(true);
-  };
-
-  const handleSnackbarClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackbarOpen(false);
-  };
-  //snackbar config end
+  const { snackBar, getSnackBar } = useSnackBarStore();
 
   const debtValue: any = ethers.BigNumber.from(vaultStore[5][0]);
   console.log(debtValue.toString());
@@ -142,14 +125,14 @@ const Debt = () => {
       getCircularProgress(true);
       await provider.waitForTransaction(_transactionHash);
       getCircularProgress(false); // Set isLoading to false after the transaction is mined
-      setSnackbarValue(0);
-      handleSnackbarClick();
+      getSnackBar(0);
+      //   handleSnackbarClick();
     } catch (error) {
       console.log(error);
       getCircularProgress(false);
 
-      setSnackbarValue(1);
-      handleSnackbarClick();
+      getSnackBar(1);
+      //  handleSnackbarClick();
     }
   };
 
@@ -221,30 +204,6 @@ const Debt = () => {
         color: "white",
       }}
     >
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        {snackbarValue === 0 ? (
-          <Alert
-            onClose={handleSnackbarClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            <Box>Transaction successful!</Box>
-          </Alert>
-        ) : (
-          <Alert
-            onClose={handleSnackbarClose}
-            severity="error"
-            sx={{ width: "100%" }}
-          >
-            <Box>There was an error!</Box>
-          </Alert>
-        )}
-      </Snackbar>
-
       <Box>
         <Box
           sx={{

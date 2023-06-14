@@ -201,3 +201,13 @@ export const useCircularProgressStore = create<CirccularProgressState>(
     getCircularProgress: (circularProgress) => set({ circularProgress }),
   })
 );
+
+interface SnackBarState {
+  snackBar: number;
+  getSnackBar: (snackBar: number) => void;
+}
+
+export const useSnackBarStore = create<SnackBarState>((set) => ({
+  snackBar: 55,
+  getSnackBar: (snackBar) => set({ snackBar }),
+}));

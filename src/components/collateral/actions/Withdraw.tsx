@@ -281,3 +281,5 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
     </Box>
   );
 };
+
+export default Withdraw;
