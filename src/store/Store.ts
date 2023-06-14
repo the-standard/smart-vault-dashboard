@@ -1,6 +1,30 @@
 import { create } from "zustand";
 import vaultManagerAbi from "../abis/vaultManager.ts";
 import sEuroAbi from "../abis/testTokens/sEuro.ts";
+import ethtousdAbi from "../abis/priceFeeds/mumbai/ethtousd.ts";
+
+interface EthToUsdAbiState {
+  ethToUsdAbi: Array<any>;
+  getEthToUsdAbi: (ethToUsdAbi: Array<any>) => void;
+}
+
+export const useEthToUsdAbiStore = create<EthToUsdAbiState>()((set) => ({
+  ethToUsdAbi: ethtousdAbi,
+  getEthToUsdAbi: (ethToUsdAbi) => set(() => ({ ethToUsdAbi: ethToUsdAbi })),
+}));
+
+interface EthToUsdAddressState {
+  ethToUsdAddress: string;
+  getEthToUsdAddress: (ethToUsdAddress: string) => void;
+}
+
+export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
+  (set) => ({
+    ethToUsdAddress: "0x694AA1769357215DE4FAC081bf1f309aDC325306",
+    getEthToUsdAddress: (ethToUsdAddress) =>
+      set(() => ({ ethToUsdAddress: ethToUsdAddress })),
+  })
+);
 
 interface sEuroAddressState {
   sEuroAddress: string;
@@ -27,7 +51,7 @@ interface contractAddressState {
   contractAddress: any;
   getContractAddress: (contractAddress: string) => void;
 }
-
+//this is the smart vault manager, I need to change its name to it
 export const useContractAddressStore = create<contractAddressState>()(
   (set) => ({
     contractAddress: "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",

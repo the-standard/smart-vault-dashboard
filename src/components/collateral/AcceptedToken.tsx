@@ -1,11 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import { ethers } from "ethers";
-import React, { useState, useLayoutEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, useRef, useEffect } from "react";
 import Actions from "./Actions";
 import { useCollateralSymbolStore, useWidthStore } from "../../store/Store";
 import LineChart from "./LineChart";
 import priceFeed from "../../feed/priceFeed";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
+import { getETHPrice } from "../../utils/getETHPrice";
+import axios from "axios";
 
 interface AcceptedTokenProps {
   amount: string;
@@ -34,9 +36,45 @@ const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore.getState();
+  const [euroValueConverted, setEuroValueConverted] = useState(undefined);
+
   //ref ro width sharing
   const ref = useRef<HTMLDivElement>(null);
   useSyncWidth(ref);
+
+  // const getPriceInUSD = async () => {
+  //   const price = await getETHPrice();
+  //   console.log(price);
+  // };
+
+  // console.log(getPriceInUSD());
+
+  const convertUsdToEuro = async () => {
+    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
+    try {
+      const usdPrice = await getETHPrice();
+
+      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+
+      const getUsdToEuro = await axios.get(apiUrl);
+
+      const euroPrice = getUsdToEuro.data.data.EUR;
+      console.log(euroPrice);
+      console.log(usdPrice);
+
+      const usdToEuro = usdPrice * euroPrice;
+
+      console.log(usdToEuro.toFixed(2));
+      setEuroValueConverted(usdToEuro.toFixed(2));
+      return usdToEuro.toFixed(2);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    convertUsdToEuro();
+  }, []);
 
   const renderLineChart = () => {
     if (symbol === "ETH") {
@@ -108,14 +146,34 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
               <Typography variant="body2"> {symbol}</Typography>
             )}
           </Box>
-          <Typography
+          <Box
             sx={{
-              marginTop: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              justifyContent: "center",
             }}
-            variant="body1"
           >
-            {ethers.utils.formatEther(amount)} {symbol}{" "}
-          </Typography>
+            <Typography
+              sx={{
+                marginTop: "1rem",
+                color: "white",
+              }}
+              variant="body1"
+            >
+              {ethers.utils.formatEther(amount)} {symbol}{" "}
+            </Typography>{" "}
+            <Typography
+              sx={{
+                color: "white",
+              }}
+              variant="body1"
+            >
+              {symbol === "ETH" && euroValueConverted ? (
+                <div>€{euroValueConverted}</div>
+              ) : null}
+            </Typography>
+          </Box>
         </Box>
         {/* line chart comes here */}
         <Box

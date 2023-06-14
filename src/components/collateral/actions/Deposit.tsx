@@ -17,6 +17,7 @@ import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther } from "viem";
 import { createWalletClient, custom } from "viem";
 import { sepolia } from "viem/chains";
+import { polygonMumbai } from "wagmi/chains";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -93,6 +94,7 @@ const Deposit = () => {
   //clipboard logic end
 
   const walletClient = createWalletClient({
+    //need to make this dynamic also
     chain: sepolia,
     transport: custom(window.ethereum),
   });
