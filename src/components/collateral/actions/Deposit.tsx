@@ -5,12 +5,12 @@ import {
   useVaultAddressStore,
   useTransactionHashStore,
   useCircularProgressStore,
+  useSnackBarStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
 // import smartVaultAbi from "../../../abis/smartVault";
 import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import CircularProgress from "@mui/material/CircularProgress";
 // import { useAccount } from "wagmi";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
@@ -37,29 +37,9 @@ const Deposit = () => {
   ///store
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
-  //local
-  const [snackbarValue, setSnackbarValue] = useState(0);
-
-  //snackbar config
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-
   const { getCircularProgress } = useCircularProgressStore();
 
-  const handleSnackbarClick = () => {
-    setSnackbarOpen(true);
-  };
-
-  const handleSnackbarClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackbarOpen(false);
-  };
-  //snackbar config end
+  const { getSnackBar } = useSnackBarStore();
 
   // const { address } = useAccount();
 
@@ -84,8 +64,8 @@ const Deposit = () => {
         .writeText(text)
         .then(() => {
           console.log("Text copied to clipboard:", text);
-          setSnackbarValue(0);
-          handleSnackbarClick();
+          getSnackBar(0);
+          //handleSnackbarClick();
         })
 
         .catch((error) => {
@@ -147,51 +127,16 @@ const Deposit = () => {
       getCircularProgress(true);
       await provider.waitForTransaction(_transactionHash);
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      setSnackbarValue(1);
-      handleSnackbarClick();
+      getSnackBar(0);
     } catch (error) {
       console.log(error);
       getCircularProgress(false);
-      setSnackbarValue(2);
-
-      handleSnackbarClick();
+      getSnackBar(1);
     }
   };
 
   return (
     <Box>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        {snackbarValue === 0 ? (
-          <Alert
-            onClose={handleSnackbarClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            <Box>Address copied to clipboard!</Box>
-          </Alert>
-        ) : snackbarValue === 1 ? (
-          <Alert
-            onClose={handleSnackbarClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            <Box>Transaction successful!</Box>
-          </Alert>
-        ) : (
-          <Alert
-            onClose={handleSnackbarClose}
-            severity="error"
-            sx={{ width: "100%" }}
-          >
-            <Box>There was an error!</Box>
-          </Alert>
-        )}
-      </Snackbar>
-
       <Box
         sx={{
           display: "flex",

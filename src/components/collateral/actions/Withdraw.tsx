@@ -10,17 +10,6 @@ import { Box } from "@mui/material";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
 import smartVaultAbi from "../../../abis/smartVault";
-import CircularProgress from "@mui/material/CircularProgress";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
-
-//for snackbar
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 interface WithdrawProps {
   symbol: string;

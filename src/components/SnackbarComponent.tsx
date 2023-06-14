@@ -60,7 +60,7 @@ const SnackbarComponent = () => {
         ) : snackBar === 1 ? (
           <Alert
             onClose={handleSnackbarClose}
-            severity="warning"
+            severity="error"
             sx={{ width: "100%" }}
           >
             <Box>There was an error!</Box>
