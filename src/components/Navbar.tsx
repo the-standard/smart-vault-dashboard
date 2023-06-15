@@ -84,25 +84,6 @@ const Navbar = () => {
         }}
       >
         <Menu width={"100%"} right styles={styles}>
-          {/* <a id="home" className="menu-item" href="/">
-            Home
-          </a>
-          <a id="about" className="menu-item" href="/about">
-            About
-          </a>
-          <a id="contact" className="menu-item" href="/contact">
-            Contact
-          </a> */}
-          {/* <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <Web3Button />
-          </Box> */}
           <Box
             sx={{
               display: { xs: "block", sm: "none" },
@@ -129,7 +110,7 @@ const Navbar = () => {
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-            width: { xs: "200px", sm: "400px" },
+            width: { xs: "200px", sm: "350px" },
             height: "100%",
           }}
         >
@@ -141,6 +122,8 @@ const Navbar = () => {
               height: "100%",
               marginRight: "1rem",
               margin: "36px 0",
+              position: "relative",
+              top: "1rem",
             }}
           />
         </Box>
@@ -155,10 +138,9 @@ const Navbar = () => {
         >
           <Box
             sx={{
-              display: { xs: "absolute", sm: "fixed" },
-              position: { xs: "absolute", sm: "static" },
+              position: "relative",
               float: "right",
-              top: "2.5rem",
+              top: { xs: "1rem", sm: "0.7rem" },
             }}
           >
             <Web3Button />
