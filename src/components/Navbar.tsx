@@ -87,7 +87,7 @@ const Navbar = () => {
           <a id="contact" className="menu-item" href="/contact">
             Contact
           </a> */}
-          <Box
+          {/* <Box
             sx={{
               width: "100%",
               display: "flex",
@@ -96,7 +96,7 @@ const Navbar = () => {
             }}
           >
             <Web3Button />
-          </Box>
+          </Box> */}
           <Box
             sx={{
               display: { xs: "block", sm: "none" },
@@ -123,7 +123,7 @@ const Navbar = () => {
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-            width: { xs: "1000px", sm: "400px" },
+            width: { xs: "200px", sm: "400px" },
             height: "100%",
           }}
         >
@@ -137,15 +137,6 @@ const Navbar = () => {
               margin: "36px 0",
             }}
           />
-          {/* <Typography
-            sx={{
-              // marginLeft: { xs: "5rem", sm: "5rem", lg: "5rem", xl: "5rem" },
-              margin: "36px 0",
-              fontSize: "1.5rem",
-            }}
-          >
-            TheStandard.io
-          </Typography> */}
         </Box>
         {/* title ends */}
         <Box
@@ -158,10 +149,10 @@ const Navbar = () => {
         >
           <Box
             sx={{
-              display: { xs: "none", sm: "fixed" },
+              display: { xs: "absolute", sm: "fixed" },
               position: { xs: "absolute", sm: "static" },
               float: "right",
-              right: { xs: "0", sm: "0", md: "0", lg: "0", xl: "0" },
+              top: "2.5rem",
             }}
           >
             <Web3Button />

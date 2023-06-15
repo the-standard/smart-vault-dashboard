@@ -55,7 +55,16 @@ function App() {
         </Routes>
         <Footer />
       </WagmiConfig>
-      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+      <Web3Modal
+        projectId={projectId}
+        ethereumClient={ethereumClient}
+        themeVariables={{
+          "--w3m-font-family": "Poppins, sans-serif",
+          "--w3m-container-border-radius": "10px",
+          "--w3m-text-medium-regular-size": "10px",
+          "--w3m-accent-color": "transparent",
+        }}
+      />
     </Box>
   );
 }

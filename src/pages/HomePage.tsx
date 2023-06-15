@@ -163,7 +163,8 @@ const HomePage = () => {
             width: "100%",
             gap: "2rem",
             marginRight: "1rem",
-            // border: "2px solid red",
+            marginTop: "1.5rem",
+            //border: "2px solid red",
           }}
           ref={rectangleRef}
         >
