@@ -211,8 +211,9 @@ const StepOne: React.FC<StepProps> = ({
               height: "1px",
               width: "100%",
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               alignItems: "center",
+              marginLeft: "1rem",
             }}
           >
             <div
@@ -359,8 +360,9 @@ const StepOne: React.FC<StepProps> = ({
               height: "1px",
               width: "100%",
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               alignItems: "center",
+              marginLeft: "1rem",
             }}
           >
             <div

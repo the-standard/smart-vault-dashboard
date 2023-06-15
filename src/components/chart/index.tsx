@@ -61,7 +61,7 @@ const Index = () => {
 
       setProgressValues([
         {
-          title: "Debt Minted",
+          title: "Debt outstanding",
           value: truncateToTwoDecimals(totalDebt),
           currency: "sEURO",
         },
@@ -154,12 +154,32 @@ const Index = () => {
       {loading ? (
         <Typography variant="body2">Loading...</Typography>
       ) : (
-        <ProgressBar
-          progressValue={computeProgressBar(
-            Number(ethers.BigNumber.from(chosenVault[5][0])),
-            Number(ethers.BigNumber.from(chosenVault[5][2]))
-          )}
-        />
+        <Box>
+          <Typography
+            sx={{
+              marginLeft: "5px",
+            }}
+            variant="body1"
+          >
+            How close you are to liquidation
+          </Typography>
+          <ProgressBar
+            progressValue={computeProgressBar(
+              Number(ethers.BigNumber.from(chosenVault[5][0])),
+              Number(ethers.BigNumber.from(chosenVault[5][2]))
+            )}
+          />
+          <Typography
+            sx={{
+              marginLeft: "5px",
+              float: "right",
+              marginRight: "5px",
+            }}
+            variant="body1"
+          >
+            Vault Liquidates at 100%
+          </Typography>
+        </Box>
       )}
     </Box>
   );

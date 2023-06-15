@@ -157,6 +157,8 @@ const Deposit = () => {
           {" "}
           <img
             style={{
+              height: "23px",
+
               marginRight: "1rem",
             }}
             src={QRicon}
@@ -197,7 +199,7 @@ const Deposit = () => {
               fontSize: "1rem",
               fontWeight: "normal",
               fontFamily: "Poppins",
-              height: "2rem",
+              height: "2.5rem",
               margin: "0.5rem",
               width: "100%",
               borderRadius: "10px",
@@ -213,14 +215,18 @@ const Deposit = () => {
               margin: "2px",
               padding: "10px",
               cursor: "pointer",
-              width: "2.5rem",
+              width: "2rem",
+              height: "1.3rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
             className="myBtn"
             onClick={depositViaMetamask}
           >
             {" "}
             <img
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "2rem", height: "auto" }}
               src={MetamaskIcon}
               alt="metamaskicon"
             />{" "}
