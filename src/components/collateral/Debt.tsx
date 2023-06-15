@@ -160,13 +160,17 @@ const Debt = () => {
       value: amount,
     },
   ];
-  const payDownValues = [
+  const repayValues = [
+    {
+      key: "Fixed interest %",
+      value: "0",
+    },
     {
       key: "Burn Fee (1%)",
       value: amount * 0.01,
     },
     {
-      key: "Actual pay down",
+      key: "Actual Repayment",
       value: amount + amount * 0.01,
     },
     {
@@ -225,7 +229,7 @@ const Debt = () => {
               }}
               variant="body1"
             >
-              sEURO minted:{" "}
+              sEURO outstanding:{" "}
             </Typography>
             <Typography variant="body1">
               {" "}
@@ -233,12 +237,6 @@ const Debt = () => {
             </Typography>
           </Box>
         </Box>
-        <Typography
-          variant="body1"
-          sx={{ margin: "1rem 0 0 5px", color: "#afafaf" }}
-        >
-          interest: fixed 0%
-        </Typography>
       </Box>
 
       <Box
@@ -265,7 +263,7 @@ const Debt = () => {
             alignItems: "center",
             cursor: "pointer",
             textAlign: "center",
-            borderRadius: "6.24932px",
+            borderRadius: "10px",
             marginLeft: "10px",
             border: "2px solid rgba(255, 255, 255, 0.2)",
             boxShadow:
@@ -305,8 +303,8 @@ const Debt = () => {
             "&.activeBtn": {
               background:
                 "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-              border: "2px solid white",
-              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
+              border: "1px solid white",
+              boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
             },
           }}
           className={activeElement === 1 ? "activeBtn" : ""}
@@ -327,7 +325,7 @@ const Debt = () => {
             alignItems: "center",
             cursor: "pointer",
             textAlign: "center",
-            borderRadius: "6.24932px",
+            borderRadius: "10px",
             marginLeft: "10px",
             border: "2px solid rgba(255, 255, 255, 0.2)",
             boxShadow:
@@ -367,61 +365,72 @@ const Debt = () => {
             "&.activeBtn": {
               background:
                 "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-              border: "2px solid white",
-              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
+              border: "1px solid white",
+              boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
             },
           }}
           className={activeElement === 2 ? "activeBtn" : ""}
           onClick={() => handleClick(2)}
         >
-          Pay back
+          Repay
         </Box>
       </Box>
       <Box
         sx={{
-          background: " rgba(18, 18, 18, 0.5)",
-          boxShadow:
-            " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          borderRadius: "6.24932px",
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
           marginTop: "1rem",
         }}
       >
-        {/* <TextField
-          id="outlined-basic"
-          label="sEuro amount"
-          variant="outlined"
-          onChange={handleAmount}
-          sx={{
-            color: "white !important",
-          }}
-        />{" "} */}
-        <input
-          style={{
-            background: " rgba(18, 18, 18, 0.5)",
-            border: "none",
-            color: "#afafaf",
-            fontSize: "1rem",
-            fontWeight: "normal",
-            width: "100%",
-            paddingLeft: "5px",
-          }}
-          placeholder="€ amount of sEURO to borrow"
-          type="text"
-          onChange={handleAmount}
-          autoFocus
-          ref={inputRef}
-        />
+        {activeElement === 1 ? (
+          <input
+            style={{
+              background: " rgba(18, 18, 18, 0.5)",
+              border: "1px solid #8E9BAE",
+              color: "white",
+              fontSize: "1rem",
+              fontWeight: "normal",
+              fontFamily: "Poppins",
+              height: "2rem",
+              margin: "0.5rem",
+              width: "100%",
+              borderRadius: "10px",
+              paddingLeft: "0.5rem",
+            }}
+            placeholder="Amount of sEURO to borrow"
+            type="text"
+            onChange={handleAmount}
+            autoFocus
+            ref={inputRef}
+          />
+        ) : (
+          <input
+            style={{
+              background: " rgba(18, 18, 18, 0.5)",
+              border: "1px solid #8E9BAE",
+              color: "white",
+              fontSize: "1rem",
+              fontWeight: "normal",
+              fontFamily: "Poppins",
+              height: "2rem",
+              margin: "0.5rem",
+              width: "100%",
+              borderRadius: "10px",
+              paddingLeft: "0.5rem",
+            }}
+            placeholder="Amount of sEURO you want to repay "
+            type="text"
+            onChange={handleAmount}
+            autoFocus
+            ref={inputRef}
+          />
+        )}
       </Box>
 
       <Box
         sx={{
-          background: " rgba(18, 18, 18, 0.5)",
-          boxShadow:
-            " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          borderRadius: "6.24932px",
+          borderRadius: "10px",
           padding: "1rem",
           marginTop: "1rem",
         }}
@@ -447,7 +456,7 @@ const Debt = () => {
                 <Typography variant="body1">{item.value}</Typography>
               </Box>
             ))
-          : payDownValues.map((item) => (
+          : repayValues.map((item) => (
               <Box
                 sx={{
                   display: "flex",
@@ -486,10 +495,8 @@ const Debt = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          background: " rgba(18, 18, 18, 0.5)",
-          boxShadow:
-            " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          borderRadius: "6.24932px",
+
+          borderRadius: "10px",
           // padding: "1%",
         }}
       >
@@ -506,7 +513,7 @@ const Debt = () => {
             alignItems: "center",
             cursor: "pointer",
             textAlign: "center",
-            borderRadius: "6.24932px",
+            borderRadius: "10px",
             marginLeft: "10px",
             border: "2px solid rgba(255, 255, 255, 0.2)",
             boxShadow:
@@ -546,13 +553,13 @@ const Debt = () => {
             "&.activeBtn": {
               background:
                 "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-              border: "2px solid white",
-              boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
+              border: "1px solid white",
+              boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
             },
           }}
           onClick={handleWithdraw}
         >
-          Withdraw
+          {activeElement === 1 ? "Withdraw" : "Repay"}
         </Box>
       </Box>
     </Box>
