@@ -12,6 +12,8 @@ body {
   font-family: "Poppins", sans-serif;
   overflow-y: scroll;
   color: white;
+  margin: 0;
+  padding: 0;
 }
 
 body:before {

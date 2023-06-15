@@ -59,6 +59,7 @@ const NavButton: React.FC<NavButtonProps> = ({
           cursor: "pointer",
           textDecoration: "none",
           transition: "all 0.3s ease",
+          background: { xs: "rgba(0, 0, 0, 0.2)", md: "none" },
           "&:hover": {
             background: "rgba(0, 0, 0, 0.4)",
             transform: "scale(1.1)",

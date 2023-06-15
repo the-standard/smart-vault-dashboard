@@ -41,13 +41,19 @@ const Navbar = () => {
     },
     bmMenu: {
       //background: "transparent",
-      padding: "2.5em 1.5em 0",
-      fontSize: "1.15em",
+      // padding: "2.5em 1.5em 0",
+      // fontSize: "1.15em",
+      // background:
+      //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+      // border: "1px solid rgba(52, 52, 52, 0.3)",
+      // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+      // borderRadius: "10px 10px 0px 0px",
       background:
         "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-      border: "1px solid rgba(52, 52, 52, 0.3)",
-      boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-      borderRadius: "10px 10px 0px 0px",
+      borderRadius: "10px",
+      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+      backdropFilter: "blur(13.9px)",
+      height: "100%",
     },
     bmMorphShape: {
       fill: "#373a47",
@@ -61,7 +67,7 @@ const Navbar = () => {
       display: "flex",
     },
     bmOverlay: {
-      background: "rgba(0, 0, 0, 0.7)",
+      background: "transparent",
     },
   };
 
@@ -77,7 +83,7 @@ const Navbar = () => {
           display: { xs: "block", md: "none" },
         }}
       >
-        <Menu styles={styles}>
+        <Menu width={"100%"} right styles={styles}>
           {/* <a id="home" className="menu-item" href="/">
             Home
           </a>

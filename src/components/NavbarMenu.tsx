@@ -59,20 +59,19 @@ const NavbarMenu = () => {
       sx={{
         display: { xs: "flex", md: "grid" },
         gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
-
         flexDirection: "column",
         marginTop: { xs: "20px", sm: "20px", md: "0px" },
-
-        height: { xs: "100%", sm: "100%" },
         alignItems: "center",
-        background: "rgba(0, 0, 0, 0.6)",
-        backdropFilter: "blur(10px)",
-        borderRadius: "10px",
-        // margin: "40px",
-        boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-        border: "1px solid rgba(255, 255, 255, 0.18)",
-        gridGap: "0",
-        overflow: "hidden",
+        background: { xs: "none", md: "rgba(0, 0, 0, 0.6)" },
+        // backdropFilter: "blur(10px)",
+        // borderRadius: "10px",
+        // // margin: "40px",
+        // boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+        // border: "1px solid rgba(255, 255, 255, 0.18)",
+        // gridGap: "0",
+        // overflow: "hidden",
+        width: "100%",
+        height: "100%",
       }}
     >
       {menuItems.map((item, index) => (
@@ -82,6 +81,9 @@ const NavbarMenu = () => {
             color: "white",
             width: "100%",
             overflow: "hidden",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           key={index}
           to={item.route ? `/${item.route}` : "/"}
