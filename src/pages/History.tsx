@@ -17,7 +17,6 @@ import { EvmChain } from "@moralisweb3/common-evm-utils";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
-  useChainIdStore,
 } from "../store/Store.ts";
 
 const runApp = async () => {
@@ -31,36 +30,23 @@ runApp();
 const History = () => {
   const [matchedTransactions, setMatchedTransactions] = useState<unknown[]>([]);
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { contractAddress, arbitrumContractAddress, sepoliaContractAddress } =
-    useContractAddressStore();
-  const { chainId } = useChainIdStore();
+  const { contractAddress } = useContractAddressStore();
   // const [userInput, setUserInput] = useState("");
 
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      chainId === 5
-        ? contractAddress
-        : chainId === 421613
-        ? arbitrumContractAddress
-        : chainId === 11155111
-        ? sepoliaContractAddress
-        : null,
+      contractAddress,
       vaultManagerAbi,
       signer
     );
     const vaults = await contract.vaults();
     console.log("vaults", vaults);
-    console.log(contract);
     // setMyVaults(vaults);
     getVaultTransactions(vaults);
     return vaults;
   };
-
-  useEffect(() => {
-    getVaults();
-  }, [chainId]);
 
   const getVaultTransactions = async (vaults: any) => {
     try {

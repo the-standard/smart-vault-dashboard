@@ -3,16 +3,6 @@ import vaultManagerAbi from "../abis/vaultManager.ts";
 import sEuroAbi from "../abis/testTokens/sEuro.ts";
 import ethtousdAbi from "../abis/priceFeeds/mumbai/ethtousd.ts";
 
-interface chainIdState {
-  chainId: number;
-  setChainId: (chainId: number) => void;
-}
-
-export const useChainIdStore = create<chainIdState>((set) => ({
-  chainId: 1,
-  setChainId: (chainId) => set(() => ({ chainId: chainId })),
-}));
-
 interface EthToUsdAbiState {
   ethToUsdAbi: Array<any>;
   getEthToUsdAbi: (ethToUsdAbi: Array<any>) => void;
@@ -38,15 +28,11 @@ export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
 
 interface sEuroAddressState {
   sEuroAddress: string;
-  arbitrumSEuroAddress: string;
-  sepoliaSEuroAddress: string;
   getsEuroAddress: (sEuroAddress: string) => void;
 }
 
 export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
   sEuroAddress: "0xf23F59316A2700D88F6F503B24aEE01118255645",
-  arbitrumSEuroAddress: "0x9C777AD2575010E3ED67F6E849cfE1115BFE2A50",
-  sepoliaSEuroAddress: "0xf23F59316A2700D88F6F503B24aEE01118255645",
   getsEuroAddress: (sEuroAddress) =>
     set(() => ({ sEuroAddress: sEuroAddress })),
 }));
@@ -61,31 +47,27 @@ export const usesEuroAbiStore = create<sEuroAbiState>()((set) => ({
   getsEuroAbi: (sEuroAbi) => set(() => ({ sEuroAbi: sEuroAbi })),
 }));
 
-//this is smart vault manager
 interface contractAddressState {
   contractAddress: any;
-  arbitrumContractAddress: any;
-  sepoliaContractAddress: any;
+  getContractAddress: (contractAddress: string) => void;
 }
-
-export const useContractAddressStore = create<contractAddressState>((set) => ({
-  contractAddress: "0xbF615e590EC00140d522A721251645c65642de58",
-  arbitrumContractAddress: "0x61276e74b9c3c9c1786B34087e44290bCFE3887c",
-  sepoliaContractAddress: "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
-}));
+//this is the smart vault manager, I need to change its name to it
+export const useContractAddressStore = create<contractAddressState>()(
+  (set) => ({
+    contractAddress: "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
+    getContractAddress: (contractAddress) =>
+      set(() => ({ contractAddress: contractAddress })),
+  })
+);
 
 interface TokenManagerAddressState {
   tokenManagerAddress: string;
-  arbitrumTokenManagerAddress: string;
-  sepoliaTokenManagerAddress: string;
   getTokenManagerAddress: (tokenManagerAddress: string) => void;
 }
 
 export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
   (set) => ({
     tokenManagerAddress: "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
-    arbitrumTokenManagerAddress: "0xd6F42e228d66173e5b97A1520e61Bb010D4294af",
-    sepoliaTokenManagerAddress: "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
     getTokenManagerAddress: (tokenManagerAddress) =>
       set(() => ({ tokenManagerAddress: tokenManagerAddress })),
   })

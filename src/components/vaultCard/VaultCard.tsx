@@ -5,7 +5,6 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { useEffect } from "react";
 import {
-  useChainIdStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
 } from "../../store/Store.ts";
@@ -36,10 +35,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
 }) => {
   //snackbar config
   const [open, setOpen] = React.useState(false);
-
-  const { chainId } = useChainIdStore();
-  const { contractAddress, arbitrumContractAddress, sepoliaContractAddress } =
-    useContractAddressStore();
+  const { contractAddress } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
 
   const handleClose = (
@@ -56,24 +52,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   //call mint function and mint a smart vault NFT
 
-  const returnContractAddress = () => {
-    if (chainId) {
-      if (chainId === 5) {
-        return contractAddress;
-      } else if (chainId === 421613) {
-        return arbitrumContractAddress;
-      } else if (chainId === 11155111) {
-        return sepoliaContractAddress;
-      }
-    }
-  };
-
-  useEffect(() => {
-    console.log("chainId", chainId);
-  }, [chainId]);
-
   const { config } = usePrepareContractWrite({
-    address: returnContractAddress(),
+    address: contractAddress,
     abi: vaultManagerAbi,
     functionName: "mint",
   });
