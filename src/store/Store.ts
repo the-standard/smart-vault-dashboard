@@ -38,11 +38,15 @@ export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
 
 interface sEuroAddressState {
   sEuroAddress: string;
+  arbitrumSEuroAddress: string;
+  sepoliaSEuroAddress: string;
   getsEuroAddress: (sEuroAddress: string) => void;
 }
 
 export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
   sEuroAddress: "0xf23F59316A2700D88F6F503B24aEE01118255645",
+  arbitrumSEuroAddress: "0x9C777AD2575010E3ED67F6E849cfE1115BFE2A50",
+  sepoliaSEuroAddress: "0xf23F59316A2700D88F6F503B24aEE01118255645",
   getsEuroAddress: (sEuroAddress) =>
     set(() => ({ sEuroAddress: sEuroAddress })),
 }));
@@ -72,12 +76,16 @@ export const useContractAddressStore = create<contractAddressState>((set) => ({
 
 interface TokenManagerAddressState {
   tokenManagerAddress: string;
+  arbitrumTokenManagerAddress: string;
+  sepoliaTokenManagerAddress: string;
   getTokenManagerAddress: (tokenManagerAddress: string) => void;
 }
 
 export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
   (set) => ({
     tokenManagerAddress: "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
+    arbitrumTokenManagerAddress: "0xd6F42e228d66173e5b97A1520e61Bb010D4294af",
+    sepoliaTokenManagerAddress: "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
     getTokenManagerAddress: (tokenManagerAddress) =>
       set(() => ({ tokenManagerAddress: tokenManagerAddress })),
   })

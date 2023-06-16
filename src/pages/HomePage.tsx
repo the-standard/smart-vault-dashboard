@@ -19,6 +19,7 @@ import {
   useVaultManagerAbiStore,
   useContractAddressStore,
   usePositionStore,
+  useChainIdStore,
 } from "../store/Store.ts";
 
 const items = [
@@ -59,7 +60,9 @@ const HomePage = () => {
   const { connector: isConnected } = useAccount();
   // const [loading, setLoading] = useState(true); // Add this line
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { contractAddress } = useContractAddressStore();
+  const { contractAddress, arbitrumContractAddress, sepoliaContractAddress } =
+    useContractAddressStore();
+  const { chainId } = useChainIdStore();
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
@@ -84,60 +87,29 @@ const HomePage = () => {
     }
   });
 
+  const returnContractAddress = () => {
+    if (chainId) {
+      if (chainId === 5) {
+        return contractAddress;
+      } else if (chainId === 421613) {
+        return arbitrumContractAddress;
+      } else if (chainId === 11155111) {
+        return sepoliaContractAddress;
+      }
+    }
+  };
+
   const getVaults = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      contractAddress,
+      returnContractAddress(),
       vaultManagerAbi,
       signer
     );
     const vaults = await contract.vaults();
     console.log("vaults", vaults);
     setMyVaults(vaults);
-    // const { vaultsStore, getVaultsStore } = useVaultsStore.getState();
-    // getVaultsStore(vaults);
-
-    // //token id
-    // console.log("token id " + ethers.BigNumber.from(vaults[0][0]).toNumber());
-    // //vault address
-    // console.log("vault address " + vaults[0][1]);
-    // //collateral rate
-    // console.log(
-    //   "collateral rate " + ethers.BigNumber.from(vaults[0][2]).toNumber()
-    // );
-    // //mint fee rate
-    // console.log(
-    //   "mint fee rate " + ethers.BigNumber.from(vaults[0][3]).toNumber()
-    // );
-    // //burn fee rate
-    // console.log(
-    //   "burn fee rate " + ethers.BigNumber.from(vaults[0][4]).toNumber()
-    // );
-    // //status
-    // //minted
-    // console.log(ethers.BigNumber.from(vaults[0][5][0]).toNumber());
-    // //maxmintable
-    // console.log(ethers.BigNumber.from(vaults[0][5][1]).toNumber());
-    // //current collateral percentage
-    // console.log(ethers.BigNumber.from(vaults[0][5][2]).toNumber());
-    // //Asset
-    // //bytes32 symbol - 32-byte array representation of the coin/token symbol
-    // console.log(ethers.utils.parseBytes32String(vaults[0][5][3][0][0]));
-    // //uint256 amount - amount of coin/token held within Smart Vault
-    // console.log(ethers.BigNumber.from(vaults[0][5][3][0][1]).toNumber()); //bytes32 symbol - 32-byte array representation of the coin/token symbol
-    // console.log(ethers.utils.parseBytes32String(vaults[0][5][3][1][0]));
-    // //uint256 amount - amount of coin/token held within Smart Vault
-    // console.log(ethers.BigNumber.from(vaults[0][5][3][1][1]).toNumber());
-    // console.log(ethers.utils.parseBytes32String(vaults[0][5][3][2][0]));
-    // //uint256 amount - amount of coin/token held within Smart Vault
-    // console.log(ethers.BigNumber.from(vaults[0][5][3][2][1]).toNumber());
-    // //bool liquidated - indicates if current Smart Vault has been liquidated (and therefore disabled)
-    // console.log(vaults[0][5][4]);
-    // //uint8 version - version number of Smart Vault
-    // console.log(ethers.BigNumber.from(vaults[0][5][5]).toNumber());
-    // //bytes32 vaultType - 32-byte array representation of the stablecoin which can be borrowed from the Smart Vault e.g. "sEURO"
-    // console.log(ethers.utils.parseBytes32String(vaults[0][5][6]));
   };
 
   useEffect(() => {
@@ -145,6 +117,10 @@ const HomePage = () => {
       getVaults();
     }
   }, [isConnected]);
+
+  useEffect(() => {
+    console.log("chainId", chainId);
+  }, [chainId]);
 
   return (
     <Box>
