@@ -5,10 +5,26 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createConfig, sepolia, WagmiConfig } from "wagmi";
-import { goerli, mainnet, polygonMumbai } from "wagmi/chains";
+import {
+  arbitrum,
+  arbitrumGoerli,
+  goerli,
+  mainnet,
+  polygonMumbai,
+} from "wagmi/chains";
 
-const chains = [mainnet, goerli, sepolia, polygonMumbai];
+const chains = [
+  mainnet,
+  goerli,
+  sepolia,
+  polygonMumbai,
+  arbitrumGoerli,
+  arbitrum,
+];
+//move this to .env if you want
 const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";
+//chain id state
+import { useChainIdStore } from "./store/Store.ts";
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 const wagmiConfig = createConfig({
@@ -29,9 +45,47 @@ import CircularProgressComponent from "./components/CircularProgressComponent.ts
 import { useCircularProgressStore } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 
+// import { arbitrumGoerli } from "viem/chains";
+import { fromHex } from "viem";
+import { useEffect, useState } from "react";
+
+// const walletClient = createWalletClient({
+//   transport: custom(window.ethereum),
+// });
+
 function App() {
   const { circularProgress } = useCircularProgressStore();
   console.log(circularProgress);
+  const { chainId, setChainId } = useChainIdStore();
+
+  // const [localChainId, setLocalChainId] = useState<any>();
+  console.log(chainId);
+
+  useEffect(() => {
+    if (window.ethereum) {
+      const handleChainChanged = (newChainId: any) => {
+        // setLocalChainId(fromHex(newChainId, "number"));
+        setChainId(fromHex(newChainId, "number"));
+      };
+
+      window.ethereum.on("chainChanged", handleChainChanged);
+
+      // Cleanup function to remove the event listener when the component is unmounted
+      return () => {
+        window.ethereum.removeListener("chainChanged", handleChainChanged);
+      };
+    }
+  }, []);
+
+  const fetchDataBasedOnChainId = async () => {
+    // fetch data or perform actions based on the current chainId
+  };
+
+  useEffect(() => {
+    if (chainId) {
+      fetchDataBasedOnChainId();
+    }
+  }, [chainId]);
 
   return (
     <Box
