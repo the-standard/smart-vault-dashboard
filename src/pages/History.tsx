@@ -31,7 +31,7 @@ runApp();
 const History = () => {
   const [matchedTransactions, setMatchedTransactions] = useState<unknown[]>([]);
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { contractAddress, arbitrumContractAddress } =
+  const { contractAddress, arbitrumContractAddress, sepoliaContractAddress } =
     useContractAddressStore();
   const { chainId } = useChainIdStore();
   // const [userInput, setUserInput] = useState("");
@@ -44,6 +44,8 @@ const History = () => {
         ? contractAddress
         : chainId === 421613
         ? arbitrumContractAddress
+        : chainId === 11155111
+        ? sepoliaContractAddress
         : null,
       vaultManagerAbi,
       signer

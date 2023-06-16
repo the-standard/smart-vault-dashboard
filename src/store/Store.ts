@@ -57,20 +57,17 @@ export const usesEuroAbiStore = create<sEuroAbiState>()((set) => ({
   getsEuroAbi: (sEuroAbi) => set(() => ({ sEuroAbi: sEuroAbi })),
 }));
 
+//this is smart vault manager
 interface contractAddressState {
   contractAddress: any;
   arbitrumContractAddress: any;
-  getContractAddress: (contractAddress: string) => void;
-  getArbitrumContractAddress: (arbitrumContractAddress: string) => void;
+  sepoliaContractAddress: any;
 }
 
 export const useContractAddressStore = create<contractAddressState>((set) => ({
   contractAddress: "0xbF615e590EC00140d522A721251645c65642de58",
   arbitrumContractAddress: "0x61276e74b9c3c9c1786B34087e44290bCFE3887c",
-  getContractAddress: (contractAddress) =>
-    set(() => ({ contractAddress: contractAddress })),
-  getArbitrumContractAddress: (arbitrumContractAddress) =>
-    set(() => ({ arbitrumContractAddress: arbitrumContractAddress })),
+  sepoliaContractAddress: "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
 }));
 
 interface TokenManagerAddressState {
