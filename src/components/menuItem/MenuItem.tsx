@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Button } from "@mui/material";
+import "../../styles/navbarStyle.css";
 
 interface NavButtonProps {
   text: string;
@@ -33,14 +34,31 @@ const NavButton: React.FC<NavButtonProps> = ({
         position: "relative",
         overflow: "hidden",
         borderRadius: "10px",
-        "&:hover": {
-          background: "rgba(0, 0, 0, 0.4)",
-          transform: "scale(1.2)",
-          boxShadow: "0 10px 20px rgba(0, 0, 0, 0.5)",
-          borderRadius: "10px",
-        },
+
+        // "&:hover": {
+        //   background: "rgba(0, 0, 0, 0.4)",
+        //   transform: "scale(1.1)",
+        //   boxShadow: "0 10px 20px rgba(0, 0, 0, 0.5)",
+        //   borderRadius: "10px",
+        // },
+        // "&::before": {
+        //   content: '""',
+        //   position: "absolute",
+        //   background: "rgba(255, 255, 255, 0.2)",
+        //   width: "50%",
+        //   height: "100%",
+        //   left: "-100%",
+        //   top: 0,
+        //   transform: "skewX(-45deg)",
+        //   transition: "left 0.4s ease",
+        //   pointerEvents: "none",
+        // },
+        // "&:hover::before": {
+        //   left: "130%",
+        // },
       }}
       onClick={handleClick}
+      className="nav-button"
     >
       <Box
         sx={{
@@ -53,34 +71,13 @@ const NavButton: React.FC<NavButtonProps> = ({
           fontFamily: "Poppins",
           fontWeight: 200,
           color: " #afafaf",
-          position: "relative",
-          overflow: "hidden",
-          borderRadius: "0",
-          cursor: "pointer",
-          textDecoration: "none",
-          transition: "all 0.3s ease",
-          background: { xs: "rgba(0, 0, 0, 0.2)", md: "none" },
-          "&:hover": {
-            background: "rgba(0, 0, 0, 0.4)",
-            transform: "scale(1.1)",
-            boxShadow: "0 10px 20px rgba(0, 0, 0, 0.5)",
-            borderRadius: "10px",
-          },
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            background: "rgba(255, 255, 255, 0.2)",
-            width: "50%",
-            height: "100%",
-            left: "-100%",
-            top: 0,
-            transform: "skewX(-45deg)",
-            transition: "left 0.4s ease",
-            pointerEvents: "none",
-          },
-          "&:hover::before": {
-            left: "130%",
-          },
+          // position: "relative",
+          // overflow: "hidden",
+          // borderRadius: "0",
+          // cursor: "pointer",
+          // textDecoration: "none",
+          // transition: "all 0.3s ease",
+          // background: { xs: "rgba(0, 0, 0, 0.2)", md: "none" },
         }}
       >
         {text}

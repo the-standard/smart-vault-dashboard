@@ -50,6 +50,7 @@ const menuItems = [
 
 const NavbarMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+
   const handleItemClick = (index: number) => {
     setActiveIndex(index);
   };
@@ -63,8 +64,8 @@ const NavbarMenu = () => {
         marginTop: { xs: "20px", sm: "20px", md: "0px" },
         alignItems: "center",
         background: { xs: "none", md: "rgba(0, 0, 0, 0.6)" },
-        // backdropFilter: "blur(10px)",
-        // borderRadius: "10px",
+        backdropFilter: "blur(10px)",
+        borderRadius: "10px",
         // // margin: "40px",
         // boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
         // border: "1px solid rgba(255, 255, 255, 0.18)",
@@ -73,6 +74,7 @@ const NavbarMenu = () => {
         width: "100%",
         height: "100%",
       }}
+      className="navbar"
     >
       {menuItems.map((item, index) => (
         <Link
@@ -84,6 +86,7 @@ const NavbarMenu = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            borderRadius: "10px",
           }}
           key={index}
           to={item.route ? `/${item.route}` : "/"}

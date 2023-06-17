@@ -148,6 +148,10 @@ const Debt = () => {
       value: shortenedAddress,
     },
     {
+      key: "Fixed interest %",
+      value: "0",
+    },
+    {
       key: "Minting Fee (1%)",
       value: amount * 0.01,
     },
@@ -171,11 +175,11 @@ const Debt = () => {
     },
     {
       key: "Actual Repayment",
-      value: amount + amount * 0.01,
+      value: amount,
     },
     {
       key: "Send",
-      value: amount,
+      value: amount + amount * 0.01,
     },
   ];
 
@@ -433,6 +437,7 @@ const Debt = () => {
           borderRadius: "10px",
           padding: "1rem",
           marginTop: "1rem",
+          marginBottom: activeElement !== 1 ? "1.5rem" : "0",
         }}
       >
         {activeElement === 1
