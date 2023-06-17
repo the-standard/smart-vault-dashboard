@@ -1,4 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 // import CircularProgress from "@mui/material/CircularProgress";
 import { useRef, useState } from "react";
@@ -48,6 +51,12 @@ const Debt = () => {
   const signer = provider.getSigner();
   const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
 
+  //modal
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [modalStep, setModalStep] = useState(1);
+
   const borrowMoney = async () => {
     let transactionResponse; // Declare a variable to hold the transaction response
     console.log(parseEther(amount.toString()));
@@ -70,24 +79,42 @@ const Debt = () => {
     }
   };
 
+  const sEuroContract = new ethers.Contract(sEuroAddress, sEuroAbi, signer);
+
+  const approvePayment = async () => {
+    console.log(vaultAddress);
+    console.log(amount.toString());
+    const sEuroFee: any = (amount * 0.01).toString();
+    console.log(parseEther(sEuroFee));
+    handleOpen();
+
+    try {
+      // Approve the transfer of the fee amount
+      const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
+      const transactionResponse = await sEuroContract.approve(
+        vaultAddress,
+        feeAmount
+      );
+      const transactionHash = transactionResponse.hash;
+      console.log("Transaction Hash:", transactionHash);
+      console.log("confirming transaction " + transactionHash.confirmations);
+      getTransactionHash(transactionHash);
+      waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+      //call repayMoney function
+      repayMoney();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const repayMoney = async () => {
     //let transactionResponse; // Declare a variable to hold the transaction response
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     // const signer = provider.getSigner();
     // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
-    console.log(vaultAddress);
-    console.log(amount.toString());
-    const sEuroFee: any = (amount * 0.01).toString();
-    console.log(parseEther(sEuroFee));
-
-    const signer = provider.getSigner();
-    const sEuroContract = new ethers.Contract(sEuroAddress, sEuroAbi, signer);
+    setModalStep(2);
 
     try {
-      // Approve the transfer of the fee amount
-      const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
-      await sEuroContract.approve(vaultAddress, feeAmount);
-
       const transactionResponse = await contract.burn(
         parseEther(amount.toString())
       );
@@ -96,8 +123,11 @@ const Debt = () => {
       console.log("confirming transaction " + transactionHash.confirmations);
       getTransactionHash(transactionHash);
       waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+      handleClose();
+      setModalStep(1);
     } catch (error) {
       console.log(error);
+      setModalStep(1);
     }
   };
 
@@ -107,7 +137,7 @@ const Debt = () => {
       borrowMoney();
     } else {
       console.log("paydown");
-      repayMoney();
+      approvePayment();
     }
   };
 
@@ -567,6 +597,139 @@ const Debt = () => {
           {activeElement === 1 ? "Withdraw" : "Repay"}
         </Box>
       </Box>
+      <div>
+        <Button onClick={handleOpen}>Open modal</Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(13.9px)",
+              WebkitBackdropFilter: "blur(13.9px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "10px ",
+            }}
+          >
+            {modalStep === 1 ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "500px",
+                }}
+              >
+                {/* stepper starts */}
+                <Box
+                  sx={{
+                    width: "100%",
+                    //  border: "1px solid #ffffff",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "40%",
+                      // border: "3px solid red",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: "2.5rem",
+                        height: "1.5rem",
+                        borderRadius: "50%",
+                        background: "#00ac11",
+                        boxShadow: "0 0 10px 5px rgba(0, 172, 17, 0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "0.2rem",
+                      }}
+                    >
+                      1
+                    </Box>{" "}
+                    <Box
+                      sx={{
+                        width: "15rem",
+                        height: "0.3rem",
+                        borderRadius: "0px",
+                        background:
+                          "linear-gradient(90deg, #00ac11 0%, #00ac11 20%, rgba(0,0,255,0) 40%)",
+                        boxShadow: "0 1px 1px -1px gray",
+                      }}
+                    ></Box>
+                    <Box
+                      sx={{
+                        width: "2.5rem",
+                        height: "1.5rem",
+                        borderRadius: "50%",
+                        //  border: "0.2px solid white",
+                        background: "black",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "0.2rem",
+                      }}
+                    >
+                      2
+                    </Box>
+                  </Box>
+                </Box>
+                {/* stepper ends */}
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Authorize Your SEURO Spending Cap
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  Set a spending cap for the SEURO tokens in your wallet. This
+                  security feature ensures you control the maximum our
+                  application can use for the fees.
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  We recommend setting your cap to [Recommended Amount].
+                </Typography>{" "}
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  Follow the prompts in your wallet to set your cap.{" "}
+                </Typography>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "500px",
+                }}
+              >
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Confirm Your Loan Repayment
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  The funds will repay your loan and the small fee will support
+                  the DAO (TST stakers).
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </Modal>
+      </div>
     </Box>
   );
 };

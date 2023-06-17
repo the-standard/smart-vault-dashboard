@@ -82,7 +82,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
             fontSize: "1rem",
           }}
         >
-          {percentage}%
+          {Number.isNaN(percentage) ? "0.00" : percentage}%
         </Box>
       </Box>
     </Box>
