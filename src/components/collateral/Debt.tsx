@@ -20,6 +20,7 @@ import {
   useSnackBarStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
+import CheckIcon from "@mui/icons-material/Check";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
@@ -598,7 +599,7 @@ const Debt = () => {
         </Box>
       </Box>
       <div>
-        <Button onClick={handleOpen}>Open modal</Button>
+        {/* <Button onClick={handleOpen}>Open modal</Button> */}
         <Modal
           open={open}
           onClose={handleClose}
@@ -727,7 +728,14 @@ const Debt = () => {
                   </Box>
                 </Box>
                 {/* stepper ends */}
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                <Typography
+                  sx={{
+                    fontWeight: "600",
+                  }}
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
                   Authorize Your SEURO Spending Cap
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -736,7 +744,7 @@ const Debt = () => {
                   application can use for the fees.
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  We recommend setting your cap to [Recommended Amount].
+                  We recommend setting your cap to {amount}.
                 </Typography>{" "}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   Follow the prompts in your wallet to set your cap.{" "}
@@ -752,10 +760,115 @@ const Debt = () => {
                   width: "500px",
                 }}
               >
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                {/* stepper starts */}
+                <Box
+                  sx={{
+                    width: "100%",
+                    //  border: "1px solid #ffffff",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "40%",
+                      // border: "3px solid red",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: { xs: "3.5rem", md: "2.5rem" },
+                        height: "1.5rem",
+                        borderRadius: "50%",
+                        background: "#00ac11",
+                        boxShadow: "0 0 10px 5px rgba(0, 172, 17, 0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "0.2rem",
+                      }}
+                    >
+                      <CheckIcon />
+                    </Box>{" "}
+                    <Box
+                      sx={{
+                        width: "15rem",
+                        height: "0.3rem",
+                        borderRadius: "0px",
+                        background:
+                          "linear-gradient(90deg, #00ac11 0%, #00ac11 100%, rgba(0,0,255,0) 100%)",
+                        boxShadow: "0 1px 1px -1px gray",
+                      }}
+                    ></Box>
+                    <Box
+                      sx={{
+                        width: { xs: "3.5rem", md: "2.5rem" },
+                        height: "1.5rem",
+                        borderRadius: "50%",
+                        background: "#00ac11",
+                        boxShadow: "0 0 10px 5px rgba(0, 172, 17, 0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "0.2rem",
+                      }}
+                    >
+                      2
+                    </Box>
+                  </Box>
+                  {/* stepper bottom texts */}
+                  <Box
+                    sx={{
+                      width: "45%",
+                      //    border: "3px solid red",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginTop: "0.5rem",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#ffffff",
+                        fontSize: "0.8rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Authorize
+                    </Typography>{" "}
+                    <Typography
+                      sx={{
+                        color: "#ffffff",
+                        fontSize: "0.8rem",
+                        fontWeight: "500",
+                        marginRight: { xs: "0px", md: "0.8rem" },
+                      }}
+                    >
+                      Send
+                    </Typography>
+                  </Box>
+                </Box>
+                {/* stepper ends */}
+                <Typography
+                  sx={{
+                    fontWeight: "600",
+                  }}
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
                   Confirm Your Loan Repayment
                 </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <Typography
+                  id="modal-modal-description"
+                  sx={{ mt: 2, textAlign: "center" }}
+                >
                   The funds will repay your loan and the small fee will support
                   the DAO (TST stakers).
                 </Typography>
