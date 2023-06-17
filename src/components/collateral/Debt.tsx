@@ -619,6 +619,7 @@ const Debt = () => {
               WebkitBackdropFilter: "blur(13.9px)",
               border: "1px solid rgba(255, 255, 255, 0.3)",
               borderRadius: "10px ",
+              padding: "2rem",
             }}
           >
             {modalStep === 1 ? (
@@ -628,7 +629,7 @@ const Debt = () => {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "500px",
+                  width: { xs: "350px", md: "500px" },
                 }}
               >
                 {/* stepper starts */}
@@ -637,8 +638,10 @@ const Debt = () => {
                     width: "100%",
                     //  border: "1px solid #ffffff",
                     display: "flex",
+                    flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
+                    marginBottom: "1rem",
                   }}
                 >
                   <Box
@@ -652,7 +655,7 @@ const Debt = () => {
                   >
                     <Box
                       sx={{
-                        width: "2.5rem",
+                        width: { xs: "3.5rem", md: "2.5rem" },
                         height: "1.5rem",
                         borderRadius: "50%",
                         background: "#00ac11",
@@ -690,6 +693,37 @@ const Debt = () => {
                     >
                       2
                     </Box>
+                  </Box>
+                  {/* stepper bottom texts */}
+                  <Box
+                    sx={{
+                      width: "45%",
+                      //    border: "3px solid red",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginTop: "0.5rem",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#ffffff",
+                        fontSize: "0.8rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Authorize
+                    </Typography>{" "}
+                    <Typography
+                      sx={{
+                        color: "#ffffff",
+                        fontSize: "0.8rem",
+                        fontWeight: "500",
+                        marginRight: { xs: "0px", md: "0.8rem" },
+                      }}
+                    >
+                      Send
+                    </Typography>
                   </Box>
                 </Box>
                 {/* stepper ends */}
