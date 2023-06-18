@@ -51,7 +51,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="history" element={<History />} />
-          <Route path="collateral" element={<Collateral />} />
+          <Route path="collateral/:vaultId" element={<Collateral />} />
         </Routes>
         <Footer />
       </WagmiConfig>

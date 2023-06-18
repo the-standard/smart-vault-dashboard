@@ -37,6 +37,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   //store values
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { contractAddress } = useContractAddressStore();
+  const { getVaultID, vaultID } = useVaultIdStore();
   //modal state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -160,7 +161,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     const handleManageClick = () => {
       console.log(params.vaultID);
       setModalChildState(params.vaultID);
-      const { getVaultID } = useVaultIdStore.getState();
       getVaultID(params.vaultID);
     };
 
@@ -180,7 +180,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             alignItems: "center",
             justifyContent: "center",
           }}
-          to="Collateral"
+          to={`Collateral/${params.vaultID}`}
           onClick={handleManageClick}
         >
           <Button
