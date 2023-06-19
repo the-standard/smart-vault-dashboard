@@ -9,6 +9,8 @@ import { Seaport } from "@opensea/seaport-js";
 // import { ItemType } from "@opensea/seaport-js/lib/constants";
 // import axios from "axios";
 import { useAccount } from "wagmi";
+import { OpenSeaSDK, Chain } from "opensea-js";
+import { OpenSeaAsset, TokenStandard } from "opensea-js/lib/types";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,7 +39,44 @@ const StepTwo: React.FC<StepProps> = ({
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
-  console.log(signer);
+  // console.log(signer);
+
+  // This example provider won't let you make transactions, only read-only calls:
+  // const provider = new ethers.providers.JsonRpcProvider(
+  //   "https://mainnet.infura.io"
+  // );
+
+  const openseaSDK = new OpenSeaSDK(provider, {
+    chain: Chain.Goerli,
+    // apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
+  });
+
+  console.log(openseaSDK);
+
+  // Expire this auction one day from now.
+  // Note that we convert from the JavaScript timestamp (milliseconds):
+
+  const tokenId: any = "7";
+  const tokenAddress = "0xbf615e590ec00140d522a721251645c65642de58";
+  const accountAddress = "0x600044FE9A152C27f337BbB23803dC6A68E3eFB0";
+
+  const listmyNft = async () => {
+    try {
+      const listing = await openseaSDK.createSellOrder({
+        asset: {
+          tokenId,
+          tokenAddress,
+        },
+        accountAddress,
+        startAmount: 3,
+        // If `endAmount` is specified, the order will decline in value to that amount until `expirationTime`. Otherwise, it's a fixed-price order:
+        endAmount: 0.1,
+      });
+      console.log(listing);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const seaport = new Seaport(signer, { seaportVersion: "1.4" }); //console.log(seaport);
   // const [myPrices, setMyPrices] = React.useState<object[]>([]);
@@ -210,6 +249,7 @@ const StepTwo: React.FC<StepProps> = ({
   };
   return (
     <Box sx={{ color: "white" }}>
+      <button onClick={listmyNft}>List</button>
       <Box sx={{}}>
         <img style={{}} src={tokenMap.get(modalChildState).image} alt="NFT" />
       </Box>{" "}
