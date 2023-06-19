@@ -54,7 +54,7 @@ const History = () => {
         vaults.map(async (vault: any) => {
           const vaultTransactions =
             await Moralis.EvmApi.transaction.getWalletTransactions({
-              chain: EvmChain.SEPOLIA,
+              chain: EvmChain.GOERLI,
               address: vault[1],
             });
           return vaultTransactions.raw.result;
