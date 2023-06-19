@@ -21,6 +21,9 @@ const StepOne: React.FC<StepProps> = ({
     const data = 2;
     onDataFromChild(data);
   }
+
+  console.log(tokenMap);
+  console.log(modalChildState);
   return (
     <Box sx={{}}>
       <Box sx={{}}>

@@ -13,6 +13,7 @@ import {
   useVaultIdStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
+  useVaultForListingStore,
 } from "../../store/Store.ts";
 import {
   Button,
@@ -38,6 +39,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { contractAddress } = useContractAddressStore();
   const { getVaultID } = useVaultIdStore();
+  const { getVaultForListing } = useVaultForListingStore();
   //modal state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -162,6 +164,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       console.log(params.vaultID);
       setModalChildState(params.vaultID);
       getVaultID(params.vaultID);
+      getVaultForListing(params.smartVault);
+      console.log("vault", params.smartVault);
     };
 
     return (
@@ -352,6 +356,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       {" "}
                       {renderActions({
                         vaultID: ethers.BigNumber.from(vault[0]).toString(),
+                        smartVault: vault,
                       })}
                     </td>
                   </tr>
@@ -419,6 +424,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       {" "}
                       {renderActions({
                         vaultID: ethers.BigNumber.from(vault[0]).toString(),
+                        smartVault: vault,
                       })}
                     </td>
                   </tr>
@@ -499,6 +505,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       {" "}
                       {renderActions({
                         vaultID: ethers.BigNumber.from(vault[0]).toString(),
+                        smartVault: vault,
                       })}
                     </td>
                   </tr>

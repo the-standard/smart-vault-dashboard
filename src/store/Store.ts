@@ -215,3 +215,13 @@ export const useSnackBarStore = create<SnackBarState>((set) => ({
   snackBar: 55,
   getSnackBar: (snackBar) => set({ snackBar }),
 }));
+
+interface VaultForListingState {
+  vaultForListing: Array<unknown>;
+  getVaultForListing: (vaultForListing: Array<unknown>) => void;
+}
+
+export const useVaultForListingStore = create<VaultForListingState>((set) => ({
+  vaultForListing: [],
+  getVaultForListing: (vaultForListing) => set({ vaultForListing }),
+}));
