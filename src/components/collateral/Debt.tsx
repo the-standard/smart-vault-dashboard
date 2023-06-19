@@ -25,13 +25,13 @@ const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
   const { address } = useAccount();
   const [amount, setAmount] = useState<any>(0);
-  const { vaultAddress } = useVaultAddressStore.getState();
+  const { vaultAddress } = useVaultAddressStore();
   const { vaultStore }: any = useVaultStore();
-  const { sEuroAddress } = usesEuroAddressStore.getState();
-  const { sEuroAbi } = usesEuroAbiStore.getState();
-  const { getTransactionHash } = useTransactionHashStore.getState();
+  const { sEuroAddress } = usesEuroAddressStore();
+  const { sEuroAbi } = usesEuroAbiStore();
+  const { getTransactionHash } = useTransactionHashStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
-  const { getCircularProgress } = useCircularProgressStore();
+  const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { getSnackBar } = useSnackBarStore();
 
   const debtValue: any = ethers.BigNumber.from(vaultStore[5][0]);
@@ -58,6 +58,7 @@ const Debt = () => {
   const [modalStep, setModalStep] = useState(1);
 
   const borrowMoney = async () => {
+    getProgressType(1);
     let transactionResponse; // Declare a variable to hold the transaction response
     console.log(parseEther(amount.toString()));
     console.log(ethers.BigNumber.from(amount));
@@ -112,6 +113,8 @@ const Debt = () => {
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     // const signer = provider.getSigner();
     // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+    getProgressType(2);
+
     setModalStep(2);
 
     try {

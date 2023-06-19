@@ -23,9 +23,16 @@ import Debt from "../components/collateral/Debt.tsx";
 import "../styles/buttonStyle.css";
 import { formatEther, fromHex } from "viem";
 import ChartComponent from "../components/chart/index.tsx";
+import { useParams } from "react-router-dom";
+
+type RouteParams = {
+  vaultId: string;
+};
 
 const Collateral = () => {
-  const { vaultID } = useVaultIdStore();
+  // const { getVaultID } = useVaultIdStore();
+  const { vaultId } = useParams<RouteParams>();
+  console.log(vaultId);
   const { getVaultAddress } = useVaultAddressStore();
   const { getVaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();
@@ -124,9 +131,9 @@ const Collateral = () => {
     vaults.map((vault: any) => {
       const tokenId = ethers.BigNumber.from(vault[0]);
       console.log(vault);
-      console.log(vaultID);
+      console.log(vaultId);
       console.log(tokenId);
-      if (Number(tokenId) === Number(vaultID)) {
+      if (Number(tokenId) === Number(vaultId)) {
         console.log("found");
         console.log(vault);
         console.log(vault[5][3]);
@@ -166,7 +173,7 @@ const Collateral = () => {
   };
 
   useEffect(() => {
-    console.log(vaultID + "my vault");
+    console.log(vaultId + "my vault");
     // returntokens();
     returnAcceptedTokensList();
     // console.log(tokenmanagerabi);
@@ -237,8 +244,9 @@ const Collateral = () => {
   }, [localVault]);
 
   useEffect(() => {
-    console.log(vaultID + "my vault update");
+    console.log(vaultId + "my vault update");
   }, []);
+
   return (
     <Box
       sx={{
@@ -442,7 +450,7 @@ const Collateral = () => {
                 color: "#afafaf",
               }}
             >
-              sEuro Smart Vault #{vaultID}
+              sEuro Smart Vault #{vaultId}
             </Box>
           </Box>
         </Box>

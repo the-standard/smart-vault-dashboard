@@ -30,7 +30,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   //snackbar config
   const { getSnackBar } = useSnackBarStore();
 
-  const { getCircularProgress } = useCircularProgressStore();
+  const { getCircularProgress, getProgressType } = useCircularProgressStore();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -78,6 +78,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
 
   const waitForTransaction = async (_transactionHash: string) => {
     try {
+      getProgressType(1);
       getCircularProgress(true); // Set getCircularProgress to true before waiting for the transaction
       await provider.waitForTransaction(_transactionHash);
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
