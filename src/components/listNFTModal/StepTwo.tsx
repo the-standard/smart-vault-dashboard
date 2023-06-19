@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -15,7 +15,9 @@ import {
   useVaultForListingStore,
   useContractAddressStore,
 } from "../../store/Store";
-import { fromHex } from "viem";
+import { fromHex, parseEther } from "viem";
+import { getETHPrice } from "../../utils/getETHPrice";
+import axios from "axios";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,6 +38,7 @@ const StepTwo: React.FC<StepProps> = ({
   const { contractAddress } = useContractAddressStore();
 
   const [userInput, setUserInput] = useState<string>("");
+  const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
 
   console.log(onDataFromChild);
   console.log(modalChildState);
@@ -64,6 +67,32 @@ const StepTwo: React.FC<StepProps> = ({
   console.log(tokenAddress);
   console.log(tokenId);
 
+  const convertUsdToEuro = async () => {
+    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
+    try {
+      const usdPrice = await getETHPrice();
+      console.log(usdPrice);
+
+      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+
+      const getUsdToEuro = await axios.get(apiUrl);
+
+      const euroPrice = getUsdToEuro.data.data.EUR;
+      console.log(euroPrice);
+      console.log(usdPrice);
+
+      const usdToEuro = usdPrice * euroPrice;
+
+      console.log(usdToEuro);
+      console.log(userInput);
+      console.log((usdToEuro * Number(userInput)).toFixed(2));
+      setEuroValueConverted((usdToEuro * Number(userInput)).toFixed(2));
+      return usdToEuro.toFixed(2);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const listSmartVault = async () => {
     try {
       const listing = await openseaSDK.createSellOrder({
@@ -80,6 +109,16 @@ const StepTwo: React.FC<StepProps> = ({
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    console.log(userInput);
+    convertUsdToEuro();
+    console.log(euroValueConverted);
+  }, [userInput]);
+
+  useEffect(() => {
+    userInput ? convertUsdToEuro() : null;
+  }, []);
 
   return (
     <Box sx={{ color: "white" }}>
@@ -276,7 +315,7 @@ const StepTwo: React.FC<StepProps> = ({
                 borderBottom: "1px solid #8E9BAE",
                 paddingLeft: "5px",
               }}
-              onClick={(e: any) => {
+              onChange={(e: any) => {
                 setUserInput(e.target.value);
               }}
             />
@@ -293,7 +332,7 @@ const StepTwo: React.FC<StepProps> = ({
               variant="body2"
               component="div"
             >
-              approx: 0.0000 USD
+              approx: {euroValueConverted} Euro
             </Typography>
           </Box>
         </CardContent>
