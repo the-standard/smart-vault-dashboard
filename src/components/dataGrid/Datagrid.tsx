@@ -37,7 +37,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   //store values
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { contractAddress } = useContractAddressStore();
-  const { getVaultID, vaultID } = useVaultIdStore();
+  const { getVaultID } = useVaultIdStore();
   //modal state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);

@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import {
-  useVaultIdStore,
+  // useVaultIdStore,
   useVaultAddressStore,
   useVaultStore,
   useTransactionHashStore,
