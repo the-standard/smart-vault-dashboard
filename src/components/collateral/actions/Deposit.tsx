@@ -16,7 +16,7 @@ import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther } from "viem";
 import { createWalletClient, custom } from "viem";
 // import { sepolia } from "viem/chains";
-import { goerli } from "wagmi/chains";
+import { arbitrumGoerli, goerli } from "wagmi/chains";
 // import { polygonMumbai } from "wagmi/chains";
 
 const Deposit = () => {
@@ -68,7 +68,7 @@ const Deposit = () => {
 
   const walletClient = createWalletClient({
     //need to make this dynamic also
-    chain: goerli,
+    chain: arbitrumGoerli,
     transport: custom(window.ethereum),
   });
 

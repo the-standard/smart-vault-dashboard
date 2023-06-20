@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 // import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
@@ -7,6 +7,7 @@ import React, { useEffect } from "react";
 import {
   useContractAddressStore,
   useVaultManagerAbiStore,
+  useCircularProgressStore,
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
 
@@ -37,6 +38,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const [open, setOpen] = React.useState(false);
   const { contractAddress } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
+  const { getProgressType, getCircularProgress } = useCircularProgressStore();
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
@@ -57,6 +59,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
     abi: vaultManagerAbi,
     functionName: "mint",
   });
+
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
   console.log("data", data);
   console.log("isLoading", isLoading);
@@ -69,6 +72,17 @@ const VaultCard: React.FC<VaultCardProps> = ({
       setOpen(true);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isLoading) {
+      getProgressType(3);
+      console.log("loading");
+      getCircularProgress(true);
+    } else {
+      getCircularProgress(false);
+    }
+  }, [isLoading, isSuccess]);
+
   return (
     <Box
       sx={{
