@@ -20,7 +20,7 @@ interface EthToUsdAddressState {
 
 export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
   (set) => ({
-    ethToUsdAddress: "0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08",
+    ethToUsdAddress: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e",
     getEthToUsdAddress: (ethToUsdAddress) =>
       set(() => ({ ethToUsdAddress: ethToUsdAddress })),
   })
@@ -32,7 +32,7 @@ interface sEuroAddressState {
 }
 
 export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
-  sEuroAddress: "0x9C777AD2575010E3ED67F6E849cfE1115BFE2A50",
+  sEuroAddress: "0xEC8A98a08b6494B2E131a3B85DF612eD5567a3FB",
   getsEuroAddress: (sEuroAddress) =>
     set(() => ({ sEuroAddress: sEuroAddress })),
 }));
@@ -54,7 +54,7 @@ interface contractAddressState {
 //this is the smart vault manager, I need to change its name to it
 export const useContractAddressStore = create<contractAddressState>()(
   (set) => ({
-    contractAddress: "0x61276e74b9c3c9c1786B34087e44290bCFE3887c",
+    contractAddress: "0xbF615e590EC00140d522A721251645c65642de58",
     getContractAddress: (contractAddress) =>
       set(() => ({ contractAddress: contractAddress })),
   })
@@ -67,7 +67,7 @@ interface TokenManagerAddressState {
 
 export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
   (set) => ({
-    tokenManagerAddress: "0xd6F42e228d66173e5b97A1520e61Bb010D4294af",
+    tokenManagerAddress: "0x0F408a962C7e70Dcc115703b7f96C76692C041Cb",
     getTokenManagerAddress: (tokenManagerAddress) =>
       set(() => ({ tokenManagerAddress: tokenManagerAddress })),
   })

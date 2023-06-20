@@ -15,7 +15,7 @@ import {
   useVaultForListingStore,
   useContractAddressStore,
 } from "../../store/Store";
-import { fromHex, parseEther } from "viem";
+import { fromHex } from "viem";
 import { getETHPrice } from "../../utils/getETHPrice";
 import axios from "axios";
 
