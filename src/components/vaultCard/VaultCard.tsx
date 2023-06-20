@@ -3,12 +3,16 @@ import { useContractWrite, usePrepareContractWrite } from "wagmi";
 // import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useContractAddressStore,
   useVaultManagerAbiStore,
+  useCircularProgressStore,
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
+import { ethers } from "ethers";
+import { fromHex } from "viem";
+import { useNavigate } from "react-router-dom";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -37,6 +41,9 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const [open, setOpen] = React.useState(false);
   const { contractAddress } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
+  const { getProgressType, getCircularProgress } = useCircularProgressStore();
+  const navigate = useNavigate();
+  const [vaultCreated, setVaultCreated] = useState(false);
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
@@ -57,11 +64,41 @@ const VaultCard: React.FC<VaultCardProps> = ({
     abi: vaultManagerAbi,
     functionName: "mint",
   });
+
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
   console.log("data", data);
   console.log("isLoading", isLoading);
   console.log("isSuccess", isSuccess);
   console.log("write", write);
+
+  const navigateToLatestVault = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      contractAddress,
+      vaultManagerAbi,
+      signer
+    );
+    const vaults = await contract.vaults();
+    console.log("vaults", vaults);
+    // Get the last vault in the array
+    const lastVault = vaults[vaults.length - 1];
+    console.log("lastVault", lastVault);
+
+    // Navigate to the Collateral/{vaultId} route
+    if (lastVault) {
+      const vaultId = fromHex(lastVault[0], "number");
+      navigate(`Collateral/${vaultId}`);
+    }
+
+    return vaults;
+  };
+
+  useEffect(() => {
+    if (vaultCreated) {
+      navigateToLatestVault();
+    }
+  }, [vaultCreated]);
 
   //show snackbar if succesfull
   useEffect(() => {
@@ -69,6 +106,21 @@ const VaultCard: React.FC<VaultCardProps> = ({
       setOpen(true);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isLoading) {
+      getProgressType(3);
+      console.log("loading");
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      getCircularProgress(false);
+      // Vault created successfully
+      setVaultCreated(true);
+    } else {
+      getCircularProgress(false);
+    }
+  }, [isLoading, isSuccess]);
+
   return (
     <Box
       sx={{

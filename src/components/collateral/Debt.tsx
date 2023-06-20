@@ -109,10 +109,6 @@ const Debt = () => {
   };
 
   const repayMoney = async () => {
-    //let transactionResponse; // Declare a variable to hold the transaction response
-    // const provider = new ethers.providers.Web3Provider(window.ethereum);
-    // const signer = provider.getSigner();
-    // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
     getProgressType(2);
 
     setModalStep(2);

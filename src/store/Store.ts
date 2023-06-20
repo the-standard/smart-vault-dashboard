@@ -200,6 +200,7 @@ interface CirccularProgressState {
 export const useCircularProgressStore = create<CirccularProgressState>(
   (set) => ({
     circularProgress: false,
+    //1 for withdraw, 2 for deposit, 3 for new vault
     progressType: 1,
     getCircularProgress: (circularProgress) => set({ circularProgress }),
     getProgressType: (progressType: number) => set({ progressType }),
@@ -214,4 +215,14 @@ interface SnackBarState {
 export const useSnackBarStore = create<SnackBarState>((set) => ({
   snackBar: 55,
   getSnackBar: (snackBar) => set({ snackBar }),
+}));
+
+interface VaultForListingState {
+  vaultForListing: Array<unknown>;
+  getVaultForListing: (vaultForListing: Array<unknown>) => void;
+}
+
+export const useVaultForListingStore = create<VaultForListingState>((set) => ({
+  vaultForListing: [],
+  getVaultForListing: (vaultForListing) => set({ vaultForListing }),
 }));
