@@ -326,7 +326,7 @@ const Collateral = () => {
                   left: "0",
                   background:
                     "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-                  backgroundSize: "200% 100%",
+                  backgroundSize: "300% 100%",
                   backgroundPosition: "165% 0",
                   transition: "0.7s",
                 },
