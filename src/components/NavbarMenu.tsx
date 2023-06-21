@@ -12,6 +12,7 @@ import liquidatorslogo2 from "../assets/2ndliquidatorslogo.svg";
 import historylogo2 from "../assets/2ndhistorylogo.svg";
 import borrowinglogo2 from "../assets/2ndborrowinglogo.svg";
 import { Link } from "react-router-dom";
+import { useBurgerMenuStore } from "../store/Store";
 
 const menuItems = [
   {
@@ -51,8 +52,11 @@ const menuItems = [
 const NavbarMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const { getBurgerMenu } = useBurgerMenuStore();
+
   const handleItemClick = (index: number) => {
     setActiveIndex(index);
+    getBurgerMenu(false);
   };
 
   return (
@@ -66,11 +70,6 @@ const NavbarMenu = () => {
         background: { xs: "none", md: "rgba(0, 0, 0, 0.6)" },
         backdropFilter: "blur(10px)",
         borderRadius: "10px",
-        // // margin: "40px",
-        // boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-        // border: "1px solid rgba(255, 255, 255, 0.18)",
-        // gridGap: "0",
-        // overflow: "hidden",
         width: "100%",
         height: "100%",
       }}

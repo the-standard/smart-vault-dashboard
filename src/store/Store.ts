@@ -226,3 +226,13 @@ export const useVaultForListingStore = create<VaultForListingState>((set) => ({
   vaultForListing: [],
   getVaultForListing: (vaultForListing) => set({ vaultForListing }),
 }));
+
+interface BurgerMenuState {
+  burgerMenu: boolean;
+  getBurgerMenu: (burgerMenu: boolean) => void;
+}
+
+export const useBurgerMenuStore = create<BurgerMenuState>((set) => ({
+  burgerMenu: false,
+  getBurgerMenu: (burgerMenu) => set({ burgerMenu }),
+}));
