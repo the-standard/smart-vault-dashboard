@@ -3,6 +3,7 @@ import {
   // useVaultIdStore,
   useVaultAddressStore,
   useVaultStore,
+  useVaultIdStore,
   useTransactionHashStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
@@ -25,6 +26,7 @@ import { formatEther, fromHex } from "viem";
 import ChartComponent from "../components/chart/index.tsx";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import arbitrumLogo from "../assets/arbitrum.svg";
 
 type RouteParams = {
   vaultId: string;
@@ -40,6 +42,7 @@ const Collateral = () => {
   // const { tokenManagerAbi } = useTokenManagerAbiStore();
   const { contractAddress } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
+  const { getVaultID } = useVaultIdStore();
   // const { tokenManagerAddress } = useTokenManagerAddressStore();
   //local states
   const [vaultAddressLocal, setVaultAddressLocal] = useState("");
@@ -55,6 +58,10 @@ const Collateral = () => {
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
+
+  useEffect(() => {
+    getVaultID(vaultId);
+  }, []);
 
   useLayoutEffect(() => {
     function updatePosition() {
@@ -489,34 +496,15 @@ const Collateral = () => {
               alignItems: "flex-end",
             }}
           >
-            {/* <Box
-              sx={{
-                background: " rgba(18, 18, 18, 0.5)",
-                boxShadow:
-                  " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-                borderRadius: "6.24932px",
-                cursor: "pointer",
-                marginLeft: "2rem",
-              }}
-            >
-              <Box
-                sx={{
-                  margin: "2px",
-                  padding: "5px",
-                }}
-                className={activeElement === 4 ? "glowingCard" : ""}
-                onClick={() => handleClick(4)}
-              >
-                List of Open Smart Vaults
-              </Box>
-            </Box> */}
             <Box
               sx={{
                 marginTop: "1rem",
                 color: "#afafaf",
+                width: "200px",
+                marginRight: "5px",
               }}
             >
-              sEuro Smart Vault #{vaultId}
+              <img src={arbitrumLogo} alt="logo" />
             </Box>
           </Box>
         </Box>

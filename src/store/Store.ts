@@ -100,8 +100,8 @@ export const useVaultManagerAbiStore = create<VaultManagerAbiState>()(
 );
 
 interface VaultIdState {
-  vaultID: number;
-  getVaultID: (id: number) => void;
+  vaultID: any;
+  getVaultID: (id: any) => void;
 }
 
 export const useVaultIdStore = create<VaultIdState>()((set) => ({
