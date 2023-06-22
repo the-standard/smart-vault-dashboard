@@ -91,7 +91,7 @@ const Index = () => {
       sx={{
         padding: "10px",
         width: "100%",
-        color: "#8E9BAE",
+        color: "white",
       }}
     >
       <Box
@@ -127,17 +127,27 @@ const Index = () => {
                 key={index}
               >
                 <Typography variant="body2">{item.title}</Typography>
-                <Typography
-                  variant="body1"
+                <Box
                   sx={{
-                    fontWeight: "bold",
-                    fontSize: "1.5rem",
-                    color: "#fff",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
                   }}
                 >
-                  {item.value}
-                </Typography>
-                <Typography variant="body2">{item.currency}</Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "1.5rem",
+                      color: "#fff",
+                      marginRight: "10px",
+                    }}
+                  >
+                    {item.value}
+                  </Typography>
+                  <Typography variant="body2">{item.currency}</Typography>
+                </Box>
               </Box>
             ))
           )}
@@ -158,6 +168,7 @@ const Index = () => {
           <Typography
             sx={{
               marginLeft: "5px",
+              fontWeight: "200",
             }}
             variant="body1"
           >
@@ -174,6 +185,7 @@ const Index = () => {
               marginLeft: "5px",
               float: "right",
               marginRight: "5px",
+              fontWeight: "200",
             }}
             variant="body1"
           >
