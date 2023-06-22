@@ -17,6 +17,7 @@ import {
   usesEuroAddressStore,
   useCircularProgressStore,
   useSnackBarStore,
+  useVaultIdStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
 import CheckIcon from "@mui/icons-material/Check";
@@ -33,6 +34,7 @@ const Debt = () => {
   const inputRef: any = useRef<HTMLInputElement>(null);
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { getSnackBar } = useSnackBarStore();
+  const { vaultID } = useVaultIdStore();
 
   const debtValue: any = ethers.BigNumber.from(vaultStore[5][0]);
   console.log(debtValue.toString());
@@ -251,23 +253,36 @@ const Debt = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "1rem",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              marginLeft: "1rem",
             }}
           >
-            <Typography
+            Smart Vault #{vaultID}
+            <Box
               sx={{
-                margin: "0 10px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                // marginTop: "1rem",
               }}
-              variant="body1"
             >
-              sEURO outstanding:{" "}
-            </Typography>
-            <Typography variant="body1">
-              {" "}
-              € {formatEther(debtValue.toString())}{" "}
-            </Typography>
+              <Typography
+                sx={
+                  {
+                    // margin: "0 10px",
+                  }
+                }
+                variant="body1"
+              >
+                sEURO outstanding:{" "}
+              </Typography>
+              <Typography variant="body1">
+                {" "}
+                € {formatEther(debtValue.toString())}{" "}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
