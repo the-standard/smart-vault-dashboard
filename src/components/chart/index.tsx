@@ -138,15 +138,26 @@ const Index = () => {
                   <Typography
                     variant="body1"
                     sx={{
-                      fontWeight: "bold",
                       fontSize: "1.5rem",
                       color: "#fff",
                       marginRight: "10px",
+                      fontFamily: "Poppins",
+                      fontWeight: "200",
                     }}
                   >
                     {item.value}
                   </Typography>
-                  <Typography variant="body2">{item.currency}</Typography>
+                  <Typography
+                    sx={{
+                      position: "relative",
+                      top: "2px",
+                      fontFamily: "Poppins",
+                      fontWeight: "200",
+                    }}
+                    variant="body2"
+                  >
+                    {item.currency}
+                  </Typography>
                 </Box>
               </Box>
             ))
