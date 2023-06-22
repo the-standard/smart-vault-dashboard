@@ -22,15 +22,18 @@ import HomePage from "./pages/HomePage.tsx";
 import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import { Box } from "@mui/material";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import History from "./pages/History.tsx";
 import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
 import { useCircularProgressStore } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
+import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
+  const location = useLocation();
+  useBackgroundImage([location]);
   console.log(circularProgress);
 
   return (
