@@ -16,7 +16,7 @@ body {
   padding: 0;
 }
 
-body:before {
+/* body:before {
   content: "";
   position: fixed;
   top: 0;
@@ -27,6 +27,6 @@ body:before {
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
-}
+} */
 
 /* Add any additional styles for your app */
