@@ -35,11 +35,28 @@ const CircularProgressComponent = () => {
             {" "}
             <Box
               sx={{
-                width: "100px",
-                height: "100px",
+                background:
+                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                borderRadius: "10px",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                backdropFilter: "blur(13.9px)",
+                WebkitBackdropFilter: "blur(13.9px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "450px",
+                height: "300px",
               }}
             >
-              <Lottie animationData={withdrawLottie} />{" "}
+              <Box
+                sx={{
+                  width: "250px",
+                  height: "250px",
+                }}
+              >
+                <Lottie animationData={withdrawLottie} />{" "}
+              </Box>
             </Box>
           </Box>
         ) : progressType === 2 ? (
@@ -58,11 +75,28 @@ const CircularProgressComponent = () => {
             {" "}
             <Box
               sx={{
-                width: "100px",
-                height: "100px",
+                background:
+                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                borderRadius: "10px",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                backdropFilter: "blur(13.9px)",
+                WebkitBackdropFilter: "blur(13.9px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "450px",
+                height: "300px",
               }}
             >
-              <Lottie animationData={depositLottie} />{" "}
+              <Box
+                sx={{
+                  width: "250px",
+                  height: "250px",
+                }}
+              >
+                <Lottie animationData={depositLottie} />{" "}
+              </Box>
             </Box>
           </Box>
         ) : progressType === 3 ? (
@@ -81,11 +115,28 @@ const CircularProgressComponent = () => {
             {" "}
             <Box
               sx={{
-                width: "100px",
-                height: "100px",
+                background:
+                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                borderRadius: "10px",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                backdropFilter: "blur(13.9px)",
+                WebkitBackdropFilter: "blur(13.9px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "450px",
+                height: "300px",
               }}
             >
-              <Lottie animationData={newVaultLottie} />{" "}
+              <Box
+                sx={{
+                  width: "250px",
+                  height: "250px",
+                }}
+              >
+                <Lottie animationData={newVaultLottie} />{" "}
+              </Box>
             </Box>
           </Box>
         ) : (
