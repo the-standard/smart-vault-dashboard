@@ -33,7 +33,7 @@ const Actions: React.FC<ActionsProps> = ({ activeElement, symbol }) => {
       content = (
         <Box>
           {" "}
-          <Deposit />{" "}
+          <Deposit symbol={symbol} />{" "}
         </Box>
       );
       break;

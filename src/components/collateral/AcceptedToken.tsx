@@ -8,9 +8,10 @@ import priceFeed from "../../feed/priceFeed";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
 import { getETHPrice } from "../../utils/getETHPrice";
 import axios from "axios";
+import { formatUnits } from "viem";
 
 interface AcceptedTokenProps {
-  amount: string;
+  amount: any;
   symbol: string;
 }
 
@@ -161,7 +162,14 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
               }}
               variant="body1"
             >
-              {ethers.utils.formatEther(amount)} {symbol}{" "}
+              {symbol === "ETH"
+                ? ethers.utils.formatEther(amount)
+                : symbol === "SUSD6"
+                ? formatUnits(amount, 6)
+                : symbol === "SUSD18"
+                ? formatUnits(amount, 18)
+                : null}{" "}
+              {symbol}
             </Typography>{" "}
             <Typography
               sx={{
