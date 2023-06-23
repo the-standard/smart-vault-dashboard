@@ -82,7 +82,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const depositSUSD6 = async () => {
-    const [account] = await walletClient.getAddresses();
+    // const [account] = await walletClient.getAddresses();
     let txHashForError = "";
     try {
       const txAmount: any = amount;
@@ -115,7 +115,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
     }
   };
   const depositSUSD18 = async () => {
-    const [account] = await walletClient.getAddresses();
+    // const [account] = await walletClient.getAddresses();
     let txHashForError = "";
     try {
       const txAmount: any = amount;
