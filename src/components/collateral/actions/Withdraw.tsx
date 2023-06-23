@@ -10,6 +10,7 @@ import { Box } from "@mui/material";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
 import smartVaultAbi from "../../../abis/smartVault";
+import { parseUnits } from "viem";
 
 interface WithdrawProps {
   symbol: string;
@@ -17,7 +18,7 @@ interface WithdrawProps {
 
 const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   const { collateralSymbol } = useCollateralSymbolStore.getState();
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState<any>(0);
   const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
@@ -49,12 +50,22 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
           ethers.utils.parseUnits(amount.toString()),
           address
         );
-      } else if (symbol === "SUSD18" || symbol === "SUSD6") {
+      } else if (symbol === "SUSD6") {
         const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
         console.log(symbolBytes32);
         transactionResponse = await contract.removeCollateral(
           symbolBytes32,
-          ethers.utils.parseUnits(amount.toString()),
+          //  ethers.utils.parseUnits(amount.toString()),
+          parseUnits(amount.toString(), 6),
+          address
+        );
+      } else if (symbol === "SUSD18") {
+        const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
+        console.log(symbolBytes32);
+        transactionResponse = await contract.removeCollateral(
+          symbolBytes32,
+          //  ethers.utils.parseUnits(amount.toString()),
+          parseUnits(amount.toString(), 18),
           address
         );
       } else {
