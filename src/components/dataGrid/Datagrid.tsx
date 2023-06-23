@@ -274,7 +274,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       Number(formatUnits(collateralValue, 18));
     console.log("ratio", ratio.toFixed(2));
     console.log("ratio", (ratio * 100).toFixed(2));
-    return (ratio * 100).toFixed(2);
+    const returnVal = (ratio * 100).toFixed(2);
+    if (isNaN(Number(returnVal))) {
+      return "0.00";
+    } else {
+      return (ratio * 100).toFixed(2);
+    }
   };
 
   function truncateToTwoDecimals(num: any) {
