@@ -6,20 +6,23 @@ import {
   useTransactionHashStore,
   useCircularProgressStore,
   useSnackBarStore,
+  usesUSD6Store,
+  usesUSD18Store,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
-// import smartVaultAbi from "../../../abis/smartVault";
 import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-// import { useAccount } from "wagmi";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
-import { parseEther } from "viem";
+import { parseEther, parseUnits } from "viem";
 import { createWalletClient, custom } from "viem";
-// import { sepolia } from "viem/chains";
 import { sepolia } from "wagmi/chains";
-// import { polygonMumbai } from "wagmi/chains";
 
-const Deposit = () => {
+interface DepositProps {
+  symbol: string;
+  //1 = deposit, 2 = withdraw, 3 = swap, 4 = borrow 5 = pay down
+}
+
+const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   //modal states
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -29,8 +32,12 @@ const Deposit = () => {
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
+  const { sUSD6Address, sUSD6Abi } = usesUSD6Store();
+  const { sUSD18Address, sUSD18Abi } = usesUSD18Store();
 
   const { getSnackBar } = useSnackBarStore();
+
+  console.log(symbol);
 
   // const { address } = useAccount();
 
@@ -73,28 +80,78 @@ const Deposit = () => {
   });
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const depositViaMetamask = async () => {
+
+  const depositSUSD6 = async () => {
+    const [account] = await walletClient.getAddresses();
+    let txHashForError = "";
+    try {
+      const txAmount: any = amount;
+      console.log(txAmount);
+
+      const tokenContract = new ethers.Contract(
+        sUSD6Address,
+        sUSD6Abi,
+        provider.getSigner()
+      );
+
+      const amountToDeposit = parseUnits(txAmount.toString(), 6);
+      console.log(amountToDeposit);
+
+      const transferTx = await tokenContract.transfer(
+        vaultAddress,
+        //no parseEther here but need to add 6 decimals
+        amountToDeposit
+        // "5000000" //hardcoded for now
+      );
+
+      txHashForError = transferTx.hash;
+
+      console.log("Transaction sent:", txHashForError);
+      getTransactionHash(txHashForError);
+      waitForTransaction(txHashForError);
+    } catch (error) {
+      waitForTransaction(txHashForError);
+      console.log(error);
+    }
+  };
+  const depositSUSD18 = async () => {
+    const [account] = await walletClient.getAddresses();
+    let txHashForError = "";
+    try {
+      const txAmount: any = amount;
+      console.log(txAmount);
+
+      const tokenContract = new ethers.Contract(
+        sUSD18Address,
+        sUSD18Abi,
+        provider.getSigner()
+      );
+
+      const transferTx = await tokenContract.transfer(
+        vaultAddress,
+        //no parseEther here but need to add 18 decimals
+        parseUnits(txAmount.toString(), 18)
+      );
+
+      txHashForError = transferTx.hash;
+
+      console.log("Transaction sent:", txHashForError);
+      getTransactionHash(txHashForError);
+      waitForTransaction(txHashForError);
+    } catch (error) {
+      waitForTransaction(txHashForError);
+      console.log(error);
+    }
+  };
+
+  const depositEther = async () => {
     const [account] = await walletClient.getAddresses();
 
     let txHashForError = "";
     try {
-      // const signer = provider.getSigner();
-      // const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
-      // Prompt user to enter the amount in MetaMask
       const txAmount: any = amount;
       console.log(txAmount);
-      // const transactionParameters = {
-      //   to: vaultAddress,
-      //   from: address,
-      //   value: parseEther("0.1"),
-      // };
 
-      // Send funds using MetaMask
-      // const txHash = await window.ethereum.request({
-      //   method: "eth_sendTransaction",
-      //   params: [transactionParameters],
-      // });
-      //this value is used for error handling due to scoping issues
       const toAddress: any = vaultAddress;
 
       const txHash = await walletClient.sendTransaction({
@@ -109,6 +166,20 @@ const Deposit = () => {
       waitForTransaction(txHash);
     } catch (error) {
       waitForTransaction(txHashForError);
+      console.log(error);
+    }
+  };
+
+  const depositViaMetamask = async () => {
+    try {
+      if (symbol == "SUSD6") {
+        depositSUSD6();
+      } else if (symbol == "SUSD18") {
+        depositSUSD18();
+      } else if (symbol === "ETH") {
+        depositEther();
+      }
+    } catch (error) {
       console.log(error);
     }
   };

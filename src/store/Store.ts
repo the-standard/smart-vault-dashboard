@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import vaultManagerAbi from "../abis/vaultManager.ts";
 import sEuroAbi from "../abis/testTokens/sEuro.ts";
+import sUSD6Abi from "../abis/testTokens/sUsd6.ts";
+import sUSD18Abi from "../abis/testTokens/sUsd18.ts";
 import ethtousdAbi from "../abis/priceFeeds/mumbai/ethtousd.ts";
 
 interface EthToUsdAbiState {
@@ -45,6 +47,36 @@ interface sEuroAbiState {
 export const usesEuroAbiStore = create<sEuroAbiState>()((set) => ({
   sEuroAbi: sEuroAbi,
   getsEuroAbi: (sEuroAbi) => set(() => ({ sEuroAbi: sEuroAbi })),
+}));
+
+interface sUSD6State {
+  sUSD6Address: string;
+  getsUSD6Address: (sUSD6Address: string) => void;
+  sUSD6Abi: Array<any>;
+  getsUSD6Abi: (sUSD6Abi: Array<any>) => void;
+}
+
+export const usesUSD6Store = create<sUSD6State>()((set) => ({
+  sUSD6Address: "0x78D4BDd6771C87B66d66a5A89FE52d5F19D778c5",
+  getsUSD6Address: (sUSD6Address) =>
+    set(() => ({ sUSD6Address: sUSD6Address })),
+  sUSD6Abi: sUSD6Abi,
+  getsUSD6Abi: (sUSD6Abi) => set(() => ({ sUSD6Abi: sUSD6Abi })),
+}));
+
+interface sUSD18State {
+  sUSD18Address: string;
+  getsUSD18Address: (sUSD18Address: string) => void;
+  sUSD18Abi: Array<any>;
+  getsUSD18Abi: (sUSD18Abi: Array<any>) => void;
+}
+
+export const usesUSD18Store = create<sUSD18State>()((set) => ({
+  sUSD18Address: "0x4904AFBf65480Ca77Eb2DdfF39EdcEABE53D4373",
+  getsUSD18Address: (sUSD18Address) =>
+    set(() => ({ sUSD18Address: sUSD18Address })),
+  sUSD18Abi: sUSD18Abi,
+  getsUSD18Abi: (sUSD18Abi) => set(() => ({ sUSD18Abi: sUSD18Abi })),
 }));
 
 interface contractAddressState {
