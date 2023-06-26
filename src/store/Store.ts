@@ -5,6 +5,16 @@ import sUSD6Abi from "../abis/testTokens/sUsd6.ts";
 import sUSD18Abi from "../abis/testTokens/sUsd18.ts";
 import ethtousdAbi from "../abis/priceFeeds/mumbai/ethtousd.ts";
 
+interface ChainIdState {
+  chainId: number;
+  getChainId: (chainId: number) => void;
+}
+
+export const useChainIdStore = create<ChainIdState>((set) => ({
+  chainId: 1,
+  getChainId: (chainId) => set(() => ({ chainId: chainId })),
+}));
+
 interface EthToUsdAbiState {
   ethToUsdAbi: Array<any>;
   getEthToUsdAbi: (ethToUsdAbi: Array<any>) => void;
@@ -17,12 +27,14 @@ export const useEthToUsdAbiStore = create<EthToUsdAbiState>()((set) => ({
 
 interface EthToUsdAddressState {
   ethToUsdAddress: string;
+  arbitrumGoerliethToUsdAddress: string;
   getEthToUsdAddress: (ethToUsdAddress: string) => void;
 }
 
 export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
   (set) => ({
     ethToUsdAddress: "0x694AA1769357215DE4FAC081bf1f309aDC325306",
+    arbitrumGoerliethToUsdAddress: "0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08",
     getEthToUsdAddress: (ethToUsdAddress) =>
       set(() => ({ ethToUsdAddress: ethToUsdAddress })),
   })
@@ -30,11 +42,13 @@ export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
 
 interface sEuroAddressState {
   sEuroAddress: string;
+  arbitrumGoerlisEuroAddress: string;
   getsEuroAddress: (sEuroAddress: string) => void;
 }
 
 export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
   sEuroAddress: "0xf23F59316A2700D88F6F503B24aEE01118255645",
+  arbitrumGoerlisEuroAddress: "0x9C777AD2575010E3ED67F6E849cfE1115BFE2A50",
   getsEuroAddress: (sEuroAddress) =>
     set(() => ({ sEuroAddress: sEuroAddress })),
 }));
@@ -81,12 +95,14 @@ export const usesUSD18Store = create<sUSD18State>()((set) => ({
 
 interface contractAddressState {
   contractAddress: any;
+  arbitrumGoerliContractAddress: any;
   getContractAddress: (contractAddress: string) => void;
 }
 //this is the smart vault manager, I need to change its name to it
 export const useContractAddressStore = create<contractAddressState>()(
   (set) => ({
     contractAddress: "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
+    arbitrumGoerliContractAddress: "0x61276e74b9c3c9c1786B34087e44290bCFE3887c",
     getContractAddress: (contractAddress) =>
       set(() => ({ contractAddress: contractAddress })),
   })
@@ -94,12 +110,15 @@ export const useContractAddressStore = create<contractAddressState>()(
 
 interface TokenManagerAddressState {
   tokenManagerAddress: string;
+  arbitrumGoerliTokenManagerAddress: string;
   getTokenManagerAddress: (tokenManagerAddress: string) => void;
 }
 
 export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
   (set) => ({
     tokenManagerAddress: "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
+    arbitrumGoerliTokenManagerAddress:
+      "0xd6F42e228d66173e5b97A1520e61Bb010D4294af",
     getTokenManagerAddress: (tokenManagerAddress) =>
       set(() => ({ tokenManagerAddress: tokenManagerAddress })),
   })

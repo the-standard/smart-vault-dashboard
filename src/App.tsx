@@ -26,15 +26,27 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import History from "./pages/History.tsx";
 import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
-import { useCircularProgressStore } from "./store/Store.ts";
+import { useCircularProgressStore, useChainIdStore } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
+import { useEffect } from "react";
+import { fromHex } from "viem";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
+  const { getChainId } = useChainIdStore();
   const location = useLocation();
   useBackgroundImage([location]);
   console.log(circularProgress);
+
+  useEffect(() => {
+    if (window.ethereum) {
+      window.ethereum.on("chainChanged", (chainId: any) => {
+        const idFromHex = fromHex(chainId, "number");
+        getChainId(idFromHex);
+      });
+    }
+  }, []);
 
   return (
     <Box

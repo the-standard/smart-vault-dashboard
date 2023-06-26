@@ -1,12 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import VaultCard from "../components/vaultCard/VaultCard";
 import Datagrid from "../components/dataGrid/Datagrid";
-// import { useContractRead } from "wagmi";
-// import { useEffect } from "react";
-// import { ethers } from "ethers";
-// import abi from "../abis/tokenManagerABI.ts";
-// import { ethers } from "ethers";
-// import abi from "../abis/vaultManager.ts";
+
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { ethers } from "ethers";
 import seurologo from "../assets/seurologo.png";
@@ -20,6 +15,8 @@ import {
   useContractAddressStore,
   usePositionStore,
 } from "../store/Store.ts";
+import { fromHex } from "viem";
+import createClientUtil from "../utils/createClientUtil.ts";
 
 const items = [
   {
@@ -59,7 +56,8 @@ const HomePage = () => {
   const { connector: isConnected } = useAccount();
   // const [loading, setLoading] = useState(true); // Add this line
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { contractAddress } = useContractAddressStore();
+  const { contractAddress, arbitrumGoerliContractAddress } =
+    useContractAddressStore();
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
@@ -84,11 +82,11 @@ const HomePage = () => {
     }
   });
 
-  const getVaults = async () => {
+  const getVaults = async (conditionalAddress: any) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      contractAddress,
+      conditionalAddress,
       vaultManagerAbi,
       signer
     );
@@ -97,11 +95,30 @@ const HomePage = () => {
     setMyVaults(vaults);
   };
 
+  const getCurrentChain = async () => {
+    const block = await createClientUtil.getChainId();
+    console.log("block", block);
+    if (block === 11155111) {
+      getVaults(contractAddress);
+    } else if (block === 421613) {
+      getVaults(arbitrumGoerliContractAddress);
+    }
+  };
+
   useEffect(() => {
     if (isConnected) {
-      getVaults();
+      //getVaults();
+      getCurrentChain();
     }
   }, [isConnected]);
+
+  useEffect(() => {
+    if (window.ethereum) {
+      window.ethereum.on("chainChanged", () => {
+        getCurrentChain();
+      });
+    }
+  }, []);
 
   return (
     <Box>
@@ -127,6 +144,7 @@ const HomePage = () => {
         >
           {items.map((item) => (
             <VaultCard
+              key={item.title}
               title={item.title}
               para={item.para}
               borrowRate={item.borrowRate}

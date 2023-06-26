@@ -18,6 +18,7 @@ import {
   useVaultManagerAbiStore,
   useContractAddressStore,
 } from "../store/Store.ts";
+// import createClientUtil from "../utils/createClientUtil.ts";
 
 const runApp = async () => {
   await Moralis.start({
@@ -47,6 +48,17 @@ const History = () => {
     getVaultTransactions(vaults);
     return vaults;
   };
+
+  // const getChainIdNow = async () => {
+  //   const block = await createClientUtil.getChainId();
+  //   console.log(block);
+  //   //sepolia 11155111
+  //   //arbitrum 421613
+  // };
+
+  // useEffect(() => {
+  //   getChainIdNow();
+  // }, []);
 
   const getVaultTransactions = async (vaults: any) => {
     try {

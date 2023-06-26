@@ -1,5 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import {
   useVaultAddressStore,
@@ -33,8 +33,8 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { sUSD6Address, sUSD6Abi } = usesUSD6Store();
   const { sUSD18Address, sUSD18Abi } = usesUSD18Store();
-
   const { getSnackBar } = useSnackBarStore();
+  //local
 
   console.log(symbol);
 
