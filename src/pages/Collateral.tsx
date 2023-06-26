@@ -27,6 +27,7 @@ import ChartComponent from "../components/chart/index.tsx";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import arbitrumLogo from "../assets/arbitrum.svg";
+import createClientUtil from "../utils/createClientUtil.ts";
 
 type RouteParams = {
   vaultId: string;
@@ -40,7 +41,8 @@ const Collateral = () => {
   const { getVaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();
   // const { tokenManagerAbi } = useTokenManagerAbiStore();
-  const { contractAddress } = useContractAddressStore();
+  const { contractAddress, arbitrumGoerliContractAddress } =
+    useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getVaultID } = useVaultIdStore();
   // const { tokenManagerAddress } = useTokenManagerAddressStore();
@@ -123,11 +125,11 @@ const Collateral = () => {
   //   console.log(ethers.utils.parseBytes32String(tokens[1][0]));
   // };
 
-  const returnAcceptedTokensList = async () => {
+  const returnAcceptedTokensList = async (conditionalAddress: any) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      contractAddress,
+      conditionalAddress,
       vaultManagerAbi,
       signer
     );
@@ -159,6 +161,17 @@ const Collateral = () => {
     console.log(foundValue);
     setAcceptedTokens(foundValue);
   };
+
+  const getCurrentChain = async () => {
+    const block = await createClientUtil.getChainId();
+    console.log("block", block);
+    if (block === 11155111) {
+      returnAcceptedTokensList(contractAddress);
+    } else if (block === 421613) {
+      returnAcceptedTokensList(arbitrumGoerliContractAddress);
+    }
+  };
+
   const displayTokens = () => {
     if (acceptedTokens.length === 0) {
       return <div>Loading...</div>;
@@ -183,7 +196,7 @@ const Collateral = () => {
   useEffect(() => {
     console.log(vaultId + "my vault");
     // returntokens();
-    returnAcceptedTokensList();
+    getCurrentChain();
     // console.log(tokenmanagerabi);
   }, []);
 
