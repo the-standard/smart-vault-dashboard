@@ -64,6 +64,14 @@ const Footer = () => {
         borderTop: "1px solid #8E9BAE",
         marginTop: "20rem",
         paddingBlock: "1rem",
+        background:
+          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+
+        borderRadius: "10px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(13.9px)",
+        WebkitBackdropFilter: "blur(13.9px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
       }}
     >
       <Box
@@ -88,6 +96,7 @@ const Footer = () => {
                 color: "#8E9BAE",
                 textDecoration: "none",
                 marginRight: "1rem",
+                fontSize: "0.8rem",
               }}
               href={link.link}
             >

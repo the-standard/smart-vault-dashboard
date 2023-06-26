@@ -26,7 +26,12 @@ const Index = () => {
       Number(formatUnits(collateralValue, 18));
     console.log("ratio", ratio.toFixed(2));
     console.log("ratio", (ratio * 100).toFixed(2));
-    return (ratio * 100).toFixed(2);
+    const returnVal = (ratio * 100).toFixed(2);
+    if (isNaN(Number(returnVal))) {
+      return "0.00";
+    } else {
+      return (ratio * 100).toFixed(2);
+    }
   };
 
   function truncateToTwoDecimals(num: any) {
@@ -150,7 +155,7 @@ const Index = () => {
                   <Typography
                     sx={{
                       position: "relative",
-                      top: "2px",
+                      top: "4.2px",
                       fontFamily: "Poppins",
                       fontWeight: "200",
                     }}

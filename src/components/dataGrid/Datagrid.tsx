@@ -196,6 +196,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               alignItems: "center",
               justifyContent: "center",
               width: { xs: "4rem", md: "8rem" },
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
             }}
             className="myBtn"
           >
@@ -224,6 +225,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             width: { xs: "4rem", md: "8rem" },
             padding: 0,
             margin: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
           }}
           className="myBtn"
           onClick={() => {
@@ -296,13 +298,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   return (
     <Box
       sx={{
-        // margin: "3% 12%",
-        // padding: "3%",
-        // background:
-        //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        // border: "1px solid rgba(52, 52, 52, 0.3)",
-        // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        // borderRadius: "10px 10px 0px 0px",
         color: "#afafaf",
         fontFamily: "Poppins",
         fontWeight: 300,

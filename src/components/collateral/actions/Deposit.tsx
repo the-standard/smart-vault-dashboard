@@ -14,8 +14,7 @@ import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
-import { createWalletClient, custom } from "viem";
-import { sepolia } from "wagmi/chains";
+import createClientUtil from "../../../utils/createClientUtil";
 
 interface DepositProps {
   symbol: string;
@@ -73,16 +72,10 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   };
   //clipboard logic end
 
-  const walletClient = createWalletClient({
-    //need to make this dynamic also
-    chain: sepolia,
-    transport: custom(window.ethereum),
-  });
-
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const depositSUSD6 = async () => {
-    // const [account] = await walletClient.getAddresses();
+    // const [account] = await createClientUtil.getAddresses();
     let txHashForError = "";
     try {
       const txAmount: any = amount;
@@ -115,7 +108,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
     }
   };
   const depositSUSD18 = async () => {
-    // const [account] = await walletClient.getAddresses();
+    // const [account] = await createClientUtil.getAddresses();
     let txHashForError = "";
     try {
       const txAmount: any = amount;
@@ -145,7 +138,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   };
 
   const depositEther = async () => {
-    const [account] = await walletClient.getAddresses();
+    const [account] = await createClientUtil.getAddresses();
 
     let txHashForError = "";
     try {
@@ -154,7 +147,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
 
       const toAddress: any = vaultAddress;
 
-      const txHash = await walletClient.sendTransaction({
+      const txHash = await createClientUtil.sendTransaction({
         account,
         to: toAddress,
         value: parseEther(txAmount.toString()),

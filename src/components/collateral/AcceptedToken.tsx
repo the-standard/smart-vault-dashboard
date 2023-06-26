@@ -102,6 +102,10 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
         //  border: "1px solid rgba(52, 52, 52, 0.3)",
         //  boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
         borderRadius: "10px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(13.9px)",
+        WebkitBackdropFilter: "blur(13.9px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
         width: "auto",
         padding: "1rem",
         marginTop: "0.5rem",
@@ -110,10 +114,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
         flexDirection: "column",
         height: "auto",
         overflow: "auto",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(13.9px)",
-        WebkitBackdropFilter: "blur(13.9px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
       }}
     >
       <Box
