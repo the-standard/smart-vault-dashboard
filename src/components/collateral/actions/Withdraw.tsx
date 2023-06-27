@@ -45,12 +45,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
       console.log(symbol);
       let transactionResponse; // Declare a variable to hold the transaction response
 
-      if (symbol === "ETH" || symbol === "MATIC") {
-        transactionResponse = await contract.removeCollateralNative(
-          ethers.utils.parseUnits(amount.toString()),
-          address
-        );
-      } else if (symbol === "SUSD6") {
+      if (symbol === "SUSD6") {
         const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
         console.log(symbolBytes32);
         transactionResponse = await contract.removeCollateral(
@@ -69,9 +64,10 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
           address
         );
       } else {
-        // This one should get the token address instead of symbol
-        // But how will the user know the token address if this is just a fallback function?
-        transactionResponse = await contract.removeAsset(amount, address);
+        transactionResponse = await contract.removeCollateralNative(
+          ethers.utils.parseUnits(amount.toString()),
+          address
+        );
       }
 
       // Access the transaction hash from the transaction response

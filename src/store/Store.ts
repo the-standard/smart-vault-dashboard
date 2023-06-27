@@ -65,6 +65,7 @@ export const usesEuroAbiStore = create<sEuroAbiState>()((set) => ({
 
 interface sUSD6State {
   sUSD6Address: string;
+  arbitrumGoerlisUSD6Address: string;
   getsUSD6Address: (sUSD6Address: string) => void;
   sUSD6Abi: Array<any>;
   getsUSD6Abi: (sUSD6Abi: Array<any>) => void;
@@ -72,6 +73,7 @@ interface sUSD6State {
 
 export const usesUSD6Store = create<sUSD6State>()((set) => ({
   sUSD6Address: "0x78D4BDd6771C87B66d66a5A89FE52d5F19D778c5",
+  arbitrumGoerlisUSD6Address: "0x96eB9C75B1e2DA3eb2bD5eBE1aaDA7f8f34C975C",
   getsUSD6Address: (sUSD6Address) =>
     set(() => ({ sUSD6Address: sUSD6Address })),
   sUSD6Abi: sUSD6Abi,
@@ -80,6 +82,7 @@ export const usesUSD6Store = create<sUSD6State>()((set) => ({
 
 interface sUSD18State {
   sUSD18Address: string;
+  arbitrumGoerlisUSD18Address: string;
   getsUSD18Address: (sUSD18Address: string) => void;
   sUSD18Abi: Array<any>;
   getsUSD18Abi: (sUSD18Abi: Array<any>) => void;
@@ -87,6 +90,7 @@ interface sUSD18State {
 
 export const usesUSD18Store = create<sUSD18State>()((set) => ({
   sUSD18Address: "0x4904AFBf65480Ca77Eb2DdfF39EdcEABE53D4373",
+  arbitrumGoerlisUSD18Address: "0x208CD13FDc8a5EFc2ff3908082e8c24D515F0006",
   getsUSD18Address: (sUSD18Address) =>
     set(() => ({ sUSD18Address: sUSD18Address })),
   sUSD18Abi: sUSD18Abi,

@@ -1,9 +1,8 @@
 import { createWalletClient, custom } from "viem";
-import { sepolia } from "viem/chains";
+import { sepolia, arbitrumGoerli, mainnet } from "viem/chains";
+import { useChainIdStore } from "../store/Store";
 
 const createClientUtil = createWalletClient({
-  //need to make this dynamic also
-  chain: sepolia,
   transport: custom(window.ethereum),
 });
 

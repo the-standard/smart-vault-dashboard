@@ -15,7 +15,6 @@ import {
   useContractAddressStore,
   usePositionStore,
 } from "../store/Store.ts";
-import { fromHex } from "viem";
 import createClientUtil from "../utils/createClientUtil.ts";
 
 const items = [

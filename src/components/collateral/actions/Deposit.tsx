@@ -15,6 +15,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
 import createClientUtil from "../../../utils/createClientUtil";
+import { arbitrumGoerli, sepolia } from "viem/chains";
 
 interface DepositProps {
   symbol: string;
@@ -28,11 +29,13 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   const handleClose = () => setOpen(false);
   const [amount, setAmount] = useState(0);
   ///store
-  const { vaultAddress } = useVaultAddressStore.getState();
-  const { getTransactionHash } = useTransactionHashStore.getState();
+  const { vaultAddress } = useVaultAddressStore();
+  const { getTransactionHash } = useTransactionHashStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
-  const { sUSD6Address, sUSD6Abi } = usesUSD6Store();
-  const { sUSD18Address, sUSD18Abi } = usesUSD18Store();
+  const { sUSD6Address, sUSD6Abi, arbitrumGoerlisUSD6Address } =
+    usesUSD6Store();
+  const { sUSD18Address, sUSD18Abi, arbitrumGoerlisUSD18Address } =
+    usesUSD18Store();
   const { getSnackBar } = useSnackBarStore();
   //local
 
@@ -74,7 +77,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-  const depositSUSD6 = async () => {
+  const depositSUSD6 = async (conditionalAddress: any) => {
     // const [account] = await createClientUtil.getAddresses();
     let txHashForError = "";
     try {
@@ -82,7 +85,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
       console.log(txAmount);
 
       const tokenContract = new ethers.Contract(
-        sUSD6Address,
+        conditionalAddress,
         sUSD6Abi,
         provider.getSigner()
       );
@@ -107,7 +110,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
       console.log(error);
     }
   };
-  const depositSUSD18 = async () => {
+  const depositSUSD18 = async (conditionalAddress: any) => {
     // const [account] = await createClientUtil.getAddresses();
     let txHashForError = "";
     try {
@@ -115,7 +118,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
       console.log(txAmount);
 
       const tokenContract = new ethers.Contract(
-        sUSD18Address,
+        conditionalAddress,
         sUSD18Abi,
         provider.getSigner()
       );
@@ -137,8 +140,9 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
     }
   };
 
-  const depositEther = async () => {
+  const depositEther = async (conditionalChain: any) => {
     const [account] = await createClientUtil.getAddresses();
+    console.log(account);
 
     let txHashForError = "";
     try {
@@ -146,8 +150,8 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
       console.log(txAmount);
 
       const toAddress: any = vaultAddress;
-
       const txHash = await createClientUtil.sendTransaction({
+        chain: conditionalChain,
         account,
         to: toAddress,
         value: parseEther(txAmount.toString()),
@@ -164,13 +168,27 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   };
 
   const depositViaMetamask = async () => {
+    const block = await createClientUtil.getChainId();
+
     try {
       if (symbol == "SUSD6") {
-        depositSUSD6();
+        if (block === 11155111) {
+          depositSUSD6(sUSD6Address);
+        } else {
+          depositSUSD6(arbitrumGoerlisUSD6Address);
+        }
       } else if (symbol == "SUSD18") {
-        depositSUSD18();
-      } else if (symbol === "ETH") {
-        depositEther();
+        if (block === 11155111) {
+          depositSUSD18(sUSD18Address);
+        } else {
+          depositSUSD18(arbitrumGoerlisUSD18Address);
+        }
+      } else {
+        if (block === 11155111) {
+          depositEther(sepolia);
+        } else {
+          depositEther(arbitrumGoerli);
+        }
       }
     } catch (error) {
       console.log(error);

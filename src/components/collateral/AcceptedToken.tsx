@@ -78,14 +78,12 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   }, []);
 
   const renderLineChart = () => {
-    if (symbol === "ETH") {
-      return <LineChart data={priceFeed.ETH.prices} symbol={symbol} />;
-    } else if (symbol === "SUSD6") {
+    if (symbol === "SUSD6") {
       return <LineChart data={priceFeed.SUSD6.prices} symbol={symbol} />;
     } else if (symbol === "SUSD18") {
       return <LineChart data={priceFeed.SUSD18.prices} symbol={symbol} />;
     } else {
-      return null; // or render a default state or error message
+      return <LineChart data={priceFeed.ETH.prices} symbol={symbol} />;
     }
   };
 
@@ -162,13 +160,11 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
               }}
               variant="body1"
             >
-              {symbol === "ETH"
-                ? ethers.utils.formatEther(amount)
-                : symbol === "SUSD6"
+              {symbol === "SUSD6"
                 ? formatUnits(amount, 6)
                 : symbol === "SUSD18"
                 ? formatUnits(amount, 18)
-                : null}{" "}
+                : ethers.utils.formatEther(amount)}{" "}
               {symbol}
             </Typography>{" "}
             <Typography

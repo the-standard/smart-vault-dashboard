@@ -8,6 +8,7 @@ import {
   useContractAddressStore,
   useVaultManagerAbiStore,
   usePositionStore,
+  useChainIdStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 // import QRicon from "../assets/qricon.png";
@@ -27,6 +28,7 @@ import ChartComponent from "../components/chart/index.tsx";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import arbitrumLogo from "../assets/arbitrum.svg";
+import sepolialogo from "../assets/sepolialogo.svg";
 import createClientUtil from "../utils/createClientUtil.ts";
 
 type RouteParams = {
@@ -41,6 +43,7 @@ const Collateral = () => {
   const { getVaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();
   // const { tokenManagerAbi } = useTokenManagerAbiStore();
+  const { chainId } = useChainIdStore();
   const { contractAddress, arbitrumGoerliContractAddress } =
     useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
@@ -98,7 +101,7 @@ const Collateral = () => {
     if (receipt.status === 1) {
       // Transaction was successful, perform rerender or any other necessary action
       console.log("Transaction successful");
-      returnAcceptedTokensList();
+      getCurrentChain();
       // Trigger rerender or any other necessary action
     } else {
       // Transaction failed
@@ -509,16 +512,29 @@ const Collateral = () => {
               alignItems: "flex-end",
             }}
           >
-            <Box
-              sx={{
-                marginTop: "1rem",
-                color: "#afafaf",
-                width: "200px",
-                marginRight: "5px",
-              }}
-            >
-              <img src={arbitrumLogo} alt="logo" />
-            </Box>
+            {chainId === 11155111 ? (
+              <Box
+                sx={{
+                  marginTop: "1rem",
+                  color: "#afafaf",
+                  width: "200px",
+                  marginRight: "5px",
+                }}
+              >
+                <img src={sepolialogo} alt="logo" />
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  marginTop: "1rem",
+                  color: "#afafaf",
+                  width: "200px",
+                  marginRight: "5px",
+                }}
+              >
+                <img src={arbitrumLogo} alt="logo" />
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

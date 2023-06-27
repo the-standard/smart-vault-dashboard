@@ -40,6 +40,15 @@ function App() {
   console.log(circularProgress);
 
   useEffect(() => {
+    const fetchChainId = async () => {
+      if (window.ethereum) {
+        const idFromHex = fromHex(window.ethereum.chainId, "number");
+        getChainId(idFromHex);
+      }
+    };
+
+    fetchChainId();
+
     if (window.ethereum) {
       window.ethereum.on("chainChanged", (chainId: any) => {
         const idFromHex = fromHex(chainId, "number");
