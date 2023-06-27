@@ -1,5 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import {
   useVaultAddressStore,
