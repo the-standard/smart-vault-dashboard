@@ -195,7 +195,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: { xs: "4rem", md: "8rem" },
+              width: { xs: "5.2rem", md: "8rem" },
               backgroundColor: "rgba(0, 0, 0, 0.2)",
             }}
             className="myBtn"
@@ -222,7 +222,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: { xs: "4rem", md: "8rem" },
+            width: { xs: "5.2rem", md: "8rem" },
             padding: 0,
             margin: 0,
             backgroundColor: "rgba(0, 0, 0, 0.2)",

@@ -75,6 +75,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
 
   useEffect(() => {
     amount ? convertUsdToEuro() : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   const renderLineChart = () => {

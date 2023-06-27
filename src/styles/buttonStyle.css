@@ -27,7 +27,7 @@
     rgba(255, 255, 255, 0.16) 67%,
     transparent 68%
   );
-  background-size: 200% 100%;
+  background-size: 300% 100%;
   background-position: 165% 0;
   transition: 0.7s;
 }
