@@ -36,7 +36,7 @@ function App() {
   const { circularProgress } = useCircularProgressStore();
   const { getChainId } = useChainIdStore();
   const location = useLocation();
-  useBackgroundImage([location]);
+  useBackgroundImage();
   console.log(circularProgress);
 
   useEffect(() => {

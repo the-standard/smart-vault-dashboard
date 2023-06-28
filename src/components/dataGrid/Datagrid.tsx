@@ -320,13 +320,35 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             display: { xs: "block", md: "none" },
           }}
         >
-          <table>
+          <table
+            style={{
+              backgroundColor: "transparent",
+              borderCollapse: "collapse",
+              backdropFilter: "blur(20px)",
+              borderRadius: "10px",
+              boxShadow: "4px 6px 20px 5px #00000038",
+              border: "1px solid rgba(255,255,255,.18)",
+              color: "#afafaf",
+              fontFamily: "Open Sans, sans-serif",
+              width: "76%",
+              margin: "40px auto",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+          >
             <thead>
               <tr>
                 <th scope="col">Debt Range</th>
                 {/* width is not actually 20px, but it makes the table look good */}
                 <th style={{ width: "20px" }} scope="col">
-                  Actions
+                  {/* just one of them makes all of them have a margin */}
+                  <p
+                    style={{
+                      margin: "20px 0",
+                    }}
+                  >
+                    Actions
+                  </p>
                 </th>
               </tr>
             </thead>
@@ -370,13 +392,38 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             display: { xs: "none", md: "block", lg: "none" },
           }}
         >
-          <table>
+          <table
+            style={{
+              backgroundColor: "transparent",
+              borderCollapse: "collapse",
+              backdropFilter: "blur(20px)",
+              borderRadius: "10px",
+              boxShadow: "4px 6px 20px 5px #00000038",
+              border: "1px solid rgba(255,255,255,.18)",
+              color: "#afafaf",
+              fontFamily: "Open Sans, sans-serif",
+              width: "76%",
+              margin: "40px auto",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+          >
             <thead>
               <tr>
                 <th scope="col">Vault NFT</th>
                 <th scope="col">Vault ID</th>
 
-                <th scope="col">Ratio</th>
+                <th scope="col">
+                  {" "}
+                  {/* just one of them makes all of them have a margin */}
+                  <p
+                    style={{
+                      margin: "20px 0",
+                    }}
+                  >
+                    Ratio
+                  </p>
+                </th>
                 {/* width is not actually 20px, but it makes the table look good */}
                 <th style={{ width: "20px" }} scope="col">
                   Actions
@@ -438,14 +485,38 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             display: { xs: "none", lg: "block" },
           }}
         >
-          <table>
+          <table
+            style={{
+              borderCollapse: "collapse",
+              backdropFilter: "blur(20px)",
+              borderRadius: "10px",
+              boxShadow: "4px 6px 20px 5px #00000038",
+              border: "1px solid rgba(255,255,255,.18)",
+              color: "#afafaf",
+              fontFamily: "Open Sans, sans-serif",
+              width: "76%",
+              margin: "40px auto",
+              alignItems: "center",
+              overflow: "hidden",
+              background: "transparent",
+            }}
+          >
             <thead>
               <tr>
                 <th scope="col">Vault NFT</th>
                 <th scope="col">Vault ID</th>
                 <th scope="col">Collateral</th>
                 <th scope="col">Debt</th>
-                <th scope="col">Ratio</th>
+                <th scope="col">
+                  {/* just one of them makes all of them have a margin */}
+                  <p
+                    style={{
+                      margin: "20px 0",
+                    }}
+                  >
+                    Ratio
+                  </p>
+                </th>
                 {/* width is not actually 20px, but it makes the table look good */}
                 <th style={{ width: "20px" }} scope="col">
                   Actions

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useVaultIdStore } from "../store/Store";
 
 const bgImages = [
   "/backgrounds/abstract1.png",
@@ -51,12 +52,20 @@ const bgImages = [
   "/backgrounds/abstract48.png",
 ];
 
-function getRandomBgImage() {
-  const randomIndex = Math.floor(Math.random() * bgImages.length);
-  return bgImages[randomIndex];
+function getVaultBgImage(vaultId: number) {
+  let index;
+  if (vaultId <= 50) {
+    index = vaultId - 1; // Since array index starts from 0
+  } else {
+    index = parseInt(vaultId.toString().slice(-1)) - 1;
+  }
+  return bgImages[index];
 }
 
 export function useBackgroundImage(deps: any[] = []) {
+  //const vaultId = useStore((state) => state.vaultId); // get vaultId from your zustand store
+  const vaultId = useVaultIdStore((state) => state.vaultID);
+
   useEffect(() => {
     const styleElement = document.createElement("style");
     styleElement.innerHTML = `
@@ -67,16 +76,28 @@ export function useBackgroundImage(deps: any[] = []) {
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url(${getRandomBgImage()});
+        background-image: url(${getVaultBgImage(vaultId)});
         background-repeat: no-repeat;
         background-size: cover;
         z-index: -1;
+        opacity: 0; /* Initial opacity set to 0 */
+        transition: opacity 0.5s ease-in-out; /* Define the transition properties */
+      }
+
+      body.loaded:before { /* Adjusted selector to include loaded class */
+        opacity: 1; /* Transition to opacity 1 when loaded class is added */
       }
     `;
     document.head.appendChild(styleElement);
 
+    const image = new Image();
+    image.onload = () => {
+      document.body.classList.add("loaded");
+    };
+    image.src = getVaultBgImage(vaultId);
+
     return () => {
       document.head.removeChild(styleElement);
     };
-  }, deps);
+  }, [vaultId]); // Add vaultId as a dependency of the useEffect hook
 }

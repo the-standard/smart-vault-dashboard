@@ -160,7 +160,7 @@ interface VaultIdState {
 }
 
 export const useVaultIdStore = create<VaultIdState>()((set) => ({
-  vaultID: 0,
+  vaultID: 1,
   getVaultID: (id) => set(() => ({ vaultID: id })),
 }));
 
