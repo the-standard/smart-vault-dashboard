@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useVaultIdStore } from "../store/Store";
+import { useLocation } from "react-router-dom";
 
 const bgImages = [
   "/backgrounds/abstract1.png",
@@ -63,10 +64,18 @@ function getVaultBgImage(vaultId: number) {
 }
 
 export function useBackgroundImage(deps: any[] = []) {
-  //const vaultId = useStore((state) => state.vaultId); // get vaultId from your zustand store
   const vaultId = useVaultIdStore((state) => state.vaultID);
+  const location = useLocation();
 
   useEffect(() => {
+    let bgImage;
+    if (location.pathname === "/" || location.pathname === "/history") {
+      // if the current route is home
+      bgImage = bgImages[0]; // set the first image as the background
+    } else {
+      bgImage = getVaultBgImage(vaultId); // else, get the image based on the vaultId
+    }
+
     const styleElement = document.createElement("style");
     styleElement.innerHTML = `
       body:before {
@@ -76,7 +85,7 @@ export function useBackgroundImage(deps: any[] = []) {
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url(${getVaultBgImage(vaultId)});
+        background-image:  url(${bgImage});
         background-repeat: no-repeat;
         background-size: cover;
         z-index: -1;
@@ -94,10 +103,9 @@ export function useBackgroundImage(deps: any[] = []) {
     image.onload = () => {
       document.body.classList.add("loaded");
     };
-    image.src = getVaultBgImage(vaultId);
-
+    image.src = bgImage;
     return () => {
       document.head.removeChild(styleElement);
     };
-  }, [vaultId]); // Add vaultId as a dependency of the useEffect hook
+  }, [vaultId, location]); // Add vaultId as a dependency of the useEffect hook
 }
