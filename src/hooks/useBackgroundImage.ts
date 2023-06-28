@@ -63,7 +63,7 @@ function getVaultBgImage(vaultId: number) {
   return bgImages[index];
 }
 
-export function useBackgroundImage(deps: any[] = []) {
+export function useBackgroundImage() {
   const vaultId = useVaultIdStore((state) => state.vaultID);
   const location = useLocation();
 
