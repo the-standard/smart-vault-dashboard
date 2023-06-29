@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { useEthToUsdAddressStore } from "../store/Store";
 import createClientUtil from "./createClientUtil";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 export async function getETHPrice() {
   // Get the address of the ETH/USD price feed
