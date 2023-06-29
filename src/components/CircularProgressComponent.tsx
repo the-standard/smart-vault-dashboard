@@ -62,14 +62,15 @@ const CircularProgressComponent = () => {
         ) : progressType === 2 ? (
           <Box
             sx={{
-              position: "fixed", // Change this line
+              position: "fixed",
               display: "flex",
               justifyContent: "center",
-              alignItems: "center",
+              alignItems: "flex-end",
               width: "100%",
               height: "100%",
               background: "transparent",
               zIndex: 9999,
+              //  marginTop: "500px",
             }}
           >
             {" "}
@@ -102,7 +103,7 @@ const CircularProgressComponent = () => {
         ) : progressType === 3 ? (
           <Box
             sx={{
-              position: "fixed", // Change this line
+              position: "fixed",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -142,7 +143,7 @@ const CircularProgressComponent = () => {
         ) : (
           <Box
             sx={{
-              position: "fixed", // Change this line
+              position: "fixed",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",

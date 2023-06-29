@@ -1,9 +1,23 @@
 import { ethers } from "ethers";
 import { useEthToUsdAddressStore } from "../store/Store";
+import createClientUtil from "./createClientUtil";
+import { useEffect } from "react";
 
 export async function getETHPrice() {
   // Get the address of the ETH/USD price feed
-  const ethToUsdAddress = useEthToUsdAddressStore.getState().ethToUsdAddress;
+  const { ethToUsdAddress, arbitrumGoerliethToUsdAddress } =
+    useEthToUsdAddressStore.getState();
+
+  const getCurrentChain = async () => {
+    const block = await createClientUtil.getChainId();
+    console.log("block", block);
+    if (block === 11155111) {
+      return ethToUsdAddress;
+    } else if (block === 421613) {
+      return arbitrumGoerliethToUsdAddress;
+    }
+  };
+
   // Create provider for interacting with the Ethereum network
   // REPLACE RPC_URL_HERE WITH THE URL OF THE ETHEREUM NETWORK YOU ARE USING
   const provider = new ethers.providers.Web3Provider(window.ethereum); // This constant describes the ABI interface of the contract which will provide the price of ETH
@@ -59,7 +73,7 @@ export async function getETHPrice() {
     },
   ];
   // The address of the contract which will provide the price of ETH on Kovan
-  const addr = ethToUsdAddress;
+  const addr: any = getCurrentChain();
   // We create an instance of the contract which we can interact with
   const priceFeed = new ethers.Contract(
     addr,
