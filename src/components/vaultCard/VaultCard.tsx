@@ -8,6 +8,8 @@ import {
   useContractAddressStore,
   useVaultManagerAbiStore,
   useCircularProgressStore,
+  useSnackBarStore,
+  useTransactionHashStore,
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
 import { ethers } from "ethers";
@@ -39,8 +41,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
 }) => {
   //snackbar config
   const [open, setOpen] = React.useState(false);
+  const { getSnackBar } = useSnackBarStore();
   const { contractAddress } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
+  const { getTransactionHash } = useTransactionHashStore();
   const { getProgressType, getCircularProgress } = useCircularProgressStore();
   const navigate = useNavigate();
   const [vaultCreated, setVaultCreated] = useState(false);
@@ -59,17 +63,46 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   //call mint function and mint a smart vault NFT
 
-  const { config } = usePrepareContractWrite({
-    address: contractAddress,
-    abi: vaultManagerAbi,
-    functionName: "mint",
-  });
+  // const { config } = usePrepareContractWrite({
+  //   address: contractAddress,
+  //   abi: vaultManagerAbi,
+  //   functionName: "mint",
+  // });
 
-  const { data, isLoading, isSuccess, write } = useContractWrite(config);
-  console.log("data", data);
-  console.log("isLoading", isLoading);
-  console.log("isSuccess", isSuccess);
-  console.log("write", write);
+  // const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  // console.log("data", data);
+  // console.log("isLoading", isLoading);
+  // console.log("isSuccess", isSuccess);
+  // console.log("write", write);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(
+    contractAddress,
+    vaultManagerAbi,
+    signer
+  );
+  const mintVault = async () => {
+    try {
+      getProgressType(3);
+      getCircularProgress(true);
+      const tx = await contract.mint();
+      console.log("tx", tx);
+      const receipt = await tx.wait();
+      const transactionHash = receipt.hash;
+      console.log("transactionHash", transactionHash);
+      getTransactionHash(transactionHash);
+      //   waitForTransaction(transactionHash);
+      setVaultCreated(true);
+      getCircularProgress(false);
+      getSnackBar(0);
+      navigateToLatestVault();
+    } catch (error) {
+      console.log("error", error);
+      getCircularProgress(false);
+      getSnackBar(1);
+    }
+  };
 
   const navigateToLatestVault = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -94,32 +127,32 @@ const VaultCard: React.FC<VaultCardProps> = ({
     return vaults;
   };
 
-  useEffect(() => {
-    if (vaultCreated) {
-      navigateToLatestVault();
-    }
-  }, [vaultCreated]);
+  // useEffect(() => {
+  //   if (vaultCreated) {
+  //     navigateToLatestVault();
+  //   }
+  // }, [vaultCreated]);
 
   //show snackbar if succesfull
-  useEffect(() => {
-    if (isSuccess) {
-      setOpen(true);
-    }
-  }, [isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setOpen(true);
+  //   }
+  // }, [isSuccess]);
 
-  useEffect(() => {
-    if (isLoading) {
-      getProgressType(3);
-      console.log("loading");
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      getCircularProgress(false);
-      // Vault created successfully
-      setVaultCreated(true);
-    } else {
-      getCircularProgress(false);
-    }
-  }, [isLoading, isSuccess]);
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     getProgressType(3);
+  //     console.log("loading");
+  //     getCircularProgress(true);
+  //   } else if (isSuccess) {
+  //     getCircularProgress(false);
+  //     // Vault created successfully
+  //     setVaultCreated(true);
+  //   } else {
+  //     getCircularProgress(false);
+  //   }
+  // }, [isLoading, isSuccess]);
 
   return (
     <Box
@@ -223,7 +256,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
             width: "100%",
           }}
           className="myBtn"
-          onClick={() => write?.()}
+          // onClick={() => write?.()}
+          onClick={() => mintVault()}
         >
           <Typography
             sx={{
