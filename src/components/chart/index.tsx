@@ -2,13 +2,14 @@
 import FullChart from "./FullChart";
 import { Box, Typography } from "@mui/material";
 import ProgressBar from "../ProgressBar";
-import { useVaultStore } from "../../store/Store";
+import { useVaultStore, useVaultIdStore } from "../../store/Store";
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
 
 const Index = () => {
   const { vaultStore } = useVaultStore();
+  const { vaultID } = useVaultIdStore();
   console.log(vaultStore);
   const chosenVault: any = vaultStore;
   const [progressValues, setProgressValues] = useState<any[]>([]);
@@ -172,9 +173,31 @@ const Index = () => {
           sx={{
             width: { xs: "200px", sm: "300px" },
             height: { xs: "200px", sm: "300px" },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <FullChart />
+          <Typography
+            sx={{
+              position: "relative",
+              top: "-170px",
+              fontFamily: "Poppins",
+            }}
+            variant="body1"
+          >
+            {" "}
+            VAULT ID <br></br>
+            <Box
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              #{vaultID}
+            </Box>
+          </Typography>
         </Box>
       </Box>
       {loading ? (

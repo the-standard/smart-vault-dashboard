@@ -73,46 +73,6 @@ const FullChart = () => (
       modifiers: [["darker", 2]],
     }}
     defs={[
-      // using helpers
-      // will inherit colors from current element
-      // linearGradientDef("forBTC", [
-      //   { offset: 0, color: "#FF3530" },
-      //   { offset: 100, color: "#FFED4D" },
-      // ]),
-      // linearGradientDef(
-      //   "forMATIC",
-      //   [
-      //     { offset: 0, color: "#DDADFF" },
-      //     { offset: 100, color: "#8800DB" },
-      //   ],
-
-      //   // you may specify transforms for your gradients, e.g. rotations and skews,
-      //   // following the transform attribute format.
-      //   // For instance here we rotate 90 degrees relative to the center of the object.
-      //   {
-      //     gradientTransform: "rotate(90 0.5 0.5)",
-      //   }
-      // ),
-      // linearGradientDef(
-      //   "forSHIB",
-      //   [
-      //     { offset: 0, color: "#FFC49D" },
-      //     { offset: 100, color: "#FF3DEC" },
-      //   ]
-
-      //   // you may specify transforms for your gradients, e.g. rotations and skews,
-      //   // following the transform attribute format.
-      //   // For instance here we rotate 90 degrees relative to the center of the object.
-      // ),
-      // linearGradientDef("forETH", [
-      //   { offset: 0, color: "#007DF1" },
-      //   { offset: 100, color: "#ABFF73" },
-      // ]),
-      // linearGradientDef("forUSDC", [
-      //   { offset: 0, color: "#FFCD1D" },
-      //   { offset: 100, color: "#52FF78" },
-      // ]),
-      // using plain object
       {
         id: "gradientC",
         type: "linearGradient",
@@ -124,11 +84,6 @@ const FullChart = () => (
     ]}
     // 2. defining rules to apply those gradients
     fill={[
-      // match using object query
-      // { match: { id: "BTC" }, id: "forBTC" },
-      // { match: { id: "MATIC" }, id: "forMATIC" },
-      // { match: { id: "SHIB" }, id: "forSHIB" },
-      // { match: { id: "ETH" }, id: "forETH" },
       // match using function
       { match: (d) => d.id === "vue", id: "gradientB" },
       // match all, will only affect 'elm', because once a rule match,

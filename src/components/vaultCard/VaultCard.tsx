@@ -127,33 +127,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
     return vaults;
   };
 
-  // useEffect(() => {
-  //   if (vaultCreated) {
-  //     navigateToLatestVault();
-  //   }
-  // }, [vaultCreated]);
-
-  //show snackbar if succesfull
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setOpen(true);
-  //   }
-  // }, [isSuccess]);
-
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     getProgressType(3);
-  //     console.log("loading");
-  //     getCircularProgress(true);
-  //   } else if (isSuccess) {
-  //     getCircularProgress(false);
-  //     // Vault created successfully
-  //     setVaultCreated(true);
-  //   } else {
-  //     getCircularProgress(false);
-  //   }
-  // }, [isLoading, isSuccess]);
-
   return (
     <Box
       sx={{
