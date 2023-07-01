@@ -4,6 +4,15 @@ import sEuroAbi from "../abis/testTokens/sEuro.ts";
 import sUSD6Abi from "../abis/testTokens/sUsd6.ts";
 import sUSD18Abi from "../abis/testTokens/sUsd18.ts";
 import ethtousdAbi from "../abis/priceFeeds/mumbai/ethtousd.ts";
+import priceCalculatorAbi from "../abis/priceFeeds/original/PriceCalculator.ts";
+
+interface PriceCalculatorState {
+  priceCalculatorabi: Array<any>;
+}
+
+export const usePriceCalculatorStore = create<PriceCalculatorState>(() => ({
+  priceCalculatorabi: priceCalculatorAbi,
+}));
 
 interface ChainIdState {
   chainId: number;
@@ -165,8 +174,8 @@ export const useVaultIdStore = create<VaultIdState>()((set) => ({
 }));
 
 interface VaultsState {
-  vaultsStore: Array<unknown>;
-  getVaultsStore: (vaultsStore: Array<unknown>) => void;
+  vaultsStore: Array<any>;
+  getVaultsStore: (vaultsStore: Array<any>) => void;
 }
 
 export const useVaultsStore = create<VaultsState>()((set) => ({
@@ -177,8 +186,8 @@ export const useVaultsStore = create<VaultsState>()((set) => ({
 //individual vault
 
 interface VaultState {
-  vaultStore: Array<unknown>;
-  getVaultStore: (vaultStore: Array<unknown>) => void;
+  vaultStore: Array<any>;
+  getVaultStore: (vaultStore: Array<any>) => void;
 }
 
 export const useVaultStore = create<VaultState>()((set) => ({

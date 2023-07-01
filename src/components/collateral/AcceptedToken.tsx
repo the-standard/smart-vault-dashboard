@@ -2,13 +2,18 @@ import { Box, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import React, { useState, useLayoutEffect, useRef, useEffect } from "react";
 import Actions from "./Actions";
-import { useCollateralSymbolStore, useWidthStore } from "../../store/Store";
+import {
+  useCollateralSymbolStore,
+  useWidthStore,
+  usePriceCalculatorStore,
+  useVaultStore,
+} from "../../store/Store";
 import LineChart from "./LineChart";
 import priceFeed from "../../feed/priceFeed";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
 import { getETHPrice } from "../../utils/getETHPrice";
 import axios from "axios";
-import { formatUnits } from "viem";
+import { formatUnits, parseEther, fromHex, formatEther } from "viem";
 
 interface AcceptedTokenProps {
   amount: any;
@@ -38,38 +43,88 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore.getState();
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
+  const { priceCalculatorabi } = usePriceCalculatorStore.getState();
+  const { vaultStore } = useVaultStore.getState();
+
+  const [convertedAmount, setConvertedAmount] = useState<any>(undefined);
+
+  const getUsdPriceOfToken = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    let myToken;
+    //the first [0] is the token type, so it should be dynamic
+    console.log(vaultStore[5][3][0][0]);
+    if (symbol === "SUSD6") {
+      myToken = vaultStore[5][3][1][0];
+    } else if (symbol === "SUSD18") {
+      myToken = vaultStore[5][3][2][0];
+    } else {
+      myToken = vaultStore[5][3][0][0];
+    }
+    console.log(myToken);
+    const contract = new ethers.Contract(
+      myToken.clAddr,
+      priceCalculatorabi,
+      signer
+    );
+    console.log(contract);
+    console.log(priceCalculatorabi);
+    const price = await contract.latestRoundData();
+    console.log(price);
+    console.log(fromHex(price.answer, "number"));
+    const priceInUsd = fromHex(price.answer, "number");
+    console.log(BigInt(priceInUsd));
+    const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
+    console.log(priceFormatted);
+    console.log(amount);
+    //  if susd6, the amount should be formatted differently
+    let amountFormatted;
+    if (symbol === "SUSD6") {
+      amountFormatted = formatUnits(amount, 6);
+      console.log(amountFormatted);
+    } else if (symbol === "SUSD18") {
+      amountFormatted = formatUnits(amount, 18);
+      console.log(amountFormatted);
+    } else {
+      amountFormatted = formatUnits(amount, 18);
+      console.log(amountFormatted);
+    }
+    console.log(formatEther(amount));
+    const amountinUsd = Number(amountFormatted) * Number(priceFormatted);
+    console.log(amountinUsd.toFixed(2));
+    setConvertedAmount(amountinUsd.toFixed(2));
+  };
+
+  useEffect(() => {
+    getUsdPriceOfToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   //ref ro width sharing
   const ref = useRef<HTMLDivElement>(null);
   useSyncWidth(ref);
 
   const convertUsdToEuro = async () => {
-    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
-    try {
-      const usdPrice = await getETHPrice();
-      console.log(usdPrice);
+    if (convertedAmount !== undefined) {
+      const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
+      try {
+        const usdPrice = await getETHPrice();
+        console.log(usdPrice);
 
-      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+        const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
 
-      const getUsdToEuro = await axios.get(apiUrl);
+        const getUsdToEuro = await axios.get(apiUrl);
 
-      const euroPrice = getUsdToEuro.data.data.EUR;
-      console.log(euroPrice);
-      console.log(usdPrice);
+        const euroPrice = getUsdToEuro.data.data.EUR;
+        console.log(euroPrice);
+        console.log(usdPrice);
 
-      const usdToEuro = usdPrice * euroPrice;
+        console.log(convertedAmount * euroPrice);
 
-      console.log(usdToEuro);
-      console.log(ethers.utils.formatEther(amount));
-      console.log(
-        (usdToEuro * Number(ethers.utils.formatEther(amount))).toFixed(2)
-      );
-      setEuroValueConverted(
-        (usdToEuro * Number(ethers.utils.formatEther(amount))).toFixed(2)
-      );
-      return usdToEuro.toFixed(2);
-    } catch (error) {
-      console.log(error);
+        setEuroValueConverted((convertedAmount * euroPrice).toFixed(2));
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -174,9 +229,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
               }}
               variant="body1"
             >
-              {symbol === "ETH" && euroValueConverted ? (
-                <div>€{euroValueConverted}</div>
-              ) : null}
+              {euroValueConverted ? <div>€{euroValueConverted}</div> : null}
             </Typography>
           </Box>
         </Box>

@@ -4,9 +4,13 @@ import { Box } from "@mui/material";
 
 interface ProgressBarProps {
   progressValue: any;
+  greyBarValue?: any;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({
+  progressValue,
+  greyBarValue,
+}) => {
   // const progressBar = document.getElementById("progress-bar");
   // const percentageDiv = document.getElementById("percentage");
   console.log(progressValue);
@@ -70,7 +74,17 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progressValue }) => {
           sx={{
             backgroundColor: `hsla(${hue}, 100%, 50%, 0.6)`,
             width: `${percentage}%`,
+            zIndex: 1,
           }}
+        ></Box>
+        <Box
+          sx={{
+            backgroundColor: `grey`,
+            width: `${greyBarValue}%`,
+            zIndex: 0,
+          }}
+          className="progress-bar-grey"
+          id="progress-bar-grey"
         ></Box>
         <Box
           className="percentage"
