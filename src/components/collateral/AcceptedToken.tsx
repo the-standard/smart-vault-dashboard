@@ -13,7 +13,7 @@ import priceFeed from "../../feed/priceFeed";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
 import { getETHPrice } from "../../utils/getETHPrice";
 import axios from "axios";
-import { formatUnits, parseEther, fromHex, formatEther } from "viem";
+import { formatUnits, fromHex, formatEther } from "viem";
 
 interface AcceptedTokenProps {
   amount: any;

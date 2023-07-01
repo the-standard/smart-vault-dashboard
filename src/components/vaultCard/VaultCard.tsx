@@ -1,9 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+// import { useContractWrite, usePrepareContractWrite } from "wagmi";
 // import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   useContractAddressStore,
   useVaultManagerAbiStore,
@@ -47,7 +47,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const { getTransactionHash } = useTransactionHashStore();
   const { getProgressType, getCircularProgress } = useCircularProgressStore();
   const navigate = useNavigate();
-  const [vaultCreated, setVaultCreated] = useState(false);
+  // const [vaultCreated, setVaultCreated] = useState(false);
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
@@ -93,7 +93,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
       console.log("transactionHash", transactionHash);
       getTransactionHash(transactionHash);
       //   waitForTransaction(transactionHash);
-      setVaultCreated(true);
+      // setVaultCreated(true);
       getCircularProgress(false);
       getSnackBar(0);
       navigateToLatestVault();
