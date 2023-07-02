@@ -53,6 +53,8 @@ const bgImages = [
   "/backgrounds/abstract48.png",
 ];
 
+const homeBgImage = "/backgrounds/Home.png";
+
 function getVaultBgImage(vaultId: number) {
   let index;
   if (vaultId <= 50) {
@@ -71,7 +73,7 @@ export function useBackgroundImage() {
     let bgImage;
     if (location.pathname === "/" || location.pathname === "/history") {
       // if the current route is home
-      bgImage = bgImages[0]; // set the first image as the background
+      bgImage = homeBgImage; // set the first image as the background
     } else {
       bgImage = getVaultBgImage(vaultId); // else, get the image based on the vaultId
     }
