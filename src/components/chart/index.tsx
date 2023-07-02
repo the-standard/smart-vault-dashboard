@@ -6,6 +6,7 @@ import { useVaultStore, useVaultIdStore } from "../../store/Store";
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Index = () => {
   const { vaultStore } = useVaultStore();
@@ -53,11 +54,35 @@ const Index = () => {
     return resultNum;
   }
 
+  const [euroPrice, setEuroPrice] = useState(undefined);
+
+  const getEuroPrice = async () => {
+    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
+    try {
+      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+
+      const getUsdToEuro = await axios.get(apiUrl);
+
+      const euroPriceFromAPI = getUsdToEuro.data.data.EUR;
+      console.log(euroPriceFromAPI);
+      setEuroPrice(euroPriceFromAPI);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    if (chosenVault[5] != undefined) {
-      const totalCollateralValue = removeLast18Digits(
+    getEuroPrice();
+  }, []);
+
+  useEffect(() => {
+    if (chosenVault[5] != undefined && euroPrice != undefined) {
+      const collateralValueInUSD = removeLast18Digits(
         fromHex(chosenVault[5][2]._hex, "number")
       );
+      console.log("collateralValueInUSD", collateralValueInUSD);
+      const totalCollateralValue = collateralValueInUSD * euroPrice;
+      console.log("totalCollateralValue", totalCollateralValue);
 
       const totalDebt = formatEther(chosenVault[5][0]);
 
