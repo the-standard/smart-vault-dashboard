@@ -305,10 +305,12 @@ interface GreyProgressBarValuesState {
   depositValue: any;
   withdrawValue: any;
   symbolForGreyBar: string;
+  operationType: string;
 
   getDepositValue: (depositValue: any) => void;
   getWithdrawValue: (withdrawValue: any) => void;
   getSymbolForGreyBar: (symbolForGreyBar: string) => void;
+  getOperationType: (operationType: string) => void;
 }
 
 export const useGreyProgressBarValuesStore = create<GreyProgressBarValuesState>(
@@ -316,9 +318,11 @@ export const useGreyProgressBarValuesStore = create<GreyProgressBarValuesState>(
     depositValue: 0,
     withdrawValue: 0,
     symbolForGreyBar: "",
+    operationType: "",
 
     getDepositValue: (depositValue) => set({ depositValue }),
     getWithdrawValue: (withdrawValue) => set({ withdrawValue }),
     getSymbolForGreyBar: (symbolForGreyBar) => set({ symbolForGreyBar }),
+    getOperationType: (operationType) => set({ operationType }),
   })
 );

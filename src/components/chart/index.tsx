@@ -24,8 +24,6 @@ const Index = () => {
   const chosenVault: any = vaultStore;
   const [progressValues, setProgressValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [greyBarValueConverted, setGreyBarValueConverted] =
-    useState<any>(undefined);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -56,7 +54,6 @@ const Index = () => {
     console.log(priceFormatted);
     console.log(depositValue);
     console.log(Number(priceFormatted) * depositValue);
-
     const amountinUsd = Number(depositValue) * Number(priceFormatted);
     console.log(amountinUsd);
     convertUsdToEuro(amountinUsd);
@@ -78,32 +75,55 @@ const Index = () => {
       console.log("priceInUsd" + priceInUsd);
       const euroValue = Number(priceInUsd) * euroPrice;
       console.log("euroValue.toFixed(2)" + euroValue.toFixed(2));
-      setGreyBarValueConverted(euroValue.toFixed(2));
+      //setGreyBarValueConverted(euroValue);
+      return euroValue.toFixed(2);
     } catch (error) {
       console.log(error);
     }
   };
+  const [collateralValueFormattedToEuros, setCollateralValueFormattedToEuros] =
+    useState<any>(undefined);
 
-  const computeGreyBar = (totalDebt: any, collateralValue: any) => {
-    if (greyBarValueConverted !== undefined) {
-      console.log("greyBarValueConverted", greyBarValueConverted);
-      const collateralFormatted = Number(
-        formatUnits(collateralValue, 18)
-      ).toFixed(2);
-      console.log("collateralFormatted", collateralFormatted);
-      const totalDebtFormatted = Number(formatUnits(totalDebt, 18)).toFixed(2);
-      console.log("totalDebtFormatted", totalDebtFormatted);
+  const getCollateralValueInEuros = async () => {
+    const collateralValue = Number(ethers.BigNumber.from(chosenVault[5][2]));
+
+    const collateralValueInEuros = await convertUsdToEuro(collateralValue);
+    console.log(
+      "collateralValueInEuros",
+      Number(formatUnits(BigInt(Number(collateralValueInEuros)), 18)).toFixed(2)
+    );
+    setCollateralValueFormattedToEuros(
+      Number(formatUnits(BigInt(Number(collateralValueInEuros)), 18)).toFixed(2)
+    );
+
+    return Number(
+      formatUnits(BigInt(Number(collateralValueInEuros)), 18)
+    ).toFixed(2);
+  };
+
+  useEffect(() => {
+    getCollateralValueInEuros();
+  }, []);
+
+  const computeGreyBar = () => {
+    if (collateralValueFormattedToEuros !== undefined) {
+      const totalDebt = Number(ethers.BigNumber.from(chosenVault[5][0]));
+
+      //computation starts here
       const collateralPlusGreyBarValue =
-        Number(collateralFormatted) + Number(greyBarValueConverted);
+        Number(collateralValueFormattedToEuros) + Number(depositValue);
       console.log("collateralPlusGreyBarValue", collateralPlusGreyBarValue);
+      const collateralMinusGreyBarValue =
+        Number(collateralValueFormattedToEuros) - Number(depositValue);
+      console.log("collateralMinusGreyBarValue", collateralMinusGreyBarValue);
+      //make this ratio conditional
       const ratio =
-        Number(totalDebtFormatted) / Number(collateralPlusGreyBarValue);
+        Number(formatEther(BigInt(totalDebt))) / collateralPlusGreyBarValue;
       console.log("ratio", ratio.toFixed(2));
-      const returnVal = (ratio * 100).toFixed(2);
-      console.log("returnVal", returnVal);
-      return returnVal;
+      return ratio.toFixed(2);
     }
   };
+
   const computeProgressBar = (totalDebt: any, collateralValue: any) => {
     // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
     console.log("totalDebt", totalDebt);
@@ -330,10 +350,7 @@ const Index = () => {
               Number(ethers.BigNumber.from(chosenVault[5][0])),
               Number(ethers.BigNumber.from(chosenVault[5][2]))
             )}
-            greyBarValue={computeGreyBar(
-              Number(ethers.BigNumber.from(chosenVault[5][0])),
-              Number(ethers.BigNumber.from(chosenVault[5][2]))
-            )}
+            greyBarValue={computeGreyBar()}
           />
           <Typography
             sx={{
