@@ -16,7 +16,7 @@ import axios from "axios";
 const Index = () => {
   const { vaultStore } = useVaultStore();
   const { vaultID } = useVaultIdStore();
-  const { depositValue, withdrawValue, symbolForGreyBar } =
+  const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
   const { priceCalculatorabi } = usePriceCalculatorStore.getState();
 
@@ -52,16 +52,17 @@ const Index = () => {
     console.log(BigInt(priceInUsd));
     const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
     console.log(priceFormatted);
-    console.log(depositValue);
-    console.log(Number(priceFormatted) * depositValue);
-    const amountinUsd = Number(depositValue) * Number(priceFormatted);
+    console.log(userInputForGreyBarOperation);
+    console.log(Number(priceFormatted) * userInputForGreyBarOperation);
+    const amountinUsd =
+      Number(userInputForGreyBarOperation) * Number(priceFormatted);
     console.log(amountinUsd);
     convertUsdToEuro(amountinUsd);
   };
 
   useEffect(() => {
     getUsdPriceOfToken();
-  }, [depositValue]);
+  }, [userInputForGreyBarOperation]);
 
   const convertUsdToEuro = async (priceInUsd: any) => {
     const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
@@ -81,6 +82,7 @@ const Index = () => {
       console.log(error);
     }
   };
+
   const [collateralValueFormattedToEuros, setCollateralValueFormattedToEuros] =
     useState<any>(undefined);
 
@@ -106,22 +108,33 @@ const Index = () => {
   }, []);
 
   const computeGreyBar = () => {
+    let ratio: any = undefined;
     if (collateralValueFormattedToEuros !== undefined) {
       const totalDebt = Number(ethers.BigNumber.from(chosenVault[5][0]));
 
       //computation starts here
       const collateralPlusGreyBarValue =
-        Number(collateralValueFormattedToEuros) + Number(depositValue);
+        Number(collateralValueFormattedToEuros) +
+        Number(userInputForGreyBarOperation);
       console.log("collateralPlusGreyBarValue", collateralPlusGreyBarValue);
       const collateralMinusGreyBarValue =
-        Number(collateralValueFormattedToEuros) - Number(depositValue);
+        Number(collateralValueFormattedToEuros) -
+        Number(userInputForGreyBarOperation);
       console.log("collateralMinusGreyBarValue", collateralMinusGreyBarValue);
       //make this ratio conditional
-      const ratio =
-        Number(formatEther(BigInt(totalDebt))) / collateralPlusGreyBarValue;
+      if (operationType === 1) {
+        ratio =
+          Number(formatEther(BigInt(totalDebt))) / collateralPlusGreyBarValue;
+      } else if (operationType === 2) {
+        ratio =
+          (Number(formatEther(BigInt(totalDebt))) /
+            collateralMinusGreyBarValue) *
+          100;
+      }
+
       console.log("ratio", ratio.toFixed(2));
-      return ratio.toFixed(2);
     }
+    return typeof ratio !== "undefined" ? ratio.toFixed(2) : undefined;
   };
 
   const computeProgressBar = (totalDebt: any, collateralValue: any) => {

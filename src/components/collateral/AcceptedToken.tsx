@@ -7,6 +7,7 @@ import {
   useWidthStore,
   usePriceCalculatorStore,
   useVaultStore,
+  useGreyProgressBarValuesStore,
 } from "../../store/Store";
 import LineChart from "./LineChart";
 import priceFeed from "../../feed/priceFeed";
@@ -44,6 +45,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
   const { priceCalculatorabi } = usePriceCalculatorStore.getState();
   const { vaultStore } = useVaultStore.getState();
+  const { getOperationType } = useGreyProgressBarValuesStore.getState();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -128,6 +130,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
     setActiveElement(element);
     console.log(symbol);
     getCollateralSymbol(symbol);
+    getOperationType(element);
   };
   return (
     <Box

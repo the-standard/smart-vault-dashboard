@@ -38,7 +38,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   const { sUSD18Address, sUSD18Abi, arbitrumGoerlisUSD18Address } =
     usesUSD18Store();
   const { getSnackBar } = useSnackBarStore();
-  const { getDepositValue, getSymbolForGreyBar } =
+  const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
   //local
 
@@ -49,7 +49,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
     console.log(e.target.value);
-    getDepositValue(Number(e.target.value));
+    getGreyBarUserInput(Number(e.target.value));
     getSymbolForGreyBar(symbol);
   };
 

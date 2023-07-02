@@ -5,6 +5,7 @@ import {
   useTransactionHashStore,
   useCircularProgressStore,
   useSnackBarStore,
+  useGreyProgressBarValuesStore,
 } from "../../../store/Store";
 import { Box } from "@mui/material";
 import { useAccount } from "wagmi";
@@ -22,10 +23,14 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore.getState();
   const { getTransactionHash } = useTransactionHashStore.getState();
+  const { getGreyBarUserInput, getSymbolForGreyBar } =
+    useGreyProgressBarValuesStore();
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
     console.log(e.target.value);
+    getSymbolForGreyBar(symbol);
+    getGreyBarUserInput(Number(e.target.value));
   };
 
   //snackbar config
