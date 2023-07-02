@@ -151,7 +151,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
         overflow: "auto",
       }}
     >
-      <button onClick={getUsdPriceOfToken}>get price</button>
       <Box
         sx={{
           display: "flex",

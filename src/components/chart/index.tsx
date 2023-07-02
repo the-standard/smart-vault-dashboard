@@ -2,7 +2,12 @@
 import FullChart from "./FullChart";
 import { Box, Typography } from "@mui/material";
 import ProgressBar from "../ProgressBar";
-import { useVaultStore, useVaultIdStore } from "../../store/Store";
+import {
+  useVaultStore,
+  useVaultIdStore,
+  useGreyProgressBarValuesStore,
+  usePriceCalculatorStore,
+} from "../../store/Store";
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
@@ -11,11 +16,94 @@ import axios from "axios";
 const Index = () => {
   const { vaultStore } = useVaultStore();
   const { vaultID } = useVaultIdStore();
+  const { depositValue, withdrawValue, symbolForGreyBar } =
+    useGreyProgressBarValuesStore();
+  const { priceCalculatorabi } = usePriceCalculatorStore.getState();
+
   console.log(vaultStore);
   const chosenVault: any = vaultStore;
   const [progressValues, setProgressValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [greyBarValueConverted, setGreyBarValueConverted] =
+    useState<any>(undefined);
 
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  let myToken = undefined;
+
+  const getUsdPriceOfToken = async () => {
+    //the first [0] is the token type, so it should be dynamic
+    console.log(vaultStore[5][3][0][0]);
+    if (symbolForGreyBar === "SUSD6") {
+      myToken = vaultStore[5][3][1][0];
+    } else if (symbolForGreyBar === "SUSD18") {
+      myToken = vaultStore[5][3][2][0];
+    } else {
+      myToken = vaultStore[5][3][0][0];
+    }
+    console.log(symbolForGreyBar);
+    const contract = new ethers.Contract(
+      myToken.clAddr,
+      priceCalculatorabi,
+      signer
+    );
+    console.log(contract);
+    const price = await contract.latestRoundData();
+    console.log(price);
+    const priceInUsd = fromHex(price.answer, "number");
+    console.log(BigInt(priceInUsd));
+    const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
+    console.log(priceFormatted);
+    console.log(depositValue);
+    console.log(Number(priceFormatted) * depositValue);
+
+    const amountinUsd = Number(depositValue) * Number(priceFormatted);
+    console.log(amountinUsd);
+    convertUsdToEuro(amountinUsd);
+  };
+
+  useEffect(() => {
+    getUsdPriceOfToken();
+  }, [depositValue]);
+
+  const convertUsdToEuro = async (priceInUsd: any) => {
+    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
+    try {
+      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+
+      const getUsdToEuro = await axios.get(apiUrl);
+
+      const euroPrice = getUsdToEuro.data.data.EUR;
+      console.log("euroPrice" + euroPrice);
+      console.log("priceInUsd" + priceInUsd);
+      const euroValue = Number(priceInUsd) * euroPrice;
+      console.log("euroValue.toFixed(2)" + euroValue.toFixed(2));
+      setGreyBarValueConverted(euroValue.toFixed(2));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const computeGreyBar = (totalDebt: any, collateralValue: any) => {
+    if (greyBarValueConverted !== undefined) {
+      console.log("greyBarValueConverted", greyBarValueConverted);
+      const collateralFormatted = Number(
+        formatUnits(collateralValue, 18)
+      ).toFixed(2);
+      console.log("collateralFormatted", collateralFormatted);
+      const totalDebtFormatted = Number(formatUnits(totalDebt, 18)).toFixed(2);
+      console.log("totalDebtFormatted", totalDebtFormatted);
+      const collateralPlusGreyBarValue =
+        Number(collateralFormatted) + Number(greyBarValueConverted);
+      console.log("collateralPlusGreyBarValue", collateralPlusGreyBarValue);
+      const ratio =
+        Number(totalDebtFormatted) / Number(collateralPlusGreyBarValue);
+      console.log("ratio", ratio.toFixed(2));
+      const returnVal = (ratio * 100).toFixed(2);
+      console.log("returnVal", returnVal);
+      return returnVal;
+    }
+  };
   const computeProgressBar = (totalDebt: any, collateralValue: any) => {
     // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
     console.log("totalDebt", totalDebt);
@@ -32,10 +120,9 @@ const Index = () => {
     if (isNaN(Number(returnVal))) {
       return "0.00";
     } else {
-      return (ratio * 100).toFixed(2);
+      return returnVal;
     }
   };
-
   function truncateToTwoDecimals(num: any) {
     const withTwoDecimals = num.toString().match(/^-?\d+(?:\.\d{0,2})?/);
     return withTwoDecimals ? withTwoDecimals[0] : num;
@@ -240,6 +327,10 @@ const Index = () => {
           </Typography>
           <ProgressBar
             progressValue={computeProgressBar(
+              Number(ethers.BigNumber.from(chosenVault[5][0])),
+              Number(ethers.BigNumber.from(chosenVault[5][2]))
+            )}
+            greyBarValue={computeGreyBar(
               Number(ethers.BigNumber.from(chosenVault[5][0])),
               Number(ethers.BigNumber.from(chosenVault[5][2]))
             )}
