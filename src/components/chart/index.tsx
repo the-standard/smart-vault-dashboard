@@ -166,18 +166,19 @@ const Index = () => {
     }
   };
 
-  const computeProgressBar = (totalDebt: any, collateralValue: any) => {
-    // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
+  const computeProgressBar = (totalDebt: any) => {
+    console.log(collateralValueFormattedToEuros);
+    // // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
     console.log("totalDebt", totalDebt);
-    console.log("collateralValue", collateralValue);
+    console.log("collateralValue", collateralValueFormattedToEuros);
     console.log(formatUnits(totalDebt, 18));
-    console.log(formatUnits(collateralValue, 18));
+    // console.log(formatUnits(collateralValue, 18));
 
     const ratio =
       Number(formatUnits(totalDebt, 18)) /
-      Number(formatUnits(collateralValue, 18));
+      Number(collateralValueFormattedToEuros);
     console.log("ratio", ratio.toFixed(2));
-    console.log("ratio", (ratio * 100).toFixed(2));
+    // console.log("ratio", (ratio * 100).toFixed(2));
     const returnVal = (ratio * 100).toFixed(2);
     if (isNaN(Number(returnVal))) {
       return "0.00";
@@ -389,8 +390,8 @@ const Index = () => {
           </Typography>
           <ProgressBar
             progressValue={computeProgressBar(
-              Number(ethers.BigNumber.from(chosenVault[5][0])),
-              Number(ethers.BigNumber.from(chosenVault[5][2]))
+              Number(ethers.BigNumber.from(chosenVault[5][0]))
+              // Number(ethers.BigNumber.from(chosenVault[5][2]))
             )}
             greyBarValue={computeGreyBar()}
           />
