@@ -45,7 +45,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
   const { priceCalculatorabi } = usePriceCalculatorStore.getState();
   const { vaultStore } = useVaultStore.getState();
-  const { getOperationType } = useGreyProgressBarValuesStore.getState();
+  const { getOperationType, getGreyBarUserInput } =
+    useGreyProgressBarValuesStore.getState();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -131,6 +132,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
     console.log(symbol);
     getCollateralSymbol(symbol);
     getOperationType(element);
+    getGreyBarUserInput(0);
   };
   return (
     <Box

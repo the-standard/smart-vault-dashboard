@@ -108,33 +108,62 @@ const Index = () => {
   }, []);
 
   const computeGreyBar = () => {
-    let ratio: any = undefined;
-    if (collateralValueFormattedToEuros !== undefined) {
-      const totalDebt = Number(ethers.BigNumber.from(chosenVault[5][0]));
-
-      //computation starts here
-      const collateralPlusGreyBarValue =
-        Number(collateralValueFormattedToEuros) +
-        Number(userInputForGreyBarOperation);
-      console.log("collateralPlusGreyBarValue", collateralPlusGreyBarValue);
-      const collateralMinusGreyBarValue =
-        Number(collateralValueFormattedToEuros) -
-        Number(userInputForGreyBarOperation);
-      console.log("collateralMinusGreyBarValue", collateralMinusGreyBarValue);
-      //make this ratio conditional
-      if (operationType === 1) {
-        ratio =
-          Number(formatEther(BigInt(totalDebt))) / collateralPlusGreyBarValue;
-      } else if (operationType === 2) {
-        ratio =
-          (Number(formatEther(BigInt(totalDebt))) /
-            collateralMinusGreyBarValue) *
-          100;
-      }
-
-      console.log("ratio", ratio.toFixed(2));
+    //let ratio: any = undefined;
+    let totalDebt: any = undefined;
+    // const collateralValue: any = Number(
+    //   ethers.BigNumber.from(chosenVault[5][2])
+    // );
+    console.log(chosenVault);
+    //conditionnal total debt
+    if (operationType === 1 || operationType === 2) {
+      totalDebt = Number(ethers.BigNumber.from(chosenVault[5][0]));
+    } else if (operationType === 3) {
+      totalDebt =
+        Number(ethers.BigNumber.from(chosenVault[5][0])) -
+        userInputForGreyBarOperation;
+    } else if (operationType === 4) {
+      totalDebt =
+        Number(ethers.BigNumber.from(chosenVault[5][0])) +
+        userInputForGreyBarOperation;
     }
-    return typeof ratio !== "undefined" ? ratio.toFixed(2) : undefined;
+
+    //conditionnal collateral value
+
+    //computation starts here
+
+    // ratio =
+    //   totalDebt / Number(collateralValueFormattedToEuros) -
+    //   Number(userInputForGreyBarOperation);
+    // console.log(
+    //   "collateralValueFormattedToEuros",
+    //   collateralValueFormattedToEuros
+    // );
+    // console.log("total debt", Number(formatEther(totalDebt)));
+    // console.log("userInputForGreyBarOperation", userInputForGreyBarOperation);
+    // console.log(
+    //   "result",
+    //   Number(formatEther(totalDebt)) /
+    //     (Number(collateralValueFormattedToEuros) -
+    //       Number(userInputForGreyBarOperation))
+    // );
+    // console.log("ratio", Number(formatEther(BigInt(ratio))) * 100);
+
+    if (operationType === 1) {
+      return (
+        (Number(formatEther(totalDebt)) /
+          (Number(collateralValueFormattedToEuros) +
+            Number(userInputForGreyBarOperation))) *
+        100
+      );
+    } else if (operationType === 2) {
+      //withdrawing
+      return (
+        (Number(formatEther(totalDebt)) /
+          (Number(collateralValueFormattedToEuros) -
+            Number(userInputForGreyBarOperation))) *
+        100
+      );
+    }
   };
 
   const computeProgressBar = (totalDebt: any, collateralValue: any) => {
