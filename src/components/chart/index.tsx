@@ -22,7 +22,7 @@ const Index = () => {
 
   console.log(vaultStore);
   const chosenVault: any = vaultStore;
-  const [progressValues, setProgressValues] = useState<any[]>([]);
+  const [chartValues, setChartValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [euroPrice, setEuroPrice] = useState<any>(undefined);
   const [ethToEuro, setEthToEuro] = useState<any>(undefined);
@@ -30,6 +30,60 @@ const Index = () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   let myToken = undefined;
+
+  const getChartValues = async () => {
+    if (chosenVault[5] != undefined) {
+      try {
+        setLoading(true);
+        const collateralValueInUSD = removeLast18Digits(
+          fromHex(chosenVault[5][2]._hex, "number")
+        );
+
+        const collateralValueInEuro = await convertUsdToEuro(
+          collateralValueInUSD
+        );
+        const totalDebt = formatEther(chosenVault[5][0]);
+
+        const totalLiquidationValue = Number(totalDebt) * 1.1;
+
+        const borrowLimit =
+          Number(collateralValueInEuro) - Number(collateralValueInEuro) * 0.15;
+
+        const returnedValues = [
+          {
+            title: "Debt outstanding",
+            value: truncateToTwoDecimals(totalDebt),
+            currency: "sEURO",
+          },
+          {
+            title: "Vault Collateral Value",
+            value: truncateToTwoDecimals(collateralValueInEuro),
+            currency: "sEURO",
+          },
+          {
+            title: "Collateral Value Liquidation Trigger",
+            value: truncateToTwoDecimals(totalLiquidationValue),
+            currency: "sEURO",
+          },
+          {
+            title: "You can borrow up to:",
+            value: truncateToTwoDecimals(borrowLimit),
+            currency: "sEURO",
+          },
+        ];
+
+        setChartValues(returnedValues);
+
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getChartValues();
+  }, [chosenVault]);
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
@@ -185,52 +239,6 @@ const Index = () => {
     getEuroPrice();
   }, []);
 
-  useEffect(() => {
-    if (chosenVault[5] != undefined && euroPrice != undefined) {
-      const collateralValueInUSD = removeLast18Digits(
-        fromHex(chosenVault[5][2]._hex, "number")
-      );
-      console.log("collateralValueInUSD", collateralValueInUSD);
-      const totalCollateralValue = collateralValueInUSD * euroPrice;
-      console.log("totalCollateralValue", totalCollateralValue);
-
-      const totalDebt = formatEther(chosenVault[5][0]);
-
-      const totalLiquidationValue = Number(totalDebt) * 1.1;
-
-      const borrowLimit = totalCollateralValue - totalCollateralValue * 0.15;
-
-      setProgressValues([
-        {
-          title: "Debt outstanding",
-          value: truncateToTwoDecimals(totalDebt),
-          currency: "sEURO",
-        },
-        {
-          title: "Vault Collateral Value",
-          value: truncateToTwoDecimals(totalCollateralValue),
-          currency: "sEURO",
-        },
-        {
-          title: "Collateral Value Liquidation Trigger",
-          value: truncateToTwoDecimals(totalLiquidationValue),
-          currency: "sEURO",
-        },
-        {
-          title: "You can borrow up to:",
-          value: truncateToTwoDecimals(borrowLimit),
-          currency: "sEURO",
-        },
-      ]);
-
-      setLoading(false);
-    }
-  }, [chosenVault]);
-
-  if (euroPrice === undefined) {
-    return <div>loading</div>;
-  }
-
   return (
     <Box
       sx={{
@@ -262,7 +270,7 @@ const Index = () => {
           {loading ? (
             <Typography variant="body2">Loading...</Typography>
           ) : (
-            progressValues.map((item, index) => (
+            chartValues.map((item, index) => (
               <Box
                 sx={{
                   marginBottom: "25px",
