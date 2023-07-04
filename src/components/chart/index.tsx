@@ -108,12 +108,9 @@ const Index = () => {
   }, []);
 
   const computeGreyBar = () => {
-    //let ratio: any = undefined;
     let totalDebt: any = undefined;
-    // const collateralValue: any = Number(
-    //   ethers.BigNumber.from(chosenVault[5][2])
-    // );
     console.log(chosenVault);
+
     //conditionnal total debt
     if (operationType === 1 || operationType === 2) {
       totalDebt = Number(ethers.BigNumber.from(chosenVault[5][0]));
@@ -131,23 +128,7 @@ const Index = () => {
 
     //computation starts here
 
-    // ratio =
-    //   totalDebt / Number(collateralValueFormattedToEuros) -
-    //   Number(userInputForGreyBarOperation);
-    // console.log(
-    //   "collateralValueFormattedToEuros",
-    //   collateralValueFormattedToEuros
-    // );
-    // console.log("total debt", Number(formatEther(totalDebt)));
-    // console.log("userInputForGreyBarOperation", userInputForGreyBarOperation);
-    // console.log(
-    //   "result",
-    //   Number(formatEther(totalDebt)) /
-    //     (Number(collateralValueFormattedToEuros) -
-    //       Number(userInputForGreyBarOperation))
-    // );
-    // console.log("ratio", Number(formatEther(BigInt(ratio))) * 100);
-
+    //depositing
     if (operationType === 1) {
       return (
         (Number(formatEther(totalDebt)) /
@@ -186,6 +167,7 @@ const Index = () => {
       return returnVal;
     }
   };
+
   function truncateToTwoDecimals(num: any) {
     const withTwoDecimals = num.toString().match(/^-?\d+(?:\.\d{0,2})?/);
     return withTwoDecimals ? withTwoDecimals[0] : num;
