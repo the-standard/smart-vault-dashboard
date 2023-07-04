@@ -14,6 +14,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   // const progressBar = document.getElementById("progress-bar");
   // const percentageDiv = document.getElementById("percentage");
   console.log(progressValue);
+  console.log(greyBarValue);
 
   // Set the percentage value
   const percentage = progressValue;

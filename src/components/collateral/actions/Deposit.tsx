@@ -8,6 +8,7 @@ import {
   useSnackBarStore,
   usesUSD6Store,
   usesUSD18Store,
+  useGreyProgressBarValuesStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
 import { ethers } from "ethers";
@@ -37,6 +38,8 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   const { sUSD18Address, sUSD18Abi, arbitrumGoerlisUSD18Address } =
     usesUSD18Store();
   const { getSnackBar } = useSnackBarStore();
+  const { getGreyBarUserInput, getSymbolForGreyBar } =
+    useGreyProgressBarValuesStore();
   //local
 
   console.log(symbol);
@@ -46,6 +49,8 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
     console.log(e.target.value);
+    getGreyBarUserInput(Number(e.target.value));
+    getSymbolForGreyBar(symbol);
   };
 
   //clipboard logic

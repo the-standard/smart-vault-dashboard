@@ -300,3 +300,27 @@ export const useBurgerMenuStore = create<BurgerMenuState>((set) => ({
   burgerMenu: false,
   getBurgerMenu: (burgerMenu) => set({ burgerMenu }),
 }));
+
+interface GreyProgressBarValuesState {
+  userInputForGreyBarOperation: any;
+  symbolForGreyBar: string;
+  // 1 for deposit, 2 for withdraw, 3 for swap, 4 for Borrow, 5 for Repay
+  operationType: number;
+
+  getGreyBarUserInput: (userInputForGreyBarOperation: any) => void;
+  getSymbolForGreyBar: (symbolForGreyBar: string) => void;
+  getOperationType: (operationType: number) => void;
+}
+
+export const useGreyProgressBarValuesStore = create<GreyProgressBarValuesState>(
+  (set) => ({
+    userInputForGreyBarOperation: 0,
+    symbolForGreyBar: "",
+    operationType: 0,
+
+    getGreyBarUserInput: (userInputForGreyBarOperation) =>
+      set({ userInputForGreyBarOperation }),
+    getSymbolForGreyBar: (symbolForGreyBar) => set({ symbolForGreyBar }),
+    getOperationType: (operationType) => set({ operationType }),
+  })
+);

@@ -18,6 +18,7 @@ import {
   useCircularProgressStore,
   useSnackBarStore,
   useVaultIdStore,
+  useGreyProgressBarValuesStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
 import CheckIcon from "@mui/icons-material/Check";
@@ -35,6 +36,8 @@ const Debt = () => {
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { getSnackBar } = useSnackBarStore();
   const { vaultID } = useVaultIdStore();
+  const { getGreyBarUserInput, getOperationType } =
+    useGreyProgressBarValuesStore();
 
   const debtValue: any = ethers.BigNumber.from(vaultStore[5][0]);
   console.log(debtValue.toString());
@@ -42,11 +45,13 @@ const Debt = () => {
   const handleClick = (element: any) => {
     setActiveElement(element);
     handleInputFocus();
+    getOperationType(element);
   };
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
     console.log(e.target.value);
+    getGreyBarUserInput(e.target.value);
   };
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
