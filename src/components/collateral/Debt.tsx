@@ -138,7 +138,7 @@ const Debt = () => {
   };
 
   const handleWithdraw = () => {
-    if (activeElement === 1) {
+    if (activeElement === 4) {
       console.log("borrow");
       borrowMoney();
     } else {
@@ -486,7 +486,7 @@ const Debt = () => {
           borderRadius: "10px",
           padding: "1rem",
           marginTop: "1rem",
-          marginBottom: activeElement !== 1 ? "1.5rem" : "0",
+          marginBottom: activeElement !== 4 ? "1.5rem" : "0",
         }}
       >
         {activeElement === 4
@@ -613,7 +613,7 @@ const Debt = () => {
           }}
           onClick={handleWithdraw}
         >
-          {activeElement === 1 ? "Withdraw" : "Repay"}
+          {activeElement === 4 ? "Withdraw" : "Repay"}
         </Box>
       </Box>
       <div>
