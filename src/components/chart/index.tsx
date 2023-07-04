@@ -24,7 +24,7 @@ const Index = () => {
   const chosenVault: any = vaultStore;
   const [progressValues, setProgressValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [euroPrice, setEuroPrice] = useState(undefined);
+  const [euroPrice, setEuroPrice] = useState<any>(undefined);
   const [ethToEuro, setEthToEuro] = useState<any>(undefined);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
