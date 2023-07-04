@@ -360,8 +360,8 @@ const Debt = () => {
               boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
             },
           }}
-          className={activeElement === 1 ? "activeBtn" : ""}
-          onClick={() => handleClick(1)}
+          className={activeElement === 4 ? "activeBtn" : ""}
+          onClick={() => handleClick(4)}
         >
           Borrow
         </Box>
@@ -422,8 +422,8 @@ const Debt = () => {
               boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
             },
           }}
-          className={activeElement === 2 ? "activeBtn" : ""}
-          onClick={() => handleClick(2)}
+          className={activeElement === 5 ? "activeBtn" : ""}
+          onClick={() => handleClick(5)}
         >
           Repay
         </Box>

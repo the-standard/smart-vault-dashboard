@@ -25,6 +25,7 @@ const Index = () => {
   const [progressValues, setProgressValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [euroPrice, setEuroPrice] = useState(undefined);
+  const [ethToEuro, setEthToEuro] = useState<any>(undefined);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -79,6 +80,7 @@ const Index = () => {
         Number(ethers.BigNumber.from(chosenVault[5][0])),
         Number(ethers.BigNumber.from(chosenVault[5][2]))
       );
+      setEthToEuro(euroValue.toFixed(2));
 
       return euroValue.toFixed(2);
     } catch (error) {
@@ -87,15 +89,35 @@ const Index = () => {
   };
 
   const computeGreyBar = (totalDebt: any, collateralValue: any) => {
-    const debt = Number(formatUnits(totalDebt, 18));
-    const collateral = Number(formatUnits(collateralValue, 18));
-    console.log(
-      (debt / (collateral - Number(userInputForGreyBarOperation))) * 100
-    );
-    console.log("totalDebt", Number(formatUnits(totalDebt, 18)));
-    console.log("collateralValue", Number(formatUnits(collateralValue, 18)));
+    if (ethToEuro !== undefined) {
+      const debt = Number(formatUnits(totalDebt, 18));
+      const collateral = Number(formatUnits(collateralValue, 18));
+      let operation: any;
+      console.log(
+        (debt / (collateral - Number(userInputForGreyBarOperation))) * 100
+      );
+      console.log("totalDebt", Number(formatUnits(totalDebt, 18)));
+      console.log("collateralValue", Number(formatUnits(collateralValue, 18)));
 
-    return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
+      // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
+      if (operationType === 1) {
+        //deposit / userinputforgreybaroperation must be converted to eth to euros
+        operation = (debt / (collateral + Number(ethToEuro))) * 100;
+      } else if (operationType === 2) {
+        //withdraw  / ethToEuro must be converted to eth to euros
+        operation = (debt / (collateral - Number(ethToEuro))) * 100;
+      } else if (operationType === 4) {
+        //borrow
+        operation =
+          ((debt + Number(userInputForGreyBarOperation)) / collateral) * 100;
+      } else if (operationType === 5) {
+        //repay
+        operation =
+          ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
+      }
+      console.log(operation);
+      return operation;
+    }
   };
 
   useEffect(() => {
