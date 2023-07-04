@@ -227,6 +227,10 @@ const Index = () => {
     }
   }, [chosenVault]);
 
+  if (euroPrice === undefined) {
+    return <div>loading</div>;
+  }
+
   return (
     <Box
       sx={{
