@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
 // import CircularProgress from "@mui/material/CircularProgress";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/seurologo.png";
 // import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
@@ -162,9 +162,9 @@ const Debt = () => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(circularProgress);
-  // }, []);
+  useEffect(() => {
+    setActiveElement(4);
+  }, []);
 
   const handleInputFocus = () => {
     inputRef.current.focus();
@@ -436,7 +436,7 @@ const Debt = () => {
           marginTop: "1rem",
         }}
       >
-        {activeElement === 1 ? (
+        {activeElement === 4 ? (
           <input
             style={{
               background: " rgba(18, 18, 18, 0.5)",
@@ -489,7 +489,7 @@ const Debt = () => {
           marginBottom: activeElement !== 1 ? "1.5rem" : "0",
         }}
       >
-        {activeElement === 1
+        {activeElement === 4
           ? borrowValues.map((item) => (
               <Box
                 sx={{
