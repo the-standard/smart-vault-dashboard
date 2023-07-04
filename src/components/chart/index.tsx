@@ -186,7 +186,7 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    if (chosenVault[5] != undefined) {
+    if (chosenVault[5] != undefined && euroPrice != undefined) {
       const collateralValueInUSD = removeLast18Digits(
         fromHex(chosenVault[5][2]._hex, "number")
       );
