@@ -116,7 +116,7 @@ const Debt = () => {
   };
 
   const repayMoney = async () => {
-    getProgressType(2);
+    getProgressType(5);
 
     setModalStep(2);
 
@@ -131,6 +131,7 @@ const Debt = () => {
       waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
       handleClose();
       setModalStep(1);
+      getProgressType(2);
     } catch (error) {
       console.log(error);
       setModalStep(1);
