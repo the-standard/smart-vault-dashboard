@@ -155,10 +155,10 @@ const Index = () => {
 
       // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
       if (operationType === 1) {
-        //deposit / userinputforgreybaroperation must be converted to eth to euros
+        //deposit /
         operation = (debt / (collateral + Number(ethToEuro))) * 100;
       } else if (operationType === 2) {
-        //withdraw  / ethToEuro must be converted to eth to euros
+        //withdraw  /
         operation = (debt / (collateral - Number(ethToEuro))) * 100;
       } else if (operationType === 4) {
         //borrow
@@ -170,7 +170,8 @@ const Index = () => {
           ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
       }
       console.log(operation);
-      return operation;
+      operation >= 100 ? (operation = 100) : operation;
+      return userInputForGreyBarOperation === 0 ? 0 : operation;
     }
   };
 
