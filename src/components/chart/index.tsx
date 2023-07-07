@@ -170,6 +170,7 @@ const Index = () => {
           ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
       }
       console.log(operation);
+      //not sure about this line, test it
       operation >= 100 ? (operation = 100) : operation;
       return userInputForGreyBarOperation === 0 ? 0 : operation;
     }

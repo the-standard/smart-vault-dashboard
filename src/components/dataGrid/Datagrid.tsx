@@ -358,6 +358,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage
                 )
+                .sort((a, b) =>
+                  ethers.BigNumber.from(b[0])
+                    .sub(ethers.BigNumber.from(a[0]))
+                    .toNumber()
+                )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
                     <td>
@@ -435,6 +440,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 .slice(
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage
+                )
+                .sort((a, b) =>
+                  ethers.BigNumber.from(b[0])
+                    .sub(ethers.BigNumber.from(a[0]))
+                    .toNumber()
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
@@ -528,6 +538,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 .slice(
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage
+                )
+                .sort((a, b) =>
+                  ethers.BigNumber.from(b[0])
+                    .sub(ethers.BigNumber.from(a[0]))
+                    .toNumber()
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>

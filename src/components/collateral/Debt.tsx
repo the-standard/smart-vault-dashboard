@@ -502,13 +502,22 @@ const Debt = () => {
               >
                 <Typography
                   sx={{
-                    color: "#8E9BAE",
+                    color: "#ffff",
+                    fontFamily: "Poppins",
                   }}
                   variant="body1"
                 >
                   {item.key}
                 </Typography>
-                <Typography variant="body1">{item.value}</Typography>
+                <Typography
+                  sx={{
+                    color: "#ffff",
+                    fontFamily: "Poppins",
+                  }}
+                  variant="body1"
+                >
+                  {item.value}
+                </Typography>
               </Box>
             ))
           : repayValues.map((item) => (
@@ -522,13 +531,22 @@ const Debt = () => {
               >
                 <Typography
                   sx={{
-                    color: "#8E9BAE",
+                    color: "#ffff",
+                    fontFamily: "Poppins",
                   }}
                   variant="body1"
                 >
                   {item.key}
                 </Typography>
-                <Typography variant="body1">{item.value}</Typography>
+                <Typography
+                  sx={{
+                    color: "#ffff",
+                    fontFamily: "Poppins",
+                  }}
+                  variant="body1"
+                >
+                  {item.value}
+                </Typography>
               </Box>
             ))}
       </Box>
