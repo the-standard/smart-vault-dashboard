@@ -214,6 +214,8 @@ const StepTwo: React.FC<StepProps> = ({
                 xs: "12px",
                 sm: "14px",
               },
+              color: "white",
+              fontFamily: "Poppins",
             }}
             gutterBottom
           >
@@ -249,6 +251,8 @@ const StepTwo: React.FC<StepProps> = ({
                 xs: "12px",
                 sm: "14px",
               },
+              color: "white",
+              fontFamily: "Poppins",
             }}
             gutterBottom
           >
