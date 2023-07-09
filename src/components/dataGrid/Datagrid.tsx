@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 // import SliderComponent from "../SliderComponent";
 import "../../styles/buttonStyle.css";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 // import abi from "../../abis/vaultManager.ts";
 import { useEffect, useRef, useState } from "react";
 import Modal from "@mui/material/Modal";
@@ -149,15 +149,18 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   }, [tokenToId]);
 
   console.log("vaults", vaults);
-  // console.log("vault sth", ethers.BigNumber.from(vaults[0][1]).toNumber());
 
-  // const renderSlider = (step: number) => {
-  //   return (
-  //     <Box>
-  //       <SliderComponent step={step} />
-  //     </Box>
-  //   );
-  // };
+  const sortedVaults = [...vaults].sort((a, b) => {
+    const idA = BigNumber.from(a[0]);
+    const idB = BigNumber.from(b[0]);
+    if (idA.lt(idB)) {
+      return 1;
+    } else if (idB.lt(idA)) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
 
   const renderActions = (params: any) => {
     const handleManageClick = () => {
@@ -190,7 +193,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           <Button
             sx={{
               cursor: "pointer",
-              marginRight: "2rem",
+              marginRight: "0.7rem",
               height: "3rem",
               display: "flex",
               alignItems: "center",
@@ -338,6 +341,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           >
             <thead>
               <tr>
+                {" "}
+                <th scope="col">Vault ID</th>
                 <th scope="col">Debt Range</th>
                 {/* width is not actually 20px, but it makes the table look good */}
                 <th style={{ width: "20px" }} scope="col">
@@ -353,7 +358,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               </tr>
             </thead>
             <tbody>
-              {vaults
+              {sortedVaults
                 .slice(
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage
@@ -365,8 +370,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
+                    <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
                     <td>
-                      {/* returns NaN */}
                       <ProgressBar
                         progressValue={
                           // (Number(ethers.BigNumber.from(vault[5][0])) /
@@ -436,7 +441,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               </tr>
             </thead>
             <tbody>
-              {vaults
+              {sortedVaults
                 .slice(
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage
@@ -534,7 +539,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               </tr>
             </thead>
             <tbody>
-              {vaults
+              {sortedVaults
+
                 .slice(
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage

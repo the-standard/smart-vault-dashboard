@@ -115,19 +115,6 @@ const Collateral = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionHash]);
 
-  // const returntokens = async () => {
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = provider.getSigner();
-  //   const contract = new ethers.Contract(
-  //     tokenManagerAddress,
-  //     tokenManagerAbi,
-  //     signer
-  //   );
-  //   const tokens = await contract.getAcceptedTokens();
-  //   console.log(tokens[0][0]);
-  //   console.log(ethers.utils.parseBytes32String(tokens[1][0]));
-  // };
-
   const returnAcceptedTokensList = async (conditionalAddress: any) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -194,6 +181,40 @@ const Collateral = () => {
 
   const displayDebt = () => {
     return <Debt />;
+  };
+
+  const buttonDetails = [
+    {
+      id: 1,
+      title: "View on Etherscan",
+    },
+    {
+      id: 2,
+      title: "Add sEURO to wallet",
+    },
+    {
+      id: 3,
+      title: "Earn Yield on sEURO",
+    },
+  ];
+
+  const handleButtonActions = (id: number) => {
+    if (id === 1) {
+      window.open(
+        `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
+        "_blank"
+      );
+    } else if (id === 2) {
+      window.open(
+        `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
+        "_blank"
+      );
+    } else if (id === 3) {
+      window.open(
+        `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
+        "_blank"
+      );
+    }
   };
 
   useEffect(() => {
@@ -303,12 +324,6 @@ const Collateral = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
-            // background: " rgba(18, 18, 18, 0.5)",
-            // boxShadow:
-            //   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-            // borderRadius: "6.24932px",
-            //  padding: "1%",
-            //   border: "1px solid red",
           }}
         >
           <Link
@@ -483,27 +498,6 @@ const Collateral = () => {
             alignItems: "flex-start",
           }}
         >
-          {/* <Box
-            sx={{
-              background: " rgba(18, 18, 18, 0.5)",
-              boxShadow:
-                " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-              borderRadius: "6.24932px",
-              cursor: "pointer",
-              marginLeft: "2rem",
-            }}
-          >
-            <Box
-              sx={{
-                margin: "2px",
-                padding: "5px",
-              }}
-              className={activeElement === 3 ? "glowingCard" : ""}
-              onClick={() => handleClick(3)}
-            >
-              + Add Token
-            </Box>
-          </Box>{" "} */}
           <Box
             sx={{
               display: "flex",
@@ -553,13 +547,7 @@ const Collateral = () => {
         }}
       >
         {/* left side of the container */}
-        <Box
-          sx={
-            {
-              //change this value
-            }
-          }
-        >
+        <Box>
           {" "}
           <Box
             sx={{
@@ -577,42 +565,6 @@ const Collateral = () => {
             marginTop: "8px",
           }}
         >
-          {/* half chart container */}
-          {/* <Box
-            sx={{
-              background:
-                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-              //   border: "1px solid rgba(52, 52, 52, 0.3)",
-              //    boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-              borderRadius: "10px 10px 0px 0px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "auto",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-around",
-                flexDirection: { xs: "column", xl: "row" },
-              }}
-            >
-              {localVault != undefined ? (
-                smallCardValues.map((item, index) => (
-                  <SmallCard key={index} {...item} />
-                ))
-              ) : (
-                <div>loading</div>
-              )}
-            </Box>
-            <HalfChart />
-          </Box> */}
           {/* full chart container */}
           <Box
             sx={{
@@ -632,8 +584,80 @@ const Collateral = () => {
             }}
           >
             {/* full chart and the progress bar here */}
-
             <ChartComponent />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            {/* the new buttons will come here */}
+            {buttonDetails.map((item, index) => (
+              <Box
+                key={index}
+                sx={{
+                  margin: "2px",
+                  padding: "5px",
+                  width: "auto",
+                  height: "3rem",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "1rem",
+
+                  alignItems: "center",
+                  cursor: "pointer",
+                  textAlign: "center",
+                  borderRadius: "6.24932px",
+                  border: "2px solid rgba(255, 255, 255, 0.2)",
+                  boxShadow:
+                    "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+                  fontFamily: '"Poppins", sans-serif',
+                  color: "#ffffff",
+                  fontSize: "1rem",
+                  letterSpacing: "1px",
+                  backdropFilter: "blur(8px)",
+                  transition: "0.5s",
+                  position: "relative",
+                  "&:after": {
+                    content: '""',
+                    position: "absolute",
+                    height: "100%",
+                    width: "100%",
+                    top: "0",
+                    left: "0",
+                    background:
+                      "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+                    backgroundSize: "200% 100%",
+                    backgroundPosition: "165% 0",
+                    transition: "0.7s",
+                  },
+                  "&:hover:after": {
+                    backgroundPosition: "-20% 0",
+                  },
+                  "&:hover": {
+                    boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+                    transform: "translateY(-5px)",
+                  },
+                  "&:active": {
+                    transform: "translateY(0)",
+                    border: "2px solid rgba(152, 250, 250, 0.5)",
+                    boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+                  },
+                  "&.activeBtn": {
+                    background:
+                      "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+                    border: "2px solid white",
+                    boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
+                  },
+                }}
+                onClick={() => {
+                  handleButtonActions(item.id);
+                }}
+              >
+                {item.title}
+              </Box>
+            ))}
           </Box>
         </Box>
       </Box>
