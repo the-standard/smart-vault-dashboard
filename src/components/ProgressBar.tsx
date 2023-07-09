@@ -64,7 +64,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <Box
       sx={{
-        minWidth: "150px",
+        minWidth: "80px",
         color: "white",
       }}
     >
