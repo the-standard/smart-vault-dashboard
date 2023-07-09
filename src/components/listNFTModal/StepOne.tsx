@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
+import { useVaultForListingStore } from "../../store/Store.ts";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,6 +25,9 @@ const StepOne: React.FC<StepProps> = ({
 
   console.log(tokenMap);
   console.log(modalChildState);
+
+  const { vaultForListing } = useVaultForListingStore();
+  console.log(vaultForListing);
   return (
     <Box sx={{}}>
       <Box sx={{}}>
@@ -110,6 +114,7 @@ const StepOne: React.FC<StepProps> = ({
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
+              color: "white",
             }}
           >
             <Typography
@@ -133,6 +138,8 @@ const StepOne: React.FC<StepProps> = ({
                   xs: "12px",
                   sm: "14px",
                 },
+                color: "white",
+                fontFamily: "Poppins",
               }}
               gutterBottom
             >
@@ -168,6 +175,8 @@ const StepOne: React.FC<StepProps> = ({
                   xs: "12px",
                   sm: "14px",
                 },
+                color: "white",
+                fontFamily: "Poppins",
               }}
               gutterBottom
             >
@@ -203,10 +212,49 @@ const StepOne: React.FC<StepProps> = ({
                   xs: "12px",
                   sm: "14px",
                 },
+                color: "white",
+                fontFamily: "Poppins",
               }}
               gutterBottom
             >
               {tokenMap.get(modalChildState).attributes[6].value}
+            </Typography>
+          </CardContent>{" "}
+          <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              sx={{
+                fontStyle: "normal",
+                fontWeight: "400",
+                fontSize: {
+                  xs: "12px",
+                  sm: "16px",
+                },
+                lineHeight: "141.5%",
+                color: "#8E9BAE",
+              }}
+              gutterBottom
+            >
+              {tokenMap.get(modalChildState).attributes[7].trait_type}
+            </Typography>{" "}
+            <Typography
+              sx={{
+                fontSize: {
+                  xs: "12px",
+                  sm: "14px",
+                },
+                color: "white",
+                fontFamily: "Poppins",
+              }}
+              gutterBottom
+            >
+              {tokenMap.get(modalChildState).attributes[7].value}
             </Typography>
           </CardContent>
           <div
@@ -256,10 +304,16 @@ const StepOne: React.FC<StepProps> = ({
                   xs: "12px",
                   sm: "14px",
                 },
+                color: "white",
+                fontFamily: "Poppins",
               }}
               gutterBottom
             >
-              {tokenMap.get(modalChildState).attributes[6].value}
+              {(
+                tokenMap.get(modalChildState).attributes[5].value +
+                tokenMap.get(modalChildState).attributes[6].value +
+                tokenMap.get(modalChildState).attributes[7].value
+              ).toFixed(2)}
             </Typography>
           </CardContent>
         </Card>
@@ -317,6 +371,8 @@ const StepOne: React.FC<StepProps> = ({
                   xs: "12px",
                   sm: "14px",
                 },
+                color: "white",
+                fontFamily: "Poppins",
               }}
               gutterBottom
             >
@@ -352,6 +408,8 @@ const StepOne: React.FC<StepProps> = ({
                   xs: "12px",
                   sm: "14px",
                 },
+                color: "white",
+                fontFamily: "Poppins",
               }}
               gutterBottom
             >
@@ -405,6 +463,7 @@ const StepOne: React.FC<StepProps> = ({
                   xs: "12px",
                   sm: "14px",
                 },
+                color: "white",
               }}
               gutterBottom
             >
