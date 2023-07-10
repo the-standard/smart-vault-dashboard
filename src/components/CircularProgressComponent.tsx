@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useCircularProgressStore } from "../store/Store";
 import { useEffect } from "react";
@@ -55,6 +55,15 @@ const CircularProgressComponent = () => {
                   height: "250px",
                 }}
               >
+                {" "}
+                <Typography
+                  sx={{
+                    width: "450px",
+                  }}
+                  variant="body2"
+                >
+                  Withdrawing from your blockchain smart vault{" "}
+                </Typography>
                 <Lottie animationData={withdrawLottie} />{" "}
               </Box>
             </Box>
@@ -96,6 +105,14 @@ const CircularProgressComponent = () => {
                   height: "250px",
                 }}
               >
+                <Typography
+                  sx={{
+                    width: "450px",
+                  }}
+                  variant="body2"
+                >
+                  Depositing to your blockchain smart vault
+                </Typography>
                 <Lottie animationData={depositLottie} />{" "}
               </Box>
             </Box>
@@ -136,6 +153,15 @@ const CircularProgressComponent = () => {
                   height: "250px",
                 }}
               >
+                {" "}
+                <Typography
+                  sx={{
+                    width: "450px",
+                  }}
+                  variant="body2"
+                >
+                  Creating your blockchain smart vault{" "}
+                </Typography>
                 <Lottie animationData={newVaultLottie} />{" "}
               </Box>
             </Box>
@@ -194,7 +220,6 @@ const CircularProgressComponent = () => {
               zIndex: 9999,
             }}
           >
-            {" "}
             <CircularProgress />
           </Box>
         )
