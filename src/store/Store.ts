@@ -264,7 +264,7 @@ interface CirccularProgressState {
 export const useCircularProgressStore = create<CirccularProgressState>(
   (set) => ({
     circularProgress: false,
-    //1 for withdraw, 2 for deposit, 3 for new vault
+    //1 for withdraw, 2 for deposit, 3 for new vault, 5 for repay with flex-end
     progressType: 1,
     getCircularProgress: (circularProgress) => set({ circularProgress }),
     getProgressType: (progressType: number) => set({ progressType }),
