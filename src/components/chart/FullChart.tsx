@@ -8,40 +8,12 @@ import { ResponsivePie } from "@nivo/pie";
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const FullChart = () => (
+interface fullChartProps {
+  fullChartData: [];
+}
+const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
   <ResponsivePie
-    data={[
-      {
-        id: "BTC",
-        label: "Bitcoin BTC",
-        value: 482,
-        color: "hsl(223, 70%, 50%)",
-      },
-      {
-        id: "ETH",
-        label: "Ethereum ETH",
-        value: 229,
-        color: "hsl(46, 70%, 50%)",
-      },
-      {
-        id: "SHIB",
-        label: "Shiba Inu SHIB",
-        value: 531,
-        color: "hsl(299, 70%, 50%)",
-      },
-      {
-        id: "MATIC",
-        label: "Polygon MATIC",
-        value: 192,
-        color: "hsl(338, 70%, 50%)",
-      },
-      {
-        id: "USDC",
-        label: "USD Coin USDC",
-        value: 91,
-        color: "hsl(304, 70%, 50%)",
-      },
-    ]}
+    data={fullChartData}
     margin={{ top: 40, right: 0, bottom: 40, left: 0 }}
     innerRadius={0.82}
     padAngle={4}

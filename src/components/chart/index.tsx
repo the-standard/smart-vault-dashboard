@@ -26,6 +26,8 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [euroPrice, setEuroPrice] = useState<any>(undefined);
   const [ethToEuro, setEthToEuro] = useState<any>(undefined);
+  const [chartData, setChartData] = useState<any>([]);
+  const [ethPriceInUsd, setEthPriceInUsd] = useState<any>(undefined);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -108,6 +110,7 @@ const Index = () => {
     console.log(BigInt(priceInUsd));
     const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
     console.log(priceFormatted);
+    setEthPriceInUsd(priceFormatted);
     console.log(userInputForGreyBarOperation);
     console.log(Number(priceFormatted) * userInputForGreyBarOperation);
     const amountinUsd =
@@ -241,6 +244,76 @@ const Index = () => {
     getEuroPrice();
   }, []);
 
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    if (chosenVault[5] != undefined && euroPrice != undefined) {
+      const collateralMapped = chosenVault[5][3].map((collateral: any) => {
+        const id = ethers.utils.parseBytes32String(collateral[0].symbol);
+        let value = fromHex(collateral[1]._hex, "number");
+
+        if (id === "ETH") {
+          value = Number(formatUnits(BigInt(value), 18)) * ethPriceInUsd;
+        } else if (id === "SUSD6") {
+          value = Number(formatUnits(BigInt(value), 6));
+        } else if (id === "SUSD18") {
+          value = Number(formatUnits(BigInt(value), 18));
+        }
+
+        return {
+          id,
+          value,
+        };
+      });
+
+      console.log("collateralMapped", collateralMapped);
+      setChartData(collateralMapped);
+
+      const collateralValueInUSD = removeLast18Digits(
+        fromHex(chosenVault[5][2]._hex, "number")
+      );
+      console.log("collateralValueInUSD", collateralValueInUSD);
+      const totalCollateralValue = collateralValueInUSD * euroPrice;
+      console.log("totalCollateralValue", totalCollateralValue);
+
+      const totalDebt = formatEther(chosenVault[5][0]);
+
+      const totalLiquidationValue = Number(totalDebt) * 1.1;
+
+      const borrowLimit = totalCollateralValue - totalCollateralValue * 0.15;
+
+      setProgressValues([
+        {
+          title: "Debt outstanding",
+          value: truncateToTwoDecimals(totalDebt),
+          currency: "sEURO",
+        },
+        {
+          title: "Vault Collateral Value",
+          value: truncateToTwoDecimals(totalCollateralValue),
+          currency: "sEURO",
+        },
+        {
+          title: "Collateral Value Liquidation Trigger",
+          value: truncateToTwoDecimals(totalLiquidationValue),
+          currency: "sEURO",
+        },
+        {
+          title: "You can borrow up to:",
+          value: truncateToTwoDecimals(borrowLimit),
+          currency: "sEURO",
+        },
+      ]);
+
+      setLoading(false);
+    }
+  }, [chosenVault]);
+
+  if (euroPrice === undefined) {
+    return <div>loading</div>;
+  }
+
+>>>>>>> development
   return (
     <Box
       sx={{
@@ -328,7 +401,7 @@ const Index = () => {
             alignItems: "center",
           }}
         >
-          <FullChart />
+          <FullChart fullChartData={chartData} />
           <Typography
             sx={{
               position: "relative",

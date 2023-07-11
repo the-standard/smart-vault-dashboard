@@ -142,7 +142,13 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
             },
           },
           tooltip: {
+            enabled: true,
             shared: false,
+            x: {
+              show: false,
+              format: "dd MMM",
+              formatter: undefined,
+            },
             y: {
               formatter: function (val) {
                 return (val / 1000000).toFixed(0);
