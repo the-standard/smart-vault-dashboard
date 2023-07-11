@@ -22,9 +22,9 @@ const Index = () => {
 
   console.log(vaultStore);
   const chosenVault: any = vaultStore;
-  const [chartValues, setChartValues] = useState<any[]>([]);
+  const [progressValues, setProgressValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [euroPrice, setEuroPrice] = useState<any>(undefined);
+  const [euroPrice, setEuroPrice] = useState(undefined);
   const [ethToEuro, setEthToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
   const [ethPriceInUsd, setEthPriceInUsd] = useState<any>(undefined);
@@ -32,60 +32,6 @@ const Index = () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   let myToken = undefined;
-
-  const getChartValues = async () => {
-    if (chosenVault[5] != undefined) {
-      try {
-        setLoading(true);
-        const collateralValueInUSD = removeLast18Digits(
-          fromHex(chosenVault[5][2]._hex, "number")
-        );
-
-        const collateralValueInEuro = await convertUsdToEuro(
-          collateralValueInUSD
-        );
-        const totalDebt = formatEther(chosenVault[5][0]);
-
-        const totalLiquidationValue = Number(totalDebt) * 1.1;
-
-        const borrowLimit =
-          Number(collateralValueInEuro) - Number(collateralValueInEuro) * 0.15;
-
-        const returnedValues = [
-          {
-            title: "Debt outstanding",
-            value: truncateToTwoDecimals(totalDebt),
-            currency: "sEURO",
-          },
-          {
-            title: "Vault Collateral Value",
-            value: truncateToTwoDecimals(collateralValueInEuro),
-            currency: "sEURO",
-          },
-          {
-            title: "Collateral Value Liquidation Trigger",
-            value: truncateToTwoDecimals(totalLiquidationValue),
-            currency: "sEURO",
-          },
-          {
-            title: "You can borrow up to:",
-            value: truncateToTwoDecimals(borrowLimit),
-            currency: "sEURO",
-          },
-        ];
-
-        setChartValues(returnedValues);
-
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    getChartValues();
-  }, [chosenVault]);
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
@@ -158,10 +104,10 @@ const Index = () => {
 
       // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
       if (operationType === 1) {
-        //deposit /
+        //deposit / userinputforgreybaroperation must be converted to eth to euros
         operation = (debt / (collateral + Number(ethToEuro))) * 100;
       } else if (operationType === 2) {
-        //withdraw  /
+        //withdraw  / ethToEuro must be converted to eth to euros
         operation = (debt / (collateral - Number(ethToEuro))) * 100;
       } else if (operationType === 4) {
         //borrow
@@ -173,9 +119,7 @@ const Index = () => {
           ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
       }
       console.log(operation);
-      //not sure about this line, test it
-      operation >= 100 ? (operation = 100) : operation;
-      return userInputForGreyBarOperation === 0 ? 0 : operation;
+      return operation;
     }
   };
 
@@ -244,8 +188,6 @@ const Index = () => {
     getEuroPrice();
   }, []);
 
-<<<<<<< HEAD
-=======
   useEffect(() => {
     if (chosenVault[5] != undefined && euroPrice != undefined) {
       const collateralMapped = chosenVault[5][3].map((collateral: any) => {
@@ -313,7 +255,6 @@ const Index = () => {
     return <div>loading</div>;
   }
 
->>>>>>> development
   return (
     <Box
       sx={{
@@ -345,7 +286,7 @@ const Index = () => {
           {loading ? (
             <Typography variant="body2">Loading...</Typography>
           ) : (
-            chartValues.map((item, index) => (
+            progressValues.map((item, index) => (
               <Box
                 sx={{
                   marginBottom: "25px",
