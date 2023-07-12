@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
-import { useVaultForListingStore } from "../../store/Store.ts";
+import {
+  useVaultForListingStore,
+  usePriceCalculatorStore,
+  useNFTListingModalStore,
+} from "../../store/Store.ts";
+import { ethers } from "ethers";
+import { formatUnits, fromHex } from "viem";
+import axios from "axios";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,10 +30,94 @@ const StepOne: React.FC<StepProps> = ({
     onDataFromChild(data);
   }
 
+  const { vaultForListing } = useVaultForListingStore();
+  const {
+    getNFTListingModalTotalValue,
+    getNFTListingModalTotalValueMinusDebt,
+  } = useNFTListingModalStore();
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const { priceCalculatorabi } = usePriceCalculatorStore.getState();
+
+  const totalValueInEth = tokenMap.get(modalChildState).attributes[5].value;
+
+  const totalValueInSUSDTokens =
+    tokenMap.get(modalChildState).attributes[6].value +
+    tokenMap.get(modalChildState).attributes[7].value;
+
+  console.log(totalValueInEth);
+
+  const [euroValuesAddedTogether, setEuroValuesAddedTogether] = useState(0);
+
+  const convertETHToUSD = async (eth: number) => {
+    const ethclAddr = vaultForListing[5][3][0][0][3];
+    console.log(ethclAddr);
+
+    const contract = new ethers.Contract(ethclAddr, priceCalculatorabi, signer);
+    const price = await contract.latestRoundData();
+
+    const priceInUsd = fromHex(price.answer, "number");
+
+    const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
+
+    console.log(priceFormatted);
+
+    const ethValueInUSD = eth * Number(priceFormatted);
+    console.log(ethValueInUSD);
+    return convertUsdToEuro(ethValueInUSD);
+  };
+
+  const convertUsdToEuro = async (priceInUsd: any) => {
+    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
+    try {
+      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+
+      const getUsdToEuro = await axios.get(apiUrl);
+
+      const euroPrice = getUsdToEuro.data.data.EUR;
+      console.log("euroPrice" + euroPrice);
+      console.log("priceInUsd" + priceInUsd);
+      const euroValue = Number(priceInUsd) * euroPrice;
+      console.log("euroValue.toFixed(2)" + euroValue);
+      //you can put tofixed(2) here if necessary
+      return euroValue;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Assuming the convertETHToUSD function returns a promise
+  async function getEuroValuesAddedTogether() {
+    const totalValueOfEthInEuro = await convertETHToUSD(totalValueInEth);
+    console.log(totalValueOfEthInEuro);
+    const totalValueOfSUSDInEuro = await convertUsdToEuro(
+      totalValueInSUSDTokens
+    );
+    console.log(totalValueOfSUSDInEuro);
+    const totalValueInEuro =
+      Number(totalValueOfEthInEuro) + Number(totalValueOfSUSDInEuro);
+    console.log(totalValueInEuro);
+    setEuroValuesAddedTogether(totalValueInEuro);
+
+    console.log(euroValuesAddedTogether);
+  }
+
+  getEuroValuesAddedTogether();
+
+  useEffect(() => {
+    convertETHToUSD(totalValueInEth);
+    getNFTListingModalTotalValue(euroValuesAddedTogether);
+    getNFTListingModalTotalValueMinusDebt(
+      tokenMap.get(modalChildState).attributes[4].value
+    );
+  }, []);
+
   console.log(tokenMap);
   console.log(modalChildState);
+  console.log(tokenMap.get(modalChildState).attributes[4].value);
 
-  const { vaultForListing } = useVaultForListingStore();
   console.log(vaultForListing);
   return (
     <Box sx={{}}>
@@ -309,11 +400,7 @@ const StepOne: React.FC<StepProps> = ({
               }}
               gutterBottom
             >
-              {(
-                tokenMap.get(modalChildState).attributes[5].value +
-                tokenMap.get(modalChildState).attributes[6].value +
-                tokenMap.get(modalChildState).attributes[7].value
-              ).toFixed(2)}
+              {euroValuesAddedTogether ? euroValuesAddedTogether : 0} sEURO
             </Typography>
           </CardContent>
         </Card>
@@ -334,12 +421,11 @@ const StepOne: React.FC<StepProps> = ({
         <Card
           sx={{
             background:
-              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.5%, rgba(0, 0, 0, 0.6) 101.11%)",
             borderRadius: "10px",
             boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(13.9px)",
-            WebkitBackdropFilter: "blur(13.9px)",
             border: "1px solid rgba(255, 255, 255, 0.3)",
+            // backdropFilter: "blur(14px)",
           }}
         >
           <CardContent
@@ -507,7 +593,7 @@ const StepOne: React.FC<StepProps> = ({
               color: "#ffffff",
               fontSize: "1rem",
               letterSpacing: "1px",
-              backdropFilter: "blur(8px)",
+              //backdropFilter: "blur(8px)",
               cursor: "pointer",
               borderRadius: "10px",
               transition: "0.5s",

@@ -34,6 +34,21 @@ const Index = () => {
   let myToken = undefined;
 
   const getChartValues = async () => {
+    const token = vaultStore[5][3][0][0];
+
+    const contract = new ethers.Contract(
+      token.clAddr,
+      priceCalculatorabi,
+      signer
+    );
+
+    const price = await contract.latestRoundData();
+
+    const priceInUsd = fromHex(price.answer, "number");
+
+    const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
+
+    console.log(priceFormatted);
     if (chosenVault[5] != undefined) {
       try {
         setLoading(true);
@@ -42,7 +57,8 @@ const Index = () => {
           let value = fromHex(collateral[1]._hex, "number");
 
           if (id === "ETH") {
-            value = Number(formatUnits(BigInt(value), 18)) * ethPriceInUsd;
+            value =
+              Number(formatUnits(BigInt(value), 18)) * Number(priceFormatted);
           } else if (id === "SUSD6") {
             value = Number(formatUnits(BigInt(value), 6));
           } else if (id === "SUSD18") {

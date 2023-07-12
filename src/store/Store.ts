@@ -282,8 +282,8 @@ export const useSnackBarStore = create<SnackBarState>((set) => ({
 }));
 
 interface VaultForListingState {
-  vaultForListing: Array<unknown>;
-  getVaultForListing: (vaultForListing: Array<unknown>) => void;
+  vaultForListing: any;
+  getVaultForListing: (vaultForListing: any) => void;
 }
 
 export const useVaultForListingStore = create<VaultForListingState>((set) => ({
@@ -324,3 +324,18 @@ export const useGreyProgressBarValuesStore = create<GreyProgressBarValuesState>(
     getOperationType: (operationType) => set({ operationType }),
   })
 );
+
+interface NFTListingModalState {
+  totalValue: number;
+  getNFTListingModalTotalValue: (totalValue: number) => void;
+  totalValueMinusDebt: number;
+  getNFTListingModalTotalValueMinusDebt: (totalValueMinusDebt: number) => void;
+}
+
+export const useNFTListingModalStore = create<NFTListingModalState>((set) => ({
+  totalValue: 0,
+  getNFTListingModalTotalValue: (totalValue) => set({ totalValue }),
+  totalValueMinusDebt: 0,
+  getNFTListingModalTotalValueMinusDebt: (totalValueMinusDebt) =>
+    set({ totalValueMinusDebt }),
+}));

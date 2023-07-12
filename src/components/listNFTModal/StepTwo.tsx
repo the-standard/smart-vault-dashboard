@@ -14,6 +14,7 @@ import { OpenSeaSDK, Chain } from "opensea-js";
 import {
   useVaultForListingStore,
   useContractAddressStore,
+  useNFTListingModalStore,
 } from "../../store/Store";
 import { fromHex } from "viem";
 import { getETHPrice } from "../../utils/getETHPrice";
@@ -36,6 +37,7 @@ const StepTwo: React.FC<StepProps> = ({
 }) => {
   const { vaultForListing } = useVaultForListingStore();
   const { contractAddress } = useContractAddressStore();
+  const { totalValue, totalValueMinusDebt } = useNFTListingModalStore();
 
   const [userInput, setUserInput] = useState<string>("");
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
@@ -219,7 +221,8 @@ const StepTwo: React.FC<StepProps> = ({
             }}
             gutterBottom
           >
-            {tokenMap.get(modalChildState).attributes[6].value}
+            {/* {tokenMap.get(modalChildState).attributes[6].value} */}
+            {totalValue} sEURO
           </Typography>
         </CardContent>
         <CardContent
@@ -256,7 +259,8 @@ const StepTwo: React.FC<StepProps> = ({
             }}
             gutterBottom
           >
-            {tokenMap.get(modalChildState).attributes[6].value}
+            {/* {tokenMap.get(modalChildState).attributes[6].value} */}
+            {totalValueMinusDebt}
           </Typography>
         </CardContent>
       </Card>
