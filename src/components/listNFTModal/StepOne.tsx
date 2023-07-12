@@ -421,12 +421,11 @@ const StepOne: React.FC<StepProps> = ({
         <Card
           sx={{
             background:
-              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.5%, rgba(0, 0, 0, 0.6) 101.11%)",
             borderRadius: "10px",
             boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(13.9px)",
-            WebkitBackdropFilter: "blur(13.9px)",
             border: "1px solid rgba(255, 255, 255, 0.3)",
+            // backdropFilter: "blur(14px)",
           }}
         >
           <CardContent
@@ -594,7 +593,7 @@ const StepOne: React.FC<StepProps> = ({
               color: "#ffffff",
               fontSize: "1rem",
               letterSpacing: "1px",
-              backdropFilter: "blur(8px)",
+              //backdropFilter: "blur(8px)",
               cursor: "pointer",
               borderRadius: "10px",
               transition: "0.5s",
