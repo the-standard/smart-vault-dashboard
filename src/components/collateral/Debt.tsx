@@ -39,7 +39,7 @@ const Debt = () => {
   const { getGreyBarUserInput, getOperationType } =
     useGreyProgressBarValuesStore();
 
-  const debtValue: any = ethers.BigNumber.from(vaultStore[5][0]);
+  const debtValue: any = ethers.BigNumber.from(vaultStore[4].minted);
   console.log(debtValue.toString());
 
   const handleClick = (element: any) => {
