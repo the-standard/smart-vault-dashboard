@@ -365,7 +365,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 </th>
               </tr>
             </thead>
-            {/* <tbody>
+            <tbody>
               {sortedVaults
                 .slice(
                   (currentPage - 1) * itemsPerPage,
@@ -381,15 +381,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
                     <td>
                       <ProgressBar
-                        progressValue={
-                          // (Number(ethers.BigNumber.from(vault[5][0])) /
-                          //   Number(ethers.BigNumber.from(vault[5][1]))) *
-                          // 100
-                          computeProgressBar(
-                            Number(ethers.BigNumber.from(vault[5][0])),
-                            Number(ethers.BigNumber.from(vault[5][2]))
+                        progressValue={computeProgressBar(
+                          Number(ethers.BigNumber.from(vault[4].minted)),
+                          Number(
+                            ethers.BigNumber.from(vault[4].collateralValue)
                           )
-                        }
+                        )}
                       />
                     </td>
                     <td style={{}}>
@@ -401,7 +398,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     </td>
                   </tr>
                 ))}
-            </tbody> */}
+            </tbody>
           </table>{" "}
         </Box>
         {/* medium screen table */}
@@ -448,7 +445,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 </th>
               </tr>
             </thead>
-            {/* <tbody>
+            <tbody>
               {sortedVaults
                 .slice(
                   (currentPage - 1) * itemsPerPage,
@@ -461,7 +458,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
-               
                     <td>
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault[0]).toString()
@@ -479,13 +475,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
 
                     <td>
-              
                       <ProgressBar
                         progressValue={computeProgressBar(
-                          Number(ethers.BigNumber.from(vault[5][0])),
-                          Number(ethers.BigNumber.from(vault[5][2]))
+                          Number(ethers.BigNumber.from(vault[4].minted)),
+                          Number(
+                            ethers.BigNumber.from(vault[4].collateralValue)
+                          )
                         )}
-                      />{" "}
+                      />
                     </td>
                     <td style={{}}>
                       {" "}
@@ -496,7 +493,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     </td>
                   </tr>
                 ))}
-            </tbody> */}
+            </tbody>
           </table>{" "}
         </Box>
         {/* big screen table */}

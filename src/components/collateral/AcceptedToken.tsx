@@ -54,13 +54,13 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
-    console.log(vaultStore[5][3][0][0]);
+    console.log(vaultStore[4].collateral[0].token);
     if (symbol === "SUSD6") {
-      myToken = vaultStore[5][3][1][0];
+      myToken = vaultStore[4].collateral[1].token;
     } else if (symbol === "SUSD18") {
-      myToken = vaultStore[5][3][2][0];
+      myToken = vaultStore[4].collateral[2].token;
     } else {
-      myToken = vaultStore[5][3][0][0];
+      myToken = vaultStore[4].collateral[0].token;
     }
     console.log(symbol);
     const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);

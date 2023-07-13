@@ -20,7 +20,7 @@ const Index = () => {
     useGreyProgressBarValuesStore();
   const { ethToUsdAbi } = useEthToUsdAbiStore.getState();
 
-  console.log(vaultStore);
+  console.log("vault store" + vaultStore);
   const chosenVault: any = vaultStore;
   const [chartValues, setChartValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,8 +35,8 @@ const Index = () => {
   let myToken = undefined;
 
   const getChartValues = async () => {
-    const token = vaultStore[5][3][0][0];
-
+    const token = vaultStore[4].collateral[0][0];
+    console.log(token.clAddr);
     const contract = new ethers.Contract(token.clAddr, ethToUsdAbi, signer);
 
     const price = await contract.latestRoundData();
@@ -46,44 +46,46 @@ const Index = () => {
     const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
 
     console.log(priceFormatted);
-    if (chosenVault[5] != undefined) {
+    if (chosenVault != undefined) {
+      console.log("chosen vault", chosenVault);
       try {
         setLoading(true);
-        const collateralMapped = chosenVault[5][3].map((collateral: any) => {
-          const id = ethers.utils.parseBytes32String(collateral[0].symbol);
-          let value = fromHex(collateral[1]._hex, "number");
+        const collateralMapped = chosenVault[4].collateral.map(
+          (collateral: any) => {
+            const id = ethers.utils.parseBytes32String(collateral[0].symbol);
+            let value = fromHex(collateral[1]._hex, "number");
 
-          if (id === "ETH") {
-            value =
-              Number(formatUnits(BigInt(value), 18)) * Number(priceFormatted);
-          } else if (id === "SUSD6") {
-            value = Number(formatUnits(BigInt(value), 6));
-          } else if (id === "SUSD18") {
-            value = Number(formatUnits(BigInt(value), 18));
+            if (id === "ETH") {
+              value =
+                Number(formatUnits(BigInt(value), 18)) * Number(priceFormatted);
+            } else if (id === "SUSD6") {
+              value = Number(formatUnits(BigInt(value), 6));
+            } else if (id === "SUSD18") {
+              value = Number(formatUnits(BigInt(value), 18));
+            }
+
+            return {
+              id,
+              value,
+            };
           }
-
-          return {
-            id,
-            value,
-          };
-        });
+        );
 
         console.log("collateralMapped", collateralMapped);
         setChartData(collateralMapped);
 
         const collateralValueInUSD = removeLast18Digits(
-          fromHex(chosenVault[5][2]._hex, "number")
+          fromHex(chosenVault[4].collateralValue._hex, "number")
         );
+        console.log("collateralValueInUSD", collateralValueInUSD);
 
-        const collateralValueInEuro = await convertUsdToEuro(
-          collateralValueInUSD
-        );
-        const totalDebt = formatEther(chosenVault[5][0]);
+        const totalDebt = formatEther(chosenVault[4].minted);
+        console.log("totalDebt", totalDebt);
 
         const totalLiquidationValue = Number(totalDebt) * 1.1;
 
         const borrowLimit =
-          Number(collateralValueInEuro) - Number(collateralValueInEuro) * 0.15;
+          Number(collateralValueInUSD) - Number(collateralValueInUSD) * 0.15;
 
         const returnedValues = [
           {
@@ -93,7 +95,7 @@ const Index = () => {
           },
           {
             title: "Vault Collateral Value",
-            value: truncateToTwoDecimals(collateralValueInEuro),
+            value: truncateToTwoDecimals(collateralValueInUSD),
             currency: "sEURO",
           },
           {
@@ -123,13 +125,13 @@ const Index = () => {
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
-    console.log(vaultStore[5][3][0][0]);
+    console.log(vaultStore[4].collateral[0].token);
     if (symbolForGreyBar === "SUSD6") {
-      myToken = vaultStore[5][3][1][0];
+      myToken = vaultStore[4].collateral[1].token;
     } else if (symbolForGreyBar === "SUSD18") {
-      myToken = vaultStore[5][3][2][0];
+      myToken = vaultStore[4].collateral[2].token;
     } else {
-      myToken = vaultStore[5][3][0][0];
+      myToken = vaultStore[4].collateral[0].token;
     }
     console.log(symbolForGreyBar);
     const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
@@ -140,39 +142,12 @@ const Index = () => {
     console.log(BigInt(priceInUsd));
     const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
     console.log(priceFormatted);
-    setEthPriceInUsd(priceFormatted);
+    // setEthPriceInUsd(priceFormatted);
     console.log(userInputForGreyBarOperation);
     console.log(Number(priceFormatted) * userInputForGreyBarOperation);
     const amountinUsd =
       Number(userInputForGreyBarOperation) * Number(priceFormatted);
     console.log(amountinUsd);
-    convertUsdToEuro(amountinUsd);
-  };
-
-  const convertUsdToEuro = async (priceInUsd: any) => {
-    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
-    try {
-      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
-
-      const getUsdToEuro = await axios.get(apiUrl);
-
-      const euroPrice = getUsdToEuro.data.data.EUR;
-      console.log("euroPrice" + euroPrice);
-      console.log("priceInUsd" + priceInUsd);
-      const euroValue = Number(priceInUsd) * euroPrice;
-      console.log("euroValue.toFixed(2)" + euroValue.toFixed(2));
-      //setGreyBarValueConverted(euroValue);
-      //call computegreybar here
-      computeGreyBar(
-        Number(ethers.BigNumber.from(chosenVault[5][0])),
-        Number(ethers.BigNumber.from(chosenVault[5][2]))
-      );
-      setEthToEuro(euroValue.toFixed(2));
-
-      return euroValue.toFixed(2);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const computeGreyBar = (totalDebt: any, collateralValue: any) => {
@@ -254,25 +229,6 @@ const Index = () => {
 
     return resultNum;
   }
-
-  const getEuroPrice = async () => {
-    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
-    try {
-      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
-
-      const getUsdToEuro = await axios.get(apiUrl);
-
-      const euroPriceFromAPI = getUsdToEuro.data.data.EUR;
-      console.log(euroPriceFromAPI);
-      setEuroPrice(euroPriceFromAPI);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getEuroPrice();
-  }, []);
 
   return (
     <Box
@@ -397,12 +353,12 @@ const Index = () => {
           </Typography>
           <ProgressBar
             progressValue={computeProgressBar(
-              Number(ethers.BigNumber.from(chosenVault[5][0])),
-              Number(ethers.BigNumber.from(chosenVault[5][2]))
+              Number(ethers.BigNumber.from(chosenVault[4].minted)),
+              Number(ethers.BigNumber.from(chosenVault[4].collateralValue))
             )}
             greyBarValue={computeGreyBar(
-              Number(ethers.BigNumber.from(chosenVault[5][0])),
-              Number(ethers.BigNumber.from(chosenVault[5][2]))
+              Number(ethers.BigNumber.from(chosenVault[4].minted)),
+              Number(ethers.BigNumber.from(chosenVault[4].collateralValue))
             )}
           />
           <Typography
