@@ -143,9 +143,10 @@ const Collateral = () => {
         //set vault to local state
         setLocalVault(vault);
         //set vault address to state
-        getVaultAddress(vault[1]);
+        getVaultAddress(vault.status.vaultAddress);
+        console.log(vault.status.vaultAddress);
         //set vault address to local state
-        setVaultAddressLocal(vault[1]);
+        setVaultAddressLocal(vault.status.vaultAddress);
       }
     });
     console.log(foundValue);
