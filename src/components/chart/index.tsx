@@ -6,7 +6,7 @@ import {
   useVaultStore,
   useVaultIdStore,
   useGreyProgressBarValuesStore,
-  usePriceCalculatorStore,
+  useEthToUsdAbiStore,
 } from "../../store/Store";
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
@@ -18,7 +18,7 @@ const Index = () => {
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
-  const { priceCalculatorabi } = usePriceCalculatorStore.getState();
+  const { ethToUsdAbi } = useEthToUsdAbiStore.getState();
 
   console.log(vaultStore);
   const chosenVault: any = vaultStore;
@@ -27,7 +27,8 @@ const Index = () => {
   const [euroPrice, setEuroPrice] = useState<any>(undefined);
   const [ethToEuro, setEthToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
-  const [ethPriceInUsd, setEthPriceInUsd] = useState<any>(undefined);
+  //delete this one
+  const [setEthPriceInUsd] = useState<any>(undefined);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -36,11 +37,7 @@ const Index = () => {
   const getChartValues = async () => {
     const token = vaultStore[5][3][0][0];
 
-    const contract = new ethers.Contract(
-      token.clAddr,
-      priceCalculatorabi,
-      signer
-    );
+    const contract = new ethers.Contract(token.clAddr, ethToUsdAbi, signer);
 
     const price = await contract.latestRoundData();
 
@@ -135,11 +132,7 @@ const Index = () => {
       myToken = vaultStore[5][3][0][0];
     }
     console.log(symbolForGreyBar);
-    const contract = new ethers.Contract(
-      myToken.clAddr,
-      priceCalculatorabi,
-      signer
-    );
+    const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
     console.log(contract);
     const price = await contract.latestRoundData();
     console.log(price);

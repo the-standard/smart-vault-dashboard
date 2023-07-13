@@ -3,15 +3,23 @@ import vaultManagerAbi from "../abis/vaultManager.ts";
 import sEuroAbi from "../abis/testTokens/sEuro.ts";
 import sUSD6Abi from "../abis/testTokens/sUsd6.ts";
 import sUSD18Abi from "../abis/testTokens/sUsd18.ts";
-import ethtousdAbi from "../abis/priceFeeds/mumbai/ethtousd.ts";
-import priceCalculatorAbi from "../abis/priceFeeds/original/PriceCalculator.ts";
+import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
+import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 
-interface PriceCalculatorState {
-  priceCalculatorabi: Array<any>;
+// interface PriceCalculatorState {
+//   priceCalculatorabi: Array<any>;
+// }
+// //this one is eth to usd price calculator
+// export const usePriceCalculatorStore = create<PriceCalculatorState>(() => ({
+//   priceCalculatorabi: priceCalculatorAbi,
+// }));
+
+interface UsdToEuroState {
+  usdToEuroAbi: Array<any>;
 }
 
-export const usePriceCalculatorStore = create<PriceCalculatorState>(() => ({
-  priceCalculatorabi: priceCalculatorAbi,
+export const useUsdToEuroStore = create<UsdToEuroState>(() => ({
+  usdToEuroAbi: usdToEuroAbi,
 }));
 
 interface ChainIdState {
@@ -34,6 +42,17 @@ export const useEthToUsdAbiStore = create<EthToUsdAbiState>()((set) => ({
   getEthToUsdAbi: (ethToUsdAbi) => set(() => ({ ethToUsdAbi: ethToUsdAbi })),
 }));
 
+interface USDToEuroAbiState {
+  usdToEuroAbi: Array<any>;
+  getUSDToEuroAbi: (usdToEuroAbi: Array<any>) => void;
+}
+
+export const useUSDToEuroAbiStore = create<USDToEuroAbiState>()((set) => ({
+  usdToEuroAbi: usdToEuroAbi,
+  getUSDToEuroAbi: (usdToEuroAbi) =>
+    set(() => ({ usdToEuroAbi: usdToEuroAbi })),
+}));
+
 interface EthToUsdAddressState {
   ethToUsdAddress: string;
   arbitrumGoerliethToUsdAddress: string;
@@ -42,10 +61,26 @@ interface EthToUsdAddressState {
 
 export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
   (set) => ({
-    ethToUsdAddress: "0x694AA1769357215DE4FAC081bf1f309aDC325306",
+    ethToUsdAddress: "0x10742171dD4aB632653869d3a03b2195a10C5f1F",
     arbitrumGoerliethToUsdAddress: "0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08",
     getEthToUsdAddress: (ethToUsdAddress) =>
       set(() => ({ ethToUsdAddress: ethToUsdAddress })),
+  })
+);
+
+interface USDToEuroAddressState {
+  usdToEuroAddress: string;
+  arbitrumGoerliUSDToEuroAddress: string;
+  getUSDToEuroAddress: (usdToEuroAddress: string) => void;
+}
+
+export const useUSDToEuroAddressStore = create<USDToEuroAddressState>()(
+  (set) => ({
+    usdToEuroAddress: "0x59a6A8357BD5Ae002DEd9A5F72ab526f9fDc573A",
+    arbitrumGoerliUSDToEuroAddress:
+      "0xe5CD8A83fc9E1bb87b2576B2999f99A1328D3888",
+    getUSDToEuroAddress: (usdToEuroAddress) =>
+      set(() => ({ usdToEuroAddress: usdToEuroAddress })),
   })
 );
 
@@ -114,8 +149,8 @@ interface contractAddressState {
 //this is the smart vault manager, I need to change its name to it
 export const useContractAddressStore = create<contractAddressState>()(
   (set) => ({
-    contractAddress: "0x8e8fb106D22d0Eb7BB3D31BDB29964B5791c7C0E",
-    arbitrumGoerliContractAddress: "0x61276e74b9c3c9c1786B34087e44290bCFE3887c",
+    contractAddress: "0xb9fc41992740D56107dCCaDD6f08A69c216D2c6A",
+    arbitrumGoerliContractAddress: "0x7D44c84199F69ffB3F9c857CB0a1BADF3727193a",
     getContractAddress: (contractAddress) =>
       set(() => ({ contractAddress: contractAddress })),
   })
@@ -129,9 +164,9 @@ interface TokenManagerAddressState {
 
 export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
   (set) => ({
-    tokenManagerAddress: "0x25C2704a9a0A096c2B3D243f699dDa00bD67F7d2",
+    tokenManagerAddress: "0xfd5a6111409086a00f81Bcb84758DCC4C9859Bf9",
     arbitrumGoerliTokenManagerAddress:
-      "0xd6F42e228d66173e5b97A1520e61Bb010D4294af",
+      "0x5A11EEFFa0a2f943bb3350B1C6233de8fa71D1e9",
     getTokenManagerAddress: (tokenManagerAddress) =>
       set(() => ({ tokenManagerAddress: tokenManagerAddress })),
   })

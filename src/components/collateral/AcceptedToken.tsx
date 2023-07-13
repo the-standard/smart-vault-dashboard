@@ -5,7 +5,7 @@ import Actions from "./Actions";
 import {
   useCollateralSymbolStore,
   useWidthStore,
-  usePriceCalculatorStore,
+  useEthToUsdAbiStore,
   useVaultStore,
   useGreyProgressBarValuesStore,
 } from "../../store/Store";
@@ -41,12 +41,12 @@ const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
 
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [activeElement, setActiveElement] = useState(0);
-  const { getCollateralSymbol } = useCollateralSymbolStore.getState();
+  const { getCollateralSymbol } = useCollateralSymbolStore();
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
-  const { priceCalculatorabi } = usePriceCalculatorStore.getState();
-  const { vaultStore } = useVaultStore.getState();
+  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { vaultStore } = useVaultStore();
   const { getOperationType, getGreyBarUserInput } =
-    useGreyProgressBarValuesStore.getState();
+    useGreyProgressBarValuesStore();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -63,11 +63,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
       myToken = vaultStore[5][3][0][0];
     }
     console.log(symbol);
-    const contract = new ethers.Contract(
-      myToken.clAddr,
-      priceCalculatorabi,
-      signer
-    );
+    const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
     console.log(contract);
     const price = await contract.latestRoundData();
     console.log(price);

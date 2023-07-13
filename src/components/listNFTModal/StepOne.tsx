@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
 import {
   useVaultForListingStore,
-  usePriceCalculatorStore,
+  useEthToUsdAbiStore,
   useNFTListingModalStore,
 } from "../../store/Store.ts";
 import { ethers } from "ethers";
@@ -39,7 +39,7 @@ const StepOne: React.FC<StepProps> = ({
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
-  const { priceCalculatorabi } = usePriceCalculatorStore.getState();
+  const { ethToUsdAbi } = useEthToUsdAbiStore();
 
   const totalValueInEth = tokenMap.get(modalChildState).attributes[5].value;
 
@@ -55,7 +55,7 @@ const StepOne: React.FC<StepProps> = ({
     const ethclAddr = vaultForListing[5][3][0][0][3];
     console.log(ethclAddr);
 
-    const contract = new ethers.Contract(ethclAddr, priceCalculatorabi, signer);
+    const contract = new ethers.Contract(ethclAddr, ethToUsdAbi, signer);
     const price = await contract.latestRoundData();
 
     const priceInUsd = fromHex(price.answer, "number");
