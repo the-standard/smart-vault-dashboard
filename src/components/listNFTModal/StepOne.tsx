@@ -8,6 +8,9 @@ import {
   useVaultForListingStore,
   useEthToUsdAbiStore,
   useNFTListingModalStore,
+  useEthToUsdAddressStore,
+  useUSDToEuroAbiStore,
+  useUSDToEuroAddressStore,
 } from "../../store/Store.ts";
 import { ethers } from "ethers";
 import { formatUnits, fromHex } from "viem";
@@ -35,24 +38,28 @@ const StepOne: React.FC<StepProps> = ({
     getNFTListingModalTotalValue,
     getNFTListingModalTotalValueMinusDebt,
   } = useNFTListingModalStore();
+  const { ethToUsdAddress } = useEthToUsdAddressStore();
+  const { usdToEuroAddress } = useUSDToEuroAddressStore();
+  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
-  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  console.log(tokenMap.get(modalChildState));
 
-  const totalValueInEth = tokenMap.get(modalChildState).attributes[5].value;
+  const totalValueInEth = tokenMap.get(modalChildState).attributes[6].value;
 
   const totalValueInSUSDTokens =
-    tokenMap.get(modalChildState).attributes[6].value +
-    tokenMap.get(modalChildState).attributes[7].value;
+    tokenMap.get(modalChildState).attributes[7].value +
+    tokenMap.get(modalChildState).attributes[8].value;
 
   console.log(totalValueInEth);
 
   const [euroValuesAddedTogether, setEuroValuesAddedTogether] = useState(0);
 
   const convertETHToUSD = async (eth: number) => {
-    const ethclAddr = vaultForListing[5][3][0][0][3];
+    const ethclAddr = vaultForListing[4].collateral[0].token.clAddr;
     console.log(ethclAddr);
 
     const contract = new ethers.Contract(ethclAddr, ethToUsdAbi, signer);
@@ -70,41 +77,42 @@ const StepOne: React.FC<StepProps> = ({
   };
 
   const convertUsdToEuro = async (priceInUsd: any) => {
-    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
     try {
-      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+      const contract = new ethers.Contract(
+        usdToEuroAddress,
+        usdToEuroAbi,
+        signer
+      );
+      console.log(contract);
+      const price = await contract.latestRoundData();
+      console.log(price.answer);
 
-      const getUsdToEuro = await axios.get(apiUrl);
-
-      const euroPrice = getUsdToEuro.data.data.EUR;
-      console.log("euroPrice" + euroPrice);
-      console.log("priceInUsd" + priceInUsd);
-      const euroValue = Number(priceInUsd) * euroPrice;
-      console.log("euroValue.toFixed(2)" + euroValue);
-      //you can put tofixed(2) here if necessary
-      return euroValue;
+      const priceInEuro = fromHex(price.answer, "number");
+      console.log(priceInEuro);
+      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
+      console.log(priceInEuroFormatted);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Assuming the convertETHToUSD function returns a promise
-  async function getEuroValuesAddedTogether() {
-    const totalValueOfEthInEuro = await convertETHToUSD(totalValueInEth);
-    console.log(totalValueOfEthInEuro);
-    const totalValueOfSUSDInEuro = await convertUsdToEuro(
-      totalValueInSUSDTokens
-    );
-    console.log(totalValueOfSUSDInEuro);
-    const totalValueInEuro =
-      Number(totalValueOfEthInEuro) + Number(totalValueOfSUSDInEuro);
-    console.log(totalValueInEuro);
-    setEuroValuesAddedTogether(totalValueInEuro);
+  // // Assuming the convertETHToUSD function returns a promise
+  // async function getEuroValuesAddedTogether() {
+  //   const totalValueOfEthInEuro = await convertETHToUSD(totalValueInEth);
+  //   console.log(totalValueOfEthInEuro);
+  //   const totalValueOfSUSDInEuro = await convertUsdToEuro(
+  //     totalValueInSUSDTokens
+  //   );
+  //   console.log(totalValueOfSUSDInEuro);
+  //   const totalValueInEuro =
+  //     Number(totalValueOfEthInEuro) + Number(totalValueOfSUSDInEuro);
+  //   console.log(totalValueInEuro);
+  //   setEuroValuesAddedTogether(totalValueInEuro);
+  //   getNFTListingModalTotalValue(totalValueInEuro);
 
-    console.log(euroValuesAddedTogether);
-  }
-
-  getEuroValuesAddedTogether();
+  //   console.log(euroValuesAddedTogether);
+  // }
+  // getEuroValuesAddedTogether();
 
   useEffect(() => {
     convertETHToUSD(totalValueInEth);

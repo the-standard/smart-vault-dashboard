@@ -39,6 +39,10 @@ const StepTwo: React.FC<StepProps> = ({
   const { contractAddress } = useContractAddressStore();
   const { totalValue, totalValueMinusDebt } = useNFTListingModalStore();
 
+  useEffect(() => {
+    console.log("totalValue" + totalValue);
+  }, []);
+
   const [userInput, setUserInput] = useState<string>("");
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
 
@@ -222,7 +226,7 @@ const StepTwo: React.FC<StepProps> = ({
             gutterBottom
           >
             {/* {tokenMap.get(modalChildState).attributes[6].value} */}
-            {totalValue} sEURO
+            {totalValue ? totalValue : 0} sEURO
           </Typography>
         </CardContent>
         <CardContent
