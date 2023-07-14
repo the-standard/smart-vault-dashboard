@@ -91,6 +91,8 @@ const StepOne: React.FC<StepProps> = ({
       console.log(priceInEuro);
       const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
       console.log(priceInEuroFormatted);
+      console.log(tokenMap.get(modalChildState).attributes);
+      return priceInEuroFormatted;
     } catch (error) {
       console.log(error);
     }
@@ -355,6 +357,43 @@ const StepOne: React.FC<StepProps> = ({
             >
               {tokenMap.get(modalChildState).attributes[7].value}
             </Typography>
+          </CardContent>{" "}
+          <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              sx={{
+                fontStyle: "normal",
+                fontWeight: "400",
+                fontSize: {
+                  xs: "12px",
+                  sm: "16px",
+                },
+                lineHeight: "141.5%",
+                color: "#8E9BAE",
+              }}
+              gutterBottom
+            >
+              {tokenMap.get(modalChildState).attributes[8].trait_type}
+            </Typography>{" "}
+            <Typography
+              sx={{
+                fontSize: {
+                  xs: "12px",
+                  sm: "14px",
+                },
+                color: "white",
+                fontFamily: "Poppins",
+              }}
+              gutterBottom
+            >
+              {tokenMap.get(modalChildState).attributes[8].value}
+            </Typography>
           </CardContent>
           <div
             style={{
@@ -408,7 +447,8 @@ const StepOne: React.FC<StepProps> = ({
               }}
               gutterBottom
             >
-              {euroValuesAddedTogether ? euroValuesAddedTogether : 0} sEURO
+              {tokenMap.get(modalChildState).attributes[4].value}
+              sEURO
             </Typography>
           </CardContent>
         </Card>
@@ -561,7 +601,7 @@ const StepOne: React.FC<StepProps> = ({
               }}
               gutterBottom
             >
-              {tokenMap.get(modalChildState).attributes[6].value}
+              {tokenMap.get(modalChildState).attributes[5].value}
             </Typography>
           </CardContent>
         </Card>
