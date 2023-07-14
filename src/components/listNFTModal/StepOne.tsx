@@ -39,8 +39,8 @@ const StepOne: React.FC<StepProps> = ({
     getNFTListingModalTotalValueMinusDebt,
   } = useNFTListingModalStore();
   const { ethToUsdAddress } = useEthToUsdAddressStore();
-  const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -118,9 +118,11 @@ const StepOne: React.FC<StepProps> = ({
 
   useEffect(() => {
     convertETHToUSD(totalValueInEth);
-    getNFTListingModalTotalValue(euroValuesAddedTogether);
-    getNFTListingModalTotalValueMinusDebt(
+    getNFTListingModalTotalValue(
       tokenMap.get(modalChildState).attributes[4].value
+    );
+    getNFTListingModalTotalValueMinusDebt(
+      tokenMap.get(modalChildState).attributes[5].value
     );
   }, []);
 
