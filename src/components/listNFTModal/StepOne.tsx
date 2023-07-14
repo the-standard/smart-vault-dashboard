@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -6,15 +6,14 @@ import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
 import {
   useVaultForListingStore,
-  useEthToUsdAbiStore,
   useNFTListingModalStore,
-  useEthToUsdAddressStore,
+  useEthToUsdAbiStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
 } from "../../store/Store.ts";
 import { ethers } from "ethers";
 import { formatUnits, fromHex } from "viem";
-import axios from "axios";
+// import axios from "axios";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,7 +37,7 @@ const StepOne: React.FC<StepProps> = ({
     getNFTListingModalTotalValue,
     getNFTListingModalTotalValueMinusDebt,
   } = useNFTListingModalStore();
-  const { ethToUsdAddress } = useEthToUsdAddressStore();
+  // const { ethToUsdAddress } = useEthToUsdAddressStore();
   const { ethToUsdAbi } = useEthToUsdAbiStore();
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
@@ -49,14 +48,6 @@ const StepOne: React.FC<StepProps> = ({
   console.log(tokenMap.get(modalChildState));
 
   const totalValueInEth = tokenMap.get(modalChildState).attributes[6].value;
-
-  const totalValueInSUSDTokens =
-    tokenMap.get(modalChildState).attributes[7].value +
-    tokenMap.get(modalChildState).attributes[8].value;
-
-  console.log(totalValueInEth);
-
-  const [euroValuesAddedTogether, setEuroValuesAddedTogether] = useState(0);
 
   const convertETHToUSD = async (eth: number) => {
     const ethclAddr = vaultForListing[4].collateral[0].token.clAddr;
@@ -77,6 +68,7 @@ const StepOne: React.FC<StepProps> = ({
   };
 
   const convertUsdToEuro = async (priceInUsd: any) => {
+    console.log(priceInUsd);
     try {
       const contract = new ethers.Contract(
         usdToEuroAddress,
@@ -97,24 +89,6 @@ const StepOne: React.FC<StepProps> = ({
       console.log(error);
     }
   };
-
-  // // Assuming the convertETHToUSD function returns a promise
-  // async function getEuroValuesAddedTogether() {
-  //   const totalValueOfEthInEuro = await convertETHToUSD(totalValueInEth);
-  //   console.log(totalValueOfEthInEuro);
-  //   const totalValueOfSUSDInEuro = await convertUsdToEuro(
-  //     totalValueInSUSDTokens
-  //   );
-  //   console.log(totalValueOfSUSDInEuro);
-  //   const totalValueInEuro =
-  //     Number(totalValueOfEthInEuro) + Number(totalValueOfSUSDInEuro);
-  //   console.log(totalValueInEuro);
-  //   setEuroValuesAddedTogether(totalValueInEuro);
-  //   getNFTListingModalTotalValue(totalValueInEuro);
-
-  //   console.log(euroValuesAddedTogether);
-  // }
-  // getEuroValuesAddedTogether();
 
   useEffect(() => {
     convertETHToUSD(totalValueInEth);

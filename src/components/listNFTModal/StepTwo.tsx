@@ -18,11 +18,10 @@ import {
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
   useEthToUsdAbiStore,
-  useEthToUsdAddressStore,
 } from "../../store/Store";
 import { formatUnits, fromHex } from "viem";
-import { getETHPrice } from "../../utils/getETHPrice";
-import axios from "axios";
+// import { getETHPrice } from "../../utils/getETHPrice";
+// import axios from "axios";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,7 +43,7 @@ const StepTwo: React.FC<StepProps> = ({
   const { totalValue, totalValueMinusDebt } = useNFTListingModalStore();
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
-  const { ethToUsdAddress } = useEthToUsdAddressStore();
+  // const { ethToUsdAddress } = useEthToUsdAddressStore();
   const { ethToUsdAbi } = useEthToUsdAbiStore();
 
   useEffect(() => {
@@ -105,6 +104,7 @@ const StepTwo: React.FC<StepProps> = ({
 
   useEffect(() => {
     userValueInUsd(Number(userInput));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInput]);
 
   const convertUsdToEuro = async (ethValueInUsd: number) => {
@@ -148,18 +148,8 @@ const StepTwo: React.FC<StepProps> = ({
     }
   };
 
-  // useEffect(() => {
-  //   console.log(userInput);
-  //   console.log(euroValueConverted);
-  // }, [userInput]);
-
-  // useEffect(() => {
-  //   userInput ? convertUsdToEuro() : null;
-  // }, []);
-
   return (
     <Box sx={{ color: "white" }}>
-      {/* <button onClick={listSmartVault}>List</button> */}
       <Box sx={{}}>
         <img style={{}} src={tokenMap.get(modalChildState).image} alt="NFT" />
       </Box>{" "}

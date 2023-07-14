@@ -11,7 +11,6 @@ import {
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 const Index = () => {
   const { vaultStore } = useVaultStore();
@@ -24,11 +23,10 @@ const Index = () => {
   const chosenVault: any = vaultStore;
   const [chartValues, setChartValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [euroPrice, setEuroPrice] = useState<any>(undefined);
-  const [ethToEuro, setEthToEuro] = useState<any>(undefined);
+  const [euroPrice] = useState<any>(undefined);
+  const [ethToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
   //delete this one
-  const [setEthPriceInUsd] = useState<any>(undefined);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
