@@ -90,7 +90,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     );
   };
 
-  //get this contract and abi from store
   async function getNFT(vault: any) {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -100,8 +99,17 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       signer
     );
     const tokenURI = await contract.tokenURI(vault[0]);
-    const tokenDecoded = JSON.parse(atob(tokenURI.split(",")[1]));
-    // console.log(tokenDecoded.image);
+    let tokenDecoded: any;
+    let decodedString = atob(tokenURI.split(",")[1]);
+    // eslint-disable-next-line no-control-regex
+    decodedString = decodedString.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+    try {
+      const parsedJSON = JSON.parse(decodedString);
+      console.log(parsedJSON);
+      tokenDecoded = parsedJSON;
+    } catch (error) {
+      console.error("Failed to parse JSON: ", error);
+    }
 
     tokenToNFTMap.current.set(
       ethers.BigNumber.from(vault[0]).toString(),
@@ -373,15 +381,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
                     <td>
                       <ProgressBar
-                        progressValue={
-                          // (Number(ethers.BigNumber.from(vault[5][0])) /
-                          //   Number(ethers.BigNumber.from(vault[5][1]))) *
-                          // 100
-                          computeProgressBar(
-                            Number(ethers.BigNumber.from(vault[5][0])),
-                            Number(ethers.BigNumber.from(vault[5][2]))
+                        progressValue={computeProgressBar(
+                          Number(ethers.BigNumber.from(vault[4].minted)),
+                          Number(
+                            ethers.BigNumber.from(vault[4].collateralValue)
                           )
-                        }
+                        )}
                       />
                     </td>
                     <td style={{}}>
@@ -453,9 +458,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
-                    {/* <td data-label="#">
-                    {(currentPage - 1) * itemsPerPage + index + 1}
-                  </td> */}
                     <td>
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault[0]).toString()
@@ -473,14 +475,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
 
                     <td>
-                      {/* returns NaN */}
-                      {/* how to get the debt range */}
                       <ProgressBar
                         progressValue={computeProgressBar(
-                          Number(ethers.BigNumber.from(vault[5][0])),
-                          Number(ethers.BigNumber.from(vault[5][2]))
+                          Number(ethers.BigNumber.from(vault[4].minted)),
+                          Number(
+                            ethers.BigNumber.from(vault[4].collateralValue)
+                          )
                         )}
-                      />{" "}
+                      />
                     </td>
                     <td style={{}}>
                       {" "}
@@ -552,9 +554,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
-                    {/* <td data-label="#">
-                    {(currentPage - 1) * itemsPerPage + index + 1}
-                  </td> */}
                     <td>
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault[0]).toString()
@@ -573,7 +572,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <TruncatedTableCell
                       value={truncateToTwoDecimals(
                         ethers.utils.formatEther(
-                          ethers.BigNumber.from(vault[5][2]).toString()
+                          ethers.BigNumber.from(
+                            vault[4].collateralValue
+                          ).toString()
                         )
                       )}
                       length={12}
@@ -581,15 +582,16 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
                     <td>
                       {truncateToTwoDecimals(
-                        formatEther(vault[5][0].toString())
+                        formatEther(vault[4].minted.toString())
                       )}
                     </td>
                     <td>
-                      {/* returns NaN */}
                       <ProgressBar
                         progressValue={computeProgressBar(
-                          Number(ethers.BigNumber.from(vault[5][0])),
-                          Number(ethers.BigNumber.from(vault[5][2]))
+                          Number(ethers.BigNumber.from(vault[4].minted)),
+                          Number(
+                            ethers.BigNumber.from(vault[4].collateralValue)
+                          )
                         )}
                       />
                     </td>

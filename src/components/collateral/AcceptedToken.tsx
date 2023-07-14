@@ -5,7 +5,7 @@ import Actions from "./Actions";
 import {
   useCollateralSymbolStore,
   useWidthStore,
-  usePriceCalculatorStore,
+  useEthToUsdAbiStore,
   useVaultStore,
   useGreyProgressBarValuesStore,
 } from "../../store/Store";
@@ -41,12 +41,12 @@ const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
 
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const [activeElement, setActiveElement] = useState(0);
-  const { getCollateralSymbol } = useCollateralSymbolStore.getState();
+  const { getCollateralSymbol } = useCollateralSymbolStore();
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
-  const { priceCalculatorabi } = usePriceCalculatorStore.getState();
-  const { vaultStore } = useVaultStore.getState();
+  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { vaultStore } = useVaultStore();
   const { getOperationType, getGreyBarUserInput } =
-    useGreyProgressBarValuesStore.getState();
+    useGreyProgressBarValuesStore();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -54,20 +54,16 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
-    console.log(vaultStore[5][3][0][0]);
+    console.log(vaultStore[4].collateral[0].token);
     if (symbol === "SUSD6") {
-      myToken = vaultStore[5][3][1][0];
+      myToken = vaultStore[4].collateral[1].token;
     } else if (symbol === "SUSD18") {
-      myToken = vaultStore[5][3][2][0];
+      myToken = vaultStore[4].collateral[2].token;
     } else {
-      myToken = vaultStore[5][3][0][0];
+      myToken = vaultStore[4].collateral[0].token;
     }
     console.log(symbol);
-    const contract = new ethers.Contract(
-      myToken.clAddr,
-      priceCalculatorabi,
-      signer
-    );
+    const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
     console.log(contract);
     const price = await contract.latestRoundData();
     console.log(price);

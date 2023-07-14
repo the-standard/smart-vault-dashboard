@@ -15,10 +15,13 @@ import {
   useVaultForListingStore,
   useContractAddressStore,
   useNFTListingModalStore,
+  useUSDToEuroAbiStore,
+  useUSDToEuroAddressStore,
+  useEthToUsdAbiStore,
 } from "../../store/Store";
-import { fromHex } from "viem";
-import { getETHPrice } from "../../utils/getETHPrice";
-import axios from "axios";
+import { formatUnits, fromHex } from "viem";
+// import { getETHPrice } from "../../utils/getETHPrice";
+// import axios from "axios";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,6 +41,14 @@ const StepTwo: React.FC<StepProps> = ({
   const { vaultForListing } = useVaultForListingStore();
   const { contractAddress } = useContractAddressStore();
   const { totalValue, totalValueMinusDebt } = useNFTListingModalStore();
+  const { usdToEuroAddress } = useUSDToEuroAddressStore();
+  const { usdToEuroAbi } = useUSDToEuroAbiStore();
+  // const { ethToUsdAddress } = useEthToUsdAddressStore();
+  const { ethToUsdAbi } = useEthToUsdAbiStore();
+
+  useEffect(() => {
+    console.log("totalValue" + totalValue);
+  }, []);
 
   const [userInput, setUserInput] = useState<string>("");
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
@@ -48,7 +59,7 @@ const StepTwo: React.FC<StepProps> = ({
   const { address } = useAccount();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  // const signer = provider.getSigner();
+  const signer = provider.getSigner();
   // console.log(signer);
 
   const openseaSDK = new OpenSeaSDK(provider, {
@@ -69,27 +80,52 @@ const StepTwo: React.FC<StepProps> = ({
   console.log(tokenAddress);
   console.log(tokenId);
 
-  const convertUsdToEuro = async () => {
-    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
+  const userValueInUsd = async (eth: number) => {
     try {
-      const usdPrice = await getETHPrice();
-      console.log(usdPrice);
+      const ethclAddr = vaultForListing[4].collateral[0].token.clAddr;
+      console.log(ethclAddr);
 
-      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+      const contract = new ethers.Contract(ethclAddr, ethToUsdAbi, signer);
+      const price = await contract.latestRoundData();
 
-      const getUsdToEuro = await axios.get(apiUrl);
+      const priceInUsd = fromHex(price.answer, "number");
 
-      const euroPrice = getUsdToEuro.data.data.EUR;
-      console.log(euroPrice);
-      console.log(usdPrice);
+      const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
 
-      const usdToEuro = usdPrice * euroPrice;
+      console.log(priceFormatted);
 
-      console.log(usdToEuro);
-      console.log(userInput);
-      console.log((usdToEuro * Number(userInput)).toFixed(2));
-      setEuroValueConverted((usdToEuro * Number(userInput)).toFixed(2));
-      return usdToEuro.toFixed(2);
+      const ethValueInUSD = eth * Number(priceFormatted);
+      console.log(ethValueInUSD);
+      return convertUsdToEuro(ethValueInUSD);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    userValueInUsd(Number(userInput));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInput]);
+
+  const convertUsdToEuro = async (ethValueInUsd: number) => {
+    try {
+      const contract = new ethers.Contract(
+        usdToEuroAddress,
+        usdToEuroAbi,
+        signer
+      );
+      console.log(contract);
+      const price = await contract.latestRoundData();
+      console.log(price.answer);
+
+      const priceInEuro = fromHex(price.answer, "number");
+      console.log(priceInEuro);
+      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
+      console.log(priceInEuroFormatted);
+      const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
+      console.log(euroValueConverted);
+      setEuroValueConverted(euroValueConverted);
+      return priceInEuroFormatted;
     } catch (error) {
       console.log(error);
     }
@@ -112,19 +148,8 @@ const StepTwo: React.FC<StepProps> = ({
     }
   };
 
-  useEffect(() => {
-    console.log(userInput);
-    convertUsdToEuro();
-    console.log(euroValueConverted);
-  }, [userInput]);
-
-  useEffect(() => {
-    userInput ? convertUsdToEuro() : null;
-  }, []);
-
   return (
     <Box sx={{ color: "white" }}>
-      {/* <button onClick={listSmartVault}>List</button> */}
       <Box sx={{}}>
         <img style={{}} src={tokenMap.get(modalChildState).image} alt="NFT" />
       </Box>{" "}
@@ -222,7 +247,7 @@ const StepTwo: React.FC<StepProps> = ({
             gutterBottom
           >
             {/* {tokenMap.get(modalChildState).attributes[6].value} */}
-            {totalValue} sEURO
+            {totalValue ? totalValue : 0} sEURO
           </Typography>
         </CardContent>
         <CardContent

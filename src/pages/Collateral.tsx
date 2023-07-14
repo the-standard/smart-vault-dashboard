@@ -136,16 +136,17 @@ const Collateral = () => {
       if (Number(tokenId) === Number(vaultId)) {
         console.log("found");
         console.log(vault);
-        console.log(vault[5][3]);
-        foundValue = vault[5][3];
+        console.log(vault[4][4]);
+        foundValue = vault[4][4];
         //set vault to state
         getVaultStore(vault);
         //set vault to local state
         setLocalVault(vault);
         //set vault address to state
-        getVaultAddress(vault[1]);
+        getVaultAddress(vault.status.vaultAddress);
+        console.log(vault.status.vaultAddress);
         //set vault address to local state
-        setVaultAddressLocal(vault[1]);
+        setVaultAddressLocal(vault.status.vaultAddress);
       }
     });
     console.log(foundValue);
