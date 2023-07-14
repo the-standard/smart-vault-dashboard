@@ -8,6 +8,8 @@ import {
   useEthToUsdAbiStore,
   useVaultStore,
   useGreyProgressBarValuesStore,
+  useUSDToEuroAbiStore,
+  useUSDToEuroAddressStore,
 } from "../../store/Store";
 import LineChart from "./LineChart";
 import priceFeed from "../../feed/priceFeed";
@@ -47,6 +49,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const { vaultStore } = useVaultStore();
   const { getOperationType, getGreyBarUserInput } =
     useGreyProgressBarValuesStore();
+  const { usdToEuroAddress } = useUSDToEuroAddressStore();
+  const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -73,6 +77,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
     console.log(priceFormatted);
     console.log(amount);
     let amountFormatted;
+
     if (symbol === "SUSD6") {
       amountFormatted = formatUnits(amount, 6);
       console.log(amountFormatted);
@@ -89,17 +94,23 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   };
 
   const convertUsdToEuro = async (priceInUsd: any) => {
-    const apiKey = import.meta.env.VITE_USDTOEURO_API_KEY;
     try {
-      const apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}`;
+      const contract = new ethers.Contract(
+        usdToEuroAddress,
+        usdToEuroAbi,
+        signer
+      );
+      console.log(contract);
+      const price = await contract.latestRoundData();
+      console.log(price.answer);
 
-      const getUsdToEuro = await axios.get(apiUrl);
-
-      const euroPrice = getUsdToEuro.data.data.EUR;
-      console.log(euroPrice);
-      const euroValue = Number(priceInUsd) * Number(euroPrice);
-      console.log(euroValue.toFixed(2));
-      setEuroValueConverted(euroValue.toFixed(2));
+      const priceInEuro = fromHex(price.answer, "number");
+      console.log(priceInEuro);
+      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
+      console.log(priceInEuroFormatted);
+      const euroValueConverted = priceInUsd / priceInEuroFormatted;
+      console.log(euroValueConverted);
+      setEuroValueConverted(euroValueConverted.toFixed(2));
     } catch (error) {
       console.log(error);
     }
@@ -108,6 +119,11 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   useEffect(() => {
     getUsdPriceOfToken();
   }, []);
+
+  useEffect(() => {
+    console.log(amount);
+    getUsdPriceOfToken();
+  }, [amount]);
 
   //ref to width sharing
   const ref = useRef<HTMLDivElement>(null);
