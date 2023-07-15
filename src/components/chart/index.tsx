@@ -23,8 +23,8 @@ const Index = () => {
   const chosenVault: any = vaultStore;
   const [chartValues, setChartValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [euroPrice] = useState<any>(undefined);
-  const [ethToEuro] = useState<any>(undefined);
+  // const [euroPrice] = useState<any>(undefined);
+  // const [ethToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
   //delete this one
 
@@ -149,46 +149,44 @@ const Index = () => {
   };
 
   const computeGreyBar = (totalDebt: any, collateralValue: any) => {
-    if (ethToEuro !== undefined) {
-      const debt = Number(formatUnits(totalDebt, 18));
-      const collateral = Number(formatUnits(collateralValue, 18));
-      let operation: any;
-      console.log(
-        (debt / (collateral - Number(userInputForGreyBarOperation))) * 100
-      );
-      console.log("totalDebt", Number(formatUnits(totalDebt, 18)));
-      console.log("collateralValue", Number(formatUnits(collateralValue, 18)));
+    const debt = Number(formatUnits(totalDebt, 18));
+    const collateral = Number(formatUnits(collateralValue, 18));
+    let operation: any;
+    console.log(
+      (debt / (collateral - Number(userInputForGreyBarOperation))) * 100
+    );
+    console.log("totalDebt", Number(formatUnits(totalDebt, 18)));
+    console.log("collateralValue", Number(formatUnits(collateralValue, 18)));
 
-      // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
-      if (operationType === 1) {
-        //deposit /
-        operation = (debt / (collateral + Number(ethToEuro))) * 100;
-      } else if (operationType === 2) {
-        //withdraw  /
-        operation = (debt / (collateral - Number(ethToEuro))) * 100;
-      } else if (operationType === 4) {
-        //borrow
-        operation =
-          ((debt + Number(userInputForGreyBarOperation)) / collateral) * 100;
-      } else if (operationType === 5) {
-        //repay
-        operation =
-          ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
-      }
-      console.log(operation);
-      //not sure about this line, test it
-      operation >= 100 ? (operation = 100) : operation;
-      return userInputForGreyBarOperation === 0 ? 0 : operation;
+    // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
+    if (operationType === 1) {
+      //deposit / these 2 lines, userInputForGreyBarOperation * 1900, are quick and dirty fixes to get the user input in euros for the presentation. Fix them!
+      operation =
+        (debt / (collateral + Number(userInputForGreyBarOperation * 1900))) *
+        100;
+    } else if (operationType === 2) {
+      //withdraw  // these 2 lines, userInputForGreyBarOperation * 1900, are quick and dirty fixes to get the user input in euros for the presentation. Fix them!
+      operation =
+        (debt / (collateral - Number(userInputForGreyBarOperation * 1900))) *
+        100;
+    } else if (operationType === 4) {
+      //borrow
+      operation =
+        ((debt + Number(userInputForGreyBarOperation)) / collateral) * 100;
+    } else if (operationType === 5) {
+      //repay
+      operation =
+        ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
     }
+    console.log(operation);
+    //not sure about this line, test it
+    operation >= 100 ? (operation = 100) : operation;
+    return userInputForGreyBarOperation === 0 ? 0 : operation;
   };
 
   useEffect(() => {
     getUsdPriceOfToken();
   }, [userInputForGreyBarOperation]);
-
-  useEffect(() => {
-    console.log(euroPrice);
-  }, [euroPrice]);
 
   const computeProgressBar = (totalDebt: any, collateralValue: any) => {
     // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
