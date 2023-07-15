@@ -153,7 +153,9 @@ const HomePage = () => {
               />
             ))
           ) : (
-            <Box></Box>
+            <Box>
+              Please install Metamask or any other web3 wallet to continue
+            </Box>
           )}
         </Box>
       </Grid>
