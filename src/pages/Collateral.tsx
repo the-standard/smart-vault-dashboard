@@ -29,7 +29,8 @@ import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import arbitrumLogo from "../assets/arbitrum.svg";
 import sepolialogo from "../assets/sepolialogo.svg";
-import createClientUtil from "../utils/createClientUtil.ts";
+// import createClientUtil from "../utils/createClientUtil.ts";
+import { getNetwork } from "@wagmi/core";
 
 type RouteParams = {
   vaultId: string;
@@ -154,12 +155,11 @@ const Collateral = () => {
   };
 
   const getCurrentChain = async () => {
-    const block = await createClientUtil.getChainId();
-    console.log("block", block);
-    if (block === 11155111) {
-      returnAcceptedTokensList(contractAddress);
-    } else if (block === 421613) {
+    const { chain } = getNetwork();
+    if (chain?.id == 421613) {
       returnAcceptedTokensList(arbitrumGoerliContractAddress);
+    } else if (chain?.id == 11155111) {
+      returnAcceptedTokensList(contractAddress);
     }
   };
 

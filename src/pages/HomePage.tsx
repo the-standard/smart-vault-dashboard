@@ -15,7 +15,7 @@ import {
   useContractAddressStore,
   usePositionStore,
 } from "../store/Store.ts";
-import createClientUtil from "../utils/createClientUtil.ts";
+// import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
 
 const items = [
