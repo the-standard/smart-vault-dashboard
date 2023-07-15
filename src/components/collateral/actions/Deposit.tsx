@@ -15,8 +15,11 @@ import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
-import createClientUtil from "../../../utils/createClientUtil";
+// import createClientUtil from "../../../utils/createClientUtil";
 import { arbitrumGoerli, sepolia } from "viem/chains";
+import { getAccount } from "@wagmi/core";
+import { sendTransaction } from "@wagmi/core";
+import { getNetwork } from "@wagmi/core";
 
 interface DepositProps {
   symbol: string;
@@ -146,8 +149,9 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   };
 
   const depositEther = async (conditionalChain: any) => {
-    const [account] = await createClientUtil.getAddresses();
-    console.log(account);
+    console.log(conditionalChain);
+    const account = getAccount();
+    console.log(account.address);
 
     let txHashForError = "";
     try {
@@ -155,17 +159,17 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
       console.log(txAmount);
 
       const toAddress: any = vaultAddress;
-      const txHash = await createClientUtil.sendTransaction({
-        chain: conditionalChain,
-        account,
+      const { hash } = await sendTransaction({
+        //chain: conditionalChain,
+        account: account.address,
         to: toAddress,
         value: parseEther(txAmount.toString()),
       });
-      txHashForError = txHash;
+      txHashForError = hash;
 
-      console.log("Transaction sent:", txHash);
-      getTransactionHash(txHash);
-      waitForTransaction(txHash);
+      console.log("Transaction sent:", hash);
+      getTransactionHash(hash);
+      waitForTransaction(hash);
     } catch (error) {
       waitForTransaction(txHashForError);
       console.log(error);
@@ -173,23 +177,23 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   };
 
   const depositViaMetamask = async () => {
-    const block = await createClientUtil.getChainId();
+    const { chain } = getNetwork();
 
     try {
       if (symbol == "SUSD6") {
-        if (block === 11155111) {
+        if (chain?.id === 11155111) {
           depositSUSD6(sUSD6Address);
         } else {
           depositSUSD6(arbitrumGoerlisUSD6Address);
         }
       } else if (symbol == "SUSD18") {
-        if (block === 11155111) {
+        if (chain?.id === 11155111) {
           depositSUSD18(sUSD18Address);
         } else {
           depositSUSD18(arbitrumGoerlisUSD18Address);
         }
       } else {
-        if (block === 11155111) {
+        if (chain?.id === 11155111) {
           depositEther(sepolia);
         } else {
           depositEther(arbitrumGoerli);

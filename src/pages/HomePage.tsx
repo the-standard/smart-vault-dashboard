@@ -15,7 +15,8 @@ import {
   useContractAddressStore,
   usePositionStore,
 } from "../store/Store.ts";
-import createClientUtil from "../utils/createClientUtil.ts";
+// import createClientUtil from "../utils/createClientUtil.ts";
+import { getNetwork } from "@wagmi/core";
 
 const items = [
   {
@@ -95,12 +96,11 @@ const HomePage = () => {
   };
 
   const getCurrentChain = async () => {
-    const block = await createClientUtil.getChainId();
-    console.log("block", block);
-    if (block === 11155111) {
-      getVaults(contractAddress);
-    } else if (block === 421613) {
+    const { chain } = await getNetwork();
+    if (chain?.id == 421613) {
       getVaults(arbitrumGoerliContractAddress);
+    } else if (chain?.id == 11155111) {
+      getVaults(contractAddress);
     }
   };
 
@@ -141,16 +141,20 @@ const HomePage = () => {
           }}
           ref={rectangleRef}
         >
-          {items.map((item) => (
-            <VaultCard
-              key={item.title}
-              title={item.title}
-              para={item.para}
-              borrowRate={item.borrowRate}
-              image={item.image}
-              isActive={item.isActive}
-            />
-          ))}
+          {window.ethereum ? (
+            items.map((item) => (
+              <VaultCard
+                key={item.title}
+                title={item.title}
+                para={item.para}
+                borrowRate={item.borrowRate}
+                image={item.image}
+                isActive={item.isActive}
+              />
+            ))
+          ) : (
+            <Box></Box>
+          )}
         </Box>
       </Grid>
       <Typography
