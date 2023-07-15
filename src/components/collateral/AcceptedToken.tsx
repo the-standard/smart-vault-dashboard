@@ -14,7 +14,6 @@ import {
 import LineChart from "./LineChart";
 import priceFeed from "../../feed/priceFeed";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
-import axios from "axios";
 import { formatUnits, fromHex } from "viem";
 
 interface AcceptedTokenProps {

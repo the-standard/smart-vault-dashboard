@@ -141,16 +141,20 @@ const HomePage = () => {
           }}
           ref={rectangleRef}
         >
-          {items.map((item) => (
-            <VaultCard
-              key={item.title}
-              title={item.title}
-              para={item.para}
-              borrowRate={item.borrowRate}
-              image={item.image}
-              isActive={item.isActive}
-            />
-          ))}
+          {window.ethereum ? (
+            items.map((item) => (
+              <VaultCard
+                key={item.title}
+                title={item.title}
+                para={item.para}
+                borrowRate={item.borrowRate}
+                image={item.image}
+                isActive={item.isActive}
+              />
+            ))
+          ) : (
+            <Box></Box>
+          )}
         </Box>
       </Grid>
       <Typography

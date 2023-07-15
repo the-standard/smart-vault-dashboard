@@ -75,17 +75,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   // console.log("isSuccess", isSuccess);
   // console.log("write", write);
 
-  let provider;
-
-  if (window.ethereum) {
-    provider = window.ethereum;
-  } else {
-    // Infura provider setup
-    const infuraApiKey = import.meta.env.VITE_INFURA_API_KEY;
-    provider = new ethers.providers.JsonRpcProvider(
-      `https://sepolia.infura.io/v3/${infuraApiKey}`
-    );
-  }
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
     contractAddress,
@@ -115,15 +105,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   };
 
   const navigateToLatestVault = async () => {
-    if (window.ethereum) {
-      provider = window.ethereum;
-    } else {
-      // Infura provider setup
-      const infuraApiKey = import.meta.env.VITE_INFURA_API_KEY;
-      provider = new ethers.providers.JsonRpcProvider(
-        `https://sepolia.infura.io/v3/${infuraApiKey}`
-      );
-    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       contractAddress,

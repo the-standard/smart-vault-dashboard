@@ -149,6 +149,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   };
 
   const depositEther = async (conditionalChain: any) => {
+    console.log(conditionalChain);
     const account = getAccount();
     console.log(account.address);
 
