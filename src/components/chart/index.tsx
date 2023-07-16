@@ -7,6 +7,8 @@ import {
   useVaultIdStore,
   useGreyProgressBarValuesStore,
   useEthToUsdAbiStore,
+  useUSDToEuroAbiStore,
+  useUSDToEuroAddressStore,
 } from "../../store/Store";
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
@@ -17,7 +19,9 @@ const Index = () => {
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
-  const { ethToUsdAbi } = useEthToUsdAbiStore.getState();
+  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { usdToEuroAddress } = useUSDToEuroAddressStore();
+  const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
   console.log("vault store" + vaultStore);
   const chosenVault: any = vaultStore;
@@ -26,8 +30,7 @@ const Index = () => {
   // const [euroPrice] = useState<any>(undefined);
   // const [ethToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
-  //delete this one
-
+  const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   let myToken = undefined;
@@ -121,6 +124,30 @@ const Index = () => {
     getChartValues();
   }, [chosenVault]);
 
+  const convertUsdToEuro = async (ethValueInUsd: number) => {
+    try {
+      const contract = new ethers.Contract(
+        usdToEuroAddress,
+        usdToEuroAbi,
+        signer
+      );
+      console.log(contract);
+      const price = await contract.latestRoundData();
+      console.log(price.answer);
+
+      const priceInEuro = fromHex(price.answer, "number");
+      console.log(priceInEuro);
+      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
+      console.log(priceInEuroFormatted);
+      const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
+      console.log(euroValueConverted);
+      setEuroValueConverted(euroValueConverted);
+      return priceInEuroFormatted;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
     console.log(vaultStore[4].collateral[0].token);
@@ -146,9 +173,12 @@ const Index = () => {
     const amountinUsd =
       Number(userInputForGreyBarOperation) * Number(priceFormatted);
     console.log(amountinUsd);
+    //not amountinusd but priceformatted as I need to see the price of 1 ether in euro and not the amount of user input
+    return convertUsdToEuro(Number(priceFormatted));
   };
 
   const computeGreyBar = (totalDebt: any, collateralValue: any) => {
+    console.log("euroValueConverted", euroValueConverted);
     const debt = Number(formatUnits(totalDebt, 18));
     const collateral = Number(formatUnits(collateralValue, 18));
     let operation: any;
@@ -160,14 +190,18 @@ const Index = () => {
 
     // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
     if (operationType === 1) {
-      //deposit / these 2 lines, userInputForGreyBarOperation * 1900, are quick and dirty fixes to get the user input in euros for the presentation. Fix them!
+      //deposit
       operation =
-        (debt / (collateral + Number(userInputForGreyBarOperation * 1900))) *
+        (debt /
+          (collateral +
+            Number(userInputForGreyBarOperation * euroValueConverted))) *
         100;
     } else if (operationType === 2) {
-      //withdraw  // these 2 lines, userInputForGreyBarOperation * 1900, are quick and dirty fixes to get the user input in euros for the presentation. Fix them!
+      //withdraw
       operation =
-        (debt / (collateral - Number(userInputForGreyBarOperation * 1900))) *
+        (debt /
+          (collateral -
+            Number(userInputForGreyBarOperation * euroValueConverted))) *
         100;
     } else if (operationType === 4) {
       //borrow
