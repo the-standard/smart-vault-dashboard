@@ -27,7 +27,6 @@ const Index = () => {
   const chosenVault: any = vaultStore;
   const [chartValues, setChartValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [priceInEuro, setPriceInEuro] = useState<any>(undefined);
   // const [euroPrice] = useState<any>(undefined);
   // const [ethToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
@@ -217,7 +216,6 @@ const Index = () => {
       const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
       console.log(euroValueConverted);
       setEuroValueConverted(euroValueConverted);
-      setPriceInEuro(priceInEuroFormatted);
       return priceInEuroFormatted;
     } catch (error) {
       console.log(error);
