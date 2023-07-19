@@ -48,7 +48,7 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
       <div
         style={{
           background:
-            "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+            "linear-gradient(110.28deg, rgba(85, 74, 74, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
 
           borderRadius: "10px",
           boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
@@ -64,7 +64,7 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
         }}
       >
         <strong>
-          {id}: {value}
+          {value} € <br />
         </strong>
       </div>
     )}

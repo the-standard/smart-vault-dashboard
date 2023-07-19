@@ -37,6 +37,34 @@ const Index = () => {
   let myToken = undefined;
 
   const getChartValues = async () => {
+    //need to recreate this function here scoped to the function
+    const convertUsdToEuro = async (ethValueInUsd: number) => {
+      try {
+        const contract = new ethers.Contract(
+          usdToEuroAddress,
+          usdToEuroAbi,
+          signer
+        );
+        console.log(contract);
+        const price = await contract.latestRoundData();
+        console.log(price.answer);
+
+        const priceInEuro = fromHex(price.answer, "number");
+        console.log(priceInEuro);
+        const priceInEuroFormatted = Number(
+          formatUnits(BigInt(priceInEuro), 8)
+        );
+        console.log(priceInEuroFormatted);
+        const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
+        console.log(euroValueConverted);
+        return priceInEuroFormatted;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const priceInEuro = await convertUsdToEuro(1);
+
     const token = vaultStore[4].collateral[0][0];
     console.log(token.clAddr);
     const contract = new ethers.Contract(token.clAddr, ethToUsdAbi, signer);
@@ -57,7 +85,7 @@ const Index = () => {
             const id = ethers.utils.parseBytes32String(collateral[0].symbol);
             let value = fromHex(collateral[1]._hex, "number");
 
-            if (id === "ETH" && priceInEuro !== undefined) {
+            if (id === "ETH") {
               value =
                 (Number(formatUnits(BigInt(value), 18)) *
                   Number(priceFormatted)) /
