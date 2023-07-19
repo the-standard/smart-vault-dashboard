@@ -53,10 +53,10 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
 
           borderRadius: "10px",
           boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-          backdropFilter: "blur(13.9px)",
+          backdropFilter: "blur(16.9px)",
           WebkitBackdropFilter: "blur(13.9px)",
           border: "1px solid rgba(255, 255, 255, 0.3)",
-          color: "#199384",
+          color: "#ffff",
           padding: "25px",
           fontSize: "1rem",
           fontFamily: "Poppins",
@@ -65,7 +65,7 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
         }}
       >
         <strong>
-          {value} € <br />
+          {value.toFixed(2)} € <br />
           {label} {id}
         </strong>
       </div>

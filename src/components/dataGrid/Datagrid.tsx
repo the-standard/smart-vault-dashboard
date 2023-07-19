@@ -333,12 +333,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         >
           <table
             style={{
-              backgroundColor: "transparent",
-              borderCollapse: "collapse",
-              backdropFilter: "blur(20px)",
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+
               borderRadius: "10px",
-              boxShadow: "4px 6px 20px 5px #00000038",
-              border: "1px solid rgba(255,255,255,.18)",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(13.9px)",
+              WebkitBackdropFilter: "blur(13.9px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
               color: "#afafaf",
               fontFamily: "Open Sans, sans-serif",
               width: "76%",
@@ -409,12 +411,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         >
           <table
             style={{
-              backgroundColor: "transparent",
-              borderCollapse: "collapse",
-              backdropFilter: "blur(20px)",
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+
               borderRadius: "10px",
-              boxShadow: "4px 6px 20px 5px #00000038",
-              border: "1px solid rgba(255,255,255,.18)",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(13.9px)",
+              WebkitBackdropFilter: "blur(13.9px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
               color: "#afafaf",
               fontFamily: "Open Sans, sans-serif",
               width: "76%",
@@ -504,18 +508,20 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         >
           <table
             style={{
-              borderCollapse: "collapse",
-              backdropFilter: "blur(20px)",
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+
               borderRadius: "10px",
-              boxShadow: "4px 6px 20px 5px #00000038",
-              border: "1px solid rgba(255,255,255,.18)",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(13.9px)",
+              WebkitBackdropFilter: "blur(13.9px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
               color: "#afafaf",
               fontFamily: "Open Sans, sans-serif",
               width: "76%",
               margin: "40px auto",
               alignItems: "center",
               overflow: "hidden",
-              background: "transparent",
             }}
           >
             <thead>
