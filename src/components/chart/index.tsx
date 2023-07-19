@@ -141,6 +141,7 @@ const Index = () => {
 
             return {
               ...collateral, // Copy all the properties from the original collateral object
+              //named label bcs otherwise ts and chart won't accept the parameter for some reason
               label: nativeValue,
             };
           }
@@ -426,7 +427,7 @@ const Index = () => {
           <Typography
             sx={{
               position: "relative",
-              top: "-170px",
+              top: { xs: "-120px", sm: "-170px" },
               fontFamily: "Poppins",
             }}
             variant="body1"
