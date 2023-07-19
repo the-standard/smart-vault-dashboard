@@ -68,6 +68,7 @@ const Index = () => {
             return {
               id,
               value,
+              label: "hey",
             };
           }
         );

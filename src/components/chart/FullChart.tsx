@@ -31,12 +31,12 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
       from: "color",
       modifiers: [["darker", 0.2]],
     }}
-    //empty values
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     valueFormat={() => ``}
     arcLinkLabelsSkipAngle={10}
     arcLinkLabelsTextColor="#ffffff"
     arcLinkLabelsThickness={2}
+    arcLinkLabelsOffset={0}
+    arcLinkLabelsStraightLength={0}
     arcLinkLabelsColor={{ from: "color" }}
     arcLabelsSkipAngle={10}
     arcLinkLabelsDiagonalLength={5}
@@ -44,6 +44,30 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
       from: "color",
       modifiers: [["darker", 2]],
     }}
+    tooltip={({ datum: { id, value } }) => (
+      <div
+        style={{
+          background:
+            "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+
+          borderRadius: "10px",
+          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+          backdropFilter: "blur(13.9px)",
+          WebkitBackdropFilter: "blur(13.9px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          color: "#199384",
+          padding: "25px",
+          fontSize: "1rem",
+          fontFamily: "Poppins",
+          height: "100px",
+          width: "auto",
+        }}
+      >
+        <strong>
+          {id}: {value}
+        </strong>
+      </div>
+    )}
     defs={[
       {
         id: "gradientC",
