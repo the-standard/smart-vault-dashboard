@@ -44,7 +44,8 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
       from: "color",
       modifiers: [["darker", 2]],
     }}
-    tooltip={({ datum: { id, value } }) => (
+    //disable ts error
+    tooltip={({ datum: { id, value, label } }) => (
       <div
         style={{
           background:
@@ -65,6 +66,7 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
       >
         <strong>
           {value} € <br />
+          {label} {id}
         </strong>
       </div>
     )}

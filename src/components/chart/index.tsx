@@ -36,6 +36,12 @@ const Index = () => {
   const signer = provider.getSigner();
   let myToken = undefined;
 
+  interface CollateralData {
+    id: string;
+    value: number;
+    label: string;
+  }
+
   const getChartValues = async () => {
     //need to recreate this function here scoped to the function
     const convertUsdToEuro = async (ethValueInUsd: number) => {
@@ -74,6 +80,11 @@ const Index = () => {
     const priceInUsd = fromHex(price.answer, "number");
 
     const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
+    //price of eth in eth
+    console.log(
+      formatEther(BigInt(fromHex(vaultStore[4][4][0][1]._hex, "number")))
+    );
+    console.log(vaultStore);
 
     console.log(priceFormatted);
     if (chosenVault != undefined) {
@@ -89,23 +100,54 @@ const Index = () => {
               value =
                 (Number(formatUnits(BigInt(value), 18)) *
                   Number(priceFormatted)) /
-                priceInEuro;
+                (priceInEuro || 1.6); // Use a fallback value of 1.6 if priceInEuro is undefined
             } else if (id === "SUSD6") {
-              value = Number(formatUnits(BigInt(value), 6)) / priceInEuro;
+              value =
+                Number(formatUnits(BigInt(value), 6)) / (priceInEuro || 1.6); // Use a fallback value of 1.6 if priceInEuro is undefined
             } else if (id === "SUSD18") {
-              value = Number(formatUnits(BigInt(value), 18)) / priceInEuro;
+              value =
+                Number(formatUnits(BigInt(value), 18)) / (priceInEuro || 1.6); // Use a fallback value of 1.6 if priceInEuro is undefined
             }
 
             return {
               id,
               value,
-              label: "hey",
             };
           }
         );
 
         console.log("collateralMapped", collateralMapped);
-        setChartData(collateralMapped);
+
+        const collateralWithAdditions: CollateralData[] = collateralMapped.map(
+          (collateral: CollateralData) => {
+            let nativeValue;
+
+            if (collateral.id === "ETH") {
+              // Replace this calculation with the appropriate one for ETH
+              nativeValue = formatEther(
+                BigInt(fromHex(vaultStore[4][4][0][1]._hex, "number"))
+              );
+            } else if (collateral.id === "SUSD6") {
+              // Replace this calculation with the appropriate one for SUSD6
+              nativeValue = formatEther(
+                BigInt(fromHex(vaultStore[4][4][1][1]._hex, "number"))
+              );
+            } else if (collateral.id === "SUSD18") {
+              // Replace this calculation with the appropriate one for SUSD18
+              nativeValue = formatEther(
+                BigInt(fromHex(vaultStore[4][4][2][1]._hex, "number"))
+              );
+            }
+
+            return {
+              ...collateral, // Copy all the properties from the original collateral object
+              label: nativeValue,
+            };
+          }
+        );
+
+        console.log(collateralWithAdditions);
+        setChartData(collateralWithAdditions);
 
         const collateralValueInUSD = removeLast18Digits(
           fromHex(chosenVault[4].collateralValue._hex, "number")
