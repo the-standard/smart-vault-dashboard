@@ -27,6 +27,7 @@ const Index = () => {
   const chosenVault: any = vaultStore;
   const [chartValues, setChartValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [priceInEuro, setPriceInEuro] = useState<any>(undefined);
   // const [euroPrice] = useState<any>(undefined);
   // const [ethToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
@@ -56,13 +57,15 @@ const Index = () => {
             const id = ethers.utils.parseBytes32String(collateral[0].symbol);
             let value = fromHex(collateral[1]._hex, "number");
 
-            if (id === "ETH") {
+            if (id === "ETH" && priceInEuro !== undefined) {
               value =
-                Number(formatUnits(BigInt(value), 18)) * Number(priceFormatted);
+                (Number(formatUnits(BigInt(value), 18)) *
+                  Number(priceFormatted)) /
+                priceInEuro;
             } else if (id === "SUSD6") {
-              value = Number(formatUnits(BigInt(value), 6));
+              value = Number(formatUnits(BigInt(value), 6)) / priceInEuro;
             } else if (id === "SUSD18") {
-              value = Number(formatUnits(BigInt(value), 18));
+              value = Number(formatUnits(BigInt(value), 18)) / priceInEuro;
             }
 
             return {
@@ -143,6 +146,7 @@ const Index = () => {
       const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
       console.log(euroValueConverted);
       setEuroValueConverted(euroValueConverted);
+      setPriceInEuro(priceInEuroFormatted);
       return priceInEuroFormatted;
     } catch (error) {
       console.log(error);
