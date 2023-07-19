@@ -90,6 +90,7 @@ export function useBackgroundImage() {
         background-image:  url(${bgImage});
         background-repeat: no-repeat;
         background-size: cover;
+        background-position:center;
         z-index: -1;
         opacity: 0; /* The initial state, completely transparent */
         transition: background-color 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Add transitions to both the background color and opacity */

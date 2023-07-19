@@ -37,7 +37,6 @@ const menuItems = [
     text: "History",
     icon: historylogo,
     icon2: historylogo2,
-    route: "history",
     isWorking: true,
   },
   {

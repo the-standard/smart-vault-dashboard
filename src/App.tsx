@@ -23,7 +23,6 @@ import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import { Box } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
-import History from "./pages/History.tsx";
 import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
 import { useCircularProgressStore, useChainIdStore } from "./store/Store.ts";
@@ -73,7 +72,6 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="history" element={<History />} />
           <Route path="collateral/:vaultId" element={<Collateral />} />
         </Routes>
         <Footer />

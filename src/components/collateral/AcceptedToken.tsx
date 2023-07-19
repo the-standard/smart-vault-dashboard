@@ -150,8 +150,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
       sx={{
         background:
           "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        //  border: "1px solid rgba(52, 52, 52, 0.3)",
-        //  boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+
         borderRadius: "10px",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(13.9px)",
