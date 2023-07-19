@@ -300,7 +300,15 @@ const Index = () => {
                 }}
                 key={index}
               >
-                <Typography variant="body2">{item.title}</Typography>
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: "0.88rem",
+                  }}
+                  variant="body2"
+                >
+                  {item.title}
+                </Typography>
                 <Box
                   sx={{
                     display: "flex",

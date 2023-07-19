@@ -599,7 +599,7 @@ const Collateral = () => {
                 key={index}
                 sx={{
                   margin: "2px",
-                  padding: "5px",
+                  padding: "5px 20px",
                   width: "auto",
                   height: "3rem",
                   display: "flex",
@@ -615,7 +615,7 @@ const Collateral = () => {
                     "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
                   fontFamily: '"Poppins", sans-serif',
                   color: "#ffffff",
-                  fontSize: "1rem",
+                  fontSize: "0.88rem",
                   letterSpacing: "1px",
                   backdropFilter: "blur(8px)",
                   transition: "0.5s",

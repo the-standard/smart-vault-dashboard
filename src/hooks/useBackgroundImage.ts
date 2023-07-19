@@ -57,7 +57,7 @@ const homeBgImage = "/backgrounds/Home.png";
 
 function getVaultBgImage(vaultId: number) {
   let index;
-  if (vaultId <= 50) {
+  if (vaultId <= 51) {
     index = vaultId - 1; // Since array index starts from 0
   } else {
     index = parseInt(vaultId.toString().slice(-1)) - 1;
