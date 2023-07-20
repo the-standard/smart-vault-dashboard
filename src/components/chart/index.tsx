@@ -128,8 +128,9 @@ const Index = () => {
               );
             } else if (collateral.id === "SUSD6") {
               // Replace this calculation with the appropriate one for SUSD6
-              nativeValue = formatEther(
-                BigInt(fromHex(vaultStore[4][4][1][1]._hex, "number"))
+              nativeValue = formatUnits(
+                BigInt(fromHex(vaultStore[4][4][1][1]._hex, "number")),
+                6
               );
             } else if (collateral.id === "SUSD18") {
               // Replace this calculation with the appropriate one for SUSD18
