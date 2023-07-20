@@ -22,6 +22,8 @@ import {
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
 import CheckIcon from "@mui/icons-material/Check";
+import Lottie from "lottie-react";
+import depositLottie from "../../lotties/deposit.json";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
@@ -116,8 +118,6 @@ const Debt = () => {
   };
 
   const repayMoney = async () => {
-    getProgressType(5);
-
     setModalStep(2);
 
     try {
@@ -144,6 +144,9 @@ const Debt = () => {
       borrowMoney();
     } else {
       console.log("paydown");
+      getCircularProgress(true);
+      getProgressType(5);
+
       approvePayment();
     }
   };
@@ -773,18 +776,39 @@ const Debt = () => {
                   variant="h6"
                   component="h2"
                 >
-                  Authorize Your SEURO Spending Cap
+                  Confirm Your EURst Spending cap
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Set a spending cap for the SEURO tokens in your wallet. This
-                  security feature ensures you control the maximum our
-                  application can use for the fees.
+                  For optimal security and transparency, trustworthy DApps
+                  require you to set a spending limit (cap). This helps regulate
+                  the maximum amount your wallet can use for a fee.
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  We recommend setting your cap to {amount}.
+                  We suggest a cap of {amount} for this transaction. This fee
+                  (0.5%) is rewarded to TST stakers, helping the DAO grow and
+                  build more features.{" "}
                 </Typography>{" "}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Follow the prompts in your wallet to set your cap.{" "}
+                  Interested in receiving a share of all fees collected?{" "}
+                  <br></br>{" "}
+                  <a target="blank" href="https://app.camelot.exchange/">
+                    Simply get yourself some TST
+                  </a>
+                  and
+                  <a href="https://thestandarddao.notion.site/Roadmap-TheStandard-io-32212bdfa96149de812da24c6c010ca3">
+                    stake them.{" "}
+                  </a>
+                  <Box
+                    sx={{
+                      width: "80px",
+                      height: "80px",
+                      position: "relative",
+                      bottom: "22rem",
+                      left: "22rem",
+                    }}
+                  >
+                    <Lottie animationData={depositLottie} />{" "}
+                  </Box>
                 </Typography>
               </Box>
             ) : (
