@@ -81,6 +81,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
+              textAlign: "center",
             }}
           >
             {truncatedValue}
@@ -125,12 +126,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       image: tokenDecoded.image,
     };
   }
-  // alert(
-  //   parseFloat(
-  //     Number(ethers.BigNumber.from(vaults[0][5][0])) /
-  //       Number(ethers.BigNumber.from(vaults[0][5][1]))
-  //   ).toString() * 100
-  // );
 
   useEffect(() => {
     async function fetchNFTs() {
@@ -236,7 +231,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             alignItems: "center",
             justifyContent: "center",
             padding: 0,
-            marginRight: "0.5rem",
+            marginRight: "2rem",
             backgroundColor: "rgba(0, 0, 0, 0.2)",
           }}
           className="myBtn"
@@ -381,8 +376,18 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
-                    <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
-                    <td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {ethers.BigNumber.from(vault[0]).toString()}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
                       <ProgressBar
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault[4].minted)),
@@ -463,7 +468,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
-                    <td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault[0]).toString()
                       ) ? (
@@ -477,9 +486,19 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         />
                       ) : null}
                     </td>
-                    <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {ethers.BigNumber.from(vault[0]).toString()}
+                    </td>
 
-                    <td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
                       <ProgressBar
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault[4].minted)),
@@ -527,22 +546,28 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           >
             <thead>
               <tr>
-                <th scope="col">Vault NFT</th>
-                <th scope="col">Vault ID</th>
-                <th scope="col">Collateral</th>
-                <th scope="col">Debt</th>
-                <th scope="col">
-                  {/* just one of them makes all of them have a margin */}
-                  <p
-                    style={{
-                      margin: "20px 0",
-                    }}
-                  >
-                    Ratio
-                  </p>
+                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
+                  Vault NFT
                 </th>
-                {/* width is not actually 20px, but it makes the table look good */}
-                <th style={{ width: "20px" }} scope="col">
+                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
+                  Vault ID
+                </th>
+                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
+                  Collateral
+                </th>
+                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
+                  Debt
+                </th>
+                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
+                  <p style={{ margin: "20px 0" }}>Ratio</p>
+                </th>
+                <th
+                  style={{
+                    width: "20px",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
                   Actions
                 </th>
               </tr>
@@ -561,7 +586,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault: any, index: number) => (
                   <tr key={index}>
-                    <td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault[0]).toString()
                       ) ? (
@@ -575,7 +604,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         />
                       ) : null}
                     </td>
-                    <td>{ethers.BigNumber.from(vault[0]).toString()}</td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {ethers.BigNumber.from(vault[0]).toString()}
+                    </td>
                     <TruncatedTableCell
                       value={truncateToTwoDecimals(
                         ethers.utils.formatEther(
@@ -587,12 +622,20 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       length={12}
                     />
 
-                    <td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
                       {truncateToTwoDecimals(
                         formatEther(vault[4].minted.toString())
                       )}
                     </td>
-                    <td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
                       <ProgressBar
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault[4].minted)),

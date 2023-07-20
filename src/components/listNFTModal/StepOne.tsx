@@ -191,81 +191,6 @@ const StepOne: React.FC<StepProps> = ({
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
-              color: "white",
-            }}
-          >
-            <Typography
-              sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[4].trait_type}
-            </Typography>{" "}
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-                fontFamily: "Poppins",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[4].value}
-            </Typography>
-          </CardContent>{" "}
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[5].trait_type}
-            </Typography>{" "}
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-                fontFamily: "Poppins",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[5].value}
-            </Typography>
-          </CardContent>{" "}
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
             }}
           >
             <Typography
@@ -486,43 +411,6 @@ const StepOne: React.FC<StepProps> = ({
               gutterBottom
             >
               {tokenMap.get(modalChildState).attributes[4].value}
-            </Typography>
-          </CardContent>{" "}
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[5].trait_type}
-            </Typography>{" "}
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-                fontFamily: "Poppins",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[5].value}
             </Typography>
           </CardContent>{" "}
           <div
