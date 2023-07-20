@@ -191,11 +191,11 @@ const Collateral = () => {
     },
     {
       id: 2,
-      title: "Add sEURO to wallet",
+      title: "Add EUROs to wallet",
     },
     {
       id: 3,
-      title: "Earn Yield on sEURO",
+      title: "Earn Yield on EUROs",
     },
   ];
 

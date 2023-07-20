@@ -423,8 +423,7 @@ const StepOne: React.FC<StepProps> = ({
               }}
               gutterBottom
             >
-              {tokenMap.get(modalChildState).attributes[4].value}
-              sEURO
+              {tokenMap.get(modalChildState).attributes[4].value} EUROs
             </Typography>
           </CardContent>
         </Card>

@@ -202,12 +202,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             sx={{
               cursor: "pointer",
               marginRight: "0.7rem",
-              height: "3rem",
+              height: "2.4rem",
+              width: { xs: "5.2rem", md: "7rem" },
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: { xs: "5.2rem", md: "8rem" },
               backgroundColor: "rgba(0, 0, 0, 0.2)",
+              marginLeft: "0.5rem",
             }}
             className="myBtn"
           >
@@ -229,13 +230,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         <Button
           sx={{
             cursor: "pointer",
-            height: "3rem",
+            height: "2.4rem",
+            width: { xs: "5.2rem", md: "7rem" },
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: { xs: "5.2rem", md: "8rem" },
             padding: 0,
-            margin: 0,
+            marginRight: "0.5rem",
             backgroundColor: "rgba(0, 0, 0, 0.2)",
           }}
           className="myBtn"

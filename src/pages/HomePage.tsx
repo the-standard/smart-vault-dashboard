@@ -20,28 +20,28 @@ import { getNetwork } from "@wagmi/core";
 
 const items = [
   {
-    title: "sEURO",
+    title: "EUROs",
     para: "Euro pegged",
     borrowRate: "Borrow up to 90.91%",
     image: seurologo,
     isActive: true,
   },
   {
-    title: "sUSD",
+    title: "USDs",
     para: "USD pegged",
     borrowRate: "Borrow up to 90.91%",
     image: susdlogo,
     isActive: false,
   },
   {
-    title: "sAUD",
+    title: "AUDs",
     para: "Aussie Dollar pegged",
     borrowRate: "Borrow up to 90.91%",
     image: saudlogo,
     isActive: false,
   },
   {
-    title: "sARS",
+    title: "ARSs",
     para: "Argentine Peso pegged",
     borrowRate: "Borrow up to 90.91%",
     image: sarslogo,

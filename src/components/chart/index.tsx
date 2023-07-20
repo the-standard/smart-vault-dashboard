@@ -167,22 +167,22 @@ const Index = () => {
           {
             title: "Debt outstanding",
             value: truncateToTwoDecimals(totalDebt),
-            currency: "sEURO",
+            currency: "EUROs",
           },
           {
             title: "Vault Collateral Value",
             value: truncateToTwoDecimals(collateralValueInUSD),
-            currency: "sEURO",
+            currency: "EUROs",
           },
           {
             title: "Collateral Value Liquidation Trigger",
             value: truncateToTwoDecimals(totalLiquidationValue),
-            currency: "sEURO",
+            currency: "EUROs",
           },
           {
             title: "You can borrow up to:",
             value: truncateToTwoDecimals(borrowLimit),
-            currency: "sEURO",
+            currency: "EUROs",
           },
         ];
 

@@ -285,7 +285,7 @@ const Debt = () => {
                 }
                 variant="body1"
               >
-                sEURO outstanding:{" "}
+                EUROs outstanding:{" "}
               </Typography>
               <Typography variant="body1">
                 {" "}

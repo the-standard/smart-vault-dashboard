@@ -18,6 +18,10 @@ body {
   padding: 0;
   background-position: center;
 }
+th,
+td {
+  vertical-align: middle;
+}
 
 /* body:before {
   content: "";
