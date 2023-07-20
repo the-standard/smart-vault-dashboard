@@ -167,40 +167,17 @@ const CircularProgressComponent = () => {
             </Box>
           </Box>
         ) : progressType === 5 ? (
-          <Box
-            sx={{
-              position: "fixed",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: "100%",
-              background: "transparent",
-              zIndex: 9999,
-              //  marginTop: "500px",
-            }}
-          >
+          <Box sx={{}}>
             {" "}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-start",
-                width: "450px",
-                height: "300px",
-                position: "relative",
-                left: "50px",
-                top: "30px",
-              }}
-            >
-              <Box
+            <Box sx={{}}>
+              {/* <Box
                 sx={{
                   width: "80px",
                   height: "80px",
                 }}
               >
                 <Lottie animationData={depositLottie} />{" "}
-              </Box>
+              </Box> */}
             </Box>
           </Box>
         ) : (
