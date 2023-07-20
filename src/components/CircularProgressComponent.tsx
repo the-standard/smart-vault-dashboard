@@ -9,9 +9,9 @@ import Lottie from "lottie-react";
 
 const CircularProgressComponent = () => {
   const { circularProgress, progressType } = useCircularProgressStore();
-  console.log(circularProgress);
   // const zIndexValue = circularProgress ? 9999 : -9999;
-
+  // let progressType = 5;
+  // let circularProgress = true;
   useEffect(() => {
     console.log(circularProgress);
   }, []);
@@ -172,7 +172,7 @@ const CircularProgressComponent = () => {
               position: "fixed",
               display: "flex",
               justifyContent: "center",
-              alignItems: "flex-end",
+              alignItems: "center",
               width: "100%",
               height: "100%",
               background: "transparent",
@@ -183,24 +183,20 @@ const CircularProgressComponent = () => {
             {" "}
             <Box
               sx={{
-                background:
-                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-                borderRadius: "10px",
-                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                backdropFilter: "blur(13.9px)",
-                WebkitBackdropFilter: "blur(13.9px)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
                 display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: "flex-end",
+                alignItems: "flex-start",
                 width: "450px",
                 height: "300px",
+                position: "relative",
+                left: "50px",
+                top: "30px",
               }}
             >
               <Box
                 sx={{
-                  width: "250px",
-                  height: "250px",
+                  width: "80px",
+                  height: "80px",
                 }}
               >
                 <Lottie animationData={depositLottie} />{" "}
