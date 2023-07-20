@@ -116,8 +116,6 @@ const Debt = () => {
   };
 
   const repayMoney = async () => {
-    getProgressType(5);
-
     setModalStep(2);
 
     try {
@@ -144,6 +142,9 @@ const Debt = () => {
       borrowMoney();
     } else {
       console.log("paydown");
+      getCircularProgress(true);
+      getProgressType(5);
+
       approvePayment();
     }
   };
