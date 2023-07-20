@@ -126,12 +126,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       image: tokenDecoded.image,
     };
   }
-  // alert(
-  //   parseFloat(
-  //     Number(ethers.BigNumber.from(vaults[0][5][0])) /
-  //       Number(ethers.BigNumber.from(vaults[0][5][1]))
-  //   ).toString() * 100
-  // );
 
   useEffect(() => {
     async function fetchNFTs() {

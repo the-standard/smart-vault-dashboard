@@ -96,11 +96,14 @@ const HomePage = () => {
   };
 
   const getCurrentChain = async () => {
-    const { chain } = await getNetwork();
+    const { chain } = getNetwork();
+    console.log("chain", chain.id);
     if (chain?.id == 421613) {
       getVaults(arbitrumGoerliContractAddress);
     } else if (chain?.id == 11155111) {
       getVaults(contractAddress);
+    } else {
+      console.log("chain not supported");
     }
   };
 
@@ -109,7 +112,7 @@ const HomePage = () => {
       //getVaults();
       getCurrentChain();
     }
-  }, [isConnected]);
+  }, []);
 
   useEffect(() => {
     if (window.ethereum) {
