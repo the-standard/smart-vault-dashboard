@@ -791,11 +791,27 @@ const Debt = () => {
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   Interested in receiving a share of all fees collected?{" "}
                   <br></br>{" "}
-                  <a target="blank" href="https://app.camelot.exchange/">
-                    Simply get yourself some TST
+                  <a
+                    style={{
+                      textDecoration: "none",
+                      color: "white",
+                      borderBottom: "1px solid white",
+                    }}
+                    target="blank"
+                    href="https://app.camelot.exchange/"
+                  >
+                    Simply get yourself some TST{" "}
                   </a>
-                  and
-                  <a href="https://thestandarddao.notion.site/Roadmap-TheStandard-io-32212bdfa96149de812da24c6c010ca3">
+                  and{""}
+                  <a
+                    style={{
+                      textDecoration: "none",
+                      color: "white",
+                      borderBottom: "1px solid white",
+                    }}
+                    href="https://thestandarddao.notion.site/Roadmap-TheStandard-io-32212bdfa96149de812da24c6c010ca3"
+                  >
+                    {" "}
                     stake them.{" "}
                   </a>
                   <Box
