@@ -166,7 +166,8 @@ const CircularProgressComponent = () => {
               </Box>
             </Box>
           </Box>
-        ) : progressType === 5 ? (
+        ) : // moved this one to debt.tsx
+        progressType === 5 ? (
           <Box sx={{}}>
             {" "}
             <Box sx={{}}>
