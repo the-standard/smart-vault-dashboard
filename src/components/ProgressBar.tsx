@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import React, { useEffect, useState, useRef } from "react";
@@ -38,7 +39,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   };
 
   const run = () => {
-    const start = 0;
+    let start = 0;
     const end = percentage;
     const duration = 1000;
     const range = end - start;
@@ -48,15 +49,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     // Clamp the timer to our minimum
     stepTime = Math.max(stepTime, minTimer);
 
-    const startTime = new Date().getTime();
-    const endTime = startTime + duration;
-    // eslint-disable-next-line prefer-const
+    let startTime = new Date().getTime();
+    let endTime = startTime + duration;
     let timer;
 
     const runInterval = () => {
-      const now = new Date().getTime();
-      const remaining = Math.max((endTime - now) / duration, 0);
-      const value = Math.round(end - remaining * range);
+      let now = new Date().getTime();
+      let remaining = Math.max((endTime - now) / duration, 0);
+      let value = Math.round(end - remaining * range);
       if (percentageDivRef.current) {
         percentageDivRef.current.innerHTML = `${value}%`;
       }
@@ -70,7 +70,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   };
 
   useEffect(() => {
-    const calcPercentage = greyBarValue;
+    let calcPercentage = greyBarValue;
 
     setPercentageCalculate(calcPercentage);
     if (progressBarGreyRef.current) {
