@@ -1,6 +1,8 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+import React, { useEffect, useState, useCallback } from "react";
 import "../styles/progressBarStyle.css";
-import { Box } from "@mui/material";
+import { useGreyProgressBarValuesStore } from "../store/Store";
 
 interface ProgressBarProps {
   progressValue: any;
@@ -11,96 +13,129 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   progressValue,
   greyBarValue,
 }) => {
-  // const progressBar = document.getElementById("progress-bar");
-  // const percentageDiv = document.getElementById("percentage");
-  console.log(progressValue);
-  console.log(greyBarValue);
+  const [percentage, setPercentage] = useState(30);
+  const [percentageCalculate, setPercentageCalculate] = useState(0);
+  let timer;
 
-  // Set the percentage value
-  const percentage = progressValue;
+  const {
+    getGreyBarUserInput,
+    getSymbolForGreyBar,
+    userInputForGreyBarOperation,
+  } = useGreyProgressBarValuesStore();
 
-  // Calculate the color
-  let hue;
-  if (percentage <= 50) {
-    // linear interpolation between green (120) and orange (39)
-    hue = 120 - (percentage / 50) * (120 - 39);
-  } else {
-    // linear interpolation between orange (39) and red (0)
-    hue = 39 - ((percentage - 50) / 50) * 39;
-  }
+  useEffect(() => {
+    console.log(userInputForGreyBarOperation);
+    if (userInputForGreyBarOperation) {
+      setPercentageCalculate(userInputForGreyBarOperation);
+    }
+  }, [userInputForGreyBarOperation]);
 
-  // if (progressBar != null) {
-  //   // Set the color and width of the progress bar
-  //   progressBar.style.backgroundColor = `hsla(${hue}, 100%, 50%, 0.6)`;
-  //   progressBar.style.width = `${percentage}%`;
-  // }
+  const updateProgressBar = useCallback(() => {
+    let hue;
+    if (percentage <= 50) {
+      hue = 120 - (percentage / 50) * (120 - 39);
+    } else {
+      hue = 39 - ((percentage - 50) / 50) * 39;
+    }
+    document.getElementById(
+      "progress-bar"
+    ).style.backgroundColor = `hsla(${hue}, 100%, 50%, 0.6)`;
+    document.getElementById("progress-bar").style.width = `${percentage}%`;
+  }, [percentage]);
+
+  const handlePercentageChange = useCallback(() => {
+    // Reset the grey bar to a thin line at the current percentage position
+    document.getElementById("progress-bar-grey").style.width = "1px";
+    document.getElementById("progress-bar-grey").style.left = `${percentage}%`;
+    document.getElementById("progress-bar-grey").style.display = "block";
+
+    // Animate the grey bar to the left or right based on the user's input
+    if (percentageCalculate <= 0) {
+      document.getElementById("progress-bar-grey").style.display = "none";
+      document.getElementById("percentage").innerHTML = `${percentage}%`;
+    } else if (percentageCalculate < percentage) {
+      setTimeout(function () {
+        document.getElementById("progress-bar-grey").style.width = `${
+          percentage - percentageCalculate
+        }%`;
+        document.getElementById(
+          "progress-bar-grey"
+        ).style.left = `${percentageCalculate}%`;
+        document.getElementById(
+          "percentage"
+        ).innerHTML = `${percentageCalculate}%`;
+      }, 100); // Delay to allow the grey bar to reset before animating
+    } else {
+      setTimeout(function () {
+        document.getElementById("progress-bar-grey").style.width = `${
+          percentageCalculate - percentage
+        }%`;
+        document.getElementById(
+          "progress-bar-grey"
+        ).style.left = `${percentage}%`;
+        document.getElementById(
+          "percentage"
+        ).innerHTML = `${percentageCalculate}%`;
+      }, 100); // Delay to allow the grey bar to reset before animating
+    }
+
+    // Make the grey bar pulse red and turn red if it goes above 80%
+    if (percentageCalculate > 80) {
+      document
+        .getElementById("progress-bar-grey")
+        .classList.add("pulse-red", "red-bar");
+    } else {
+      document
+        .getElementById("progress-bar-grey")
+        .classList.remove("pulse-red", "red-bar");
+    }
+  }, [percentage, percentageCalculate]);
 
   // Animate the number
   const start = 0;
   const end = percentage;
   const duration = 1000;
   const range = end - start;
-  // const minTimer = 50;
-  // let stepTime = Math.abs(Math.floor(duration / range));
+  const minTimer = 50;
+  let stepTime = Math.abs(Math.floor(duration / range));
 
-  // // Clamp the timer to our minimum
-  // stepTime = Math.max(stepTime, minTimer);
+  // Clamp the timer to our minimum
+  stepTime = Math.max(stepTime, minTimer);
 
   const startTime = new Date().getTime();
   const endTime = startTime + duration;
-  // eslint-disable-next-line prefer-const
-  let timer: string | number | NodeJS.Timeout | undefined;
 
-  const now = new Date().getTime();
-  const remaining = Math.max((endTime - now) / duration, 0);
-  const value = Math.round(end - remaining * range);
-  // percentageDiv.innerHTML = `${value}%`;
-  if (value === end) {
-    clearInterval(timer);
-  }
+  const run = useCallback(() => {
+    const now = new Date().getTime();
+    const remaining = Math.max((endTime - now) / duration, 0);
+    const value = Math.round(end - remaining * range);
+    document.getElementById("percentage").innerHTML = `${value}%`;
+    if (value === end) {
+      clearInterval(timer);
+    }
+  }, [end, endTime, duration, range]);
 
-  // timer = setInterval(run, stepTime);
+  useEffect(() => {
+    updateProgressBar();
+    run();
+    timer = setInterval(run, stepTime);
+    return () => clearInterval(timer);
+  }, [updateProgressBar, run, stepTime]);
+
+  useEffect(() => {
+    handlePercentageChange();
+  }, [percentageCalculate, handlePercentageChange]);
 
   return (
-    <Box
-      sx={{
-        minWidth: "80px",
-        color: "white",
-      }}
-    >
-      <Box className="progress-container">
-        <Box
-          className="progress-bar"
-          id="progress-bar"
-          sx={{
-            backgroundColor: `hsla(${hue}, 100%, 50%, 0.6)`,
-            width: `${percentage}%`,
-            zIndex: 1,
-          }}
-        ></Box>
-        <Box
-          sx={{
-            backgroundColor: `grey`,
-            width: `${greyBarValue}%`,
-            zIndex: 0,
-          }}
-          className="progress-bar-grey"
-          id="progress-bar-grey"
-        ></Box>
-        <Box
-          className="percentage"
-          id="percentage"
-          sx={{
-            color: "#afafaf",
-            fontFamily: "Poppins",
-            fontWeight: 300,
-            fontSize: "1rem",
-          }}
-        >
-          {Number.isNaN(percentage) ? "0.00" : percentage}%
-        </Box>
-      </Box>
-    </Box>
+    <div>
+      <div className="progress-container">
+        <div className="progress-bar" id="progress-bar"></div>
+        <div className="progress-bar-grey" id="progress-bar-grey"></div>
+        <div className="percentage" id="percentage">
+          0%
+        </div>
+      </div>
+    </div>
   );
 };
 
