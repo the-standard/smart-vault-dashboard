@@ -17,6 +17,7 @@ import {
 } from "../store/Store.ts";
 // import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
+import { useNetwork } from "wagmi";
 
 const items = [
   {
@@ -62,6 +63,8 @@ const HomePage = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
 
+  const { chain } = useNetwork();
+
   useLayoutEffect(() => {
     function updatePosition() {
       if (rectangleRef.current) {
@@ -96,14 +99,11 @@ const HomePage = () => {
   };
 
   const getCurrentChain = async () => {
-    const { chain } = getNetwork();
-    console.log("chain", chain.id);
+    const { chain } = await getNetwork();
     if (chain?.id == 421613) {
       getVaults(arbitrumGoerliContractAddress);
     } else if (chain?.id == 11155111) {
       getVaults(contractAddress);
-    } else {
-      console.log("chain not supported");
     }
   };
 
@@ -112,7 +112,7 @@ const HomePage = () => {
       //getVaults();
       getCurrentChain();
     }
-  }, []);
+  }, [isConnected, chain]);
 
   useEffect(() => {
     if (window.ethereum) {
