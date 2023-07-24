@@ -289,7 +289,10 @@ const Index = () => {
     }
     console.log(operation);
     //not sure about this line, test it
-    operation >= 100 ? (operation = 100) : operation;
+    // If 'operation' is greater than or equal to 100, set it to 100
+    // If 'operation' is less than or equal to 0, set it to 1
+    // Otherwise, keep the 'operation' value unchanged
+    operation = operation >= 100 ? 100 : operation <= 0 ? 0.1 : operation;
     return userInputForGreyBarOperation === 0 ? 0 : operation;
   };
 
