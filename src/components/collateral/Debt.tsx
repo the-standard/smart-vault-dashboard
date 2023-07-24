@@ -56,6 +56,15 @@ const Debt = () => {
     getGreyBarUserInput(e.target.value);
   };
 
+  useEffect(() => {
+    // This function will run just before the component unmounts
+    return () => {
+      // Perform any cleanup tasks or actions you want before the component unmounts
+      setAmount(0);
+      getGreyBarUserInput(0);
+    };
+  }, []);
+
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
@@ -455,7 +464,7 @@ const Debt = () => {
               borderRadius: "10px",
               paddingLeft: "0.5rem",
             }}
-            placeholder="Amount of sEURO to borrow"
+            placeholder="Amount of EUROs to borrow"
             type="text"
             onChange={handleAmount}
             autoFocus
@@ -476,7 +485,7 @@ const Debt = () => {
               borderRadius: "10px",
               paddingLeft: "0.5rem",
             }}
-            placeholder="Amount of sEURO you want to repay "
+            placeholder="Amount of EUROs you want to repay "
             type="text"
             onChange={handleAmount}
             autoFocus
