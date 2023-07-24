@@ -48,6 +48,7 @@ const Debt = () => {
     setActiveElement(element);
     handleInputFocus();
     getOperationType(element);
+    getGreyBarUserInput(0);
   };
 
   const handleAmount = (e: any) => {
@@ -180,7 +181,11 @@ const Debt = () => {
   }, []);
 
   const handleInputFocus = () => {
-    inputRef.current.focus();
+    if (inputRef.current) {
+      // Set the input value to 0 and focus on the input field
+      inputRef.current.value = "";
+      inputRef.current.focus();
+    }
   };
 
   const shortenAddress = (address: any) => {
