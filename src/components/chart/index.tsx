@@ -9,6 +9,7 @@ import {
   useEthToUsdAbiStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
+  useCounterStore,
 } from "../../store/Store";
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
@@ -23,6 +24,8 @@ const Index = () => {
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
+  const { counter } = useCounterStore();
+
   console.log("vault store" + vaultStore);
   const chosenVault: any = vaultStore;
   const [chartValues, setChartValues] = useState<any[]>([]);
@@ -34,6 +37,11 @@ const Index = () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   let myToken = undefined;
+
+  // useEffect(() => {
+  //   alert(counter);
+
+  // }, [counter]);
 
   interface CollateralData {
     id: string;
@@ -274,10 +282,7 @@ const Index = () => {
     } else if (operationType === 2) {
       //withdraw
       operation =
-        (debt /
-          (collateral -
-            Number(userInputForGreyBarOperation * euroValueConverted))) *
-        100;
+        (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
     } else if (operationType === 4) {
       //borrow
       operation =
@@ -316,7 +321,7 @@ const Index = () => {
     if (isNaN(Number(returnVal))) {
       return "0.00";
     } else {
-      return returnVal;
+      return Math.abs(Number(returnVal));
     }
   };
 
