@@ -48,6 +48,7 @@ const Debt = () => {
     setActiveElement(element);
     handleInputFocus();
     getOperationType(element);
+    getGreyBarUserInput(0);
   };
 
   const handleAmount = (e: any) => {
@@ -55,6 +56,24 @@ const Debt = () => {
     console.log(e.target.value);
     getGreyBarUserInput(e.target.value);
   };
+
+  useEffect(() => {
+    setAmount(0);
+    setActiveElement(4);
+    handleInputFocus();
+    getOperationType(4);
+    getGreyBarUserInput(0);
+  }, []);
+
+  useEffect(() => {
+    // This function will run just before the component unmounts
+
+    return () => {
+      // Perform any cleanup tasks or actions you want before the component unmounts
+      setAmount(0);
+      getGreyBarUserInput(0);
+    };
+  }, []);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -158,10 +177,16 @@ const Debt = () => {
       getCircularProgress(false); // Set isLoading to false after the transaction is mined
       getSnackBar(0);
       //   handleSnackbarClick();
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
     } catch (error) {
       console.log(error);
       getCircularProgress(false);
       getSnackBar(1);
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
       //  handleSnackbarClick();
     }
   };
@@ -171,7 +196,11 @@ const Debt = () => {
   }, []);
 
   const handleInputFocus = () => {
-    inputRef.current.focus();
+    if (inputRef.current) {
+      // Set the input value to 0 and focus on the input field
+      inputRef.current.value = "";
+      inputRef.current.focus();
+    }
   };
 
   const shortenAddress = (address: any) => {
@@ -455,7 +484,7 @@ const Debt = () => {
               borderRadius: "10px",
               paddingLeft: "0.5rem",
             }}
-            placeholder="Amount of sEURO to borrow"
+            placeholder="Amount of EUROs to borrow"
             type="text"
             onChange={handleAmount}
             autoFocus
@@ -476,7 +505,7 @@ const Debt = () => {
               borderRadius: "10px",
               paddingLeft: "0.5rem",
             }}
-            placeholder="Amount of sEURO you want to repay "
+            placeholder="Amount of EUROs you want to repay "
             type="text"
             onChange={handleAmount}
             autoFocus
