@@ -58,7 +58,16 @@ const Debt = () => {
   };
 
   useEffect(() => {
+    setAmount(0);
+    setActiveElement(4);
+    handleInputFocus();
+    getOperationType(4);
+    getGreyBarUserInput(0);
+  }, []);
+
+  useEffect(() => {
     // This function will run just before the component unmounts
+
     return () => {
       // Perform any cleanup tasks or actions you want before the component unmounts
       setAmount(0);
