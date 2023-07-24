@@ -282,7 +282,10 @@ const Index = () => {
     } else if (operationType === 2) {
       //withdraw
       operation =
-        (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
+        (debt /
+          (collateral -
+            Number(userInputForGreyBarOperation * euroValueConverted))) *
+        100;
     } else if (operationType === 4) {
       //borrow
       operation =
@@ -297,7 +300,12 @@ const Index = () => {
     // If 'operation' is greater than or equal to 100, set it to 100
     // If 'operation' is less than or equal to 0, set it to 1
     // Otherwise, keep the 'operation' value unchanged
-    operation = operation >= 100 ? 100 : operation <= 0 ? 0.1 : operation;
+    if (operationType === 2) {
+      operation = operation >= 100 ? 100 : operation < 0 ? 551 : operation;
+    } else {
+      operation = operation >= 100 ? 100 : operation == 0 ? 0.1 : operation;
+    }
+
     return userInputForGreyBarOperation === 0 ? 0 : operation;
   };
 
