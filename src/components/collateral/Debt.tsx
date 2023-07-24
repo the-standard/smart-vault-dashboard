@@ -103,6 +103,8 @@ const Debt = () => {
       console.log("confirming transaction " + transactionHash.confirmations);
       getTransactionHash(transactionHash);
       waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+      inputRef.current.value = "";
+      inputRef.current.focus();
     } catch (error) {
       console.log(error);
     }
@@ -154,6 +156,8 @@ const Debt = () => {
     } catch (error) {
       console.log(error);
       setModalStep(1);
+      inputRef.current.value = "";
+      inputRef.current.focus();
     }
   };
 

@@ -374,3 +374,13 @@ export const useNFTListingModalStore = create<NFTListingModalState>((set) => ({
   getNFTListingModalTotalValueMinusDebt: (totalValueMinusDebt) =>
     set({ totalValueMinusDebt }),
 }));
+
+interface inputValueAsGlobalState {
+  inputValue: number;
+  getInputValue: (inputValue: number) => void;
+}
+
+export const useInputValueStore = create<inputValueAsGlobalState>((set) => ({
+  inputValue: 0,
+  getInputValue: (inputValue) => set({ inputValue }),
+}));
