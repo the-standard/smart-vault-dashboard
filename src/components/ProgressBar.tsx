@@ -23,23 +23,29 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     run();
   }, [percentage]);
 
+  useEffect(() => {
+    // perform your side effect here
+    updateProgressBar();
+    run();
+  }, [progressValue]);
+
   const updateProgressBar = () => {
     let hue;
-    if (percentage <= 50) {
-      hue = 120 - (percentage / 50) * (120 - 39);
+    if (progressValue <= 50) {
+      hue = 120 - (progressValue / 50) * (120 - 39);
     } else {
-      hue = 39 - ((percentage - 50) / 50) * 39;
+      hue = 39 - ((progressValue - 50) / 50) * 39;
     }
 
     if (progressBarRef.current) {
       progressBarRef.current.style.backgroundColor = `hsla(${hue}, 100%, 50%, 0.6)`;
-      progressBarRef.current.style.width = `${percentage}%`;
+      progressBarRef.current.style.width = `${progressValue}%`;
     }
   };
 
   const run = () => {
     const start = 0;
-    const end = percentage;
+    const end = progressValue;
     const duration = 1000;
     const range = end - start;
     const minTimer = 50;
