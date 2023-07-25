@@ -145,6 +145,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
     getOperationType(element);
     getGreyBarUserInput(0);
   };
+
   return (
     <Box
       sx={{

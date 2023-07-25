@@ -19,28 +19,42 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   const progressBarGreyRef = useRef<HTMLDivElement>(null);
   const percentageDivRef = useRef<HTMLDivElement>(null);
 
+  // useEffect(() => {
+  //   updateProgressBar();
+  //   run();
+  // }, [percentage]);
+
   useEffect(() => {
     updateProgressBar();
-    run();
-  }, [percentage]);
+    const timer = run(); // capture the returned timer
+
+    return () => {
+      clearInterval(timer); // clear the timer when progressValue changes or component unmounts
+    };
+  }, [progressValue]);
 
   const updateProgressBar = () => {
     let hue;
-    if (percentage <= 50) {
-      hue = 120 - (percentage / 50) * (120 - 39);
+    if (progressValue <= 50) {
+      hue = 120 - (progressValue / 50) * (120 - 39);
     } else {
-      hue = 39 - ((percentage - 50) / 50) * 39;
+      hue = 39 - ((progressValue - 50) / 50) * 39;
     }
 
     if (progressBarRef.current) {
       progressBarRef.current.style.backgroundColor = `hsla(${hue}, 100%, 50%, 0.6)`;
-      progressBarRef.current.style.width = `${percentage}%`;
+      progressBarRef.current.style.width = `${progressValue}%`;
     }
   };
 
   const run = () => {
+<<<<<<< HEAD
     let start = 0;
     const end = percentage;
+=======
+    const start = 0;
+    const end = progressValue;
+>>>>>>> development
     const duration = 1000;
     const range = end - start;
     const minTimer = 50;
@@ -49,8 +63,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     // Clamp the timer to our minimum
     stepTime = Math.max(stepTime, minTimer);
 
+<<<<<<< HEAD
     let startTime = new Date().getTime();
     let endTime = startTime + duration;
+=======
+    const startTime = new Date().getTime();
+    const endTime = startTime + duration;
+
+>>>>>>> development
     let timer;
 
     const runInterval = () => {
@@ -67,6 +87,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
     timer = setInterval(runInterval, stepTime);
     runInterval();
+
+    return timer; // return the timer from the run function
   };
 
   useEffect(() => {
@@ -75,19 +97,19 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     setPercentageCalculate(calcPercentage);
     if (progressBarGreyRef.current) {
       progressBarGreyRef.current.style.width = "1px";
-      progressBarGreyRef.current.style.left = `${percentage}%`;
+      progressBarGreyRef.current.style.left = `${progressValue}%`;
       progressBarGreyRef.current.style.display = "block";
 
       // Animate the grey bar to the left or right based on the user's input
       if (calcPercentage <= 0) {
         progressBarGreyRef.current.style.display = "none";
         if (percentageDivRef.current) {
-          percentageDivRef.current.innerHTML = `${percentage}%`;
+          percentageDivRef.current.innerHTML = `${progressValue}%`;
         }
-      } else if (calcPercentage < percentage) {
+      } else if (calcPercentage < progressValue) {
         setTimeout(function () {
           progressBarGreyRef.current.style.width = `${
-            percentage - calcPercentage
+            progressValue - calcPercentage
           }%`;
           progressBarGreyRef.current.style.left = `${calcPercentage}%`;
           if (percentageDivRef.current) {
@@ -97,9 +119,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       } else {
         setTimeout(function () {
           progressBarGreyRef.current.style.width = `${
-            calcPercentage - percentage
+            calcPercentage - progressValue
           }%`;
-          progressBarGreyRef.current.style.left = `${percentage}%`;
+          progressBarGreyRef.current.style.left = `${progressValue}%`;
           if (percentageDivRef.current) {
             percentageDivRef.current.innerHTML = `${calcPercentage}%`;
           }
@@ -129,7 +151,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           ref={progressBarGreyRef}
         ></div>
         <div className="percentage" id="percentage" ref={percentageDivRef}>
-          {percentage}%
+          {progressValue}%
         </div>
       </div>
     </div>

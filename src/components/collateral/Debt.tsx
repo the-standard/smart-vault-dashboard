@@ -19,6 +19,7 @@ import {
   useSnackBarStore,
   useVaultIdStore,
   useGreyProgressBarValuesStore,
+  useCounterStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
 import CheckIcon from "@mui/icons-material/Check";
@@ -40,6 +41,12 @@ const Debt = () => {
   const { vaultID } = useVaultIdStore();
   const { getGreyBarUserInput, getOperationType } =
     useGreyProgressBarValuesStore();
+
+  const { getCounter } = useCounterStore();
+
+  const incrementCounter = () => {
+    getCounter(1);
+  };
 
   const debtValue: any = ethers.BigNumber.from(vaultStore[4].minted);
   console.log(debtValue.toString());
@@ -175,6 +182,7 @@ const Debt = () => {
       getCircularProgress(true);
       await provider.waitForTransaction(_transactionHash);
       getCircularProgress(false); // Set isLoading to false after the transaction is mined
+      incrementCounter();
       getSnackBar(0);
       //   handleSnackbarClick();
       inputRef.current.value = "";
