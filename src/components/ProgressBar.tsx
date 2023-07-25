@@ -48,13 +48,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   };
 
   const run = () => {
-<<<<<<< HEAD
-    let start = 0;
-    const end = percentage;
-=======
     const start = 0;
     const end = progressValue;
->>>>>>> development
     const duration = 1000;
     const range = end - start;
     const minTimer = 50;
@@ -63,14 +58,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     // Clamp the timer to our minimum
     stepTime = Math.max(stepTime, minTimer);
 
-<<<<<<< HEAD
-    let startTime = new Date().getTime();
-    let endTime = startTime + duration;
-=======
     const startTime = new Date().getTime();
     const endTime = startTime + duration;
 
->>>>>>> development
     let timer;
 
     const runInterval = () => {

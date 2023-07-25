@@ -45,6 +45,8 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
     useGreyProgressBarValuesStore();
   //local
 
+  const inputRef: any = useRef<HTMLInputElement>(null);
+
   console.log(symbol);
 
   // const { address } = useAccount();
@@ -212,10 +214,16 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
       await provider.waitForTransaction(_transactionHash);
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
     } catch (error) {
       console.log(error);
       getCircularProgress(false);
       getSnackBar(1);
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
     }
   };
 
@@ -299,6 +307,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
               borderRadius: "10px",
               paddingLeft: "0.5rem",
             }}
+            ref={inputRef}
             type="text"
             onChange={handleAmount}
             placeholder="Enter amount"
