@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   useCollateralSymbolStore,
   useVaultAddressStore,
@@ -25,6 +25,8 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
   const { getTransactionHash } = useTransactionHashStore.getState();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
+
+  const inputRef: any = useRef<HTMLInputElement>(null);
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
@@ -96,10 +98,17 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
       //handleSnackbarClick();
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
     } catch (error) {
       console.log(error);
+      inputRef.current.value = "";
+      inputRef.current.focus();
       getCircularProgress(false); // Set getCircularProgress to false if there's an error
       getSnackBar(1);
+      getGreyBarUserInput(0);
+
       //handleSnackbarClick();
     }
   };
@@ -147,6 +156,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
               borderRadius: "10px",
               paddingLeft: "0.5rem",
             }}
+            ref={inputRef}
             type="text"
             onChange={handleAmount}
             placeholder="Amount"

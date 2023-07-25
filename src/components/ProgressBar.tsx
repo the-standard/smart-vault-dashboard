@@ -18,15 +18,18 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   const progressBarGreyRef = useRef<HTMLDivElement>(null);
   const percentageDivRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    updateProgressBar();
-    run();
-  }, [percentage]);
+  // useEffect(() => {
+  //   updateProgressBar();
+  //   run();
+  // }, [percentage]);
 
   useEffect(() => {
-    // perform your side effect here
     updateProgressBar();
-    run();
+    const timer = run(); // capture the returned timer
+
+    return () => {
+      clearInterval(timer); // clear the timer when progressValue changes or component unmounts
+    };
   }, [progressValue]);
 
   const updateProgressBar = () => {
@@ -56,7 +59,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
     const startTime = new Date().getTime();
     const endTime = startTime + duration;
-    // eslint-disable-next-line prefer-const
+
     let timer;
 
     const runInterval = () => {
@@ -73,6 +76,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
     timer = setInterval(runInterval, stepTime);
     runInterval();
+
+    return timer; // return the timer from the run function
   };
 
   useEffect(() => {
@@ -81,19 +86,19 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     setPercentageCalculate(calcPercentage);
     if (progressBarGreyRef.current) {
       progressBarGreyRef.current.style.width = "1px";
-      progressBarGreyRef.current.style.left = `${percentage}%`;
+      progressBarGreyRef.current.style.left = `${progressValue}%`;
       progressBarGreyRef.current.style.display = "block";
 
       // Animate the grey bar to the left or right based on the user's input
       if (calcPercentage <= 0) {
         progressBarGreyRef.current.style.display = "none";
         if (percentageDivRef.current) {
-          percentageDivRef.current.innerHTML = `${percentage}%`;
+          percentageDivRef.current.innerHTML = `${progressValue}%`;
         }
-      } else if (calcPercentage < percentage) {
+      } else if (calcPercentage < progressValue) {
         setTimeout(function () {
           progressBarGreyRef.current.style.width = `${
-            percentage - calcPercentage
+            progressValue - calcPercentage
           }%`;
           progressBarGreyRef.current.style.left = `${calcPercentage}%`;
           if (percentageDivRef.current) {
@@ -103,9 +108,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       } else {
         setTimeout(function () {
           progressBarGreyRef.current.style.width = `${
-            calcPercentage - percentage
+            calcPercentage - progressValue
           }%`;
-          progressBarGreyRef.current.style.left = `${percentage}%`;
+          progressBarGreyRef.current.style.left = `${progressValue}%`;
           if (percentageDivRef.current) {
             percentageDivRef.current.innerHTML = `${calcPercentage}%`;
           }
@@ -135,7 +140,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           ref={progressBarGreyRef}
         ></div>
         <div className="percentage" id="percentage" ref={percentageDivRef}>
-          {percentage}%
+          {progressValue}%
         </div>
       </div>
     </div>
