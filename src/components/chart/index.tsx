@@ -303,7 +303,7 @@ const Index = () => {
     if (operationType === 2) {
       operation = operation >= 100 ? 100 : operation < 0 ? 551 : operation;
     } else {
-      operation = operation >= 100 ? 100 : operation == 0 ? 0.1 : operation;
+      operation = operation >= 100 ? 100 : operation <= 0 ? 0.1 : operation;
     }
 
     return userInputForGreyBarOperation === 0 ? 0 : operation;
