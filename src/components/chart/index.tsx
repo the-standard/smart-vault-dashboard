@@ -9,7 +9,7 @@ import {
   useEthToUsdAbiStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
-  useCounterStore,
+  // useCounterStore,
 } from "../../store/Store";
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
@@ -24,7 +24,7 @@ const Index = () => {
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
-  const { counter } = useCounterStore();
+  // const { counter } = useCounterStore();
 
   console.log("vault store" + vaultStore);
   const chosenVault: any = vaultStore;
