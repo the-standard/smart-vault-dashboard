@@ -40,7 +40,8 @@ const StepTwo: React.FC<StepProps> = ({
 }) => {
   const { vaultForListing } = useVaultForListingStore();
   const { contractAddress } = useContractAddressStore();
-  const { totalValue, totalValueMinusDebt } = useNFTListingModalStore();
+  //this might be useless. where else do I use it?
+  const { totalValue } = useNFTListingModalStore();
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
   // const { ethToUsdAddress } = useEthToUsdAddressStore();
@@ -251,7 +252,10 @@ const StepTwo: React.FC<StepProps> = ({
             gutterBottom
           >
             {/* {tokenMap.get(modalChildState).attributes[6].value} */}
-            {totalValue ? totalValue : 0} sEURO
+            {tokenMap.get(modalChildState).attributes[3].value
+              ? tokenMap.get(modalChildState).attributes[3].value
+              : 0}{" "}
+            sEURO
           </Typography>
         </CardContent>
         <CardContent
@@ -288,8 +292,8 @@ const StepTwo: React.FC<StepProps> = ({
             }}
             gutterBottom
           >
-            {/* {tokenMap.get(modalChildState).attributes[6].value} */}
-            {totalValueMinusDebt}
+            {tokenMap.get(modalChildState).attributes[4].value}
+            {/* {totalValueMinusDebt} */}
           </Typography>
         </CardContent>
       </Card>
