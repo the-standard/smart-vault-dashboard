@@ -601,6 +601,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         ethers.BigNumber.from(vault[0]).toString()
                       ) ? (
                         <div
+                          style={{
+                            width: "200px",
+                            height: "100px",
+                            //border: "5px solid red",
+                            marginBottom: "20px",
+                          }}
                           dangerouslySetInnerHTML={{
                             __html:
                               (console.log(tokenToNFTMap.current),
