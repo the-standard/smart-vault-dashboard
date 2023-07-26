@@ -114,7 +114,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
     tokenToNFTMap.current.set(
       ethers.BigNumber.from(vault[0]).toString(),
-      tokenDecoded.image
+      tokenDecoded.image_data
     );
 
     tokenMap.current.set(
@@ -123,7 +123,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     );
     return {
       tokenId: ethers.BigNumber.from(vault[0]).toString(),
-      image: tokenDecoded.image,
+      image: tokenDecoded.image_data,
     };
   }
 
@@ -148,7 +148,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       setResolved(true);
       console.log(resolved);
     }
-    console.log(tokenToNFTMap);
+    console.error(tokenToNFTMap);
   }, [tokenToId]);
 
   console.log("vaults", vaults);
@@ -476,13 +476,19 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault[0]).toString()
                       ) ? (
-                        <img
-                          src={tokenToNFTMap.current.get(
-                            ethers.BigNumber.from(vault[0]).toString()
-                          )}
-                          alt="NFT"
-                          width={50}
-                          height={50}
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              (console.log(tokenToNFTMap.current),
+                              console.log(
+                                tokenToNFTMap.current.get(
+                                  ethers.BigNumber.from(vault[0]).toString()
+                                )
+                              ),
+                              tokenToNFTMap.current.get(
+                                ethers.BigNumber.from(vault[0]).toString()
+                              )),
+                          }}
                         />
                       ) : null}
                     </td>
@@ -594,13 +600,19 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault[0]).toString()
                       ) ? (
-                        <img
-                          src={tokenToNFTMap.current.get(
-                            ethers.BigNumber.from(vault[0]).toString()
-                          )}
-                          alt="NFT"
-                          width={50}
-                          height={50}
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              (console.log(tokenToNFTMap.current),
+                              console.log(
+                                tokenToNFTMap.current.get(
+                                  ethers.BigNumber.from(vault[0]).toString()
+                                )
+                              ),
+                              tokenToNFTMap.current.get(
+                                ethers.BigNumber.from(vault[0]).toString()
+                              )),
+                          }}
                         />
                       ) : null}
                     </td>

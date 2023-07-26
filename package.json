@@ -28,6 +28,7 @@
     "alchemy-sdk": "^2.9.2",
     "apexcharts": "^3.40.0",
     "axios": "^1.4.0",
+    "buffer": "^6.0.3",
     "chart.js": "^4.3.0",
     "decimal.js": "^10.4.3",
     "ethers": "^5.7.2",

@@ -147,11 +147,15 @@ const StepTwo: React.FC<StepProps> = ({
       console.log(error);
     }
   };
-
+  console.log(tokenMap.get(modalChildState));
+  const chosenNFT = tokenMap.get(modalChildState);
   return (
     <Box sx={{ color: "white" }}>
       <Box sx={{}}>
-        <img style={{}} src={tokenMap.get(modalChildState).image} alt="NFT" />
+        <div
+          style={{ width: "100%", height: "100%" }}
+          dangerouslySetInnerHTML={{ __html: chosenNFT.image_data }}
+        />{" "}
       </Box>{" "}
       <Box
         sx={{
