@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import coins from "../../../dist/assets/coins.png";
+// import coins from "../../../dist/assets/coins.png";
 
 const LiquidityPool = () => {
   return (
@@ -33,7 +33,7 @@ const LiquidityPool = () => {
               width: "100%",
               height: "100%",
             }}
-            src={coins}
+            src={'https://www.cabq.gov/artsculture/biopark/news/10-cool-facts-about-penguins/@@images/1a36b305-412d-405e-a38b-0947ce6709ba.jpeg'}
             alt=""
           />
         </Box>
