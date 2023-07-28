@@ -8,6 +8,14 @@ export const abi = [
     type: "constructor",
   },
   {
+    inputs: [
+      { internalType: "bytes32", name: "symbol", type: "bytes32" },
+      { internalType: "address", name: "token", type: "address" },
+    ],
+    name: "TokenExists",
+    type: "error",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -27,6 +35,38 @@ export const abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bytes32",
+        name: "symbol",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
+    name: "TokenAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bytes32",
+        name: "symbol",
+        type: "bytes32",
+      },
+    ],
+    name: "TokenRemoved",
+    type: "event",
+  },
+  {
     inputs: [
       { internalType: "address", name: "_token", type: "address" },
       { internalType: "address", name: "_chainlinkFeed", type: "address" },
@@ -34,13 +74,6 @@ export const abi = [
     name: "addAcceptedToken",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "clNativeUsd",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
     type: "function",
   },
   {

@@ -272,15 +272,15 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   const isMobile = useMediaQuery("(max-width:600px)");
 
-  const computeProgressBar = (totalDebt: any, collateralValue: any) => {
+  const computeProgressBar = (totalDebt: any, totalCollateralValue: any) => {
     // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
     console.log("totalDebt", totalDebt);
-    console.log("collateralValue", collateralValue);
+    console.log("totalCollateralValue", totalCollateralValue);
     console.log(formatUnits(totalDebt, 18));
-    console.log(formatUnits(collateralValue, 18));
+    console.log(formatUnits(totalCollateralValue, 18));
     const ratio =
       Number(formatUnits(totalDebt, 18)) /
-      Number(formatUnits(collateralValue, 18));
+      Number(formatUnits(totalCollateralValue, 18));
     console.log("ratio", ratio.toFixed(2));
     console.log("ratio", (ratio * 100).toFixed(2));
     const returnVal = (ratio * 100).toFixed(2);
@@ -392,7 +392,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault[4].minted)),
                           Number(
-                            ethers.BigNumber.from(vault[4].collateralValue)
+                            ethers.BigNumber.from(vault[4].totalCollateralValue)
                           )
                         )}
                       />
@@ -509,7 +509,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault[4].minted)),
                           Number(
-                            ethers.BigNumber.from(vault[4].collateralValue)
+                            ethers.BigNumber.from(vault[4].totalCollateralValue)
                           )
                         )}
                       />
@@ -633,7 +633,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       value={truncateToTwoDecimals(
                         ethers.utils.formatEther(
                           ethers.BigNumber.from(
-                            vault[4].collateralValue
+                            vault[4].totalCollateralValue
                           ).toString()
                         )
                       )}
@@ -658,7 +658,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault[4].minted)),
                           Number(
-                            ethers.BigNumber.from(vault[4].collateralValue)
+                            ethers.BigNumber.from(vault[4].totalCollateralValue)
                           )
                         )}
                       />

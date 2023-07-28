@@ -389,6 +389,13 @@ export const abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       { internalType: "address", name: "from", type: "address" },
       { internalType: "address", name: "to", type: "address" },
@@ -427,7 +434,7 @@ export const abi = [
               { internalType: "uint256", name: "maxMintable", type: "uint256" },
               {
                 internalType: "uint256",
-                name: "collateralValue",
+                name: "totalCollateralValue",
                 type: "uint256",
               },
               {
@@ -457,6 +464,11 @@ export const abi = [
                     type: "tuple",
                   },
                   { internalType: "uint256", name: "amount", type: "uint256" },
+                  {
+                    internalType: "uint256",
+                    name: "collateralValue",
+                    type: "uint256",
+                  },
                 ],
                 internalType: "struct ISmartVault.Asset[]",
                 name: "collateral",
@@ -480,5 +492,4 @@ export const abi = [
     type: "function",
   },
 ];
-
 export default abi;

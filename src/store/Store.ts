@@ -149,8 +149,8 @@ interface contractAddressState {
 //this is the smart vault manager, I need to change its name to it
 export const useContractAddressStore = create<contractAddressState>()(
   (set) => ({
-    contractAddress: "0xb9fc41992740D56107dCCaDD6f08A69c216D2c6A",
-    arbitrumGoerliContractAddress: "0x7D44c84199F69ffB3F9c857CB0a1BADF3727193a",
+    contractAddress: "0x0b64cb41B81f631503a562D2ACd9EBF52ac09061",
+    arbitrumGoerliContractAddress: "0x6A301a76f67ECf0D56377F8Db384dbCa9E161203",
     getContractAddress: (contractAddress) =>
       set(() => ({ contractAddress: contractAddress })),
   })
@@ -164,9 +164,9 @@ interface TokenManagerAddressState {
 
 export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
   (set) => ({
-    tokenManagerAddress: "0xfd5a6111409086a00f81Bcb84758DCC4C9859Bf9",
+    tokenManagerAddress: "0xEB704FE5B1F5C23f7062780CE23323027a58d996",
     arbitrumGoerliTokenManagerAddress:
-      "0x5A11EEFFa0a2f943bb3350B1C6233de8fa71D1e9",
+      "0xb22517e1312b508431C7Ce9CB5Bca006137656AF",
     getTokenManagerAddress: (tokenManagerAddress) =>
       set(() => ({ tokenManagerAddress: tokenManagerAddress })),
   })

@@ -168,8 +168,8 @@ const Index = () => {
 
         const totalLiquidationValue = Number(totalDebt) * 1.1;
 
-        const borrowLimit =
-          Number(collateralValueInUSD) - Number(collateralValueInUSD) * 0.15;
+        //get the 90% percent of the total collateral value
+        const borrowLimit = Number(collateralValueInUSD) * 0.9;
 
         const returnedValues = [
           {

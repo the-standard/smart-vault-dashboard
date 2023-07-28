@@ -93,6 +93,7 @@ const HomePage = () => {
       vaultManagerAbi,
       signer
     );
+    console.log(contract);
     const vaults = await contract.vaults();
     console.log("vaults", vaults);
     setMyVaults(vaults);
