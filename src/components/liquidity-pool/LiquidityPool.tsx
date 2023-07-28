@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
 import coins from "../../../dist/assets/coins.png";
 
 const LiquidityPool = () => {
