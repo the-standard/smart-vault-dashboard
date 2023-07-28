@@ -31,6 +31,7 @@ import arbitrumLogo from "../assets/arbitrum.svg";
 import sepolialogo from "../assets/sepolialogo.svg";
 // import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
+import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 
 type RouteParams = {
   vaultId: string;
@@ -584,7 +585,6 @@ const Collateral = () => {
               padding: "1.5rem",
             }}
           >
-            {/* full chart and the progress bar here */}
             <ChartComponent />
           </Box>
           <Box
@@ -659,6 +659,27 @@ const Collateral = () => {
                 {item.title}
               </Box>
             ))}
+          </Box>
+          {/* camelot content comes here */}
+          <Box
+            sx={{
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(13.9px)",
+              WebkitBackdropFilter: "blur(13.9px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+
+              borderRadius: "10px ",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "1.5rem",
+              marginTop: "1rem",
+            }}
+          >
+            <LiquidityPool />
           </Box>
         </Box>
       </Box>

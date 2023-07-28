@@ -158,10 +158,10 @@ const Index = () => {
         console.log(collateralWithAdditions);
         setChartData(collateralWithAdditions);
 
-        const collateralValueInUSD = removeLast18Digits(
-          fromHex(chosenVault[4].collateralValue._hex, "number")
+        const totalCollateralValueInUSD = removeLast18Digits(
+          fromHex(chosenVault[4].totalCollateralValue._hex, "number")
         );
-        console.log("collateralValueInUSD", collateralValueInUSD);
+        console.log("totalCollateralValueInUSD", totalCollateralValueInUSD);
 
         const totalDebt = formatEther(chosenVault[4].minted);
         console.log("totalDebt", totalDebt);
@@ -169,7 +169,7 @@ const Index = () => {
         const totalLiquidationValue = Number(totalDebt) * 1.1;
 
         //get the 90% percent of the total collateral value
-        const borrowLimit = Number(collateralValueInUSD) * 0.9;
+        const borrowLimit = Number(totalCollateralValueInUSD) * 0.9;
 
         const returnedValues = [
           {
@@ -179,7 +179,7 @@ const Index = () => {
           },
           {
             title: "Vault Collateral Value",
-            value: truncateToTwoDecimals(collateralValueInUSD),
+            value: truncateToTwoDecimals(totalCollateralValueInUSD),
             currency: "EUROs",
           },
           {
@@ -260,16 +260,19 @@ const Index = () => {
     return convertUsdToEuro(Number(priceFormatted));
   };
 
-  const computeGreyBar = (totalDebt: any, collateralValue: any) => {
+  const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {
     console.log("euroValueConverted", euroValueConverted);
     const debt = Number(formatUnits(totalDebt, 18));
-    const collateral = Number(formatUnits(collateralValue, 18));
+    const collateral = Number(formatUnits(totalCollateralValue, 18));
     let operation: any;
     console.log(
       (debt / (collateral - Number(userInputForGreyBarOperation))) * 100
     );
     console.log("totalDebt", Number(formatUnits(totalDebt, 18)));
-    console.log("collateralValue", Number(formatUnits(collateralValue, 18)));
+    console.log(
+      "totalCollateralValue",
+      Number(formatUnits(totalCollateralValue, 18))
+    );
 
     // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
     if (operationType === 1) {
@@ -313,16 +316,16 @@ const Index = () => {
     getUsdPriceOfToken();
   }, [userInputForGreyBarOperation]);
 
-  const computeProgressBar = (totalDebt: any, collateralValue: any) => {
+  const computeProgressBar = (totalDebt: any, totalCollateralValue: any) => {
     // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
     console.log("totalDebt", totalDebt);
-    console.log("collateralValue", collateralValue);
+    console.log("totalCollateralValue", totalCollateralValue);
     console.log(formatUnits(totalDebt, 18));
-    console.log(formatUnits(collateralValue, 18));
+    console.log(formatUnits(totalCollateralValue, 18));
 
     const ratio =
       Number(formatUnits(totalDebt, 18)) /
-      Number(formatUnits(collateralValue, 18));
+      Number(formatUnits(totalCollateralValue, 18));
     console.log("ratio", ratio.toFixed(2));
     console.log("ratio", (ratio * 100).toFixed(2));
     const returnVal = (ratio * 100).toFixed(2);
@@ -483,11 +486,11 @@ const Index = () => {
           <ProgressBar
             progressValue={computeProgressBar(
               Number(ethers.BigNumber.from(chosenVault[4].minted)),
-              Number(ethers.BigNumber.from(chosenVault[4].collateralValue))
+              Number(ethers.BigNumber.from(chosenVault[4].totalCollateralValue))
             )}
             greyBarValue={computeGreyBar(
               Number(ethers.BigNumber.from(chosenVault[4].minted)),
-              Number(ethers.BigNumber.from(chosenVault[4].collateralValue))
+              Number(ethers.BigNumber.from(chosenVault[4].totalCollateralValue))
             )}
           />
           <Typography
