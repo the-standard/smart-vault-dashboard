@@ -1,0 +1,70 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_NAME: ${{ secrets.GKE_PROJECT }}
+  CLUSTER_NAME: cluster-1
+  CLOUDSDK_COMPUTE_ZONE: europe-west2-c
+  DEPLOYMENT: smart-vault
+  NAMESPACE: default
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+  deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+      with:
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+    
+    - run: |-
+        gcloud --quiet auth configure-docker
+
+    - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
+      with:
+        cluster_name: ${{ env.CLUSTER_NAME }}
+        location: ${{ env.CLOUDSDK_COMPUTE_ZONE }}
+        credentials: ${{ secrets.GKE_SA_KEY}}
+
+    # Build the Docker image
+    # 
+    - name: Build
+      run: |-
+        docker build -t "gcr.io/$PROJECT_NAME/$DEPLOYMENT:${GITHUB_REF##*/}.$GITHUB_SHA" .
+
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "gcr.io/$PROJECT_NAME/$DEPLOYMENT:${GITHUB_REF##*/}.$GITHUB_SHA"
+
+    - name: Deploy
+      run: |-
+          export IMAGE_TAG="gcr.io/${PROJECT_NAME}/$DEPLOYMENT:${GITHUB_REF##*/}.${GITHUB_SHA}"
+          gcloud components install gke-gcloud-auth-plugin
+          gcloud container clusters get-credentials cluster-1 --zone $CLOUDSDK_COMPUTE_ZONE --project $PROJECT_NAME
+          kubectl set image deployment/$DEPLOYMENT-deployment $DEPLOYMENT=${IMAGE_TAG} -n ${NAMESPACE}
