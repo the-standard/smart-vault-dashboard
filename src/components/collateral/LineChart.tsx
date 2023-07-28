@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 
 interface LineChartProps {
-  data: { x: number; y: number }[];
+  data: { price: any; ts: any }[];
   symbol: string;
 }
 
@@ -11,8 +11,8 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
   const [chartHeight, setChartHeight] = useState(220);
   const [lineColor, setLineColor] = useState("green");
 
-  const convertedData = data.map(({ y, x }) => [y, x]);
-  // console.log(data);
+  const convertedData = data.map(({ ts, price }) => [ts, price]);
+  console.log(data);
   // console.log(convertedData);
   const series = [
     {

@@ -15,6 +15,7 @@ import LineChart from "./LineChart";
 import priceFeed from "../../feed/priceFeed";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
 import { formatUnits, fromHex } from "viem";
+import axios from "axios";
 
 interface AcceptedTokenProps {
   amount: any;
@@ -128,14 +129,42 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
   const ref = useRef<HTMLDivElement>(null);
   useSyncWidth(ref);
 
-  const renderLineChart = () => {
-    if (symbol === "SUSD6") {
-      return <LineChart data={priceFeed.SUSD6.prices} symbol={symbol} />;
-    } else if (symbol === "SUSD18") {
-      return <LineChart data={priceFeed.SUSD18.prices} symbol={symbol} />;
-    } else {
-      return <LineChart data={priceFeed.ETH.prices} symbol={symbol} />;
+  const [chartData, setChartData] = useState<any>(undefined);
+
+  const getChartData = async () => {
+    try {
+      const response = await axios.get(
+        "https://smart-vault-api.thestandard.io/"
+      );
+      console.log(response.data);
+      setChartData(response.data);
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  useEffect(() => {
+    getChartData();
+  }, []);
+
+  const renderLineChart = () => {
+    if (chartData) {
+      if (symbol === "SUSD6") {
+        return (
+          <LineChart data={chartData.sepolia.SUSD6.prices} symbol={symbol} />
+        );
+      } else if (symbol === "SUSD18") {
+        return (
+          <LineChart data={chartData.sepolia.SUSD18.prices} symbol={symbol} />
+        );
+      } else {
+        return (
+          <LineChart data={chartData.sepolia.ETH.prices} symbol={symbol} />
+        );
+      }
+    }
+
+    return null; // Return null or some fallback content if chartData is not available yet.
   };
 
   const handleClick = (element: number) => {
