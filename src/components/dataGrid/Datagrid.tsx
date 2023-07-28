@@ -602,10 +602,10 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) ? (
                         <div
                           style={{
-                            width: "200px",
+                            width: "auto",
                             height: "100px",
                             //border: "5px solid red",
-                            marginBottom: "20px",
+                            marginBottom: "100px",
                           }}
                           dangerouslySetInnerHTML={{
                             __html:
