@@ -12,7 +12,6 @@ import {
   useUSDToEuroAddressStore,
 } from "../../store/Store";
 import LineChart from "./LineChart";
-import priceFeed from "../../feed/priceFeed";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
 import { formatUnits, fromHex } from "viem";
 import axios from "axios";
