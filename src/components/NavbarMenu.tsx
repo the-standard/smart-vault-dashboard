@@ -16,35 +16,36 @@ import { useBurgerMenuStore } from "../store/Store";
 
 const menuItems = [
   {
-    text: "sEuro IBCO",
+    text: "Borrow for 0%",
     icon: seuroibcologo,
     icon2: seuroibcologo2,
-    isWorking: false,
+    isWorking: true,
   },
   {
-    text: "TST Staking",
+    text: "EUROs YIELD",
     icon: tststakinglogo,
     icon2: tststakinglogo2,
     isWorking: false,
   },
   {
-    text: "Liquidators",
+    text: "Statistics",
     icon: liquidatorslogo,
     icon2: liquidatorslogo2,
+    isWorking: true,
+    route: "stats",
+  },
+  {
+    text: "TST Staking",
+    icon: historylogo,
+    icon2: historylogo2,
     isWorking: false,
   },
   {
-    text: "History",
-    icon: historylogo,
-    icon2: historylogo2,
-    isWorking: true,
-  },
-  {
-    text: "Borrow for 0%",
+    text: "TST Membership token",
     icon: borrowinglogo,
     icon2: borrowinglogo2,
     route: "",
-    isWorking: true,
+    isWorking: false,
   },
 ];
 

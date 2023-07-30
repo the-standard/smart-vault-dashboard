@@ -30,6 +30,7 @@ import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
 import { useEffect } from "react";
 import { fromHex } from "viem";
+import Stats from "./pages/Stats.tsx";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
@@ -73,6 +74,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="collateral/:vaultId" element={<Collateral />} />
+          <Route path="stats" element={<Stats />} />
         </Routes>
         <Footer />
       </WagmiConfig>

@@ -62,7 +62,7 @@ const LiquidityPool = () => {
           variant="body1"
           sx={{ color: "#fff", marginBottom: "10px" }}
         >
-          GRAIL tokens arn you a share of all fees collected by the biggest DEX
+          GRAIL tokens earn you a share of all fees collected by the biggest DEX
           on Arbitrum!
         </Typography>{" "}
         <Box>
