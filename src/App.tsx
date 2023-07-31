@@ -31,6 +31,7 @@ import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
 import { useEffect } from "react";
 import { fromHex } from "viem";
 import Stats from "./pages/Stats.tsx";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
@@ -56,15 +57,31 @@ function App() {
     }
   }, []);
 
-  if (window.ethereum) {
-    window.ethereum
-      .request({ method: "eth_requestAccounts" })
-      .then((res: any) => {
-        console.log(res); // This will print the address of the wallet
-      });
-  } else {
-    alert("Please install MetaMask extension!");
-  }
+  const myFunction = async () => {
+    // This returns the provider, or null if it wasn't detected.
+    const provider = await detectEthereumProvider();
+
+    if (provider) {
+      // From now on, this should always be true:
+      // provider === window.ethereum
+      startApp(provider); // initialize your app
+    } else {
+      console.log("Please install MetaMask!");
+    }
+
+    function startApp(provider) {
+      // If the provider returned by detectEthereumProvider isn't the same as
+      // window.ethereum, something is overwriting it – perhaps another wallet.
+      if (provider !== window.ethereum) {
+        console.error("Do you have multiple wallets installed?");
+      }
+      // Access the decentralized web!
+    }
+  };
+
+  useEffect(() => {
+    myFunction();
+  }, []);
 
   return (
     <Box
