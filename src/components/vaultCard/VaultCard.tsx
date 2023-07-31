@@ -3,7 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 // import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useContractAddressStore,
   useVaultManagerAbiStore,
@@ -15,6 +15,8 @@ import "../../styles/buttonStyle.css";
 import { ethers } from "ethers";
 import { fromHex } from "viem";
 import { useNavigate } from "react-router-dom";
+import { getNetwork } from "@wagmi/core";
+import { useAccount } from "wagmi";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -42,11 +44,14 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //snackbar config
   const [open, setOpen] = React.useState(false);
   const { getSnackBar } = useSnackBarStore();
-  const { contractAddress } = useContractAddressStore();
+  const { contractAddress, arbitrumGoerliContractAddress } =
+    useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getTransactionHash } = useTransactionHashStore();
   const { getProgressType, getCircularProgress } = useCircularProgressStore();
   const navigate = useNavigate();
+  const { connector: isConnected } = useAccount();
+
   // const [vaultCreated, setVaultCreated] = useState(false);
 
   const handleClose = (
@@ -59,31 +64,25 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
     setOpen(false);
   };
-  //snackbar config end
 
-  //call mint function and mint a smart vault NFT
+  const getCurrentChain = async () => {
+    const { chain } = getNetwork();
+    if (chain?.id == 421613) {
+      mintVault(arbitrumGoerliContractAddress);
+    } else if (chain?.id == 11155111) {
+      mintVault(contractAddress);
+    }
+  };
 
-  // const { config } = usePrepareContractWrite({
-  //   address: contractAddress,
-  //   abi: vaultManagerAbi,
-  //   functionName: "mint",
-  // });
-
-  // const { data, isLoading, isSuccess, write } = useContractWrite(config);
-  // console.log("data", data);
-  // console.log("isLoading", isLoading);
-  // console.log("isSuccess", isSuccess);
-  // console.log("write", write);
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const contract = new ethers.Contract(
-    contractAddress,
-    vaultManagerAbi,
-    signer
-  );
-  const mintVault = async () => {
+  const mintVault = async (conditionalAddress: any) => {
     try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        conditionalAddress,
+        vaultManagerAbi,
+        signer
+      );
       getProgressType(3);
       getCircularProgress(true);
       const tx = await contract.mint();
@@ -230,7 +229,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
           }}
           className="myBtn"
           // onClick={() => write?.()}
-          onClick={() => mintVault()}
+          onClick={() => getCurrentChain()}
         >
           <Typography
             sx={{

@@ -33,8 +33,31 @@ const Stats = () => {
           alignItems: "center",
         }}
       >
-        <Typography variant="h4">Statistics and Epic data dashboard</Typography>
-        <Typography variant="h1">COMING SOON!</Typography>
+        <Typography
+          sx={{
+            fontSize: {
+              md: "2rem",
+              lg: "5rem",
+            },
+            textAlign: "center",
+          }}
+          variant="h4"
+        >
+          Statistics and Epic data dashboard
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: {
+              xs: "2rem",
+              sm: "3rem",
+              md: "4rem",
+              lg: "5rem",
+            },
+          }}
+          variant="h1"
+        >
+          COMING SOON!
+        </Typography>
       </Box>
     </Box>
   );

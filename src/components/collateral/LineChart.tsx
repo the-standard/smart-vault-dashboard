@@ -89,7 +89,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
           //   size: 0,
           // },
           title: {
-            text: "Last 7 days",
+            text: "Last 24 hours",
             align: "left",
             style: {
               color: "#fff",

@@ -87,17 +87,17 @@ function App() {
           "--w3m-text-medium-regular-size": "10px",
           "--w3m-accent-color": "transparent",
         }}
-        mobileWallets={[
-          {
-            id: "metamask",
-            name: "MetaMask",
-            links: {
-              native: "https://metamask.app.link/dapp/standardio.vercel.app/",
-              universal:
-                "https://metamask.app.link/dapp/standardio.vercel.app/",
-            },
-          },
-        ]}
+        // mobileWallets={[
+        //   {
+        //     id: "1",
+        //     name: "MetaMask",
+        //     links: {
+        //       native: "https://metamask.app.link/dapp/standardio.vercel.app/",
+        //       universal:
+        //         "https://metamask.app.link/dapp/standardio.vercel.app/",
+        //     },
+        //   },
+        // ]}
       />
     </Box>
   );
