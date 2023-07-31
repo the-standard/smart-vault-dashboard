@@ -18,6 +18,7 @@ import {
 // import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
 import { useNetwork } from "wagmi";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 const items = [
   {
@@ -86,7 +87,7 @@ const HomePage = () => {
   });
 
   const getVaults = async (conditionalAddress: any) => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = await detectEthereumProvider();
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       conditionalAddress,
