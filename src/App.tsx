@@ -69,7 +69,7 @@ function App() {
       console.log("Please install MetaMask!");
     }
 
-    function startApp(provider) {
+    function startApp(provider: any) {
       // If the provider returned by detectEthereumProvider isn't the same as
       // window.ethereum, something is overwriting it – perhaps another wallet.
       if (provider !== window.ethereum) {
