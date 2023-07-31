@@ -57,9 +57,11 @@ function App() {
   }, []);
 
   if (window.ethereum) {
-    window.ethereum.request({ method: "eth_requestAccounts" }).then((res) => {
-      console.log(res); // This will print the address of the wallet
-    });
+    window.ethereum
+      .request({ method: "eth_requestAccounts" })
+      .then((res: any) => {
+        console.log(res); // This will print the address of the wallet
+      });
   } else {
     alert("Please install MetaMask extension!");
   }
