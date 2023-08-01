@@ -3,7 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 // import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   useContractAddressStore,
   useVaultManagerAbiStore,
@@ -16,7 +16,6 @@ import { ethers } from "ethers";
 import { fromHex } from "viem";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
-import { useAccount } from "wagmi";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -50,7 +49,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const { getTransactionHash } = useTransactionHashStore();
   const { getProgressType, getCircularProgress } = useCircularProgressStore();
   const navigate = useNavigate();
-  const { connector: isConnected } = useAccount();
 
   // const [vaultCreated, setVaultCreated] = useState(false);
 

@@ -145,7 +145,7 @@ const HomePage = () => {
           }}
           ref={rectangleRef}
         >
-          {window.ethereum ? (
+          {isConnected ? (
             items.map((item) => (
               <VaultCard
                 key={item.title}
