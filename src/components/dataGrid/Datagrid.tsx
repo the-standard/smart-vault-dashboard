@@ -25,6 +25,7 @@ import {
 import "../../styles/progressBarStyle.css";
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther, formatUnits } from "viem";
+import { getNetwork } from "@wagmi/core";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -37,7 +38,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const tokenMap = useRef(new Map());
   //store values
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { contractAddress } = useContractAddressStore();
+  const { contractAddress, arbitrumGoerliContractAddress } =
+    useContractAddressStore();
   const { getVaultID } = useVaultIdStore();
   const { getVaultForListing } = useVaultForListingStore();
   //modal state
@@ -46,6 +48,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const handleClose = () => setOpen(false);
   //modal child state
   const [modalChildState, setModalChildState] = useState();
+
+  const { chain } = getNetwork();
 
   const truncateValue = (value: string, length: number) => {
     if (value.length <= length) {
@@ -92,13 +96,20 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   };
 
   async function getNFT(vault: any) {
+    let contract: any;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const contract = new ethers.Contract(
-      contractAddress,
-      vaultManagerAbi,
-      signer
-    );
+
+    if (chain?.id == 421613) {
+      contract = new ethers.Contract(
+        arbitrumGoerliContractAddress,
+        vaultManagerAbi,
+        signer
+      );
+    } else if (chain?.id == 11155111) {
+      contract = new ethers.Contract(contractAddress, vaultManagerAbi, signer);
+    }
+
     const tokenURI = await contract.tokenURI(vault[0]);
     let tokenDecoded: any;
     let decodedString = atob(tokenURI.split(",")[1]);
