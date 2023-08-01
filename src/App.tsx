@@ -31,6 +31,7 @@ import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
 import { useEffect } from "react";
 import { fromHex } from "viem";
 import Stats from "./pages/Stats.tsx";
+import Yield from "./pages/Yield.tsx";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
@@ -75,6 +76,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="collateral/:vaultId" element={<Collateral />} />
           <Route path="stats" element={<Stats />} />
+          <Route path="yield" element={<Yield />} />
         </Routes>
         <Footer />
       </WagmiConfig>

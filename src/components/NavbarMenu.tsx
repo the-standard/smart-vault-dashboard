@@ -25,7 +25,8 @@ const menuItems = [
     text: "EUROs YIELD",
     icon: tststakinglogo,
     icon2: tststakinglogo2,
-    isWorking: false,
+    isWorking: true,
+    route: "yield",
   },
   {
     text: "Statistics",

@@ -15,6 +15,7 @@ import LineChart from "./LineChart";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
 import { formatUnits, fromHex } from "viem";
 import axios from "axios";
+import { getNetwork } from "@wagmi/core";
 
 interface AcceptedTokenProps {
   amount: any;
@@ -91,6 +92,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
     console.log(amountinUsd.toFixed(2));
     convertUsdToEuro(amountinUsd.toFixed(2));
   };
+  const { chain } = getNetwork();
 
   const convertUsdToEuro = async (priceInUsd: any) => {
     try {
@@ -146,7 +148,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
     getChartData();
   }, []);
 
-  const renderLineChart = () => {
+  const renderLineChartForSepolia = () => {
     if (chartData) {
       if (symbol === "SUSD6") {
         return (
@@ -159,6 +161,35 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
       } else {
         return (
           <LineChart data={chartData.sepolia.ETH.prices} symbol={symbol} />
+        );
+      }
+    }
+
+    return null; // Return null or some fallback content if chartData is not available yet.
+  };
+
+  const renderLineChartForArbitrum = () => {
+    if (chartData) {
+      if (symbol === "SUSD6") {
+        return (
+          <LineChart
+            data={chartData.arbitrum_goerli.SUSD6.prices}
+            symbol={symbol}
+          />
+        );
+      } else if (symbol === "SUSD18") {
+        return (
+          <LineChart
+            data={chartData.arbitrum_goerli.SUSD18.prices}
+            symbol={symbol}
+          />
+        );
+      } else {
+        return (
+          <LineChart
+            data={chartData.arbitrum_goerli.AGOR.prices}
+            symbol={symbol}
+          />
         );
       }
     }
@@ -264,10 +295,15 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
             minWidth: { xs: "100%", lg: "400px" },
             width: "auto",
             height: { xs: "100px", sm: "150px", md: "200px" },
-            //deployment try
           }}
         >
-          {renderLineChart()} {/* <LineChart /> */}
+          {chain?.id == 421613
+            ? renderLineChartForArbitrum()
+            : chain?.id == 11155111
+            ? renderLineChartForSepolia()
+            : /* <LineChart /> */
+              null}
+          {/* <LineChart /> */}
         </Box>
       </Box>
       <Box
