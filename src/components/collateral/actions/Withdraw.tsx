@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   useCollateralSymbolStore,
   useVaultAddressStore,
@@ -12,12 +12,21 @@ import { useAccount } from "wagmi";
 import { ethers } from "ethers";
 import smartVaultAbi from "../../../abis/smartVault";
 import { parseUnits } from "viem";
+import axios from "axios";
 
 interface WithdrawProps {
   symbol: string;
+  tokenAddress: string;
+  decimals: number;
+  token: any;
 }
 
-const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
+const Withdraw: React.FC<WithdrawProps> = ({
+  symbol,
+  tokenAddress,
+  decimals,
+  token,
+}) => {
   const { collateralSymbol } = useCollateralSymbolStore.getState();
   const [amount, setAmount] = useState<any>(0);
   const { address } = useAccount();
@@ -35,6 +44,28 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
     getGreyBarUserInput(Number(e.target.value));
   };
 
+  const [dynamicABI, setDynamicABI] = useState<any>([]);
+
+  const getContractABI = async () => {
+    try {
+      const res = await axios.get(
+        `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${vaultAddress}&apikey=${
+          import.meta.env.VITE_ETHERSCAN_API_KEY
+        }`
+      );
+      console.log(tokenAddress);
+      console.log(res.data.result);
+      setDynamicABI(res.data.result);
+      return res.data.result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getContractABI();
+  }, []);
+
   //snackbar config
   const { getSnackBar } = useSnackBarStore();
 
@@ -42,51 +73,41 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol }) => {
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
-  const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
 
   const withdrawCollateral = async () => {
-    console.log(amount);
-    console.log(address);
-    try {
-      //setIsLoading(true); // Se
-      console.log(symbol);
-      let transactionResponse; // Declare a variable to hold the transaction response
+    if (dynamicABI) {
+      try {
+        const contract = new ethers.Contract(vaultAddress, dynamicABI, signer);
+        //setIsLoading(true); // Se
+        console.log(symbol);
+        let transactionResponse; // Declare a variable to hold the transaction response
 
-      if (symbol === "SUSD6") {
-        const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
-        console.log(symbolBytes32);
-        transactionResponse = await contract.removeCollateral(
-          symbolBytes32,
-          //  ethers.utils.parseUnits(amount.toString()),
-          parseUnits(amount.toString(), 6),
-          address
-        );
-      } else if (symbol === "SUSD18") {
-        const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
-        console.log(symbolBytes32);
-        transactionResponse = await contract.removeCollateral(
-          symbolBytes32,
-          //  ethers.utils.parseUnits(amount.toString()),
-          parseUnits(amount.toString(), 18),
-          address
-        );
-      } else {
-        transactionResponse = await contract.removeCollateralNative(
-          ethers.utils.parseUnits(amount.toString()),
-          address
-        );
+        if (symbol === "ETH" || symbol === "AGOR") {
+          transactionResponse = await contract.removeCollateralNative(
+            ethers.utils.parseUnits(amount.toString()),
+            address
+          );
+        } else {
+          const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
+          console.log(symbolBytes32);
+          transactionResponse = await contract.removeCollateral(
+            symbolBytes32,
+            parseUnits(amount.toString(), decimals),
+            address
+          );
+        }
+
+        // Access the transaction hash from the transaction response
+        const transactionHash = transactionResponse.hash;
+        console.log("Transaction Hash:", transactionHash);
+        console.log("confirming transaction " + transactionHash.confirmations);
+        getTransactionHash(transactionHash);
+        waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+        //  setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        // setIsLoading(false);
       }
-
-      // Access the transaction hash from the transaction response
-      const transactionHash = transactionResponse.hash;
-      console.log("Transaction Hash:", transactionHash);
-      console.log("confirming transaction " + transactionHash.confirmations);
-      getTransactionHash(transactionHash);
-      waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
-      //  setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      // setIsLoading(false);
     }
   };
 

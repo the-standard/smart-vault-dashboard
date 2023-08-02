@@ -55,7 +55,12 @@ const Actions: React.FC<ActionsProps> = ({
       content = (
         <Box>
           {" "}
-          <Withdraw symbol={symbol} />{" "}
+          <Withdraw
+            symbol={symbol}
+            tokenAddress={tokenAddress}
+            decimals={decimals}
+            token={token}
+          />{" "}
         </Box>
       );
       break;
