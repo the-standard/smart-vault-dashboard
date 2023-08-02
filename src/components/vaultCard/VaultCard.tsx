@@ -16,6 +16,7 @@ import { ethers } from "ethers";
 import { fromHex } from "viem";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -74,8 +75,14 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const mintVault = async (conditionalAddress: any) => {
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const metamaskProvider = await detectEthereumProvider();
+      const provider = new ethers.providers.Web3Provider(
+        metamaskProvider || window.ethereum
+      );
       const signer = provider.getSigner();
+      const infuraProvider = new ethers.providers.JsonRpcProvider(
+        `https://sepolia.infura.io/v3/63ccb3cb97cf403bb4203e47852ff41c`
+      );
       const contract = new ethers.Contract(
         conditionalAddress,
         vaultManagerAbi,
@@ -102,7 +109,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
   };
 
   const navigateToLatestVault = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const metamaskProvider = await detectEthereumProvider();
+    const provider = new ethers.providers.Web3Provider(metamaskProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       contractAddress,

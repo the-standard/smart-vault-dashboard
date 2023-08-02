@@ -18,6 +18,7 @@ import {
 // import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
 import { useNetwork } from "wagmi";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 const items = [
   {
@@ -86,15 +87,18 @@ const HomePage = () => {
   });
 
   const getVaults = async (conditionalAddress: any) => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const metamaskProvider = await detectEthereumProvider();
+    const provider = new ethers.providers.Web3Provider(metamaskProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       conditionalAddress,
       vaultManagerAbi,
       signer
     );
+
     console.log(contract);
     const vaults = await contract.vaults();
+
     console.log("vaults", vaults);
     setMyVaults(vaults);
   };
@@ -145,7 +149,7 @@ const HomePage = () => {
           }}
           ref={rectangleRef}
         >
-          {isConnected ? (
+          {window.ethereum ? (
             items.map((item) => (
               <VaultCard
                 key={item.title}

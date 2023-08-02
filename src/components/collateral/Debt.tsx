@@ -25,6 +25,7 @@ import { formatEther, parseEther } from "viem";
 import CheckIcon from "@mui/icons-material/Check";
 import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
+import { getNetwork } from "@wagmi/core";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
@@ -32,7 +33,8 @@ const Debt = () => {
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore();
   const { vaultStore }: any = useVaultStore();
-  const { sEuroAddress } = usesEuroAddressStore();
+  const { sEuroAddress, arbitrumGoerlisEuroAddress, arbitrumsEuroAddress } =
+    usesEuroAddressStore();
   const { sEuroAbi } = usesEuroAbiStore();
   const { getTransactionHash } = useTransactionHashStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
@@ -41,8 +43,8 @@ const Debt = () => {
   const { vaultID } = useVaultIdStore();
   const { getGreyBarUserInput, getOperationType } =
     useGreyProgressBarValuesStore();
-
   const { getCounter } = useCounterStore();
+  const { chain } = getNetwork();
 
   const incrementCounter = () => {
     getCounter(1);
@@ -115,8 +117,19 @@ const Debt = () => {
     }
   };
 
-  const sEuroContract = new ethers.Contract(sEuroAddress, sEuroAbi, signer);
+  let sEuroContract: any;
 
+  if (chain?.id == 42161) {
+    sEuroContract = new ethers.Contract(arbitrumsEuroAddress, sEuroAbi, signer);
+  } else if (chain?.id == 421613) {
+    sEuroContract = new ethers.Contract(
+      arbitrumGoerlisEuroAddress,
+      sEuroAbi,
+      signer
+    );
+  } else if (chain?.id == 11155111) {
+    sEuroContract = new ethers.Contract(sEuroAddress, sEuroAbi, signer);
+  }
   const approvePayment = async () => {
     console.log(vaultAddress);
     console.log(amount.toString());

@@ -31,6 +31,7 @@ const Stats = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          backdropFilter: "blur(13.9px)",
         }}
       >
         <Typography

@@ -16,6 +16,7 @@ const Yield = () => {
         borderRadius: "10px",
         minHeight: "100vh",
         height: "100%",
+        backdropFilter: "blur(13.9px)",
       }}
     >
       <Typography variant="h4" sx={{ color: "#fff" }}>

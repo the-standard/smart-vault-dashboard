@@ -87,12 +87,14 @@ export const useUSDToEuroAddressStore = create<USDToEuroAddressState>()(
 interface sEuroAddressState {
   sEuroAddress: string;
   arbitrumGoerlisEuroAddress: string;
+  arbitrumsEuroAddress: string;
   getsEuroAddress: (sEuroAddress: string) => void;
 }
 
 export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
   sEuroAddress: "0xf23F59316A2700D88F6F503B24aEE01118255645",
   arbitrumGoerlisEuroAddress: "0x9C777AD2575010E3ED67F6E849cfE1115BFE2A50",
+  arbitrumsEuroAddress: "0x643b34980e635719c15a2d4ce69571a258f940e9",
   getsEuroAddress: (sEuroAddress) =>
     set(() => ({ sEuroAddress: sEuroAddress })),
 }));
@@ -144,6 +146,7 @@ export const usesUSD18Store = create<sUSD18State>()((set) => ({
 interface contractAddressState {
   contractAddress: any;
   arbitrumGoerliContractAddress: any;
+  arbitrumContractAddress: any;
   getContractAddress: (contractAddress: string) => void;
 }
 //this is the smart vault manager, I need to change its name to it
@@ -151,6 +154,7 @@ export const useContractAddressStore = create<contractAddressState>()(
   (set) => ({
     contractAddress: "0x0b64cb41B81f631503a562D2ACd9EBF52ac09061",
     arbitrumGoerliContractAddress: "0x6A301a76f67ECf0D56377F8Db384dbCa9E161203",
+    arbitrumContractAddress: "0xba169cceCCF7aC51dA223e04654Cf16ef41A68CC",
     getContractAddress: (contractAddress) =>
       set(() => ({ contractAddress: contractAddress })),
   })
@@ -159,6 +163,7 @@ export const useContractAddressStore = create<contractAddressState>()(
 interface TokenManagerAddressState {
   tokenManagerAddress: string;
   arbitrumGoerliTokenManagerAddress: string;
+  arbitrumTokenManagerAddress: string;
   getTokenManagerAddress: (tokenManagerAddress: string) => void;
 }
 
@@ -167,6 +172,7 @@ export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
     tokenManagerAddress: "0xEB704FE5B1F5C23f7062780CE23323027a58d996",
     arbitrumGoerliTokenManagerAddress:
       "0xb22517e1312b508431C7Ce9CB5Bca006137656AF",
+    arbitrumTokenManagerAddress: "0x33c5A816382760b6E5fb50d8854a61b3383a32a0",
     getTokenManagerAddress: (tokenManagerAddress) =>
       set(() => ({ tokenManagerAddress: tokenManagerAddress })),
   })
