@@ -98,6 +98,7 @@ const Deposit: React.FC<DepositProps> = ({
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const [dynamicABI, setDynamicABI] = useState<any>([]);
+
   const getContractABI = async () => {
     try {
       const res = await axios.get(

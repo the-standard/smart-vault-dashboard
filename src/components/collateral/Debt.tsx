@@ -130,7 +130,7 @@ const Debt = () => {
   } else if (chain?.id == 11155111) {
     sEuroContract = new ethers.Contract(sEuroAddress, sEuroAbi, signer);
   }
-  
+
   const approvePayment = async () => {
     console.log(vaultAddress);
     console.log(amount.toString());

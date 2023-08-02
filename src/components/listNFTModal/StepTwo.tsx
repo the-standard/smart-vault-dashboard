@@ -22,6 +22,7 @@ import {
 import { formatUnits, fromHex } from "viem";
 // import { getETHPrice } from "../../utils/getETHPrice";
 // import axios from "axios";
+import { useNetwork } from "wagmi";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,6 +47,7 @@ const StepTwo: React.FC<StepProps> = ({
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
   // const { ethToUsdAddress } = useEthToUsdAddressStore();
   const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { chain } = useNetwork();
 
   useEffect(() => {
     console.log("totalValue" + totalValue);
@@ -63,10 +65,22 @@ const StepTwo: React.FC<StepProps> = ({
   const signer = provider.getSigner();
   // console.log(signer);
 
-  const openseaSDK = new OpenSeaSDK(provider, {
-    chain: Chain.Goerli,
-    // apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
-  });
+  let openseaSDK: any;
+
+  if (chain?.id === 1) {
+    openseaSDK = new OpenSeaSDK(provider, {
+      chain: Chain.Mainnet,
+      // apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
+    });
+  } else if (chain?.id === 42161) {
+    openseaSDK = new OpenSeaSDK(provider, {
+      chain: Chain.Arbitrum,
+    });
+  } else if (chain?.id === 421613) {
+    openseaSDK = new OpenSeaSDK(provider, {
+      chain: Chain.ArbitrumGoerli,
+    });
+  }
 
   console.log(openseaSDK);
 
