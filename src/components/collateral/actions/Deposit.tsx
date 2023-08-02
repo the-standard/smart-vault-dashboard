@@ -1,5 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import {
   useVaultAddressStore,
@@ -20,13 +20,22 @@ import { arbitrumGoerli, sepolia, arbitrum, mainnet } from "viem/chains";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { getNetwork } from "@wagmi/core";
+import axios from "axios";
 
 interface DepositProps {
   symbol: string;
   //1 = deposit, 2 = withdraw, 3 = swap, 4 = borrow 5 = pay down
+  tokenAddress: string;
+  decimals: number;
+  token: any;
 }
 
-const Deposit: React.FC<DepositProps> = ({ symbol }) => {
+const Deposit: React.FC<DepositProps> = ({
+  symbol,
+  tokenAddress,
+  decimals,
+  token,
+}) => {
   //modal states
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -48,6 +57,7 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   const inputRef: any = useRef<HTMLInputElement>(null);
 
   console.log(symbol);
+  console.log(token);
 
   // const { address } = useAccount();
 
@@ -86,6 +96,63 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
   //clipboard logic end
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+  const [dynamicABI, setDynamicABI] = useState<any>([]);
+  const getContractABI = async () => {
+    try {
+      const res = await axios.get(
+        `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${tokenAddress}&apikey=${
+          import.meta.env.VITE_ETHERSCAN_API_KEY
+        }`
+      );
+      console.log(tokenAddress);
+      console.log(res.data.result);
+      setDynamicABI(res.data.result);
+      return res.data.result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getContractABI();
+  }, []);
+  //on launch, you'll delete all three deposit functions after this one, and will use this one instead of them
+  //with a bit configuration of course
+  const depositToken = async () => {
+    if (dynamicABI) {
+      // const [account] = await createClientUtil.getAddresses();
+      let txHashForError = "";
+      try {
+        const txAmount: any = amount;
+        console.log(txAmount);
+
+        const tokenContract = new ethers.Contract(
+          tokenAddress,
+          dynamicABI,
+          provider.getSigner()
+        );
+        console.log(tokenContract);
+        console.log(tokenAddress);
+        console.log(dynamicABI);
+
+        const transferTx = await tokenContract.transfer(
+          vaultAddress,
+          //no parseEther here but need to add 18 decimals
+          parseUnits(txAmount.toString(), decimals)
+        );
+
+        txHashForError = transferTx.hash;
+
+        console.log("Transaction sent:", txHashForError);
+        getTransactionHash(txHashForError);
+        waitForTransaction(txHashForError);
+      } catch (error) {
+        waitForTransaction(txHashForError);
+        console.log(error);
+      }
+    }
+  };
 
   const depositSUSD6 = async (conditionalAddress: any) => {
     // const [account] = await createClientUtil.getAddresses();
@@ -182,36 +249,37 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
     const { chain } = getNetwork();
 
     try {
-      if (symbol === "SUSD6") {
-        if (chain?.id === 11155111) {
-          depositSUSD6(sUSD6Address);
-        } else {
-          depositSUSD6(arbitrumGoerlisUSD6Address);
-        }
-      } else if (symbol === "SUSD18") {
-        if (chain?.id === 11155111) {
-          depositSUSD18(sUSD18Address);
-        } else {
-          depositSUSD18(arbitrumGoerlisUSD18Address);
-        }
-      } else {
-        switch (chain?.id) {
-          case 11155111:
-            depositEther(sepolia);
-            break;
-          case 421613:
-            depositEther(arbitrumGoerli);
-            break;
-          case 42161:
-            depositEther(arbitrum);
-            break;
-          case 1:
-            depositEther(mainnet);
-            break;
-          default:
-            console.log("Unknown chain id:", chain?.id);
-        }
-      }
+      // if (symbol === "SUSD6") {
+      //   if (chain?.id === 11155111) {
+      //     depositSUSD6(sUSD6Address);
+      //   } else {
+      //     depositSUSD6(arbitrumGoerlisUSD6Address);
+      //   }
+      // } else if (symbol === "SUSD18") {
+      //   if (chain?.id === 11155111) {
+      //     depositSUSD18(sUSD18Address);
+      //   } else {
+      //     depositSUSD18(arbitrumGoerlisUSD18Address);
+      //   }
+      // } else {
+      //   switch (chain?.id) {
+      //     case 11155111:
+      //       depositEther(sepolia);
+      //       break;
+      //     case 421613:
+      //       depositEther(arbitrumGoerli);
+      //       break;
+      //     case 42161:
+      //       depositEther(arbitrum);
+      //       break;
+      //     case 1:
+      //       depositEther(mainnet);
+      //       break;
+      //     default:
+      //       console.log("Unknown chain id:", chain?.id);
+      //   }
+      // }
+      depositToken();
     } catch (error) {
       console.log(error);
     }

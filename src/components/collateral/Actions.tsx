@@ -8,9 +8,18 @@ interface ActionsProps {
   activeElement: number;
   symbol: string;
   //1 = deposit, 2 = withdraw, 3 = swap, 4 = borrow 5 = pay down
+  tokenAddress: string;
+  decimals: number;
+  token: any;
 }
 
-const Actions: React.FC<ActionsProps> = ({ activeElement, symbol }) => {
+const Actions: React.FC<ActionsProps> = ({
+  activeElement,
+  symbol,
+  tokenAddress,
+  decimals,
+  token,
+}) => {
   let content: JSX.Element;
 
   const createTwitterShareUrl = () => {
@@ -33,7 +42,12 @@ const Actions: React.FC<ActionsProps> = ({ activeElement, symbol }) => {
       content = (
         <Box>
           {" "}
-          <Deposit symbol={symbol} />{" "}
+          <Deposit
+            symbol={symbol}
+            tokenAddress={tokenAddress}
+            decimals={decimals}
+            token={token}
+          />{" "}
         </Box>
       );
       break;

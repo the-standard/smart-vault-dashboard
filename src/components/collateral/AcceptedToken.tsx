@@ -20,6 +20,9 @@ import { getNetwork } from "@wagmi/core";
 interface AcceptedTokenProps {
   amount: any;
   symbol: string;
+  tokenAddress: string;
+  decimals: number;
+  token: any;
 }
 
 const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
@@ -41,7 +44,13 @@ const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
   }, [ref, setWidth]);
 };
 
-const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
+const AcceptedToken: React.FC<AcceptedTokenProps> = ({
+  amount,
+  symbol,
+  tokenAddress,
+  decimals,
+  token,
+}) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore();
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
@@ -488,7 +497,13 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({ amount, symbol }) => {
           Swap
         </Box>
       </Box>
-      <Actions activeElement={activeElement} symbol={symbol} />
+      <Actions
+        activeElement={activeElement}
+        symbol={symbol}
+        tokenAddress={tokenAddress}
+        decimals={decimals}
+        token={token}
+      />
     </Box>
   );
 };

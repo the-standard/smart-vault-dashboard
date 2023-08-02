@@ -138,8 +138,8 @@ const Collateral = () => {
       if (Number(tokenId) === Number(vaultId)) {
         console.log("found");
         console.log(vault);
-        console.log(vault[4][4]);
-        foundValue = vault[4][4];
+        console.log(vault[4].collateral);
+        foundValue = vault[4].collateral;
         //set vault to state
         getVaultStore(vault);
         //set vault to local state
@@ -176,6 +176,9 @@ const Collateral = () => {
           key={index}
           symbol={ethers.utils.parseBytes32String(token[0][0])}
           amount={ethers.BigNumber.from(token[1]).toString()}
+          tokenAddress={token[0][1]}
+          decimals={token[0][2]}
+          token={token[0]}
         />
       );
     });
