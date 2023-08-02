@@ -87,7 +87,7 @@ const HomePage = () => {
   });
 
   const getVaults = async (conditionalAddress: any) => {
-    const metamaskProvider = await detectEthereumProvider();
+    const metamaskProvider: any = await detectEthereumProvider();
     const provider = new ethers.providers.Web3Provider(metamaskProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(

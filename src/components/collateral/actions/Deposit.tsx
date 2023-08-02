@@ -16,7 +16,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
 // import createClientUtil from "../../../utils/createClientUtil";
-import { arbitrumGoerli, sepolia } from "viem/chains";
+import { arbitrumGoerli, sepolia, arbitrum, mainnet } from "viem/chains";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { getNetwork } from "@wagmi/core";
@@ -182,23 +182,34 @@ const Deposit: React.FC<DepositProps> = ({ symbol }) => {
     const { chain } = getNetwork();
 
     try {
-      if (symbol == "SUSD6") {
+      if (symbol === "SUSD6") {
         if (chain?.id === 11155111) {
           depositSUSD6(sUSD6Address);
         } else {
           depositSUSD6(arbitrumGoerlisUSD6Address);
         }
-      } else if (symbol == "SUSD18") {
+      } else if (symbol === "SUSD18") {
         if (chain?.id === 11155111) {
           depositSUSD18(sUSD18Address);
         } else {
           depositSUSD18(arbitrumGoerlisUSD18Address);
         }
       } else {
-        if (chain?.id === 11155111) {
-          depositEther(sepolia);
-        } else {
-          depositEther(arbitrumGoerli);
+        switch (chain?.id) {
+          case 11155111:
+            depositEther(sepolia);
+            break;
+          case 421613:
+            depositEther(arbitrumGoerli);
+            break;
+          case 42161:
+            depositEther(arbitrum);
+            break;
+          case 1:
+            depositEther(mainnet);
+            break;
+          default:
+            console.log("Unknown chain id:", chain?.id);
         }
       }
     } catch (error) {

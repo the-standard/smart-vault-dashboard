@@ -44,8 +44,11 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //snackbar config
   const [open, setOpen] = React.useState(false);
   const { getSnackBar } = useSnackBarStore();
-  const { contractAddress, arbitrumGoerliContractAddress } =
-    useContractAddressStore();
+  const {
+    contractAddress,
+    arbitrumGoerliContractAddress,
+    arbitrumContractAddress,
+  } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getTransactionHash } = useTransactionHashStore();
   const { getProgressType, getCircularProgress } = useCircularProgressStore();
@@ -70,6 +73,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
       mintVault(arbitrumGoerliContractAddress);
     } else if (chain?.id == 11155111) {
       mintVault(contractAddress);
+    } else if (chain?.id == 42161) {
+      mintVault(arbitrumContractAddress);
     }
   };
 
@@ -80,9 +85,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
         metamaskProvider || window.ethereum
       );
       const signer = provider.getSigner();
-      const infuraProvider = new ethers.providers.JsonRpcProvider(
-        `https://sepolia.infura.io/v3/63ccb3cb97cf403bb4203e47852ff41c`
-      );
       const contract = new ethers.Contract(
         conditionalAddress,
         vaultManagerAbi,
@@ -109,7 +111,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   };
 
   const navigateToLatestVault = async () => {
-    const metamaskProvider = await detectEthereumProvider();
+    const metamaskProvider: any = await detectEthereumProvider();
     const provider = new ethers.providers.Web3Provider(metamaskProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
