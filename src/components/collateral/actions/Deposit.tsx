@@ -188,71 +188,7 @@ const Deposit: React.FC<DepositProps> = ({
 
   //these 3 should be deleted for the mainnet
 
-  const depositSUSD6 = async (conditionalAddress: any) => {
-    // const [account] = await createClientUtil.getAddresses();
-    let txHashForError = "";
-    try {
-      const txAmount: any = amount;
-      console.log(txAmount);
-
-      const tokenContract = new ethers.Contract(
-        conditionalAddress,
-        sUSD6Abi,
-        provider.getSigner()
-      );
-
-      const amountToDeposit = parseUnits(txAmount.toString(), decimals);
-      console.log(amountToDeposit);
-
-      const transferTx = await tokenContract.transfer(
-        vaultAddress,
-        //no parseEther here but need to add 6 decimals
-        amountToDeposit
-        // "5000000" //hardcoded for now
-      );
-
-      txHashForError = transferTx.hash;
-
-      console.log("Transaction sent:", txHashForError);
-      getTransactionHash(txHashForError);
-      waitForTransaction(txHashForError);
-    } catch (error) {
-      waitForTransaction(txHashForError);
-      console.log(error);
-    }
-  };
-  const depositSUSD18 = async (conditionalAddress: any) => {
-    // const [account] = await createClientUtil.getAddresses();
-    let txHashForError = "";
-    try {
-      const txAmount: any = amount;
-      console.log(txAmount);
-
-      const tokenContract = new ethers.Contract(
-        conditionalAddress,
-        sUSD18Abi,
-        provider.getSigner()
-      );
-
-      const transferTx = await tokenContract.transfer(
-        vaultAddress,
-        //no parseEther here but need to add 18 decimals
-        parseUnits(txAmount.toString(), decimals)
-      );
-
-      txHashForError = transferTx.hash;
-
-      console.log("Transaction sent:", txHashForError);
-      getTransactionHash(txHashForError);
-      waitForTransaction(txHashForError);
-    } catch (error) {
-      waitForTransaction(txHashForError);
-      console.log(error);
-    }
-  };
-
-  const depositEther = async (conditionalChain: any) => {
-    console.log(conditionalChain);
+  const depositEther = async () => {
     const account = getAccount();
     console.log(account.address);
 
@@ -280,16 +216,9 @@ const Deposit: React.FC<DepositProps> = ({
   };
 
   const depositViaMetamask = async () => {
-    //arbitrum goerli
-    if (chain?.id === 421613) {
+    if (symbol === "ETH") {
       try {
-        if (symbol === "SUSD6") {
-          depositSUSD6(arbitrumGoerlisUSD6Address);
-        } else if (symbol === "SUSD18") {
-          depositSUSD18(arbitrumGoerlisUSD18Address);
-        } else {
-          depositEther(arbitrumGoerli);
-        }
+        depositEther();
       } catch (error) {
         console.log(error);
       }
