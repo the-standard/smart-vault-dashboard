@@ -19,6 +19,7 @@ import {
 import { getNetwork } from "@wagmi/core";
 import { useNetwork } from "wagmi";
 import detectEthereumProvider from "@metamask/detect-provider";
+import { EthereumProvider } from "@walletconnect/ethereum-provider";
 
 const items = [
   {
@@ -89,9 +90,44 @@ const HomePage = () => {
     }
   });
 
+  async function createEthereumProvider() {
+    const projectId: any = "67027f91c1db8751c6ea2ed13b9cdc55";
+    const chains: any = [1]; // Ethereum Mainnet chain ID
+    const showQrModal: any = true;
+    const methods: any = ["eth_sendTransaction", "personal_sign"];
+    const events: any = [
+      "chainChanged",
+      "accountsChanged",
+      "connect",
+      "session_event",
+      "display_uri",
+      "disconnect",
+    ];
+
+    try {
+      const provider = await EthereumProvider.init({
+        projectId,
+        chains,
+        showQrModal,
+        methods,
+        events,
+      });
+
+      return provider;
+    } catch (error) {
+      console.error("Error initializing Ethereum provider:", error);
+      return null;
+    }
+  }
+
   const getVaults = async (conditionalAddress: any) => {
-    const metamaskProvider: any = await detectEthereumProvider();
-    const provider = new ethers.providers.Web3Provider(metamaskProvider);
+    let provider;
+    const ethereumProvider: any = await createEthereumProvider();
+    if (!window.ethereum) {
+      provider = new ethers.providers.Web3Provider(ethereumProvider);
+    } else {
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+    }
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       conditionalAddress,
@@ -154,7 +190,7 @@ const HomePage = () => {
           }}
           ref={rectangleRef}
         >
-          {window.ethereum ? (
+          {isConnected ? (
             items.map((item) => (
               <VaultCard
                 key={item.title}
