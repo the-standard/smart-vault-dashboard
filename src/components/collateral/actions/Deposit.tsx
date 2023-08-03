@@ -216,7 +216,7 @@ const Deposit: React.FC<DepositProps> = ({
   };
 
   const depositViaMetamask = async () => {
-    if (symbol === "ETH") {
+    if (symbol === "ETH" || symbol === "AGOR") {
       try {
         depositEther();
       } catch (error) {

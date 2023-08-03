@@ -27,8 +27,8 @@ import { formatEther, fromHex } from "viem";
 import ChartComponent from "../components/chart/index.tsx";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import arbitrumLogo from "../assets/arbitrum.svg";
-import sepolialogo from "../assets/sepolialogo.svg";
+// import arbitrumLogo from "../assets/arbitrum.svg";
+// import sepolialogo from "../assets/sepolialogo.svg";
 // import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
@@ -507,40 +507,7 @@ const Collateral = () => {
             display: "flex",
             alignItems: "flex-start",
           }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "flex-end",
-            }}
-          >
-            {chainId === 11155111 ? (
-              <Box
-                sx={{
-                  marginTop: "1rem",
-                  color: "#afafaf",
-                  width: "200px",
-                  marginRight: "5px",
-                }}
-              >
-                <img src={sepolialogo} alt="logo" />
-              </Box>
-            ) : (
-              <Box
-                sx={{
-                  marginTop: "1rem",
-                  color: "#afafaf",
-                  width: "200px",
-                  marginRight: "5px",
-                }}
-              >
-                <img src={arbitrumLogo} alt="logo" />
-              </Box>
-            )}
-          </Box>
-        </Box>
+        ></Box>
       </Box>
       {/*  column 2, container */}
       <Box

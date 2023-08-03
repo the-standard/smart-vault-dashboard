@@ -6,6 +6,14 @@ import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
 import logo from "../assets/standardiologo.svg";
 import { usePositionStore, useBurgerMenuStore } from "../store/Store";
+import arbitrumLogoLong from "../assets/arbitrumLogoLong.svg";
+import arbitrumLogoShort from "../assets/arbitrumLogoShort.svg";
+import arbitrumTestLogoLong from "../assets/arbitrumTestLogoLong.svg";
+import arbitrumTestLogoShort from "../assets/arbitrumTestLogoShort.svg";
+import networkNotSupportedLong from "../assets/networkNotSupportedLong.svg";
+import networkNotSupportedShort from "../assets/networkNotSupportedShort.svg";
+import { useNetwork } from "wagmi";
+import { useMediaQuery } from "@mui/material";
 
 const Navbar = () => {
   // const { address } = useAccount();
@@ -18,6 +26,21 @@ const Navbar = () => {
   const handleStateChange = (state: any) => {
     getBurgerMenu(state.isOpen);
   };
+
+  const isMediumOrLarger = useMediaQuery("(min-width:768px)"); // Replace 768px with your specific breakpoint
+
+  const { chain } = useNetwork();
+
+  let logoSrc;
+  if (chain?.id === 42161) {
+    logoSrc = isMediumOrLarger ? arbitrumLogoLong : arbitrumLogoShort;
+  } else if (chain?.id === 421613) {
+    logoSrc = isMediumOrLarger ? arbitrumTestLogoLong : arbitrumTestLogoShort;
+  } else {
+    logoSrc = isMediumOrLarger
+      ? networkNotSupportedLong
+      : networkNotSupportedShort;
+  }
 
   const styles: any = {
     bmBurgerButton: {
@@ -153,8 +176,22 @@ const Navbar = () => {
               position: "relative",
               float: "right",
               top: { xs: "1rem", sm: "0.7rem" },
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
+            <img
+              src={logoSrc}
+              alt="logo"
+              style={{
+                width: "auto",
+                height: "50px",
+                // marginRight: "1rem",
+                // margin: "36px 0",
+              }}
+            />
+
             <Web3Button />
           </Box>
         </Box>
