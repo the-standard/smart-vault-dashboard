@@ -6,8 +6,8 @@ import {
   useTransactionHashStore,
   useCircularProgressStore,
   useSnackBarStore,
-  usesUSD6Store,
-  usesUSD18Store,
+  // usesUSD6Store,
+  // usesUSD18Store,
   useGreyProgressBarValuesStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
@@ -16,7 +16,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
 // import createClientUtil from "../../../utils/createClientUtil";
-import { arbitrumGoerli } from "viem/chains";
+// import { arbitrumGoerli } from "viem/chains";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { getNetwork } from "@wagmi/core";

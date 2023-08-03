@@ -8,7 +8,7 @@ import {
   useContractAddressStore,
   useVaultManagerAbiStore,
   usePositionStore,
-  useChainIdStore,
+  // useChainIdStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 // import QRicon from "../assets/qricon.png";
@@ -45,7 +45,6 @@ const Collateral = () => {
   const { getVaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();
   // const { tokenManagerAbi } = useTokenManagerAbiStore();
-  const { chainId } = useChainIdStore();
   const {
     contractAddress,
     arbitrumGoerliContractAddress,
