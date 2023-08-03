@@ -58,8 +58,11 @@ const HomePage = () => {
   const { connector: isConnected } = useAccount();
   // const [loading, setLoading] = useState(true); // Add this line
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { contractAddress, arbitrumGoerliContractAddress } =
-    useContractAddressStore();
+  const {
+    contractAddress,
+    arbitrumGoerliContractAddress,
+    arbitrumContractAddress,
+  } = useContractAddressStore();
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
@@ -109,6 +112,8 @@ const HomePage = () => {
       getVaults(arbitrumGoerliContractAddress);
     } else if (chain?.id == 11155111) {
       getVaults(contractAddress);
+    } else if (chain?.id == 42161) {
+      getVaults(arbitrumContractAddress);
     }
   };
 

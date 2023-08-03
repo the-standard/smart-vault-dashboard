@@ -38,8 +38,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const tokenMap = useRef(new Map());
   //store values
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { contractAddress, arbitrumGoerliContractAddress } =
-    useContractAddressStore();
+  const {
+    contractAddress,
+    arbitrumGoerliContractAddress,
+    arbitrumContractAddress,
+  } = useContractAddressStore();
   const { getVaultID } = useVaultIdStore();
   const { getVaultForListing } = useVaultForListingStore();
   //modal state
@@ -108,6 +111,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       );
     } else if (chain?.id == 11155111) {
       contract = new ethers.Contract(contractAddress, vaultManagerAbi, signer);
+    } else if (chain?.id == 42161) {
+      contract = new ethers.Contract(
+        arbitrumContractAddress,
+        vaultManagerAbi,
+        signer
+      );
     }
 
     const tokenURI = await contract.tokenURI(vault[0]);

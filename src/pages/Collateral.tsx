@@ -46,8 +46,11 @@ const Collateral = () => {
   const { transactionHash } = useTransactionHashStore();
   // const { tokenManagerAbi } = useTokenManagerAbiStore();
   const { chainId } = useChainIdStore();
-  const { contractAddress, arbitrumGoerliContractAddress } =
-    useContractAddressStore();
+  const {
+    contractAddress,
+    arbitrumGoerliContractAddress,
+    arbitrumContractAddress,
+  } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getVaultID } = useVaultIdStore();
   // const { tokenManagerAddress } = useTokenManagerAddressStore();
@@ -161,6 +164,8 @@ const Collateral = () => {
       returnAcceptedTokensList(arbitrumGoerliContractAddress);
     } else if (chain?.id == 11155111) {
       returnAcceptedTokensList(contractAddress);
+    } else if (chain?.id == 42161) {
+      returnAcceptedTokensList(arbitrumContractAddress);
     }
   };
 

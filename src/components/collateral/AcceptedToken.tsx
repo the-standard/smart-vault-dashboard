@@ -157,6 +157,32 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
     getChartData();
   }, []);
 
+  const renderLineChartForArbitrum = () => {
+    if (chartData) {
+      if (symbol === "ETH") {
+        return (
+          <LineChart data={chartData.arbitrum.ETH.prices} symbol={symbol} />
+        );
+      } else if (symbol === "WBTC") {
+        return (
+          <LineChart data={chartData.arbitrum.WBTC.prices} symbol={symbol} />
+        );
+      } else if (symbol === "LINK") {
+        return (
+          <LineChart data={chartData.arbitrum.LINK.prices} symbol={symbol} />
+        );
+      } else if (symbol === "ARB") {
+        return (
+          <LineChart data={chartData.arbitrum.ARB.prices} symbol={symbol} />
+        );
+      } else if (symbol === "PAXG") {
+        return (
+          <LineChart data={chartData.arbitrum.PAXG.prices} symbol={symbol} />
+        );
+      }
+    }
+  };
+
   const renderLineChartForSepolia = () => {
     if (chartData) {
       if (symbol === "SUSD6") {
@@ -177,7 +203,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
     return null; // Return null or some fallback content if chartData is not available yet.
   };
 
-  const renderLineChartForArbitrum = () => {
+  const renderLineChartForArbitrumGoerli = () => {
     if (chartData) {
       if (symbol === "SUSD6") {
         return (
@@ -307,9 +333,11 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
           }}
         >
           {chain?.id == 421613
-            ? renderLineChartForArbitrum()
+            ? renderLineChartForArbitrumGoerli()
             : chain?.id == 11155111
             ? renderLineChartForSepolia()
+            : chain?.id == 42161
+            ? renderLineChartForArbitrum()
             : /* <LineChart /> */
               null}
           {/* <LineChart /> */}
