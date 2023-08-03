@@ -49,8 +49,8 @@ const Withdraw: React.FC<WithdrawProps> = ({
   const getContractABI = async () => {
     try {
       const res = await axios.get(
-        `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${vaultAddress}&apikey=${
-          import.meta.env.VITE_ETHERSCAN_API_KEY
+        `https://api.arbiscan.io/api?module=contract&action=getabi&address=${vaultAddress}&apikey=${
+          import.meta.env.VITE_ARBISCAN_API_KEY
         }`
       );
       console.log(tokenAddress);
