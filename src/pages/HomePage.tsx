@@ -121,13 +121,8 @@ const HomePage = () => {
   }
 
   const getVaults = async (conditionalAddress: any) => {
-    let provider;
     const ethereumProvider: any = await createEthereumProvider();
-    if (!window.ethereum) {
-      provider = new ethers.providers.Web3Provider(ethereumProvider);
-    } else {
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-    }
+    const provider = new ethers.providers.Web3Provider(ethereumProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       conditionalAddress,
