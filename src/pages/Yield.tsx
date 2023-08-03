@@ -52,12 +52,10 @@ const Yield = () => {
       </Typography>{" "}
       <Typography variant="h6" sx={{ color: "#fff" }}>
         Then take your LP tokens and place them into Camelot NITRO where you can
-        earn an extra 5% TST. BUG BOUNTY. CREATE A TUTORIAL VIDEO AND EARN 500
-        euro worth of TST. Eventually, we will integrate it into this page to
-        make it even easier.
+        earn an extra 5% TST.
       </Typography>{" "}
       <Typography variant="h6" sx={{ color: "#fff", fontWeight: "bold" }}>
-        BUG BOUNTY.
+        CONTENT BOUNTY
       </Typography>{" "}
       <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
         CREATE A TUTORIAL VIDEO AND EARN 500 euro worth of TST.
