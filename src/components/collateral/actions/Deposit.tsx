@@ -16,7 +16,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
 // import createClientUtil from "../../../utils/createClientUtil";
-import { arbitrumGoerli, sepolia, arbitrum, mainnet } from "viem/chains";
+import { arbitrumGoerli } from "viem/chains";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { getNetwork } from "@wagmi/core";
@@ -45,10 +45,8 @@ const Deposit: React.FC<DepositProps> = ({
   const { vaultAddress } = useVaultAddressStore();
   const { getTransactionHash } = useTransactionHashStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
-  // const { sUSD6Address, sUSD6Abi, arbitrumGoerlisUSD6Address } =
-  //   usesUSD6Store();
-  // const { sUSD18Address, sUSD18Abi, arbitrumGoerlisUSD18Address } =
-  //   usesUSD18Store();
+  const { sUSD6Abi, arbitrumGoerlisUSD6Address } = usesUSD6Store();
+  const { sUSD18Abi, arbitrumGoerlisUSD18Address } = usesUSD18Store();
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
@@ -99,19 +97,52 @@ const Deposit: React.FC<DepositProps> = ({
 
   const [dynamicABI, setDynamicABI] = useState<any>([]);
 
+  const { chain } = getNetwork();
+
   const getContractABI = async () => {
-    try {
-      const res = await axios.get(
-        `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${tokenAddress}&apikey=${
-          import.meta.env.VITE_ETHERSCAN_API_KEY
-        }`
-      );
-      console.log(tokenAddress);
-      console.log(res.data.result);
-      setDynamicABI(res.data.result);
-      return res.data.result;
-    } catch (error) {
-      console.log(error);
+    if (chain?.id === 11155111) {
+      try {
+        const res = await axios.get(
+          `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${tokenAddress}&apikey=${
+            import.meta.env.VITE_ETHERSCAN_API_KEY
+          }`
+        );
+        console.log(tokenAddress);
+        console.log(res.data.result);
+        setDynamicABI(res.data.result);
+        return res.data.result;
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (chain?.id === 1) {
+      try {
+        const res = await axios.get(
+          `https://api.etherscan.io/api?module=contract&action=getabi&address=${tokenAddress}&apikey=${
+            import.meta.env.VITE_ETHERSCAN_API_KEY
+          }`
+        );
+        console.log(tokenAddress);
+        console.log(res.data.result);
+        setDynamicABI(res.data.result);
+        return res.data.result;
+      } catch (error) {
+        console.log(error);
+      }
+      //arbitrum one
+    } else if (chain?.id === 42161) {
+      try {
+        const res = await axios.get(
+          `https://api.arbiscan.io/api?module=contract&action=getabi&address=${tokenAddress}&apikey=${
+            import.meta.env.VITE_ARBISCAN_API_KEY
+          }`
+        );
+        console.log(tokenAddress);
+        console.log(res.data.result);
+        setDynamicABI(res.data.result);
+        return res.data.result;
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -155,13 +186,119 @@ const Deposit: React.FC<DepositProps> = ({
     }
   };
 
-  const depositViaMetamask = async () => {
-    // const { chain } = getNetwork();
+  //these 3 should be deleted for the mainnet
 
+  const depositSUSD6 = async (conditionalAddress: any) => {
+    // const [account] = await createClientUtil.getAddresses();
+    let txHashForError = "";
     try {
-      depositToken();
+      const txAmount: any = amount;
+      console.log(txAmount);
+
+      const tokenContract = new ethers.Contract(
+        conditionalAddress,
+        sUSD6Abi,
+        provider.getSigner()
+      );
+
+      const amountToDeposit = parseUnits(txAmount.toString(), decimals);
+      console.log(amountToDeposit);
+
+      const transferTx = await tokenContract.transfer(
+        vaultAddress,
+        //no parseEther here but need to add 6 decimals
+        amountToDeposit
+        // "5000000" //hardcoded for now
+      );
+
+      txHashForError = transferTx.hash;
+
+      console.log("Transaction sent:", txHashForError);
+      getTransactionHash(txHashForError);
+      waitForTransaction(txHashForError);
     } catch (error) {
+      waitForTransaction(txHashForError);
       console.log(error);
+    }
+  };
+  const depositSUSD18 = async (conditionalAddress: any) => {
+    // const [account] = await createClientUtil.getAddresses();
+    let txHashForError = "";
+    try {
+      const txAmount: any = amount;
+      console.log(txAmount);
+
+      const tokenContract = new ethers.Contract(
+        conditionalAddress,
+        sUSD18Abi,
+        provider.getSigner()
+      );
+
+      const transferTx = await tokenContract.transfer(
+        vaultAddress,
+        //no parseEther here but need to add 18 decimals
+        parseUnits(txAmount.toString(), decimals)
+      );
+
+      txHashForError = transferTx.hash;
+
+      console.log("Transaction sent:", txHashForError);
+      getTransactionHash(txHashForError);
+      waitForTransaction(txHashForError);
+    } catch (error) {
+      waitForTransaction(txHashForError);
+      console.log(error);
+    }
+  };
+
+  const depositEther = async (conditionalChain: any) => {
+    console.log(conditionalChain);
+    const account = getAccount();
+    console.log(account.address);
+
+    let txHashForError = "";
+    try {
+      const txAmount: any = amount;
+      console.log(txAmount);
+
+      const toAddress: any = vaultAddress;
+      const { hash } = await sendTransaction({
+        //chain: conditionalChain,
+        account: account.address,
+        to: toAddress,
+        value: parseEther(txAmount.toString()),
+      });
+      txHashForError = hash;
+
+      console.log("Transaction sent:", hash);
+      getTransactionHash(hash);
+      waitForTransaction(hash);
+    } catch (error) {
+      waitForTransaction(txHashForError);
+      console.log(error);
+    }
+  };
+
+  const depositViaMetamask = async () => {
+    //arbitrum goerli
+    if (chain?.id === 421613) {
+      try {
+        if (symbol === "SUSD6") {
+          depositSUSD6(arbitrumGoerlisUSD6Address);
+        } else if (symbol === "SUSD18") {
+          depositSUSD18(arbitrumGoerlisUSD18Address);
+        } else {
+          depositEther(arbitrumGoerli);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        depositToken();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

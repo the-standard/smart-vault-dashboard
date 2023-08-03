@@ -10,7 +10,7 @@ import {
 import { Box } from "@mui/material";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
-import smartVaultAbi from "../../../abis/smartVault";
+// import smartVaultAbi from "../../../abis/smartVault";
 import { parseUnits } from "viem";
 import axios from "axios";
 
@@ -25,7 +25,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
   symbol,
   tokenAddress,
   decimals,
-  token,
+  // token,
 }) => {
   const { collateralSymbol } = useCollateralSymbolStore.getState();
   const [amount, setAmount] = useState<any>(0);
