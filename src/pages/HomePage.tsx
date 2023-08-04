@@ -90,10 +90,12 @@ const HomePage = () => {
     }
   });
 
-  const ethProvider = useEthereumProvider();
+  const ethProvider: any = useEthereumProvider();
   const getVaults = async (conditionalAddress: any) => {
     const ethereumProvider: any = ethProvider;
-    const provider = new ethers.providers.Web3Provider(ethereumProvider);
+    const provider = new ethers.providers.Web3Provider(
+      ethereumProvider || window.ethereum
+    );
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       conditionalAddress,
@@ -127,8 +129,8 @@ const HomePage = () => {
   }, [isConnected, chain]);
 
   useEffect(() => {
-    if (window.ethereum) {
-      window.ethereum.on("chainChanged", () => {
+    if (ethProvider) {
+      ethProvider.on("chainChanged", () => {
         getCurrentChain();
       });
     }
@@ -156,7 +158,7 @@ const HomePage = () => {
           }}
           ref={rectangleRef}
         >
-          {isConnected ? (
+          {ethProvider ? (
             items.map((item) => (
               <VaultCard
                 key={item.title}
