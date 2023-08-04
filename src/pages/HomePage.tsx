@@ -18,8 +18,8 @@ import {
 // import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
 import { useNetwork } from "wagmi";
-import detectEthereumProvider from "@metamask/detect-provider";
-import { EthereumProvider } from "@walletconnect/ethereum-provider";
+
+import useEthereumProvider from "../hooks/useEthereumProvider.ts";
 
 const items = [
   {
@@ -90,38 +90,9 @@ const HomePage = () => {
     }
   });
 
-  async function createEthereumProvider() {
-    const projectId: any = "67027f91c1db8751c6ea2ed13b9cdc55";
-    const chains: any = [1]; // Ethereum Mainnet chain ID
-    const showQrModal: any = true;
-    const methods: any = ["eth_sendTransaction", "personal_sign"];
-    const events: any = [
-      "chainChanged",
-      "accountsChanged",
-      "connect",
-      "session_event",
-      "display_uri",
-      "disconnect",
-    ];
-
-    try {
-      const provider = await EthereumProvider.init({
-        projectId,
-        chains,
-        showQrModal,
-        methods,
-        events,
-      });
-
-      return provider;
-    } catch (error) {
-      console.error("Error initializing Ethereum provider:", error);
-      return null;
-    }
-  }
-
+  const ethProvider = useEthereumProvider();
   const getVaults = async (conditionalAddress: any) => {
-    const ethereumProvider: any = await createEthereumProvider();
+    const ethereumProvider: any = ethProvider;
     const provider = new ethers.providers.Web3Provider(ethereumProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
