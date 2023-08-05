@@ -84,7 +84,12 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const mintVault = async (conditionalAddress: any) => {
     try {
       console.log(ethProvider);
-      const provider = new ethers.providers.Web3Provider(ethProvider);
+      let provider: any;
+      if (window.ethereum) {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+      } else {
+        provider = new ethers.providers.Web3Provider(ethProvider);
+      }
       const signer = provider.getSigner();
       const contract = new ethers.Contract(
         conditionalAddress,

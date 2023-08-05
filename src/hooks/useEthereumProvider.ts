@@ -25,13 +25,6 @@ function useEthereumProvider() {
       ];
 
       try {
-        // if (window.ethereum) {
-        //   await window.ethereum.request({ method: "eth_requestAccounts" });
-        //   const provider: any = new ethers.providers.Web3Provider(
-        //     window.ethereum
-        //   );
-        //   setProvider(provider);
-
         const provider = await EthereumProvider.init({
           projectId,
           chains,
