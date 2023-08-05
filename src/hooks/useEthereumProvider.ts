@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
 import { EthereumProvider } from "@walletconnect/ethereum-provider";
 
 function useEthereumProvider() {

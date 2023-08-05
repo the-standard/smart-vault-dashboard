@@ -13,6 +13,7 @@ import { ethers } from "ethers";
 // import smartVaultAbi from "../../../abis/smartVault";
 import { parseUnits } from "viem";
 import axios from "axios";
+import useEthereumProvider from "../../../hooks/useEthereumProvider";
 
 interface WithdrawProps {
   symbol: string;
@@ -70,11 +71,14 @@ const Withdraw: React.FC<WithdrawProps> = ({
   const { getSnackBar } = useSnackBarStore();
 
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
-
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
-  );
-  const signer = provider.getSigner(address);
+  const ethProvider = useEthereumProvider();
+  let provider: any;
+  if (window.ethereum) {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+  } else {
+    provider = new ethers.providers.Web3Provider(ethProvider);
+  }
+  const signer = provider.getSigner();
 
   const withdrawCollateral = async () => {
     if (dynamicABI) {
