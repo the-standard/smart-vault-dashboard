@@ -92,9 +92,8 @@ const HomePage = () => {
 
   const ethProvider: any = useEthereumProvider();
   const getVaults = async (conditionalAddress: any) => {
-    const ethereumProvider: any = ethProvider;
     const provider = new ethers.providers.Web3Provider(
-      ethereumProvider || window.ethereum
+      ethProvider || window.ethereum
     );
     const signer = provider.getSigner();
     const contract = new ethers.Contract(

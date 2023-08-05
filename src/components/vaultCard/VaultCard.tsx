@@ -17,6 +17,7 @@ import { fromHex } from "viem";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
 import detectEthereumProvider from "@metamask/detect-provider";
+import useEthereumProvider from "../../hooks/useEthereumProvider.ts";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -78,12 +79,12 @@ const VaultCard: React.FC<VaultCardProps> = ({
     }
   };
 
+  const ethProvider: any = useEthereumProvider();
+
   const mintVault = async (conditionalAddress: any) => {
     try {
-      const metamaskProvider = await detectEthereumProvider();
-      const provider = new ethers.providers.Web3Provider(
-        metamaskProvider || window.ethereum
-      );
+      console.log(ethProvider);
+      const provider = new ethers.providers.Web3Provider(ethProvider);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(
         conditionalAddress,
