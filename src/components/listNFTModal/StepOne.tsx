@@ -11,7 +11,7 @@ import {
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
 } from "../../store/Store.ts";
-import { ethers, providers } from "ethers";
+import { ethers } from "ethers";
 import { formatUnits, fromHex } from "viem";
 // import axios from "axios";
 import { useAccount } from "wagmi";

@@ -98,7 +98,6 @@ const Deposit: React.FC<DepositProps> = ({
   const provider = new ethers.providers.JsonRpcProvider(
     import.meta.env.VITE_QUICKNODE_URL
   );
-  const signer = provider.getSigner(address);
   const [dynamicABI, setDynamicABI] = useState<any>([]);
 
   const { chain } = getNetwork();
@@ -166,7 +165,7 @@ const Deposit: React.FC<DepositProps> = ({
         const tokenContract = new ethers.Contract(
           tokenAddress,
           dynamicABI,
-          provider.getSigner()
+          provider.getSigner(address)
         );
         console.log(tokenContract);
         console.log(tokenAddress);

@@ -12,7 +12,6 @@ import {
   arbitrum,
   arbitrumGoerli,
 } from "wagmi/chains";
-import { infuraProvider } from "@wagmi/core/providers/infura";
 
 const chains = [
   mainnet,
@@ -24,12 +23,7 @@ const chains = [
 ];
 const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";
 
-const { publicClient } = configureChains(chains, [
-  infuraProvider({
-    apiKey: "https://sepolia.infura.io/v3/63ccb3cb97cf403bb4203e47852ff41c",
-  }),
-]);
-
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 const wagmiConfig = createConfig({
   autoConnect: true,
   connectors: w3mConnectors({ projectId, chains }),

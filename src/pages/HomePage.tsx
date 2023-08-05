@@ -19,8 +19,6 @@ import {
 import { getNetwork } from "@wagmi/core";
 import { useNetwork } from "wagmi";
 
-import useEthereumProvider from "../hooks/useEthereumProvider.ts";
-
 const items = [
   {
     title: "EUROs",

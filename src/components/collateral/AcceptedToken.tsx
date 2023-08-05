@@ -16,7 +16,6 @@ import ethereumlogo from "../../assets/ethereumlogo.svg";
 import { formatUnits, fromHex } from "viem";
 import axios from "axios";
 import { getNetwork } from "@wagmi/core";
-import useEthereumProvider from "../../hooks/useEthereumProvider";
 import { useAccount } from "wagmi";
 
 interface AcceptedTokenProps {

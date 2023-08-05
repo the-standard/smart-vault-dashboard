@@ -103,7 +103,6 @@ const Collateral = () => {
     const provider = new ethers.providers.JsonRpcProvider(
       import.meta.env.VITE_QUICKNODE_URL
     );
-    const signer = provider.getSigner(address);
 
     const receipt = await provider.waitForTransaction(transactionHash);
 
