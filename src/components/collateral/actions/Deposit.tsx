@@ -21,6 +21,7 @@ import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { getNetwork } from "@wagmi/core";
 import axios from "axios";
+import { useAccount } from "wagmi";
 
 interface DepositProps {
   symbol: string;
@@ -51,6 +52,7 @@ const Deposit: React.FC<DepositProps> = ({
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
   //local
+  const { address } = useAccount();
 
   const inputRef: any = useRef<HTMLInputElement>(null);
 
@@ -93,8 +95,10 @@ const Deposit: React.FC<DepositProps> = ({
   };
   //clipboard logic end
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-
+  const provider = new ethers.providers.JsonRpcProvider(
+    import.meta.env.VITE_QUICKNODE_URL
+  );
+  const signer = provider.getSigner(address);
   const [dynamicABI, setDynamicABI] = useState<any>([]);
 
   const { chain } = getNetwork();

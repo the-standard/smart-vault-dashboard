@@ -71,8 +71,10 @@ const Withdraw: React.FC<WithdrawProps> = ({
 
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  const provider = new ethers.providers.JsonRpcProvider(
+    import.meta.env.VITE_QUICKNODE_URL
+  );
+  const signer = provider.getSigner(address);
 
   const withdrawCollateral = async () => {
     if (dynamicABI) {
