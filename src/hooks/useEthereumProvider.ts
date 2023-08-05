@@ -3,14 +3,18 @@ import { ethers } from "ethers";
 import { EthereumProvider } from "@walletconnect/ethereum-provider";
 
 function useEthereumProvider() {
-  const [provider, setProvider] = useState(null);
+  const [provider, setProvider] = useState<any>(null);
 
   useEffect(() => {
     async function createEthereumProvider() {
       const projectId: any = "67027f91c1db8751c6ea2ed13b9cdc55";
       const chains: any = [42161, 421613, 1];
       const showQrModal: any = true;
-      const methods: any = ["eth_sendTransaction", "personal_sign"];
+      const methods: any = [
+        "eth_sendTransaction",
+        "personal_sign",
+        "eth_requestAccounts",
+      ];
       const events: any = [
         "chainChanged",
         "accountsChanged",
@@ -21,20 +25,21 @@ function useEthereumProvider() {
       ];
 
       try {
-        if (window.ethereum) {
-          await window.ethereum.request({ method: "eth_requestAccounts" });
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          setProvider(provider);
-        } else {
-          const provider = await EthereumProvider.init({
-            projectId,
-            chains,
-            showQrModal,
-            methods,
-            events,
-          });
-          setProvider(provider);
-        }
+        // if (window.ethereum) {
+        //   await window.ethereum.request({ method: "eth_requestAccounts" });
+        //   const provider: any = new ethers.providers.Web3Provider(
+        //     window.ethereum
+        //   );
+        //   setProvider(provider);
+
+        const provider = await EthereumProvider.init({
+          projectId,
+          chains,
+          showQrModal,
+          methods,
+          events,
+        });
+        setProvider(provider);
       } catch (error) {
         console.error("Error initializing Ethereum provider:", error);
       }

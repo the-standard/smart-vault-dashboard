@@ -91,6 +91,7 @@ const HomePage = () => {
   });
 
   const ethProvider: any = useEthereumProvider();
+  console.log("ethProvider", ethProvider);
   const getVaults = async (conditionalAddress: any) => {
     const provider = new ethers.providers.Web3Provider(
       ethProvider || window.ethereum
