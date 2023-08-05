@@ -85,15 +85,21 @@ const Debt = () => {
     };
   }, []);
 
-  const { isLoading, isSuccess, write, data, isError } = useContractWrite({
+  const borrowMoney = useContractWrite({
     address: vaultAddress as any, // Replace with your vault address
     abi: smartVaultAbi, // Replace with your smartVault ABI
     functionName: "mint",
     args: [address as any, parseEther(amount.toString())],
   });
-  console.log(data);
 
+  const handleBorrowMoney = async () => {
+    const { write } = borrowMoney;
+
+    write();
+  };
   useEffect(() => {
+    const { isLoading, isSuccess, data, isError } = borrowMoney;
+
     if (isLoading) {
       getProgressType(1);
     } else if (isSuccess) {
@@ -101,7 +107,6 @@ const Debt = () => {
       getTransactionHash(data?.hash as any);
       incrementCounter();
       getSnackBar(0);
-      //   handleSnackbarClick();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -112,7 +117,12 @@ const Debt = () => {
       inputRef.current.focus();
       getGreyBarUserInput(0);
     }
-  }, [isSuccess, isLoading, data, isError]);
+  }, [
+    borrowMoney.isLoading,
+    borrowMoney.isSuccess,
+    borrowMoney.data,
+    borrowMoney.isError,
+  ]);
 
   //modal
   const [open, setOpen] = useState(false);
@@ -125,29 +135,6 @@ const Debt = () => {
   );
   const signer = provider.getSigner(address);
   const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
-  // const borrowMoney = async () => {
-  //   //console.log(signer);
-  //   getProgressType(1);
-  //   let transactionResponse; // Declare a variable to hold the transaction response
-  //   console.log(parseEther(amount.toString()));
-  //   console.log(ethers.BigNumber.from(amount));
-
-  //   try {
-  //     console.log(vaultAddress);
-  //     transactionResponse = await contract.mint(
-  //       address,
-  //       parseEther(amount.toString())
-  //     );
-  //     // Access the transaction hash from the transaction response
-  //     const transactionHash = transactionResponse.hash;
-  //     console.log("Transaction Hash:", transactionHash);
-  //     console.log("confirming transaction " + transactionHash.confirmations);
-  //     getTransactionHash(transactionHash);
-  //     waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   let sEuroContract: any;
 
@@ -215,7 +202,7 @@ const Debt = () => {
       getCircularProgress(true);
 
       console.log("borrow");
-      write();
+      handleBorrowMoney();
     } else {
       console.log("paydown");
       getCircularProgress(true);
