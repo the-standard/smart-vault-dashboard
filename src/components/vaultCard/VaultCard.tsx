@@ -16,8 +16,8 @@ import { ethers } from "ethers";
 import { fromHex } from "viem";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
-import detectEthereumProvider from "@metamask/detect-provider";
-import useEthereumProvider from "../../hooks/useEthereumProvider.ts";
+
+import { useAccount } from "wagmi";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -54,6 +54,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const { getTransactionHash } = useTransactionHashStore();
   const { getProgressType, getCircularProgress } = useCircularProgressStore();
   const navigate = useNavigate();
+  const { address } = useAccount();
 
   // const [vaultCreated, setVaultCreated] = useState(false);
 
@@ -79,18 +80,13 @@ const VaultCard: React.FC<VaultCardProps> = ({
     }
   };
 
-  const ethProvider: any = useEthereumProvider();
-
   const mintVault = async (conditionalAddress: any) => {
     try {
-      console.log(ethProvider);
-      let provider: any;
-      if (window.ethereum) {
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-      } else {
-        provider = new ethers.providers.Web3Provider(ethProvider);
-      }
-      const signer = provider.getSigner();
+      const provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_QUICKNODE_URL
+      );
+      const signer = provider.getSigner(address);
+      console.log(signer);
       const contract = new ethers.Contract(
         conditionalAddress,
         vaultManagerAbi,
@@ -110,20 +106,17 @@ const VaultCard: React.FC<VaultCardProps> = ({
       getSnackBar(0);
       navigateToLatestVault();
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
       getCircularProgress(false);
       getSnackBar(1);
     }
   };
 
   const navigateToLatestVault = async () => {
-    let provider: any;
-    if (window.ethereum) {
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-    } else {
-      provider = new ethers.providers.Web3Provider(ethProvider);
-    }
-    const signer = provider.getSigner();
+    const provider = new ethers.providers.JsonRpcProvider(
+      import.meta.env.VITE_QUICKNODE_URL
+    );
+    const signer = provider.getSigner(address);
     const contract = new ethers.Contract(
       contractAddress,
       vaultManagerAbi,

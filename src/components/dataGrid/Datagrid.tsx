@@ -498,16 +498,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) ? (
                         <div
                           dangerouslySetInnerHTML={{
-                            __html:
-                              (console.log(tokenToNFTMap.current),
-                              console.log(
-                                tokenToNFTMap.current.get(
-                                  ethers.BigNumber.from(vault[0]).toString()
-                                )
-                              ),
-                              tokenToNFTMap.current.get(
-                                ethers.BigNumber.from(vault[0]).toString()
-                              )),
+                            __html: tokenToNFTMap.current.get(
+                              ethers.BigNumber.from(vault[0]).toString()
+                            ),
                           }}
                         />
                       ) : null}
@@ -628,16 +621,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                             marginBottom: "100px",
                           }}
                           dangerouslySetInnerHTML={{
-                            __html:
-                              (console.log(tokenToNFTMap.current),
-                              console.log(
-                                tokenToNFTMap.current.get(
-                                  ethers.BigNumber.from(vault[0]).toString()
-                                )
-                              ),
-                              tokenToNFTMap.current.get(
-                                ethers.BigNumber.from(vault[0]).toString()
-                              )),
+                            __html: tokenToNFTMap.current.get(
+                              ethers.BigNumber.from(vault[0]).toString()
+                            ),
                           }}
                         />
                       ) : null}

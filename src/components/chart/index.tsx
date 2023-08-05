@@ -14,7 +14,7 @@ import {
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
-import useEthereumProvider from "../../hooks/useEthereumProvider";
+import { useAccount } from "wagmi";
 
 const Index = () => {
   const { vaultStore } = useVaultStore();
@@ -35,14 +35,12 @@ const Index = () => {
   // const [ethToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
-  const ethProvider = useEthereumProvider();
-  let provider: any;
-  if (window.ethereum) {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-  } else {
-    provider = new ethers.providers.Web3Provider(ethProvider);
-  }
-  const signer = provider.getSigner();
+  const { address } = useAccount();
+
+  const provider = new ethers.providers.JsonRpcProvider(
+    import.meta.env.VITE_QUICKNODE_URL
+  );
+  const signer = provider.getSigner(address);
   let myToken = undefined;
 
   // useEffect(() => {

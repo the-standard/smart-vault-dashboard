@@ -32,8 +32,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 // import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
-import useEthereumProvider from "../hooks/useEthereumProvider.ts";
-
+import { useAccount } from "wagmi";
 type RouteParams = {
   vaultId: string;
 };
@@ -69,7 +68,7 @@ const Collateral = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
 
-  const ethProvider = useEthereumProvider();
+  const { address } = useAccount();
 
   useEffect(() => {
     getVaultID(vaultId);
@@ -101,12 +100,11 @@ const Collateral = () => {
   }, []);
 
   async function listenToTransaction(transactionHash: string) {
-    let provider: any;
-    if (window.ethereum) {
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-    } else {
-      provider = new ethers.providers.Web3Provider(ethProvider);
-    }
+    const provider = new ethers.providers.JsonRpcProvider(
+      import.meta.env.VITE_QUICKNODE_URL
+    );
+    const signer = provider.getSigner(address);
+
     const receipt = await provider.waitForTransaction(transactionHash);
 
     // Check if the transaction is successful
@@ -128,13 +126,10 @@ const Collateral = () => {
   }, [transactionHash]);
 
   const returnAcceptedTokensList = async (conditionalAddress: any) => {
-    let provider: any;
-    if (window.ethereum) {
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-    } else {
-      provider = new ethers.providers.Web3Provider(ethProvider);
-    }
-    const signer = provider.getSigner();
+    const provider = new ethers.providers.JsonRpcProvider(
+      import.meta.env.VITE_QUICKNODE_URL
+    );
+    const signer = provider.getSigner(address);
     const contract = new ethers.Contract(
       conditionalAddress,
       vaultManagerAbi,

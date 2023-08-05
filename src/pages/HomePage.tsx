@@ -56,7 +56,7 @@ const HomePage = () => {
   // const [tokenToId, setTokenToId] = useState<any[]>([]);
   // const [resolved, setResolved] = useState(false);
   const [myVaults, setMyVaults] = useState<any[]>([]);
-  const { connector: isConnected } = useAccount();
+  const { connector: isConnected, address } = useAccount();
   // const [loading, setLoading] = useState(true); // Add this line
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const {
@@ -90,19 +90,17 @@ const HomePage = () => {
     }
   });
 
-  const ethProvider: any = useEthereumProvider();
-  console.log("ethProvider", ethProvider);
   const getVaults = async (conditionalAddress: any) => {
-    const provider = new ethers.providers.Web3Provider(
-      ethProvider || window.ethereum
+    const provider = new ethers.providers.JsonRpcProvider(
+      import.meta.env.VITE_QUICKNODE_URL
     );
-    const signer = provider.getSigner();
+    const signer = provider.getSigner(address);
+    console.log(signer);
     const contract = new ethers.Contract(
       conditionalAddress,
       vaultManagerAbi,
       signer
     );
-
     console.log(contract);
     const vaults = await contract.vaults();
 
@@ -128,13 +126,13 @@ const HomePage = () => {
     }
   }, [isConnected, chain]);
 
-  useEffect(() => {
-    if (ethProvider) {
-      ethProvider.on("chainChanged", () => {
-        getCurrentChain();
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (address) {
+  //     provider.on("chainChanged", () => {
+  //       getCurrentChain();
+  //     });
+  //   }
+  // }, []);
 
   return (
     <Box>
@@ -158,7 +156,7 @@ const HomePage = () => {
           }}
           ref={rectangleRef}
         >
-          {ethProvider ? (
+          {address ? (
             items.map((item) => (
               <VaultCard
                 key={item.title}
