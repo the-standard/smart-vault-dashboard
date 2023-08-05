@@ -85,24 +85,40 @@ const Debt = () => {
     };
   }, []);
 
-  const { isLoading, isSuccess, write } = useContractWrite({
+  const { isLoading, isSuccess, write, data, isError } = useContractWrite({
     address: vaultAddress as any, // Replace with your vault address
     abi: smartVaultAbi, // Replace with your smartVault ABI
     functionName: "mint",
     args: [address as any, parseEther(amount.toString())],
   });
+  console.log(data);
+
+  useEffect(() => {
+    if (isLoading) {
+      getProgressType(1);
+    } else if (isSuccess) {
+      getCircularProgress(false);
+      getTransactionHash(data?.hash as any);
+      incrementCounter();
+      getSnackBar(0);
+      //   handleSnackbarClick();
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
+    } else if (isError) {
+      getCircularProgress(false);
+      getSnackBar(1);
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
+    }
+  }, [isSuccess, isLoading, data, isError]);
 
   //modal
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [modalStep, setModalStep] = useState(1);
-
-  // if (isLoading) {
-  //   getProgressType(1), getCircularProgress(true);
-  // } else if (isSuccess) {
-  //   getProgressType(2), getCircularProgress(false);
-  // }
 
   const provider = new ethers.providers.JsonRpcProvider(
     import.meta.env.VITE_QUICKNODE_URL
@@ -196,6 +212,8 @@ const Debt = () => {
 
   const handleWithdraw = () => {
     if (activeElement === 4) {
+      getCircularProgress(true);
+
       console.log("borrow");
       write();
     } else {
