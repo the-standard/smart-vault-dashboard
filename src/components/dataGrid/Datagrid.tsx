@@ -26,12 +26,14 @@ import "../../styles/progressBarStyle.css";
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther, formatUnits } from "viem";
 import { getNetwork } from "@wagmi/core";
+import { useAccount } from "wagmi";
 
 interface DataGridComponentProps {
   vaults: any[];
 }
 
 const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
+  const { address } = useAccount();
   const [tokenToId, setTokenToId] = useState<any[]>([]);
   const [resolved, setResolved] = useState(false);
   const tokenToNFTMap = useRef(new Map());
@@ -100,9 +102,10 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   async function getNFT(vault: any) {
     let contract: any;
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-
+    const provider = new ethers.providers.JsonRpcProvider(
+      import.meta.env.VITE_QUICKNODE_URL
+    );
+    const signer = provider.getSigner(address);
     if (chain?.id == 421613) {
       contract = new ethers.Contract(
         arbitrumGoerliContractAddress,

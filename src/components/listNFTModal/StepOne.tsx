@@ -11,9 +11,10 @@ import {
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
 } from "../../store/Store.ts";
-import { ethers } from "ethers";
+import { ethers, providers } from "ethers";
 import { formatUnits, fromHex } from "viem";
 // import axios from "axios";
+import { useAccount } from "wagmi";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +32,7 @@ const StepOne: React.FC<StepProps> = ({
     const data = 2;
     onDataFromChild(data);
   }
-
+  const { address } = useAccount();
   const { vaultForListing } = useVaultForListingStore();
   const {
     getNFTListingModalTotalValue,
@@ -42,8 +43,10 @@ const StepOne: React.FC<StepProps> = ({
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  const provider = new ethers.providers.JsonRpcProvider(
+    import.meta.env.VITE_QUICKNODE_URL
+  );
+  const signer = provider.getSigner(address);
 
   console.log(tokenMap.get(modalChildState));
 

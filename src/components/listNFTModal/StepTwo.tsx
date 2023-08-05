@@ -61,8 +61,10 @@ const StepTwo: React.FC<StepProps> = ({
 
   const { address } = useAccount();
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  const provider = new ethers.providers.JsonRpcProvider(
+    import.meta.env.VITE_QUICKNODE_URL
+  );
+  const signer = provider.getSigner(address);
   // console.log(signer);
 
   let openseaSDK: any;
