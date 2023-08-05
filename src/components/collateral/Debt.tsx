@@ -97,6 +97,7 @@ const Debt = () => {
   const [modalStep, setModalStep] = useState(1);
 
   const borrowMoney = async () => {
+    console.log(signer);
     getProgressType(1);
     let transactionResponse; // Declare a variable to hold the transaction response
     console.log(parseEther(amount.toString()));

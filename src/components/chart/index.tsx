@@ -22,7 +22,8 @@ const Index = () => {
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
   const { ethToUsdAbi } = useEthToUsdAbiStore();
-  const { usdToEuroAddress } = useUSDToEuroAddressStore();
+  const { usdToEuroAddress, arbitrumGoerliUSDToEuroAddress } =
+    useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
   // const { counter } = useCounterStore();
@@ -59,7 +60,7 @@ const Index = () => {
     const convertUsdToEuro = async (ethValueInUsd: number) => {
       try {
         const contract = new ethers.Contract(
-          usdToEuroAddress,
+          arbitrumGoerliUSDToEuroAddress,
           usdToEuroAbi,
           signer
         );
@@ -215,9 +216,9 @@ const Index = () => {
   const convertUsdToEuro = async (ethValueInUsd: number) => {
     try {
       const contract = new ethers.Contract(
-        usdToEuroAddress,
+        arbitrumGoerliUSDToEuroAddress,
         usdToEuroAbi,
-        signer
+        provider
       );
       console.log(contract);
       const price = await contract.latestRoundData();
