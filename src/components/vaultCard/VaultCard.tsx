@@ -52,8 +52,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
     arbitrumContractAddress,
   } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { getTransactionHash } = useTransactionHashStore();
-  const { getProgressType, getCircularProgress } = useCircularProgressStore();
+  // const { getTransactionHash } = useTransactionHashStore();
+  // const { getProgressType, getCircularProgress } = useCircularProgressStore();
   const navigate = useNavigate();
   const { address } = useAccount();
 

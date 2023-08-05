@@ -26,6 +26,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
+import { useContractWrite } from "wagmi";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
@@ -84,11 +85,12 @@ const Debt = () => {
     };
   }, []);
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
-  );
-  const signer = provider.getSigner(address);
-  const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+  const { isLoading, isSuccess, write } = useContractWrite({
+    address: vaultAddress as any, // Replace with your vault address
+    abi: smartVaultAbi, // Replace with your smartVault ABI
+    functionName: "mint",
+    args: [address as any, parseEther(amount.toString())],
+  });
 
   //modal
   const [open, setOpen] = useState(false);
@@ -96,29 +98,40 @@ const Debt = () => {
   const handleClose = () => setOpen(false);
   const [modalStep, setModalStep] = useState(1);
 
-  const borrowMoney = async () => {
-    console.log(signer);
-    getProgressType(1);
-    let transactionResponse; // Declare a variable to hold the transaction response
-    console.log(parseEther(amount.toString()));
-    console.log(ethers.BigNumber.from(amount));
+  // if (isLoading) {
+  //   getProgressType(1), getCircularProgress(true);
+  // } else if (isSuccess) {
+  //   getProgressType(2), getCircularProgress(false);
+  // }
 
-    try {
-      console.log(vaultAddress);
-      transactionResponse = await contract.mint(
-        address,
-        parseEther(amount.toString())
-      );
-      // Access the transaction hash from the transaction response
-      const transactionHash = transactionResponse.hash;
-      console.log("Transaction Hash:", transactionHash);
-      console.log("confirming transaction " + transactionHash.confirmations);
-      getTransactionHash(transactionHash);
-      waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const provider = new ethers.providers.JsonRpcProvider(
+    import.meta.env.VITE_QUICKNODE_URL
+  );
+  const signer = provider.getSigner(address);
+  const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
+  // const borrowMoney = async () => {
+  //   //console.log(signer);
+  //   getProgressType(1);
+  //   let transactionResponse; // Declare a variable to hold the transaction response
+  //   console.log(parseEther(amount.toString()));
+  //   console.log(ethers.BigNumber.from(amount));
+
+  //   try {
+  //     console.log(vaultAddress);
+  //     transactionResponse = await contract.mint(
+  //       address,
+  //       parseEther(amount.toString())
+  //     );
+  //     // Access the transaction hash from the transaction response
+  //     const transactionHash = transactionResponse.hash;
+  //     console.log("Transaction Hash:", transactionHash);
+  //     console.log("confirming transaction " + transactionHash.confirmations);
+  //     getTransactionHash(transactionHash);
+  //     waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   let sEuroContract: any;
 
@@ -184,7 +197,7 @@ const Debt = () => {
   const handleWithdraw = () => {
     if (activeElement === 4) {
       console.log("borrow");
-      borrowMoney();
+      write();
     } else {
       console.log("paydown");
       getCircularProgress(true);
@@ -197,7 +210,7 @@ const Debt = () => {
   const waitForTransaction = async (_transactionHash: string) => {
     try {
       getCircularProgress(true);
-      await provider.waitForTransaction(_transactionHash);
+      //  await provider.waitForTransaction(_transactionHash);
       getCircularProgress(false); // Set isLoading to false after the transaction is mined
       incrementCounter();
       getSnackBar(0);
