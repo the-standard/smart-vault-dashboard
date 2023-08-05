@@ -16,6 +16,7 @@ import ethereumlogo from "../../assets/ethereumlogo.svg";
 import { formatUnits, fromHex } from "viem";
 import axios from "axios";
 import { getNetwork } from "@wagmi/core";
+import useEthereumProvider from "../../hooks/useEthereumProvider";
 
 interface AcceptedTokenProps {
   amount: any;
@@ -60,8 +61,14 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
     useGreyProgressBarValuesStore();
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
+  const ethProvider = useEthereumProvider();
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  let provider: any;
+  if (window.ethereum) {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+  } else {
+    provider = new ethers.providers.Web3Provider(ethProvider);
+  }
   const signer = provider.getSigner();
   let myToken = undefined;
 

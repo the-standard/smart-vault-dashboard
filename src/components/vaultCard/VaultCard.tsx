@@ -117,8 +117,12 @@ const VaultCard: React.FC<VaultCardProps> = ({
   };
 
   const navigateToLatestVault = async () => {
-    const metamaskProvider: any = await detectEthereumProvider();
-    const provider = new ethers.providers.Web3Provider(metamaskProvider);
+    let provider: any;
+    if (window.ethereum) {
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+    } else {
+      provider = new ethers.providers.Web3Provider(ethProvider);
+    }
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       contractAddress,
