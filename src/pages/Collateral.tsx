@@ -213,7 +213,7 @@ const Collateral = () => {
       title: "Earn Yield on EUROs",
     },
   ];
-
+  //chang these to arbitrum
   const handleButtonActions = (id: number) => {
     if (id === 1) {
       window.open(

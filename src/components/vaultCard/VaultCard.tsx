@@ -7,18 +7,16 @@ import React from "react";
 import {
   useContractAddressStore,
   useVaultManagerAbiStore,
-  useCircularProgressStore,
-  useSnackBarStore,
-  useTransactionHashStore,
+  // useSnackBarStore,
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
-import { ethers } from "ethers";
-import { fromHex } from "viem";
-import { useNavigate } from "react-router-dom";
+// import { ethers } from "ethers";
+// import { fromHex } from "viem";
+// import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
-import useEthereumProvider from "../../hooks/useEthereumProvider.ts";
-import { useAccount } from "wagmi";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+// import useEthereumProvider from "../../hooks/useEthereumProvider.ts";
+// import { useAccount } from "wagmi";
+import { useContractWrite } from "wagmi";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -45,7 +43,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
 }) => {
   //snackbar config
   const [open, setOpen] = React.useState(false);
-  const { getSnackBar } = useSnackBarStore();
+  // const { getSnackBar } = useSnackBarStore();
   const {
     contractAddress,
     arbitrumGoerliContractAddress,
@@ -54,8 +52,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   // const { getTransactionHash } = useTransactionHashStore();
   // const { getProgressType, getCircularProgress } = useCircularProgressStore();
-  const navigate = useNavigate();
-  const { address } = useAccount();
+  // const navigate = useNavigate();
+  // const { address } = useAccount();
 
   // const [vaultCreated, setVaultCreated] = useState(false);
 
@@ -72,7 +70,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const { chain } = getNetwork();
 
-  const ethProvider = useEthereumProvider();
+  // const ethProvider = useEthereumProvider();
 
   const { data, isLoading, isSuccess, write } = useContractWrite({
     address:
@@ -107,30 +105,30 @@ const VaultCard: React.FC<VaultCardProps> = ({
     }
   };
 
-  const navigateToLatestVault = async () => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_QUICKNODE_URL
-    );
-    const signer = provider.getSigner(address);
-    const contract = new ethers.Contract(
-      contractAddress,
-      vaultManagerAbi,
-      signer
-    );
-    const vaults = await contract.vaults();
-    console.log("vaults", vaults);
-    // Get the last vault in the array
-    const lastVault = vaults[vaults.length - 1];
-    console.log("lastVault", lastVault);
+  // const navigateToLatestVault = async () => {
+  //   const provider = new ethers.providers.JsonRpcProvider(
+  //     import.meta.env.VITE_QUICKNODE_URL
+  //   );
+  //   const signer = provider.getSigner(address);
+  //   const contract = new ethers.Contract(
+  //     contractAddress,
+  //     vaultManagerAbi,
+  //     signer
+  //   );
+  //   const vaults = await contract.vaults();
+  //   console.log("vaults", vaults);
+  //   // Get the last vault in the array
+  //   const lastVault = vaults[vaults.length - 1];
+  //   console.log("lastVault", lastVault);
 
-    // Navigate to the Collateral/{vaultId} route
-    if (lastVault) {
-      const vaultId = fromHex(lastVault[0], "number");
-      navigate(`Collateral/${vaultId}`);
-    }
+  //   // Navigate to the Collateral/{vaultId} route
+  //   if (lastVault) {
+  //     const vaultId = fromHex(lastVault[0], "number");
+  //     navigate(`Collateral/${vaultId}`);
+  //   }
 
-    return vaults;
-  };
+  //   return vaults;
+  // };
 
   return (
     <Box

@@ -9,7 +9,7 @@ import sarslogo from "../assets/sarslogo.png";
 import saudlogo from "../assets/saudlogo.png";
 import susdlogo from "../assets/susdlogo.png";
 // import { useVaultsStore } from "../store/Store.ts";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount } from "wagmi";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,

@@ -426,6 +426,6 @@ interface WBTCAbiState {
   WBTCAbi: any;
 }
 
-export const useWBTCAbiStore = create<WBTCAbiState>((set) => ({
+export const useWBTCAbiStore = create<WBTCAbiState>(() => ({
   WBTCAbi: WBTCABI,
 }));

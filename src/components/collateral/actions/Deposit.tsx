@@ -9,7 +9,6 @@ import {
   // usesUSD6Store,
   // usesUSD18Store,
   useGreyProgressBarValuesStore,
-  useWBTCAbiStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
 import { ethers } from "ethers";
@@ -22,7 +21,7 @@ import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { getNetwork } from "@wagmi/core";
 import axios from "axios";
-import { useAccount, useContractWrite } from "wagmi";
+import { useContractWrite } from "wagmi";
 
 interface DepositProps {
   symbol: string;
@@ -52,9 +51,9 @@ const Deposit: React.FC<DepositProps> = ({
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
-  const { WBTCAbi } = useWBTCAbiStore();
-  //local
-  const { address } = useAccount();
+  // const { WBTCAbi } = useWBTCAbiStore();
+  // //local
+  // const { address } = useAccount();
 
   const inputRef: any = useRef<HTMLInputElement>(null);
 
@@ -151,7 +150,7 @@ const Deposit: React.FC<DepositProps> = ({
     }
   };
 
-  const [implementationAddress, setImplementationAddress] = useState<any>([]);
+  //const [implementationAddress, setImplementationAddress] = useState<any>([]);
 
   const getImplementationAddress = async () => {
     try {
@@ -162,7 +161,7 @@ const Deposit: React.FC<DepositProps> = ({
       );
       console.log(tokenAddress);
       console.log(res.data.result[0].Implementation);
-      setImplementationAddress(res.data.result[0].Implementation);
+      //setImplementationAddress(res.data.result[0].Implementation);
       getContractABI(res.data.result[0].Implementation);
       return res.data.result;
     } catch (error) {
@@ -234,7 +233,7 @@ const Deposit: React.FC<DepositProps> = ({
   };
 
   useEffect(() => {
-    const { isLoading, isSuccess, data, isError } = depositToken;
+    const { isLoading, isSuccess, isError } = depositToken;
 
     if (isLoading) {
       getProgressType(1);

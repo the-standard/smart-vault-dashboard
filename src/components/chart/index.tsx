@@ -22,8 +22,7 @@ const Index = () => {
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
   const { ethToUsdAbi } = useEthToUsdAbiStore();
-  const { usdToEuroAddress, arbitrumGoerliUSDToEuroAddress } =
-    useUSDToEuroAddressStore();
+  const { arbitrumGoerliUSDToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
   // const { counter } = useCounterStore();
@@ -39,7 +38,7 @@ const Index = () => {
   const { address } = useAccount();
 
   const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
+    import.meta.env.VITE_ALCHEMY_URL
   );
   const signer = provider.getSigner(address);
   let myToken = undefined;

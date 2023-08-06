@@ -25,7 +25,7 @@ import { formatEther, parseEther } from "viem";
 import CheckIcon from "@mui/icons-material/Check";
 import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
-import { getNetwork } from "@wagmi/core";
+// import { getNetwork } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
 
 const Debt = () => {
@@ -34,8 +34,7 @@ const Debt = () => {
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore();
   const { vaultStore }: any = useVaultStore();
-  const { sEuroAddress, arbitrumGoerlisEuroAddress, arbitrumsEuroAddress } =
-    usesEuroAddressStore();
+  const { arbitrumsEuroAddress } = usesEuroAddressStore();
   const { sEuroAbi } = usesEuroAbiStore();
   const { getTransactionHash } = useTransactionHashStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
@@ -45,7 +44,7 @@ const Debt = () => {
   const { getGreyBarUserInput, getOperationType } =
     useGreyProgressBarValuesStore();
   const { getCounter } = useCounterStore();
-  const { chain } = getNetwork();
+  // const { chain } = getNetwork();
 
   const incrementCounter = () => {
     getCounter(1);
@@ -135,7 +134,7 @@ const Debt = () => {
 
   const approvePayment = useContractWrite({
     //make this dynamic
-    address: arbitrumGoerlisEuroAddress as any,
+    address: arbitrumsEuroAddress as any,
     abi: sEuroAbi,
     functionName: "approve",
     args: [vaultAddress as any, feeAmount],
@@ -235,27 +234,27 @@ const Debt = () => {
     }
   };
 
-  const waitForTransaction = async (_transactionHash: string) => {
-    try {
-      getCircularProgress(true);
-      //  await provider.waitForTransaction(_transactionHash);
-      getCircularProgress(false); // Set isLoading to false after the transaction is mined
-      incrementCounter();
-      getSnackBar(0);
-      //   handleSnackbarClick();
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    } catch (error) {
-      console.log(error);
-      getCircularProgress(false);
-      getSnackBar(1);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-      //  handleSnackbarClick();
-    }
-  };
+  // const waitForTransaction = async (_transactionHash: string) => {
+  //   try {
+  //     getCircularProgress(true);
+  //     //  await provider.waitForTransaction(_transactionHash);
+  //     getCircularProgress(false); // Set isLoading to false after the transaction is mined
+  //     incrementCounter();
+  //     getSnackBar(0);
+  //     //   handleSnackbarClick();
+  //     inputRef.current.value = "";
+  //     inputRef.current.focus();
+  //     getGreyBarUserInput(0);
+  //   } catch (error) {
+  //     console.log(error);
+  //     getCircularProgress(false);
+  //     getSnackBar(1);
+  //     inputRef.current.value = "";
+  //     inputRef.current.focus();
+  //     getGreyBarUserInput(0);
+  //     //  handleSnackbarClick();
+  //   }
+  // };
 
   useEffect(() => {
     setActiveElement(4);

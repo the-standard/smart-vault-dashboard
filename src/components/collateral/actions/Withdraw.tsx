@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   useCollateralSymbolStore,
   useVaultAddressStore,
-  useTransactionHashStore,
+  // useTransactionHashStore,
   useCircularProgressStore,
   useSnackBarStore,
   useGreyProgressBarValuesStore,
-  useVaultManagerAbiStore,
+  // useVaultManagerAbiStore,
   useNativeCollateralABIStore,
   useCollateralABIStore,
 } from "../../../store/Store";
@@ -34,12 +34,12 @@ const Withdraw: React.FC<WithdrawProps> = ({
   const [amount, setAmount] = useState<any>(0);
   const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore();
-  const { getTransactionHash } = useTransactionHashStore();
+  // const { getTransactionHash } = useTransactionHashStore();
   const { nativeCollateralABI } = useNativeCollateralABIStore();
   const { collateralABI } = useCollateralABIStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
-  const { vaultManagerAbi } = useVaultManagerAbiStore();
+  // const { vaultManagerAbi } = useVaultManagerAbiStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
 
   const handleAmount = (e: any) => {
@@ -50,6 +50,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
   };
 
   const [dynamicABI, setDynamicABI] = useState<any>([]);
+  console.log(dynamicABI);
 
   //for some reason, this does not really work with usecontractwrite
   const getContractABI = async () => {
@@ -106,7 +107,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
   };
 
   useEffect(() => {
-    const { isLoading, isSuccess, data, isError } = withdrawCollateral;
+    const { isLoading, isSuccess, isError } = withdrawCollateral;
 
     if (isLoading) {
       getProgressType(1);
@@ -129,11 +130,10 @@ const Withdraw: React.FC<WithdrawProps> = ({
     withdrawCollateral.isLoading,
     withdrawCollateral.isSuccess,
     withdrawCollateral.isError,
-    withdrawCollateral.data,
   ]);
 
   useEffect(() => {
-    const { isLoading, isSuccess, data, isError } = withdrawCollateralNative;
+    const { isLoading, isSuccess, isError } = withdrawCollateralNative;
     if (isLoading) {
       getProgressType(1);
 
@@ -156,7 +156,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
     withdrawCollateralNative.isLoading,
     withdrawCollateralNative.isSuccess,
     withdrawCollateralNative.isError,
-    withdrawCollateralNative.data,
   ]);
 
   const shortenAddress = (address: any) => {
