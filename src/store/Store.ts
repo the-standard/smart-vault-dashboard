@@ -5,6 +5,8 @@ import sUSD6Abi from "../abis/testTokens/sUsd6.ts";
 import sUSD18Abi from "../abis/testTokens/sUsd18.ts";
 import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
 import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
+import nativeCollateralAbi from "../abis/nativeCollateralABI.ts";
+import collateralAbi from "../abis/collateralABI.ts";
 
 // interface PriceCalculatorState {
 //   priceCalculatorabi: Array<any>;
@@ -107,6 +109,24 @@ interface sEuroAbiState {
 export const usesEuroAbiStore = create<sEuroAbiState>()((set) => ({
   sEuroAbi: sEuroAbi,
   getsEuroAbi: (sEuroAbi) => set(() => ({ sEuroAbi: sEuroAbi })),
+}));
+
+interface nativeCollateralABIState {
+  nativeCollateralABI: Array<any>;
+}
+
+export const useNativeCollateralABIStore = create<nativeCollateralABIState>(
+  () => ({
+    nativeCollateralABI: nativeCollateralAbi,
+  })
+);
+
+interface collateralABIState {
+  collateralABI: Array<any>;
+}
+
+export const useCollateralABIStore = create<collateralABIState>(() => ({
+  collateralABI: collateralAbi,
 }));
 
 interface sUSD6State {

@@ -6,9 +6,12 @@ import {
   useCircularProgressStore,
   useSnackBarStore,
   useGreyProgressBarValuesStore,
+  useVaultManagerAbiStore,
+  useNativeCollateralABIStore,
+  useCollateralABIStore,
 } from "../../../store/Store";
 import { Box } from "@mui/material";
-import { useAccount } from "wagmi";
+import { useAccount, useContractWrite } from "wagmi";
 import { ethers } from "ethers";
 // import smartVaultAbi from "../../../abis/smartVault";
 import { parseUnits } from "viem";
@@ -27,14 +30,16 @@ const Withdraw: React.FC<WithdrawProps> = ({
   decimals,
   // token,
 }) => {
-  const { collateralSymbol } = useCollateralSymbolStore.getState();
+  const { collateralSymbol } = useCollateralSymbolStore();
   const [amount, setAmount] = useState<any>(0);
   const { address } = useAccount();
-  const { vaultAddress } = useVaultAddressStore.getState();
-  const { getTransactionHash } = useTransactionHashStore.getState();
+  const { vaultAddress } = useVaultAddressStore();
+  const { getTransactionHash } = useTransactionHashStore();
+  const { nativeCollateralABI } = useNativeCollateralABIStore();
+  const { collateralABI } = useCollateralABIStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
-
+  const { vaultManagerAbi } = useVaultManagerAbiStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
 
   const handleAmount = (e: any) => {
@@ -46,10 +51,11 @@ const Withdraw: React.FC<WithdrawProps> = ({
 
   const [dynamicABI, setDynamicABI] = useState<any>([]);
 
+  //for some reason, this does not really work with usecontractwrite
   const getContractABI = async () => {
     try {
       const res = await axios.get(
-        `https://api.arbiscan.io/api?module=contract&action=getabi&address=${vaultAddress}&apikey=${
+        `https://api-goerli.arbiscan.io/api?module=contract&action=getabi&address=${vaultAddress}&apikey=${
           import.meta.env.VITE_ARBISCAN_API_KEY
         }`
       );
@@ -64,77 +70,94 @@ const Withdraw: React.FC<WithdrawProps> = ({
 
   useEffect(() => {
     getContractABI();
-  }, []);
+  }, [vaultAddress]);
 
   //snackbar config
   const { getSnackBar } = useSnackBarStore();
 
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
-  );
-  const signer = provider.getSigner(address);
+  const withdrawCollateralNative = useContractWrite({
+    address: vaultAddress as any,
+    abi: nativeCollateralABI,
+    functionName: "removeCollateralNative",
+    args: [ethers.utils.parseUnits(amount.toString()), address],
+  });
 
-  const withdrawCollateral = async () => {
-    if (dynamicABI) {
-      try {
-        const contract = new ethers.Contract(vaultAddress, dynamicABI, signer);
-        //setIsLoading(true); // Se
-        console.log(symbol);
-        let transactionResponse; // Declare a variable to hold the transaction response
-
-        if (symbol === "ETH" || symbol === "AGOR") {
-          transactionResponse = await contract.removeCollateralNative(
-            ethers.utils.parseUnits(amount.toString()),
-            address
-          );
-        } else {
-          const symbolBytes32 = ethers.utils.formatBytes32String(symbol); // Convert symbol to bytes32
-          console.log(symbolBytes32);
-          transactionResponse = await contract.removeCollateral(
-            symbolBytes32,
-            parseUnits(amount.toString(), decimals),
-            address
-          );
-        }
-
-        // Access the transaction hash from the transaction response
-        const transactionHash = transactionResponse.hash;
-        console.log("Transaction Hash:", transactionHash);
-        console.log("confirming transaction " + transactionHash.confirmations);
-        getTransactionHash(transactionHash);
-        waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
-        //  setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        // setIsLoading(false);
-      }
-    }
+  const handlewithdrawCollateralNative = async () => {
+    const { write } = withdrawCollateralNative;
+    write();
   };
 
-  const waitForTransaction = async (_transactionHash: string) => {
-    try {
+  const withdrawCollateral = useContractWrite({
+    address: vaultAddress as any,
+    abi: collateralABI,
+    functionName: "removeCollateral",
+    args: [
+      ethers.utils.formatBytes32String(symbol),
+      parseUnits(amount.toString(), decimals),
+      address,
+    ],
+  });
+
+  const handlewithdrawCollateral = async () => {
+    const { write } = withdrawCollateral;
+    write();
+  };
+
+  useEffect(() => {
+    const { isLoading, isSuccess, data, isError } = withdrawCollateral;
+
+    if (isLoading) {
       getProgressType(1);
-      getCircularProgress(true); // Set getCircularProgress to true before waiting for the transaction
-      await provider.waitForTransaction(_transactionHash);
+      getCircularProgress(true);
+    } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
       //handleSnackbarClick();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
-    } catch (error) {
-      console.log(error);
+    } else if (isError) {
       inputRef.current.value = "";
       inputRef.current.focus();
       getCircularProgress(false); // Set getCircularProgress to false if there's an error
       getSnackBar(1);
       getGreyBarUserInput(0);
-
-      //handleSnackbarClick();
     }
-  };
+  }, [
+    withdrawCollateral.isLoading,
+    withdrawCollateral.isSuccess,
+    withdrawCollateral.isError,
+    withdrawCollateral.data,
+  ]);
+
+  useEffect(() => {
+    const { isLoading, isSuccess, data, isError } = withdrawCollateralNative;
+    if (isLoading) {
+      getProgressType(1);
+
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
+      getSnackBar(0);
+      //handleSnackbarClick();
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
+    } else if (isError) {
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getCircularProgress(false); // Set getCircularProgress to false if there's an error
+      getSnackBar(1);
+      getGreyBarUserInput(0);
+    }
+  }, [
+    withdrawCollateralNative.isLoading,
+    withdrawCollateralNative.isSuccess,
+    withdrawCollateralNative.isError,
+    withdrawCollateralNative.data,
+  ]);
 
   const shortenAddress = (address: any) => {
     const prefix = address.slice(0, 6);
@@ -259,8 +282,15 @@ const Withdraw: React.FC<WithdrawProps> = ({
                 "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
             },
           }}
-          className="glowingCard"
-          onClick={withdrawCollateral}
+          className={`glowingCard ${
+            symbol === "ETH" || symbol === "AGOR" ? "activeBtn" : ""
+          }`}
+          onClick={
+            symbol === "ETH" || symbol === "AGOR"
+              ? handlewithdrawCollateralNative
+              : handlewithdrawCollateral
+          }
+          // onClick={withdrawCollateral}
         >
           Withdraw
         </Box>
