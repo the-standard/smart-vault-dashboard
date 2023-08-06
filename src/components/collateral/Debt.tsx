@@ -130,26 +130,6 @@ const Debt = () => {
   const handleClose = () => setOpen(false);
   const [modalStep, setModalStep] = useState(1);
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
-  );
-  const signer = provider.getSigner(address);
-  const contract = new ethers.Contract(vaultAddress, smartVaultAbi, signer);
-
-  let sEuroContract: any;
-
-  if (chain?.id == 42161) {
-    sEuroContract = new ethers.Contract(arbitrumsEuroAddress, sEuroAbi, signer);
-  } else if (chain?.id == 421613) {
-    sEuroContract = new ethers.Contract(
-      arbitrumGoerlisEuroAddress,
-      sEuroAbi,
-      signer
-    );
-  } else if (chain?.id == 11155111) {
-    sEuroContract = new ethers.Contract(sEuroAddress, sEuroAbi, signer);
-  }
-
   const sEuroFee: any = (amount * 0.01).toString();
   const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
 

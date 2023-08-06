@@ -205,8 +205,6 @@ const Deposit: React.FC<DepositProps> = ({
     }
   };
 
-  //these 3 should be deleted for the mainnet
-
   const depositEther = async () => {
     const account = getAccount();
     console.log(account.address);

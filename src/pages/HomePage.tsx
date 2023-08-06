@@ -9,7 +9,7 @@ import sarslogo from "../assets/sarslogo.png";
 import saudlogo from "../assets/saudlogo.png";
 import susdlogo from "../assets/susdlogo.png";
 // import { useVaultsStore } from "../store/Store.ts";
-import { useAccount } from "wagmi";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
@@ -89,8 +89,9 @@ const HomePage = () => {
   });
 
   const getVaults = async (conditionalAddress: any) => {
+    //change this to arbitrum one infura
     const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_QUICKNODE_URL
+      import.meta.env.VITE_ALCHEMY_URL
     );
     const signer = provider.getSigner(address);
     console.log(signer);
@@ -107,7 +108,7 @@ const HomePage = () => {
   };
 
   const getCurrentChain = async () => {
-    const { chain } = await getNetwork();
+    const { chain } = getNetwork();
     if (chain?.id == 421613) {
       getVaults(arbitrumGoerliContractAddress);
     } else if (chain?.id == 11155111) {

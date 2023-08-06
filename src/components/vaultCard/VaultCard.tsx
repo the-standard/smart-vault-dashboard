@@ -97,7 +97,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
       if (isLoading) {
         // Handle loading state
       } else if (isSuccess) {
-        const transactionHash = data.hash;
+        const transactionHash = data?.hash;
         console.log("transactionHash", transactionHash);
         // Handle success state
       }
