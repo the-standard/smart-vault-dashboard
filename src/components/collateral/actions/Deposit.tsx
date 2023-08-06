@@ -104,15 +104,15 @@ const Deposit: React.FC<DepositProps> = ({
 
   const { chain } = getNetwork();
 
-  const getContractABI = async () => {
+  const getContractABI = async (implementation: any) => {
     if (chain?.id === 11155111) {
       try {
         const res = await axios.get(
-          `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${tokenAddress}&apikey=${
+          `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${implementation}&apikey=${
             import.meta.env.VITE_ETHERSCAN_API_KEY
           }`
         );
-        console.log(tokenAddress);
+        console.log(implementation);
         console.log(res.data.result);
         setDynamicABI(res.data.result);
         return res.data.result;
@@ -122,11 +122,11 @@ const Deposit: React.FC<DepositProps> = ({
     } else if (chain?.id === 1) {
       try {
         const res = await axios.get(
-          `https://api.etherscan.io/api?module=contract&action=getabi&address=${tokenAddress}&apikey=${
+          `https://api.etherscan.io/api?module=contract&action=getabi&address=${implementation}&apikey=${
             import.meta.env.VITE_ETHERSCAN_API_KEY
           }`
         );
-        console.log(tokenAddress);
+        console.log(implementation);
         console.log(res.data.result);
         setDynamicABI(res.data.result);
         return res.data.result;
@@ -137,57 +137,41 @@ const Deposit: React.FC<DepositProps> = ({
     } else if (chain?.id === 42161) {
       try {
         const res = await axios.get(
-          `https://api.arbiscan.io/api?module=contract&action=getabi&address=${tokenAddress}&apikey=${
+          `https://api.arbiscan.io/api?module=contract&action=getabi&address=${implementation}&apikey=${
             import.meta.env.VITE_ARBISCAN_API_KEY
           }`
         );
-        console.log(tokenAddress);
-        console.log(res.data.result);
-        setDynamicABI(res.data.result);
+        console.log(implementation);
+        console.log(JSON.parse(res.data.result));
+        setDynamicABI(JSON.parse(res.data.result));
         return res.data.result;
       } catch (error) {
         console.log(error);
       }
     }
   };
-  // this might work to get the abis of the implementation readContracts, but rate limit exceeds quite rapidly
-  // const getImplementationAddress = async (proxyAddress) => {
-  //   try {
-  //     const res = await axios.get(
-  //       `https://api.etherscan.io/api?module=proxy&action=eth_getProxyImplementation&address=${proxyAddress}&apikey=${
-  //         import.meta.env.VITE_ETHERSCAN_API_KEY
-  //       }`
-  //     );
-  //     return res.data.result;
-  //   } catch (error) {
-  //     console.log(error);
-  //     return null;
-  //   }
-  // };
-  // const getMyContractABI = async () => {
-  //   try {
-  //     const proxyABI = await getImplementationAddress(tokenAddress);
 
-  //     if (proxyABI) {
-  //       const res = await axios.get(
-  //         `https://api.etherscan.io/api?module=contract&action=getabi&address=${proxyABI}&apikey=${
-  //           import.meta.env.VITE_ETHERSCAN_API_KEY
-  //         }`
-  //       );
-  //       console.log(proxyABI);
-  //       console.log(res.data.result);
-  //       setDynamicABI(res.data.result);
-  //       return res.data.result;
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const [implementationAddress, setImplementationAddress] = useState<any>([]);
+
+  const getImplementationAddress = async () => {
+    try {
+      const res = await axios.get(
+        `https://api.arbiscan.io/api?module=contract&action=getsourcecode&address=${tokenAddress}&apikey=${
+          import.meta.env.VITE_ARBISCAN_API_KEY
+        }`
+      );
+      console.log(tokenAddress);
+      console.log(res.data.result[0].Implementation);
+      setImplementationAddress(res.data.result[0].Implementation);
+      getContractABI(res.data.result[0].Implementation);
+      return res.data.result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    if (symbol === "WBTC") {
-      setDynamicABI(WBTCAbi);
-    }
+    getImplementationAddress();
   }, []);
 
   const depositToken = useContractWrite({
@@ -299,7 +283,7 @@ const Deposit: React.FC<DepositProps> = ({
 
   return (
     <Box>
-      <button onClick={getContractABI}>Open Modal</button>
+      <button onClick={getImplementationAddress}>Open Modal</button>
       <Box
         sx={{
           display: "flex",
