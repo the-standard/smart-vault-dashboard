@@ -21,7 +21,7 @@ import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { getNetwork } from "@wagmi/core";
 import axios from "axios";
-import { useAccount } from "wagmi";
+import { useAccount, useContractWrite } from "wagmi";
 
 interface DepositProps {
   symbol: string;
@@ -154,38 +154,54 @@ const Deposit: React.FC<DepositProps> = ({
   }, []);
   //on launch, you'll delete all three deposit functions after this one, and will use this one instead of them
   //with a bit configuration of course
-  const depositToken = async () => {
-    if (dynamicABI) {
-      // const [account] = await createClientUtil.getAddresses();
-      let txHashForError = "";
-      try {
-        const txAmount: any = amount;
-        console.log(txAmount);
+  // const depositToken = async () => {
+  //   if (dynamicABI) {
+  //     // const [account] = await createClientUtil.getAddresses();
+  //     let txHashForError = "";
+  //     try {
+  //       const txAmount: any = amount;
+  //       console.log(txAmount);
 
-        const tokenContract = new ethers.Contract(
-          tokenAddress,
-          dynamicABI,
-          provider.getSigner(address)
-        );
-        console.log(tokenContract);
-        console.log(tokenAddress);
-        console.log(dynamicABI);
+  //       const tokenContract = new ethers.Contract(
+  //         tokenAddress,
+  //         dynamicABI,
+  //         provider.getSigner(address)
+  //       );
+  //       console.log(tokenContract);
+  //       console.log(tokenAddress);
+  //       console.log(dynamicABI);
 
-        const transferTx = await tokenContract.transfer(
-          vaultAddress,
-          //no parseEther here but need to add 18 decimals
-          parseUnits(txAmount.toString(), decimals)
-        );
+  //       const transferTx = await tokenContract.transfer(
+  //         vaultAddress,
+  //         //no parseEther here but need to add 18 decimals
+  //         parseUnits(txAmount.toString(), decimals)
+  //       );
 
-        txHashForError = transferTx.hash;
+  //       txHashForError = transferTx.hash;
 
-        console.log("Transaction sent:", txHashForError);
-        getTransactionHash(txHashForError);
-        waitForTransaction(txHashForError);
-      } catch (error) {
-        waitForTransaction(txHashForError);
-        console.log(error);
-      }
+  //       console.log("Transaction sent:", txHashForError);
+  //       getTransactionHash(txHashForError);
+  //       waitForTransaction(txHashForError);
+  //     } catch (error) {
+  //       waitForTransaction(txHashForError);
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+
+  const depositToken = useContractWrite({
+    address: tokenAddress as any,
+    abi: dynamicABI,
+    functionName: "transfer",
+    args: [vaultAddress, parseUnits(amount.toString(), decimals)],
+  });
+
+  const handleDepositToken = async () => {
+    try {
+      const { write } = depositToken;
+      write();
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -227,12 +243,39 @@ const Deposit: React.FC<DepositProps> = ({
       }
     } else {
       try {
-        depositToken();
+        handleDepositToken();
       } catch (error) {
         console.log(error);
       }
     }
   };
+
+  useEffect(() => {
+    const { isLoading, isSuccess, data, isError } = depositToken;
+
+    if (isLoading) {
+      getProgressType(1);
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
+      getSnackBar(0);
+      //handleSnackbarClick();
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
+    } else if (isError) {
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getCircularProgress(false); // Set getCircularProgress to false if there's an error
+      getSnackBar(1);
+      getGreyBarUserInput(0);
+    }
+  }, [
+    depositToken.data,
+    depositToken.error,
+    depositToken.isLoading,
+    depositToken.isSuccess,
+  ]);
 
   const waitForTransaction = async (_transactionHash: string) => {
     try {
