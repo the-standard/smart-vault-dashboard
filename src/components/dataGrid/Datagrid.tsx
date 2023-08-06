@@ -103,7 +103,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   async function getNFT(vault: any) {
     let contract: any;
     const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_QUICKNODE_URL
+      import.meta.env.VITE_ALCHEMY_URL
     );
     const signer = provider.getSigner(address);
     if (chain?.id == 421613) {

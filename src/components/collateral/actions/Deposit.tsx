@@ -9,6 +9,7 @@ import {
   // usesUSD6Store,
   // usesUSD18Store,
   useGreyProgressBarValuesStore,
+  useWBTCAbiStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
 import { ethers } from "ethers";
@@ -51,6 +52,7 @@ const Deposit: React.FC<DepositProps> = ({
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
+  const { WBTCAbi } = useWBTCAbiStore();
   //local
   const { address } = useAccount();
 
@@ -96,7 +98,7 @@ const Deposit: React.FC<DepositProps> = ({
   //clipboard logic end
 
   const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
+    import.meta.env.VITE_ALCHEMY_URL
   );
   const [dynamicABI, setDynamicABI] = useState<any>([]);
 
@@ -148,46 +150,45 @@ const Deposit: React.FC<DepositProps> = ({
       }
     }
   };
-
-  useEffect(() => {
-    getContractABI();
-  }, []);
-  //on launch, you'll delete all three deposit functions after this one, and will use this one instead of them
-  //with a bit configuration of course
-  // const depositToken = async () => {
-  //   if (dynamicABI) {
-  //     // const [account] = await createClientUtil.getAddresses();
-  //     let txHashForError = "";
-  //     try {
-  //       const txAmount: any = amount;
-  //       console.log(txAmount);
-
-  //       const tokenContract = new ethers.Contract(
-  //         tokenAddress,
-  //         dynamicABI,
-  //         provider.getSigner(address)
-  //       );
-  //       console.log(tokenContract);
-  //       console.log(tokenAddress);
-  //       console.log(dynamicABI);
-
-  //       const transferTx = await tokenContract.transfer(
-  //         vaultAddress,
-  //         //no parseEther here but need to add 18 decimals
-  //         parseUnits(txAmount.toString(), decimals)
-  //       );
-
-  //       txHashForError = transferTx.hash;
-
-  //       console.log("Transaction sent:", txHashForError);
-  //       getTransactionHash(txHashForError);
-  //       waitForTransaction(txHashForError);
-  //     } catch (error) {
-  //       waitForTransaction(txHashForError);
-  //       console.log(error);
-  //     }
+  // this might work to get the abis of the implementation readContracts, but rate limit exceeds quite rapidly
+  // const getImplementationAddress = async (proxyAddress) => {
+  //   try {
+  //     const res = await axios.get(
+  //       `https://api.etherscan.io/api?module=proxy&action=eth_getProxyImplementation&address=${proxyAddress}&apikey=${
+  //         import.meta.env.VITE_ETHERSCAN_API_KEY
+  //       }`
+  //     );
+  //     return res.data.result;
+  //   } catch (error) {
+  //     console.log(error);
+  //     return null;
   //   }
   // };
+  // const getMyContractABI = async () => {
+  //   try {
+  //     const proxyABI = await getImplementationAddress(tokenAddress);
+
+  //     if (proxyABI) {
+  //       const res = await axios.get(
+  //         `https://api.etherscan.io/api?module=contract&action=getabi&address=${proxyABI}&apikey=${
+  //           import.meta.env.VITE_ETHERSCAN_API_KEY
+  //         }`
+  //       );
+  //       console.log(proxyABI);
+  //       console.log(res.data.result);
+  //       setDynamicABI(res.data.result);
+  //       return res.data.result;
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (symbol === "WBTC") {
+      setDynamicABI(WBTCAbi);
+    }
+  }, []);
 
   const depositToken = useContractWrite({
     address: tokenAddress as any,
@@ -298,6 +299,7 @@ const Deposit: React.FC<DepositProps> = ({
 
   return (
     <Box>
+      <button onClick={getContractABI}>Open Modal</button>
       <Box
         sx={{
           display: "flex",

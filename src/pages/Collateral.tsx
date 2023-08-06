@@ -101,7 +101,7 @@ const Collateral = () => {
 
   async function listenToTransaction(transactionHash: string) {
     const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_QUICKNODE_URL
+      import.meta.env.VITE_ALCHEMY_URL
     );
 
     const receipt = await provider.waitForTransaction(transactionHash);
@@ -126,7 +126,7 @@ const Collateral = () => {
 
   const returnAcceptedTokensList = async (conditionalAddress: any) => {
     const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_QUICKNODE_URL
+      import.meta.env.VITE_ALCHEMY_URL
     );
     const signer = provider.getSigner(address);
     const contract = new ethers.Contract(

@@ -7,6 +7,7 @@ import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
 import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 import nativeCollateralAbi from "../abis/nativeCollateralABI.ts";
 import collateralAbi from "../abis/collateralABI.ts";
+import WBTCABI from "../abis/tokens/WBTCABI.ts";
 
 // interface PriceCalculatorState {
 //   priceCalculatorabi: Array<any>;
@@ -419,4 +420,12 @@ interface CounterState {
 export const useCounterStore = create<CounterState>((set) => ({
   counter: 0,
   getCounter: (delta) => set((state) => ({ counter: state.counter + delta })),
+}));
+
+interface WBTCAbiState {
+  WBTCAbi: any;
+}
+
+export const useWBTCAbiStore = create<WBTCAbiState>((set) => ({
+  WBTCAbi: WBTCABI,
 }));
