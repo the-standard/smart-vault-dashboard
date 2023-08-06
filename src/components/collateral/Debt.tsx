@@ -150,52 +150,95 @@ const Debt = () => {
     sEuroContract = new ethers.Contract(sEuroAddress, sEuroAbi, signer);
   }
 
-  const approvePayment = async () => {
-    console.log(vaultAddress);
-    console.log(amount.toString());
-    const sEuroFee: any = (amount * 0.01).toString();
-    console.log(parseEther(sEuroFee));
-    handleOpen();
+  const sEuroFee: any = (amount * 0.01).toString();
+  const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
 
-    try {
-      // Approve the transfer of the fee amount
-      const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
-      const transactionResponse = await sEuroContract.approve(
-        vaultAddress,
-        feeAmount
-      );
-      const transactionHash = transactionResponse.hash;
-      console.log("Transaction Hash:", transactionHash);
-      console.log("confirming transaction " + transactionHash.confirmations);
-      getTransactionHash(transactionHash);
-      waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
-      //call repayMoney function
-      repayMoney();
-    } catch (error) {
-      console.log(error);
+  const approvePayment = useContractWrite({
+    //make this dynamic
+    address: arbitrumGoerlisEuroAddress as any,
+    abi: sEuroAbi,
+    functionName: "approve",
+    args: [vaultAddress as any, feeAmount],
+  });
+
+  useEffect(() => {
+    const { isLoading, isSuccess, data, isError } = approvePayment;
+
+    if (isLoading) {
+      handleOpen();
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      handleRepayMoney();
+      getCircularProgress(false);
+      getTransactionHash(data?.hash as any);
+      incrementCounter();
+      getSnackBar(0);
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
+    } else if (isError) {
+      handleClose();
+      getCircularProgress(false);
+      getSnackBar(1);
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
     }
+  }, [
+    approvePayment.isLoading,
+    approvePayment.isSuccess,
+    approvePayment.data,
+    approvePayment.isError,
+  ]);
+
+  const handleApprovePayment = async () => {
+    const { write } = approvePayment;
+    write();
   };
 
-  const repayMoney = async () => {
-    setModalStep(2);
+  const handleRepayMoney = async () => {
+    const { write } = repayMoney;
+    write();
+  };
 
-    try {
-      const transactionResponse = await contract.burn(
-        parseEther(amount.toString())
-      );
-      const transactionHash = transactionResponse.hash;
-      console.log("Transaction Hash:", transactionHash);
-      console.log("confirming transaction " + transactionHash.confirmations);
-      getTransactionHash(transactionHash);
-      waitForTransaction(transactionHash); // Call waitForTransaction with the transaction hash
+  const repayMoney = useContractWrite({
+    address: vaultAddress as any,
+    abi: smartVaultAbi,
+    functionName: "burn",
+    args: [parseEther(amount.toString())],
+  });
+
+  useEffect(() => {
+    const { isLoading, isSuccess, data, isError } = repayMoney;
+
+    if (isLoading) {
+      setModalStep(2);
+      getCircularProgress(true);
+    } else if (isSuccess) {
       handleClose();
       setModalStep(1);
       getProgressType(2);
-    } catch (error) {
-      console.log(error);
+      getCircularProgress(false);
+      getTransactionHash(data?.hash as any);
+      incrementCounter();
+      getSnackBar(0);
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
+    } else if (isError) {
       setModalStep(1);
+      getCircularProgress(false);
+      getSnackBar(1);
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
     }
-  };
+  }, [
+    repayMoney.isLoading,
+    repayMoney.isSuccess,
+    repayMoney.data,
+    repayMoney.isError,
+  ]);
 
   const handleWithdraw = () => {
     if (activeElement === 4) {
@@ -208,7 +251,7 @@ const Debt = () => {
       getCircularProgress(true);
       getProgressType(5);
 
-      approvePayment();
+      handleApprovePayment();
     }
   };
 
