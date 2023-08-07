@@ -66,48 +66,49 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const provider = new ethers.providers.JsonRpcProvider(
     import.meta.env.VITE_ALCHEMY_URL
   );
-  const signer = provider.getSigner(address);
-  let myToken: any = undefined;
+  //const signer = provider.getSigner(address);
+  //  let myToken: any = undefined;
 
-  const getUsdPriceOfToken = async () => {
-    //the first [0] is the token type, so it should be dynamic
-    console.log(vaultStore[4]);
-    if (symbol === "ETH") {
-      myToken = vaultStore[4].collateral[0].token;
-    } else if (symbol === "WBTC") {
-      myToken = vaultStore[4].collateral[1].token;
-      console.log(vaultStore[4].collateral[1].token);
-    } else if (symbol === "ARB") {
-      myToken = vaultStore[4].collateral[2].token;
-      console.log(
-        fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
-      );
-    } else if (symbol === "LINK") {
-      myToken = vaultStore[4].collateral[3].token;
-    } else if (symbol === "PAXG") {
-      myToken = vaultStore[4].collateral[4].token;
-      console.log(
-        fromHex(vaultStore.status?.collateral[4].token.symbol, "string")
-      );
-    }
-    console.log(symbol);
-    const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
-    console.log(contract);
-    const price = await contract.latestRoundData();
-    console.log(price);
-    const priceInUsd = fromHex(price.answer, "number");
-    console.log(BigInt(priceInUsd));
-    const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
-    console.log(priceFormatted);
-    console.log(amount);
+  // const getUsdPriceOfToken = async () => {
+  //   //the first [0] is the token type, so it should be dynamic
+  //   console.log(vaultStore[4]);
+  //   if (symbol === "ETH") {
+  //     myToken = vaultStore[4].collateral[0].token;
+  //   } else if (symbol === "WBTC") {
+  //     myToken = vaultStore[4].collateral[1].token;
+  //     console.log(vaultStore[4].collateral[1].token);
+  //   } else if (symbol === "ARB") {
+  //     myToken = vaultStore[4].collateral[2].token;
+  //     console.log(
+  //       fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
+  //     );
+  //   } else if (symbol === "LINK") {
+  //     myToken = vaultStore[4].collateral[3].token;
+  //   } else if (symbol === "PAXG") {
+  //     myToken = vaultStore[4].collateral[4].token;
+  //     console.log(
+  //       fromHex(vaultStore.status?.collateral[4].token.symbol, "string")
+  //     );
+  //   }
+  //   console.log(symbol);
+  //   const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
+  //   console.log(contract);
+  //   const price = await contract.latestRoundData();
+  //   console.log(price);
+  //   const priceInUsd = fromHex(price.answer, "number");
+  //   console.log(BigInt(priceInUsd));
+  //   const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
+  //   console.log(priceFormatted);
+  //   console.log(amount);
 
-    const amountFormatted = formatUnits(amount, decimals);
-    console.log(amountFormatted);
+  //   const amountFormatted = formatUnits(amount, decimals);
+  //   console.log(amountFormatted);
 
-    const amountinUsd = Number(amountFormatted) * Number(priceFormatted);
-    console.log(amountinUsd.toFixed(2));
-    // convertUsdToEuro(amountinUsd.toFixed(2));
-  };
+  //   const amountinUsd = Number(amountFormatted) * Number(priceFormatted);
+  //   console.log(amountinUsd.toFixed(2));
+  //   // convertUsdToEuro(amountinUsd.toFixed(2));
+  // };
+
   const { chain } = getNetwork();
 
   // const convertUsdToEuro = async (priceInUsd: any) => {
@@ -133,14 +134,14 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   //   }
   // };
 
-  useEffect(() => {
-    getUsdPriceOfToken();
-  }, []);
+  // useEffect(() => {
+  //   getUsdPriceOfToken();
+  // }, []);
 
-  useEffect(() => {
-    console.log(amount);
-    getUsdPriceOfToken();
-  }, [amount]);
+  // useEffect(() => {
+  //   console.log(amount);
+  //   getUsdPriceOfToken();
+  // }, [amount]);
 
   //ref to width sharing
   const ref = useRef<HTMLDivElement>(null);
