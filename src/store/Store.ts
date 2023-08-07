@@ -74,6 +74,7 @@ export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
 interface USDToEuroAddressState {
   usdToEuroAddress: string;
   arbitrumGoerliUSDToEuroAddress: string;
+  arbitrumOneUSDToEuroAddress: string;
   getUSDToEuroAddress: (usdToEuroAddress: string) => void;
 }
 
@@ -82,6 +83,7 @@ export const useUSDToEuroAddressStore = create<USDToEuroAddressState>()(
     usdToEuroAddress: "0x59a6A8357BD5Ae002DEd9A5F72ab526f9fDc573A",
     arbitrumGoerliUSDToEuroAddress:
       "0xe5CD8A83fc9E1bb87b2576B2999f99A1328D3888",
+    arbitrumOneUSDToEuroAddress: "0xA14d53bC1F1c0F31B4aA3BD109344E5009051a84",
     getUSDToEuroAddress: (usdToEuroAddress) =>
       set(() => ({ usdToEuroAddress: usdToEuroAddress })),
   })
