@@ -174,7 +174,7 @@ interface contractAddressState {
 export const useContractAddressStore = create<contractAddressState>()(
   (set) => ({
     contractAddress: "0x0b64cb41B81f631503a562D2ACd9EBF52ac09061",
-    arbitrumGoerliContractAddress: "0x6A301a76f67ECf0D56377F8Db384dbCa9E161203",
+    arbitrumGoerliContractAddress: "0x2342755a637451e9af75545e257Cb007EaC930B1",
     arbitrumContractAddress: "0xba169cceCCF7aC51dA223e04654Cf16ef41A68CC",
     getContractAddress: (contractAddress) =>
       set(() => ({ contractAddress: contractAddress })),
@@ -192,7 +192,7 @@ export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
   (set) => ({
     tokenManagerAddress: "0xEB704FE5B1F5C23f7062780CE23323027a58d996",
     arbitrumGoerliTokenManagerAddress:
-      "0xb22517e1312b508431C7Ce9CB5Bca006137656AF",
+      "0x08A9Aae3Fb5581D57fbE509451042cb446495b57",
     arbitrumTokenManagerAddress: "0x33c5A816382760b6E5fb50d8854a61b3383a32a0",
     getTokenManagerAddress: (tokenManagerAddress) =>
       set(() => ({ tokenManagerAddress: tokenManagerAddress })),
