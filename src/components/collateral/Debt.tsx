@@ -88,7 +88,10 @@ const Debt = () => {
     address: vaultAddress as any, // Replace with your vault address
     abi: smartVaultAbi, // Replace with your smartVault ABI
     functionName: "mint",
-    args: [address as any, parseEther(amount.toString())],
+    args: [
+      "0x600044FE9A152C27f337BbB23803dC6A68E3eFB0" as any,
+      parseEther(amount.toString()),
+    ],
   });
 
   const handleBorrowMoney = async () => {
