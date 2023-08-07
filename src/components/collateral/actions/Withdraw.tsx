@@ -56,7 +56,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
   const getContractABI = async () => {
     try {
       const res = await axios.get(
-        `https://api-goerli.arbiscan.io/api?module=contract&action=getabi&address=${vaultAddress}&apikey=${
+        `https://api.arbiscan.io/api?module=contract&action=getabi&address=${vaultAddress}&apikey=${
           import.meta.env.VITE_ARBISCAN_API_KEY
         }`
       );
@@ -202,7 +202,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
               paddingLeft: "0.5rem",
             }}
             ref={inputRef}
-            type="text"
+            type="number"
             onChange={handleAmount}
             placeholder="Amount"
             autoFocus

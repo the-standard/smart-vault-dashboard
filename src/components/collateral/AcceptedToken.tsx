@@ -64,20 +64,31 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const { address } = useAccount();
 
   const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
+    import.meta.env.VITE_ALCHEMY_URL
   );
   const signer = provider.getSigner(address);
-  let myToken = undefined;
+  let myToken: any = undefined;
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
-    console.log(vaultStore[4].collateral[0].token);
-    if (symbol === "SUSD6") {
-      myToken = vaultStore[4].collateral[1].token;
-    } else if (symbol === "SUSD18") {
-      myToken = vaultStore[4].collateral[2].token;
-    } else {
+    console.log(vaultStore[4]);
+    if (symbol === "ETH") {
       myToken = vaultStore[4].collateral[0].token;
+    } else if (symbol === "WBTC") {
+      myToken = vaultStore[4].collateral[1].token;
+      console.log(vaultStore[4].collateral[1].token);
+    } else if (symbol === "ARB") {
+      myToken = vaultStore[4].collateral[2].token;
+      console.log(
+        fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
+      );
+    } else if (symbol === "LINK") {
+      myToken = vaultStore[4].collateral[3].token;
+    } else if (symbol === "PAXG") {
+      myToken = vaultStore[4].collateral[4].token;
+      console.log(
+        fromHex(vaultStore.status?.collateral[4].token.symbol, "string")
+      );
     }
     console.log(symbol);
     const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
@@ -89,46 +100,38 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
     const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
     console.log(priceFormatted);
     console.log(amount);
-    let amountFormatted;
 
-    if (symbol === "SUSD6") {
-      amountFormatted = formatUnits(amount, 6);
-      console.log(amountFormatted);
-    } else if (symbol === "SUSD18") {
-      amountFormatted = formatUnits(amount, 18);
-      console.log(amountFormatted);
-    } else {
-      amountFormatted = formatUnits(amount, 18);
-      console.log(amountFormatted);
-    }
+    const amountFormatted = formatUnits(amount, decimals);
+    console.log(amountFormatted);
+
     const amountinUsd = Number(amountFormatted) * Number(priceFormatted);
     console.log(amountinUsd.toFixed(2));
-    convertUsdToEuro(amountinUsd.toFixed(2));
+    // convertUsdToEuro(amountinUsd.toFixed(2));
   };
   const { chain } = getNetwork();
 
-  const convertUsdToEuro = async (priceInUsd: any) => {
-    try {
-      const contract = new ethers.Contract(
-        usdToEuroAddress,
-        usdToEuroAbi,
-        signer
-      );
-      console.log(contract);
-      const price = await contract.latestRoundData();
-      console.log(price.answer);
+  // const convertUsdToEuro = async (priceInUsd: any) => {
+  //   try {
+  //     const contract = new ethers.Contract(
+  //       usdToEuroAddress,
+  //       usdToEuroAbi,
+  //       signer
+  //     );
+  //     console.log(contract);
+  //     const price = await contract.latestRoundData();
+  //     console.log(price.answer);
 
-      const priceInEuro = fromHex(price.answer, "number");
-      console.log(priceInEuro);
-      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
-      console.log(priceInEuroFormatted);
-      const euroValueConverted = priceInUsd / priceInEuroFormatted;
-      console.log(euroValueConverted);
-      setEuroValueConverted(euroValueConverted.toFixed(2));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     const priceInEuro = fromHex(price.answer, "number");
+  //     console.log(priceInEuro);
+  //     const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
+  //     console.log(priceInEuroFormatted);
+  //     const euroValueConverted = priceInUsd / priceInEuroFormatted;
+  //     console.log(euroValueConverted);
+  //     setEuroValueConverted(euroValueConverted.toFixed(2));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     getUsdPriceOfToken();
@@ -311,12 +314,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
               }}
               variant="body1"
             >
-              {symbol === "SUSD6"
-                ? formatUnits(amount, 6)
-                : symbol === "SUSD18"
-                ? formatUnits(amount, 18)
-                : ethers.utils.formatEther(amount)}{" "}
-              {symbol}
+              {formatUnits(amount, decimals)} {symbol}
             </Typography>{" "}
             <Typography
               sx={{

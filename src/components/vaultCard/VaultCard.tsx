@@ -11,12 +11,13 @@ import {
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
 // import { ethers } from "ethers";
-// import { fromHex } from "viem";
-// import { useNavigate } from "react-router-dom";
+import { fromHex } from "viem";
+import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
 // import useEthereumProvider from "../../hooks/useEthereumProvider.ts";
-// import { useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import { useContractWrite } from "wagmi";
+import { ethers } from "ethers";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -52,8 +53,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   // const { getTransactionHash } = useTransactionHashStore();
   // const { getProgressType, getCircularProgress } = useCircularProgressStore();
-  // const navigate = useNavigate();
-  // const { address } = useAccount();
+  const navigate = useNavigate();
+  const { address } = useAccount();
 
   // const [vaultCreated, setVaultCreated] = useState(false);
 
@@ -98,6 +99,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
         const transactionHash = data?.hash;
         console.log("transactionHash", transactionHash);
         // Handle success state
+        navigateToLatestVault();
       }
     } catch (error) {
       console.error("error", error);
@@ -105,30 +107,30 @@ const VaultCard: React.FC<VaultCardProps> = ({
     }
   };
 
-  // const navigateToLatestVault = async () => {
-  //   const provider = new ethers.providers.JsonRpcProvider(
-  //     import.meta.env.VITE_QUICKNODE_URL
-  //   );
-  //   const signer = provider.getSigner(address);
-  //   const contract = new ethers.Contract(
-  //     contractAddress,
-  //     vaultManagerAbi,
-  //     signer
-  //   );
-  //   const vaults = await contract.vaults();
-  //   console.log("vaults", vaults);
-  //   // Get the last vault in the array
-  //   const lastVault = vaults[vaults.length - 1];
-  //   console.log("lastVault", lastVault);
+  const navigateToLatestVault = async () => {
+    const provider = new ethers.providers.JsonRpcProvider(
+      import.meta.env.VITE_ALCHEMY_URL
+    );
+    const signer = provider.getSigner(address);
+    const contract = new ethers.Contract(
+      arbitrumContractAddress,
+      vaultManagerAbi,
+      signer
+    );
+    const vaults = await contract.vaults();
+    console.log("vaults", vaults);
+    // Get the last vault in the array
+    const lastVault = vaults[vaults.length - 1];
+    console.log("lastVault", lastVault);
 
-  //   // Navigate to the Collateral/{vaultId} route
-  //   if (lastVault) {
-  //     const vaultId = fromHex(lastVault[0], "number");
-  //     navigate(`Collateral/${vaultId}`);
-  //   }
+    // Navigate to the Collateral/{vaultId} route
+    if (lastVault) {
+      const vaultId = fromHex(lastVault[0], "number");
+      navigate(`Collateral/${vaultId}`);
+    }
 
-  //   return vaults;
-  // };
+    return vaults;
+  };
 
   return (
     <Box

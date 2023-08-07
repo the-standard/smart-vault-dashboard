@@ -248,7 +248,7 @@ export const useVaultsStore = create<VaultsState>()((set) => ({
 //individual vault
 
 interface VaultState {
-  vaultStore: Array<any>;
+  vaultStore: any;
   getVaultStore: (vaultStore: Array<any>) => void;
 }
 
@@ -262,10 +262,9 @@ interface VaultAddressState {
   getVaultAddress: (vaultAddress: string) => void;
 }
 
-export const useVaultAddressStore = create<VaultAddressState>()((set) => ({
+export const useVaultAddressStore = create<VaultAddressState>((set) => ({
   vaultAddress: "",
-  getVaultAddress: (vaultAddress) =>
-    set(() => ({ vaultAddress: vaultAddress })),
+  getVaultAddress: (vaultAddress) => set({ vaultAddress: vaultAddress }), // Corrected line
 }));
 
 interface CollateralSymbolState {

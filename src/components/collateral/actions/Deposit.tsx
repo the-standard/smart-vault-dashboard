@@ -63,10 +63,18 @@ const Deposit: React.FC<DepositProps> = ({
   // const { address } = useAccount();
 
   const handleAmount = (e: any) => {
-    setAmount(Number(e.target.value));
-    console.log(e.target.value);
-    getGreyBarUserInput(Number(e.target.value));
-    getSymbolForGreyBar(symbol);
+    const inputValue = e.target.value;
+
+    // Check if inputValue is a valid number
+    if (!isNaN(inputValue) && typeof inputValue === "number") {
+      setAmount(Number(inputValue));
+      console.log(inputValue);
+      getSymbolForGreyBar(symbol);
+      getGreyBarUserInput(Number(inputValue));
+    } else {
+      // Do nothing if inputValue is not a valid number
+      return;
+    }
   };
 
   //clipboard logic
@@ -362,7 +370,7 @@ const Deposit: React.FC<DepositProps> = ({
               paddingLeft: "0.5rem",
             }}
             ref={inputRef}
-            type="text"
+            type="number"
             onChange={handleAmount}
             placeholder="Enter amount"
             autoFocus
