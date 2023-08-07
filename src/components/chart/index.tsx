@@ -41,7 +41,7 @@ const Index = () => {
     import.meta.env.VITE_ALCHEMY_URL
   );
   const signer = provider.getSigner(address);
-  let myToken = undefined;
+  let myToken: any = undefined;
 
   // useEffect(() => {
   //   alert(counter);
@@ -113,10 +113,10 @@ const Index = () => {
                 (Number(formatUnits(BigInt(value), 18)) *
                   Number(priceFormatted)) /
                 (priceInEuro || 1.6); // Use a fallback value of 1.6 if priceInEuro is undefined
-            } else if (id === "SUSD6") {
+            } else if (id === "WBTC") {
               value =
-                Number(formatUnits(BigInt(value), 6)) / (priceInEuro || 1.6); // Use a fallback value of 1.6 if priceInEuro is undefined
-            } else if (id === "SUSD18") {
+                Number(formatUnits(BigInt(value), 8)) / (priceInEuro || 1.6); // Use a fallback value of 1.6 if priceInEuro is undefined
+            } else {
               value =
                 Number(formatUnits(BigInt(value), 18)) / (priceInEuro || 1.6); // Use a fallback value of 1.6 if priceInEuro is undefined
             }
@@ -139,13 +139,13 @@ const Index = () => {
               nativeValue = formatEther(
                 BigInt(fromHex(vaultStore[4][4][0][1]._hex, "number"))
               );
-            } else if (collateral.id === "SUSD6") {
+            } else if (collateral.id === "WBTC") {
               // Replace this calculation with the appropriate one for SUSD6
               nativeValue = formatUnits(
                 BigInt(fromHex(vaultStore[4][4][1][1]._hex, "number")),
-                6
+                8
               );
-            } else if (collateral.id === "SUSD18") {
+            } else {
               // Replace this calculation with the appropriate one for SUSD18
               nativeValue = formatEther(
                 BigInt(fromHex(vaultStore[4][4][2][1]._hex, "number"))
@@ -212,39 +212,50 @@ const Index = () => {
     getChartValues();
   }, [chosenVault]);
 
-  const convertUsdToEuro = async (ethValueInUsd: number) => {
-    try {
-      const contract = new ethers.Contract(
-        arbitrumGoerliUSDToEuroAddress,
-        usdToEuroAbi,
-        provider
-      );
-      console.log(contract);
-      const price = await contract.latestRoundData();
-      console.log(price.answer);
+  // const convertUsdToEuro = async (ethValueInUsd: number) => {
+  //   try {
+  //     const contract = new ethers.Contract(
+  //       arbitrumGoerliUSDToEuroAddress,
+  //       usdToEuroAbi,
+  //       provider
+  //     );
+  //     console.log(contract);
+  //     const price = await contract.latestRoundData();
+  //     console.log(price.answer);
 
-      const priceInEuro = fromHex(price.answer, "number");
-      console.log(priceInEuro);
-      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
-      console.log(priceInEuroFormatted);
-      const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
-      console.log(euroValueConverted);
-      setEuroValueConverted(euroValueConverted);
-      return priceInEuroFormatted;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     const priceInEuro = fromHex(price.answer, "number");
+  //     console.log(priceInEuro);
+  //     const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
+  //     console.log(priceInEuroFormatted);
+  //     const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
+  //     console.log(euroValueConverted);
+  //     setEuroValueConverted(euroValueConverted);
+  //     return priceInEuroFormatted;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
     console.log(vaultStore[4].collateral[0].token);
-    if (symbolForGreyBar === "SUSD6") {
-      myToken = vaultStore[4].collateral[1].token;
-    } else if (symbolForGreyBar === "SUSD18") {
-      myToken = vaultStore[4].collateral[2].token;
-    } else {
+    if (symbolForGreyBar === "ETH") {
       myToken = vaultStore[4].collateral[0].token;
+    } else if (symbolForGreyBar === "WBTC") {
+      myToken = vaultStore[4].collateral[1].token;
+      console.log(vaultStore[4].collateral[1].token);
+    } else if (symbolForGreyBar === "ARB") {
+      myToken = vaultStore[4].collateral[2].token;
+      console.log(
+        fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
+      );
+    } else if (symbolForGreyBar === "LINK") {
+      myToken = vaultStore[4].collateral[3].token;
+    } else if (symbolForGreyBar === "PAXG") {
+      myToken = vaultStore[4].collateral[4].token;
+      console.log(
+        fromHex(vaultStore.status?.collateral[4].token.symbol, "string")
+      );
     }
     console.log(symbolForGreyBar);
     const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
@@ -262,7 +273,7 @@ const Index = () => {
       Number(userInputForGreyBarOperation) * Number(priceFormatted);
     console.log(amountinUsd);
     //not amountinusd but priceformatted as I need to see the price of 1 ether in euro and not the amount of user input
-    return convertUsdToEuro(Number(priceFormatted));
+    return Number(priceFormatted);
   };
 
   const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {

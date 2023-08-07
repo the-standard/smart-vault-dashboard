@@ -93,6 +93,8 @@ const Debt = () => {
 
   const handleBorrowMoney = async () => {
     const { write } = borrowMoney;
+    console.log(vaultAddress);
+    console.log(address);
 
     write();
   };
@@ -550,7 +552,7 @@ const Debt = () => {
               paddingLeft: "0.5rem",
             }}
             placeholder="Amount of EUROs to borrow"
-            type="text"
+            type="number"
             onChange={handleAmount}
             autoFocus
             ref={inputRef}
