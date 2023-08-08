@@ -10,7 +10,7 @@ import {
   usePositionStore,
   // useChainIdStore,
 } from "../store/Store";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
 // import QRicon from "../assets/qricon.png";
 // import EmptyCard from "../components/collateral/EmptyCard";
 // import SmallCard from "../components/collateral/SmallCard";
