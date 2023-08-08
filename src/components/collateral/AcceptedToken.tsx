@@ -13,6 +13,10 @@ import {
 } from "../../store/Store";
 import LineChart from "./LineChart";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
+import wbtclogo from "../../assets/wbtclogo.svg";
+import linklogo from "../../assets/linklogo.svg";
+import paxglogo from "../../assets/paxglogo.svg";
+import arblogo from "../../assets/arblogo.svg";
 import { formatUnits, fromHex } from "viem";
 import axios from "axios";
 import { getNetwork } from "@wagmi/core";
@@ -295,6 +299,30 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
                 style={{ height: "3rem", width: "3rem" }}
                 src={ethereumlogo}
                 alt="ethereum logo"
+              />
+            ) : symbol === "WBTC" ? (
+              <img
+                style={{ height: "3rem", width: "3rem" }}
+                src={wbtclogo}
+                alt="wbtc logo"
+              />
+            ) : symbol === "LINK" ? (
+              <img
+                style={{ height: "3rem", width: "3rem" }}
+                src={linklogo}
+                alt="link logo"
+              />
+            ) : symbol === "ARB" ? (
+              <img
+                style={{ height: "3rem", width: "3rem" }}
+                src={arblogo}
+                alt="arb logo"
+              />
+            ) : symbol === "PAXG" ? (
+              <img
+                style={{ height: "3rem", width: "3rem" }}
+                src={paxglogo}
+                alt="paxg logo"
               />
             ) : (
               <Typography variant="body2"> {symbol}</Typography>
