@@ -4,10 +4,10 @@ import Datagrid from "../components/dataGrid/Datagrid";
 
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { ethers } from "ethers";
-import seurologo from "../assets/seurologo.png";
-import sarslogo from "../assets/sarslogo.png";
-import saudlogo from "../assets/saudlogo.png";
-import susdlogo from "../assets/susdlogo.png";
+import seurologo from "../assets/EUROs.svg";
+import swonlogo from "../assets/KRWs.svg";
+import sgbplogo from "../assets/GBPs.svg";
+import susdlogo from "../assets/USDs.svg";
 // import { useVaultsStore } from "../store/Store.ts";
 import { useAccount } from "wagmi";
 import {
@@ -35,17 +35,17 @@ const items = [
     isActive: false,
   },
   {
-    title: "AUDs",
-    para: "Aussie Dollar pegged",
+    title: "GBPs",
+    para: "Great Britain Pound pegged",
     borrowRate: "Borrow up to 90.91%",
-    image: saudlogo,
+    image: sgbplogo,
     isActive: false,
   },
   {
-    title: "ARSs",
-    para: "Argentine Peso pegged",
+    title: "KRWs",
+    para: "South Korean Won pegged",
     borrowRate: "Borrow up to 90.91%",
-    image: sarslogo,
+    image: swonlogo,
     isActive: false,
   },
 ];

@@ -177,6 +177,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
               background: " rgba(18, 18, 18, 0.5)",
               borderRadius: "10px",
               padding: "0.7rem",
+              width: "50px",
             }}
             src={image}
           />
