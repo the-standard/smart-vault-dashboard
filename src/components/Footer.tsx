@@ -3,18 +3,19 @@ import instagramLogo from "../assets/instagramlogo.svg";
 import twitterLogo from "../assets/twitterlogo.svg";
 import facebooklogo from "../assets/facebooklogo.svg";
 import linkedinlogo from "../assets/linkedinlogo.svg";
-import redditlogo from "../assets/redditlogo.svg";
 import youtubelogo from "../assets/youtubelogo.svg";
 import discordlogo from "../assets/discordlogo.svg";
+import telegramlogo from "../assets/telegramlogo.svg";
+import githublogo from "../assets/githublogo.svg";
 
 const links = [
-  { name: "Home", link: "/" },
-  { name: "The Standard Protocol", link: "/standard-protocol" },
-  { name: "Ecosystem", link: "/ecosystem" },
-  { name: "Careers", link: "/careers" },
-  { name: "FAQ", link: "/faq" },
-  { name: "Whitepaper", link: "/whitepaper" },
-  { name: "Blog", link: "/blog" },
+  { name: "Home", link: "https://TheStandard.io" },
+  // { name: "The Standard Protocol", link: "/standard-protocol" },
+  // { name: "Ecosystem", link: "/ecosystem" },
+  // { name: "Careers", link: "/careers" },
+  { name: "FAQ", link: "https://www.thestandard.io/faq" },
+  { name: "Whitepaper", link: "https://www.thestandard.io/whitepaper" },
+  { name: "Blog", link: "https://blog.thestandard.io/" },
 ];
 
 const icons = [
@@ -28,24 +29,29 @@ const icons = [
   },
   {
     logo: linkedinlogo,
-    link: "https://www.linkedin.com/company/standardprotocol",
+    link: "https://www.linkedin.com/company/the-standard-io",
   },
   {
     logo: discordlogo,
-    link: "https://discord.gg/standardprotocol",
+    link: "https://discord.gg/THWyBQ4RzQ",
   },
-  {
-    logo: redditlogo,
-    link: "https://www.reddit.com/r/StandardProtocol/",
-  },
+
   {
     logo: twitterLogo,
-    link: "https://twitter.com/StandardBSC",
+    link: "https://twitter.com/thestandard_io",
   },
 
   {
     logo: youtubelogo,
-    link: "https://www.youtube.com/channel/UCQ6V4hWJUx4J5HfX6pWzYFQ",
+    link: "https://www.youtube.com/@TheStandard_io",
+  },
+  {
+    logo: telegramlogo,
+    link: "https://t.me/TheStandard_io",
+  },
+  {
+    logo: githublogo,
+    link: "https://github.com/the-standard",
   },
 ];
 
@@ -99,6 +105,7 @@ const Footer = () => {
                 fontSize: "0.8rem",
               }}
               href={link.link}
+              target="_blank"
             >
               {link.name}
             </a>
@@ -142,7 +149,25 @@ const Footer = () => {
             }}
             key={icon.logo}
           >
-            <img src={icon.logo} />
+            <a
+              href={icon.link}
+              target="_blank" // Open link in a new tab
+              rel="noopener noreferrer" // Recommended for security
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                style={{
+                  width: "25px",
+                  height: "25px",
+                }}
+                src={icon.logo}
+                alt="icon"
+              />
+            </a>{" "}
           </Box>
         ))}
       </Box>
