@@ -59,8 +59,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const { vaultStore } = useVaultStore();
   const { getOperationType, getGreyBarUserInput } =
     useGreyProgressBarValuesStore();
-  const { usdToEuroAddress, arbitrumOneUSDToEuroAddress } =
-    useUSDToEuroAddressStore();
+  const { arbitrumOneUSDToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
   const { address } = useAccount();
 

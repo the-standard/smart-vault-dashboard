@@ -213,29 +213,32 @@ const Index = () => {
     getChartValues();
   }, [chosenVault]);
 
-  const convertUsdToEuro = async (ethValueInUsd: number) => {
-    try {
-      const contract = new ethers.Contract(
-        arbitrumOneUSDToEuroAddress,
-        usdToEuroAbi,
-        provider
-      );
-      console.log(contract);
-      const price = await contract.latestRoundData();
-      console.log(price.answer);
+  //delete this log later on
+  console.log(symbolForGreyBar);
 
-      const priceInEuro = fromHex(price.answer, "number");
-      console.log(priceInEuro);
-      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
-      console.log(priceInEuroFormatted);
-      const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
-      console.log(euroValueConverted);
-      setEuroValueConverted(euroValueConverted);
-      return priceInEuroFormatted;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const convertUsdToEuro = async (ethValueInUsd: number) => {
+  //   try {
+  //     const contract = new ethers.Contract(
+  //       arbitrumOneUSDToEuroAddress,
+  //       usdToEuroAbi,
+  //       provider
+  //     );
+  //     console.log(contract);
+  //     const price = await contract.latestRoundData();
+  //     console.log(price.answer);
+
+  //     const priceInEuro = fromHex(price.answer, "number");
+  //     console.log(priceInEuro);
+  //     const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
+  //     console.log(priceInEuroFormatted);
+  //     const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
+  //     console.log(euroValueConverted);
+  //     setEuroValueConverted(euroValueConverted);
+  //     return priceInEuroFormatted;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // const getUsdPriceOfToken = async () => {
   //   if (vaultStore[4]) {
