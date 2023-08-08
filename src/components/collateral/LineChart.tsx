@@ -13,7 +13,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
 
   const convertedData = data.map(({ ts, price }) => [ts, price]);
   console.log(data);
-  // console.log(convertedData);
+  console.log(convertedData);
   const series = [
     {
       //symbol should come here
@@ -21,6 +21,18 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
       data: convertedData,
     },
   ];
+
+  function formatNumber(value: any) {
+    // Divide by 100 to move the decimal point two places to the left
+    const formattedValue = (value / 100).toString();
+
+    // Insert a dot before the last two characters
+    const indexOfDot = formattedValue.length - 2;
+    const finalValue =
+      formattedValue.slice(0, indexOfDot) + formattedValue.slice(indexOfDot);
+
+    return finalValue;
+  }
 
   const renderColor = () => {
     //if the last element is greater than the second to last element, set lineColor to green
@@ -151,7 +163,12 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
             },
             y: {
               formatter: function (val) {
-                return (val / 1000000).toFixed(0);
+                const dollarSign = new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(0)[0];
+                return dollarSign + formatNumber((val / 1000000).toFixed(0));
+                //   return (val / 1000000).toFixed(0);
               },
             },
           },
