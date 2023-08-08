@@ -31,15 +31,62 @@ const Navbar = () => {
 
   const { chain } = useNetwork();
 
-  let logoSrc;
-  if (chain?.id === 42161) {
-    logoSrc = isMediumOrLarger ? arbitrumLogoLong : arbitrumLogoShort;
-  } else if (chain?.id === 421613) {
-    logoSrc = isMediumOrLarger ? arbitrumTestLogoLong : arbitrumTestLogoShort;
-  } else {
-    logoSrc = isMediumOrLarger
-      ? networkNotSupportedLong
-      : networkNotSupportedShort;
+  // let logoSrc;
+  // if (chain?.id === 42161) {
+  //   logoSrc = isMediumOrLarger ? arbitrumLogoLong : arbitrumLogoShort;
+  // } else if (chain?.id === 421613) {
+  //   logoSrc = isMediumOrLarger ? arbitrumTestLogoLong : arbitrumTestLogoShort;
+  // } else {
+  //   logoSrc = isMediumOrLarger
+  //     ? networkNotSupportedLong
+  //     : networkNotSupportedShort;
+  // }
+  let logoComponent = null;
+  if (chain) {
+    if (chain?.id === 42161) {
+      logoComponent = (
+        <img
+          src={isMediumOrLarger ? arbitrumLogoLong : arbitrumLogoShort}
+          alt="logo"
+          style={{
+            width: "auto",
+            height: "50px",
+            // marginRight: "1rem",
+            // margin: "36px 0",
+          }}
+        />
+      );
+    } else if (chain?.id === 421613) {
+      logoComponent = (
+        <img
+          src={isMediumOrLarger ? arbitrumTestLogoLong : arbitrumTestLogoShort}
+          alt="logo"
+          style={{
+            width: "auto",
+            height: "50px",
+            // marginRight: "1rem",
+            // margin: "36px 0",
+          }}
+        />
+      );
+    } else {
+      logoComponent = (
+        <img
+          src={
+            isMediumOrLarger
+              ? networkNotSupportedLong
+              : networkNotSupportedShort
+          }
+          alt="logo"
+          style={{
+            width: "auto",
+            height: "50px",
+            // marginRight: "1rem",
+            // margin: "36px 0",
+          }}
+        />
+      );
+    }
   }
 
   const styles: any = {
@@ -181,16 +228,7 @@ const Navbar = () => {
               alignItems: "center",
             }}
           >
-            <img
-              src={logoSrc}
-              alt="logo"
-              style={{
-                width: "auto",
-                height: "50px",
-                // marginRight: "1rem",
-                // margin: "36px 0",
-              }}
-            />
+            {chain ? logoComponent : null}
 
             <Web3Button />
           </Box>
