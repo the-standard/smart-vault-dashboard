@@ -34,7 +34,8 @@ const Index = () => {
   // const [euroPrice] = useState<any>(undefined);
   // const [ethToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
-  const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
+  //add setstate here
+  const [euroValueConverted] = useState<any>(undefined);
   const { address } = useAccount();
 
   const provider = new ethers.providers.JsonRpcProvider(
