@@ -10,7 +10,7 @@ import {
   usePositionStore,
   // useChainIdStore,
 } from "../store/Store";
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
 // import QRicon from "../assets/qricon.png";
 // import EmptyCard from "../components/collateral/EmptyCard";
 // import SmallCard from "../components/collateral/SmallCard";
@@ -21,6 +21,7 @@ import QRCode from "react-qr-code";
 // import tokenmanagerabi from "../abis/tokenManagerABI.ts";
 import { ethers } from "ethers";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
+import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
 import "../styles/buttonStyle.css";
 import { formatEther, fromHex } from "viem";
@@ -64,6 +65,9 @@ const Collateral = () => {
   // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // console.log(handleOpen)
+  const [openWalletModal, setOpenWalletModal] = useState(false);
+  const handleWalletOpen = () => setOpenWalletModal(true);
+  const handleWalletClose = () => setOpenWalletModal(false);
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
@@ -221,10 +225,11 @@ const Collateral = () => {
         "_blank"
       );
     } else if (id === 2) {
-      window.open(
-        `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
-        "_blank"
-      );
+      // window.open(
+      //   `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
+      //   "_blank"
+      // );
+      handleWalletOpen();
     } else if (id === 3) {
       window.open(
         `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
@@ -664,7 +669,7 @@ const Collateral = () => {
           </Box>
         </Box>
       </Box>
-
+      {/* Scan QR code modal */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -710,6 +715,44 @@ const Collateral = () => {
               Scan QR code to deposit collateral
             </Typography>
           </Box>
+        </Box>
+      </Modal>
+      {/* Add Euros to wallet modal */}
+      <Modal
+        open={openWalletModal}
+        onClose={handleWalletClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: { xs: "absolute" as const, md: "" },
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: {
+              xs: "60%",
+              sm: "50%",
+              md: "40%",
+            },
+            background:
+              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+            borderRadius: "10px",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(13.9px)",
+            WebkitBackdropFilter: "blur(13.9px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+
+            p: 4,
+            maxHeight: {
+              xs: "80vh",
+              sm: "80vh",
+            },
+            overflowY: "auto",
+          }}
+          className="modal-content" // add class name to modal content box
+        >
+          <AddEuros />
         </Box>
       </Modal>
     </Box>

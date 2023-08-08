@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import instagramLogo from "../assets/instagramlogo.svg";
 import twitterLogo from "../assets/twitterlogo.svg";
-import facebooklogo from "../assets/facebooklogo.svg";
 import linkedinlogo from "../assets/linkedinlogo.svg";
 import youtubelogo from "../assets/youtubelogo.svg";
 import discordlogo from "../assets/discordlogo.svg";
@@ -22,10 +21,6 @@ const icons = [
   {
     logo: instagramLogo,
     link: "https://www.instagram.com/standardprotocol/",
-  },
-  {
-    logo: facebooklogo,
-    link: "https://www.facebook.com/StandardProtocol",
   },
   {
     logo: linkedinlogo,
