@@ -6,8 +6,8 @@ import {
   useTransactionHashStore,
   useCircularProgressStore,
   useSnackBarStore,
-  // usesUSD6Store,
-  // usesUSD18Store,
+  usesUSD6Store,
+  usesUSD18Store,
   useGreyProgressBarValuesStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
@@ -46,8 +46,8 @@ const Deposit: React.FC<DepositProps> = ({
   const { vaultAddress } = useVaultAddressStore();
   const { getTransactionHash } = useTransactionHashStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
-  // const { sUSD6Abi, arbitrumGoerlisUSD6Address } = usesUSD6Store();
-  // const { sUSD18Abi, arbitrumGoerlisUSD18Address } = usesUSD18Store();
+  const { sUSD6Abi, arbitrumGoerlisUSD6Address } = usesUSD6Store();
+  const { sUSD18Abi, arbitrumGoerlisUSD18Address } = usesUSD18Store();
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
@@ -197,9 +197,21 @@ const Deposit: React.FC<DepositProps> = ({
     getImplementationAddress();
   }, []);
 
+  let abiForTestAndMainnet: any;
+
+  if (chain?.id == 421613) {
+    if (symbol === "SUSD6") {
+      abiForTestAndMainnet = sUSD6Abi;
+    } else if (symbol === "SUSD18") {
+      abiForTestAndMainnet = sUSD18Abi;
+    }
+  } else if (chain?.id === 42161) {
+    abiForTestAndMainnet = dynamicABI;
+  }
+
   const depositToken = useContractWrite({
     address: tokenAddress as any,
-    abi: dynamicABI,
+    abi: abiForTestAndMainnet,
     functionName: "transfer",
     args: [vaultAddress, parseUnits(amount.toString(), decimals)],
   });
