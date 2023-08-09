@@ -15,6 +15,7 @@ import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import { getNetwork } from "@wagmi/core";
 
 const Index = () => {
   const { vaultStore } = useVaultStore();
@@ -37,10 +38,18 @@ const Index = () => {
   //add setstate here
   const [euroValueConverted] = useState<any>(undefined);
   const { address } = useAccount();
+  const { chain } = getNetwork();
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_ALCHEMY_URL
-  );
+  let provider: any;
+  if (chain?.id == 421613) {
+    provider = new ethers.providers.JsonRpcProvider(
+      import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
+    );
+  } else if (chain?.id === 42161) {
+    provider = new ethers.providers.JsonRpcProvider(
+      import.meta.env.VITE_ALCHEMY_URL
+    );
+  }
   const signer = provider.getSigner(address);
   // let myToken: any = undefined;
 

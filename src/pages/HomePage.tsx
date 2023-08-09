@@ -89,10 +89,16 @@ const HomePage = () => {
   });
 
   const getVaults = async (conditionalAddress: any) => {
-    //change this to arbitrum one infura
-    const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_ALCHEMY_URL
-    );
+    let provider: any;
+    if (chain?.id == 421613) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
+      );
+    } else if (chain?.id === 42161) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_URL
+      );
+    }
     const signer = provider.getSigner(address);
     console.log(signer);
     const contract = new ethers.Contract(

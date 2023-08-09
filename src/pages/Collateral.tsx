@@ -73,6 +73,7 @@ const Collateral = () => {
   const setPosition = usePositionStore((state) => state.setPosition);
 
   const { address } = useAccount();
+  const { chain } = getNetwork();
 
   useEffect(() => {
     getVaultID(vaultId);
@@ -104,10 +105,16 @@ const Collateral = () => {
   }, []);
 
   async function listenToTransaction(transactionHash: string) {
-    const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_ALCHEMY_URL
-    );
-
+    let provider: any;
+    if (chain?.id == 421613) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
+      );
+    } else if (chain?.id === 42161) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_URL
+      );
+    }
     const receipt = await provider.waitForTransaction(transactionHash);
 
     // Check if the transaction is successful
@@ -129,9 +136,16 @@ const Collateral = () => {
   }, [transactionHash]);
 
   const returnAcceptedTokensList = async (conditionalAddress: any) => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_ALCHEMY_URL
-    );
+    let provider: any;
+    if (chain?.id == 421613) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
+      );
+    } else if (chain?.id === 42161) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_URL
+      );
+    }
     const signer = provider.getSigner(address);
     const contract = new ethers.Contract(
       conditionalAddress,

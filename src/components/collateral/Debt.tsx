@@ -25,7 +25,7 @@ import { formatEther, parseEther } from "viem";
 import CheckIcon from "@mui/icons-material/Check";
 import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
-// import { getNetwork } from "@wagmi/core";
+import { getNetwork } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
 
 const Debt = () => {
@@ -34,7 +34,8 @@ const Debt = () => {
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore();
   const { vaultStore }: any = useVaultStore();
-  const { arbitrumsEuroAddress } = usesEuroAddressStore();
+  const { arbitrumsEuroAddress, arbitrumGoerlisEuroAddress } =
+    usesEuroAddressStore();
   const { sEuroAbi } = usesEuroAbiStore();
   const { getTransactionHash } = useTransactionHashStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
@@ -44,7 +45,7 @@ const Debt = () => {
   const { getGreyBarUserInput, getOperationType } =
     useGreyProgressBarValuesStore();
   const { getCounter } = useCounterStore();
-  // const { chain } = getNetwork();
+  const { chain } = getNetwork();
 
   const incrementCounter = () => {
     getCounter(1);
@@ -88,10 +89,7 @@ const Debt = () => {
     address: vaultAddress as any, // Replace with your vault address
     abi: smartVaultAbi, // Replace with your smartVault ABI
     functionName: "mint",
-    args: [
-      "0x600044FE9A152C27f337BbB23803dC6A68E3eFB0" as any,
-      parseEther(amount.toString()),
-    ],
+    args: [address as any, parseEther(amount.toString())],
   });
 
   const handleBorrowMoney = async () => {
@@ -137,9 +135,17 @@ const Debt = () => {
   const sEuroFee: any = (amount * 0.01).toString();
   const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
 
+  let approveAddress: any;
+
+  if (chain?.id == 421613) {
+    approveAddress = arbitrumGoerlisEuroAddress;
+  } else if (chain?.id === 42161) {
+    approveAddress = arbitrumsEuroAddress;
+  }
+
   const approvePayment = useContractWrite({
     //make this dynamic
-    address: arbitrumsEuroAddress as any,
+    address: approveAddress as any,
     abi: sEuroAbi,
     functionName: "approve",
     args: [vaultAddress as any, feeAmount],
@@ -216,6 +222,7 @@ const Debt = () => {
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
+      console.log(isError);
     }
   }, [
     repayMoney.isLoading,

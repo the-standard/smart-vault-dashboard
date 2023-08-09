@@ -102,9 +102,17 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   async function getNFT(vault: any) {
     let contract: any;
-    const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_ALCHEMY_URL
-    );
+    let provider: any;
+    if (chain?.id == 421613) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
+      );
+    } else if (chain?.id === 42161) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_URL
+      );
+    }
+
     const signer = provider.getSigner(address);
     if (chain?.id == 421613) {
       contract = new ethers.Contract(
@@ -171,7 +179,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       setResolved(true);
       console.log(resolved);
     }
-    console.error(tokenToNFTMap);
+    console.log(tokenToNFTMap);
   }, [tokenToId]);
 
   console.log("vaults", vaults);

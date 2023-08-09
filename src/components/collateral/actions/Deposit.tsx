@@ -147,18 +147,42 @@ const Deposit: React.FC<DepositProps> = ({
       } catch (error) {
         console.log(error);
       }
+      //arbitrum goerli
+    } else if (chain?.id === 421613) {
+      try {
+        const res = await axios.get(
+          `https://api-goerli.arbiscan.io/api?module=contract&action=getabi&address=${implementation}&apikey=${
+            import.meta.env.VITE_ARBISCAN_API_KEY
+          }`
+        );
+        console.log(implementation);
+        console.log(JSON.parse(res.data.result));
+        setDynamicABI(JSON.parse(res.data.result));
+        return res.data.result;
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   //const [implementationAddress, setImplementationAddress] = useState<any>([]);
 
   const getImplementationAddress = async () => {
+    let res: any;
     try {
-      const res = await axios.get(
-        `https://api.arbiscan.io/api?module=contract&action=getsourcecode&address=${tokenAddress}&apikey=${
-          import.meta.env.VITE_ARBISCAN_API_KEY
-        }`
-      );
+      if (chain?.id === 42161) {
+        res = await axios.get(
+          `https://api.arbiscan.io/api?module=contract&action=getsourcecode&address=${tokenAddress}&apikey=${
+            import.meta.env.VITE_ARBISCAN_API_KEY
+          }`
+        );
+      } else if (chain?.id === 421613) {
+        res = await axios.get(
+          `https://api-goerli.arbiscan.io/api?module=contract&action=getsourcecode&address=${tokenAddress}&apikey=${
+            import.meta.env.VITE_ARBISCAN_API_KEY
+          }`
+        );
+      }
       console.log(tokenAddress);
       console.log(res.data.result[0].Implementation);
       //setImplementationAddress(res.data.result[0].Implementation);
