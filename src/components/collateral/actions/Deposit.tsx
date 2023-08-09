@@ -46,8 +46,8 @@ const Deposit: React.FC<DepositProps> = ({
   const { vaultAddress } = useVaultAddressStore();
   const { getTransactionHash } = useTransactionHashStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
-  const { sUSD6Abi, arbitrumGoerlisUSD6Address } = usesUSD6Store();
-  const { sUSD18Abi, arbitrumGoerlisUSD18Address } = usesUSD18Store();
+  const { sUSD6Abi } = usesUSD6Store();
+  const { sUSD18Abi } = usesUSD18Store();
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
