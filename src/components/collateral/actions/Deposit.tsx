@@ -226,10 +226,12 @@ const Deposit: React.FC<DepositProps> = ({
   };
 
   const depositEther = async () => {
+    getProgressType(2);
+    getCircularProgress(true);
     const account = getAccount();
     console.log(account.address);
 
-    let txHashForError = "";
+    // let txHashForError = "";
     try {
       const txAmount: any = amount;
       console.log(txAmount);
@@ -241,13 +243,20 @@ const Deposit: React.FC<DepositProps> = ({
         to: toAddress,
         value: parseEther(txAmount.toString()),
       });
-      txHashForError = hash;
+      //  txHashForError = hash;
 
       console.log("Transaction sent:", hash);
       getTransactionHash(hash);
-      waitForTransaction(hash);
+      // waitForTransaction(hash);
+
+      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
+      getSnackBar(0);
+      //handleSnackbarClick();
+      inputRef.current.value = "";
+      inputRef.current.focus();
+      getGreyBarUserInput(0);
     } catch (error) {
-      waitForTransaction(txHashForError);
+      // waitForTransaction(txHashForError);
       console.log(error);
     }
   };
@@ -264,6 +273,11 @@ const Deposit: React.FC<DepositProps> = ({
         handleDepositToken();
       } catch (error) {
         console.log(error);
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getCircularProgress(false); // Set getCircularProgress to false if there's an error
+        getSnackBar(1);
+        getGreyBarUserInput(0);
       }
     }
   };
@@ -272,7 +286,7 @@ const Deposit: React.FC<DepositProps> = ({
     const { isLoading, isSuccess, isError } = depositToken;
 
     if (isLoading) {
-      getProgressType(1);
+      getProgressType(2);
       getCircularProgress(true);
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
@@ -318,7 +332,7 @@ const Deposit: React.FC<DepositProps> = ({
 
   return (
     <Box>
-      <button onClick={getImplementationAddress}>Open Modal</button>
+      {/* <button onClick={getImplementationAddress}>Open Modal</button> */}
       <Box
         sx={{
           display: "flex",
