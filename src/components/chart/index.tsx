@@ -14,7 +14,7 @@ import {
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useContractReads } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 
 const Index = () => {
@@ -51,6 +51,24 @@ const Index = () => {
     );
   }
   const signer = provider.getSigner(address);
+
+  const contractFunction = {
+    abi: chainlinkAbi,
+    functionName: 'latestRoundData'
+  };
+
+  const { data: prices } = useContractReads({
+    contracts: vaultStore.status.collateral.map(asset => {
+      return { ...contractFunction, address: asset.token.clAddr }
+    }),
+  })
+
+  // TODO USE THESE PRICES:
+  prices?.forEach(price => {
+    // this is the answer to each feed
+    console.log('xxx',price.result[1])
+  })
+
   // let myToken: any = undefined;
 
   // useEffect(() => {
@@ -65,7 +83,7 @@ const Index = () => {
   }
 
   const getChartValues = async () => {
-    if (vaultStore[4]) {
+    if (vaultStore.status) {
       //need to recreate this function here scoped to the function
       const convertUsdToEuro = async (ethValueInUsd: number) => {
         try {
@@ -94,7 +112,7 @@ const Index = () => {
 
       const priceInEuro = await convertUsdToEuro(1);
 
-      const token = vaultStore[4].collateral[0][0];
+      const token = vaultStore.status.collateral[0].token;
       console.log(token.clAddr);
       const contract = new ethers.Contract(token.clAddr, chainlinkAbi, signer);
 

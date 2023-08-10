@@ -145,8 +145,6 @@ const Collateral = () => {
     });
   }
 
-  console.log('xxx',vaultStore.status.collateral)
-
   const displayTokens = () => {
     const { collateral } = vaultStore.status;
     if (!collateral || collateral.length === 0) {
