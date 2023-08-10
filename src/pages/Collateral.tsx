@@ -219,41 +219,6 @@ const Collateral = () => {
     return resultNum;
   }
 
-  let totalCollateralValueForChart;
-  let smallCardValues;
-  if (vaultStore.status && vaultStore.status.totalCollateralValue != undefined) {
-    const totalCollateralValue = Number(ethers.utils.formatEther(BigNumber.from(vaultStore.status.totalCollateralValue)));
-    totalCollateralValueForChart = ethers.utils.formatEther(totalCollateralValue)
-    //fix this issue
-    //minted
-    const totalDebtValue = Number(formatEther(vaultStore.status.minted));
-    //collateralrate
-    // const collateralRate = ethers.BigNumber.from(vaultStore[2].toString());
-    //this is wrong
-    const totalLiquidationValue = Number(totalDebtValue) * 1.1;
-
-    smallCardValues = [
-      //everything that's in the vault added up together and priced in euros
-      {
-        title: "Total Collateral",
-        value: totalCollateralValue,
-        type: "sEURO",
-      },
-      //the total amount minted so far
-      {
-        title: "Debt",
-        value: totalDebtValue,
-        type: "sEURO",
-      },
-      //if you take total collateral amount, minus the debt, the above minted divited by 0.9091
-      {
-        title: "Liquidates at",
-        value: totalLiquidationValue,
-        type: "sEURO",
-      },
-    ];
-  }
-
   useEffect(() => {
     console.log(vaultId + "my vault update");
   }, []);
