@@ -179,7 +179,6 @@ const AddEuros = () => {
       >
         <Box
           sx={{
-            display: "flex",
             flexDirection: "row",
             justifyContent: "flex-start",
             alignItems: "center",
@@ -190,6 +189,10 @@ const AddEuros = () => {
             border: "1px solid gray",
             margin: "15px 0 15px 0",
             cursor: "pointer",
+            display: {
+              xs: "none",
+              sm: "flex",
+            },
           }}
           onClick={addToken}
         >

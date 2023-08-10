@@ -30,6 +30,7 @@ const wagmiConfig = createConfig({
   publicClient,
 });
 const ethereumClient = new EthereumClient(wagmiConfig, chains);
+console.log(ethereumClient);
 import HomePage from "./pages/HomePage.tsx";
 //import navbar
 import Navbar from "./components/Navbar.tsx";

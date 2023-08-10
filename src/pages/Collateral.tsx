@@ -615,7 +615,11 @@ const Collateral = () => {
                     "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
                   fontFamily: '"Poppins", sans-serif',
                   color: "#ffffff",
-                  fontSize: "0.88rem",
+                  fontSize: {
+                    xs: "0.7rem",
+                    sm: "0.8rem",
+                    md: "0.88rem",
+                  },
                   letterSpacing: "1px",
                   backdropFilter: "blur(8px)",
                   transition: "0.5s",
