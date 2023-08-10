@@ -2,7 +2,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import VaultCard from "../components/vaultCard/VaultCard";
 import Datagrid from "../components/dataGrid/Datagrid";
 
-import { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import seurologo from "../assets/EUROs.svg";
 import swonlogo from "../assets/KRWs.svg";
 import sgbplogo from "../assets/GBPs.svg";

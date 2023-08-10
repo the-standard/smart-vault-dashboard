@@ -6,7 +6,7 @@ import {
   useVaultStore,
   useVaultIdStore,
   useGreyProgressBarValuesStore,
-  useEthToUsdAbiStore,
+  useChainlinkAbiStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
   // useCounterStore,
@@ -22,7 +22,7 @@ const Index = () => {
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
-  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { chainlinkAbi } = useChainlinkAbiStore();
   const { arbitrumOneUSDToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
@@ -96,7 +96,7 @@ const Index = () => {
 
       const token = vaultStore[4].collateral[0][0];
       console.log(token.clAddr);
-      const contract = new ethers.Contract(token.clAddr, ethToUsdAbi, signer);
+      const contract = new ethers.Contract(token.clAddr, chainlinkAbi, signer);
 
       const price = await contract.latestRoundData();
 

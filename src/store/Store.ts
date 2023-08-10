@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import vaultManagerAbi from "../abis/vaultManager.ts";
+import erc20Abi from "../abis/erc20.ts";
 import sEuroAbi from "../abis/testTokens/sEuro.ts";
 import sUSD6Abi from "../abis/testTokens/sUsd6.ts";
 import sUSD18Abi from "../abis/testTokens/sUsd18.ts";
-import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
+import chainlinkAbi from "../abis/priceFeeds/chainlink.ts";
 import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 import nativeCollateralAbi from "../abis/nativeCollateralABI.ts";
 import collateralAbi from "../abis/collateralABI.ts";
@@ -35,14 +36,14 @@ export const useChainIdStore = create<ChainIdState>((set) => ({
   getChainId: (chainId) => set(() => ({ chainId: chainId })),
 }));
 
-interface EthToUsdAbiState {
-  ethToUsdAbi: Array<any>;
-  getEthToUsdAbi: (ethToUsdAbi: Array<any>) => void;
+interface ChainlinkAbiState {
+  chainlinkAbi: Array<any>;
+  getChainlinkAbi: (chainlinkAbi: Array<any>) => void;
 }
 
-export const useEthToUsdAbiStore = create<EthToUsdAbiState>()((set) => ({
-  ethToUsdAbi: ethtousdAbi,
-  getEthToUsdAbi: (ethToUsdAbi) => set(() => ({ ethToUsdAbi: ethToUsdAbi })),
+export const useChainlinkAbiStore = create<ChainlinkAbiState>()((set) => ({
+  chainlinkAbi: chainlinkAbi,
+  getChainlinkAbi: (chainlinkAbi) => set(() => ({ chainlinkAbi: chainlinkAbi })),
 }));
 
 interface USDToEuroAbiState {
@@ -224,6 +225,19 @@ export const useVaultManagerAbiStore = create<VaultManagerAbiState>()(
     vaultManagerAbi: vaultManagerAbi,
     getVaultManagerAbi: (vaultManagerAbi) =>
       set(() => ({ vaultManagerAbi: vaultManagerAbi })),
+  })
+);
+
+interface Erc20AbiState {
+  erc20Abi: Array<any>;
+  getErc20Abi: (erc20Abi: Array<any>) => void;
+}
+
+export const useErc20AbiStore = create<Erc20AbiState>()(
+  (set) => ({
+    erc20Abi: erc20Abi,
+    getErc20Abi: (erc20Abi) =>
+      set(() => ({ erc20Abi: erc20Abi })),
   })
 );
 

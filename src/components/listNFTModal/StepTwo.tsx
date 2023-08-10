@@ -17,7 +17,7 @@ import {
   useNFTListingModalStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
-  useEthToUsdAbiStore,
+  useChainlinkAbiStore,
 } from "../../store/Store";
 import { formatUnits, fromHex } from "viem";
 // import { getETHPrice } from "../../utils/getETHPrice";
@@ -46,7 +46,7 @@ const StepTwo: React.FC<StepProps> = ({
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
   // const { ethToUsdAddress } = useEthToUsdAddressStore();
-  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { chainlinkAbi } = useChainlinkAbiStore();
   const { chain } = useNetwork();
 
   useEffect(() => {
@@ -102,7 +102,7 @@ const StepTwo: React.FC<StepProps> = ({
       const ethclAddr = vaultForListing[4].collateral[0].token.clAddr;
       console.log(ethclAddr);
 
-      const contract = new ethers.Contract(ethclAddr, ethToUsdAbi, signer);
+      const contract = new ethers.Contract(ethclAddr, chainlinkAbi, signer);
       const price = await contract.latestRoundData();
 
       const priceInUsd = fromHex(price.answer, "number");

@@ -5,11 +5,11 @@ import Actions from "./Actions";
 import {
   useCollateralSymbolStore,
   useWidthStore,
-  useEthToUsdAbiStore,
   useVaultStore,
   useGreyProgressBarValuesStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
+  useChainlinkAbiStore,
 } from "../../store/Store";
 import LineChart from "./LineChart";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
@@ -59,7 +59,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore();
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
-  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { chainlinkAbi } = useChainlinkAbiStore();
   const { vaultStore } = useVaultStore();
   const { getOperationType, getGreyBarUserInput } =
     useGreyProgressBarValuesStore();
@@ -75,27 +75,40 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
-    console.log(vaultStore[4]);
     if (symbol === "ETH") {
-      myToken = vaultStore[4].collateral[0].token;
+      myToken = vaultStore.status.collateral[0].token;
     } else if (symbol === "WBTC") {
-      myToken = vaultStore[4].collateral[1].token;
-      console.log(vaultStore[4].collateral[1].token);
+      myToken = vaultStore.status.collateral[1].token;
+      console.log(vaultStore.status.collateral[1].token);
     } else if (symbol === "ARB") {
-      myToken = vaultStore[4].collateral[2].token;
+      myToken = vaultStore.status.collateral[2].token;
       console.log(
         fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
       );
     } else if (symbol === "LINK") {
-      myToken = vaultStore[4].collateral[3].token;
+      myToken = vaultStore.status.collateral[3].token;
     } else if (symbol === "PAXG") {
-      myToken = vaultStore[4].collateral[4].token;
+      myToken = vaultStore.status.collateral[4].token;
       console.log(
         fromHex(vaultStore.status?.collateral[4].token.symbol, "string")
       );
+    } else if (symbol === "AGOR") {
+      myToken = vaultStore.status.collateral[0].token;
+      console.log(
+        fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
+      );
+    } else if (symbol === "SUSD6") {
+      myToken = vaultStore.status.collateral[1].token;
+      console.log(
+        fromHex(vaultStore.status?.collateral[1].token.symbol, "string")
+      );
+    } else if (symbol === "SUSD18") {
+      myToken = vaultStore.status.collateral[2].token;
+      console.log(
+        fromHex(vaultStore.status?.collateral[2].token.symbol, "string")
+      );
     }
-    console.log(symbol);
-    const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
+    const contract = new ethers.Contract(myToken.clAddr, chainlinkAbi, signer);
     console.log(contract);
     const price = await contract.latestRoundData();
     console.log(price);
