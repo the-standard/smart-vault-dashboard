@@ -3,21 +3,19 @@ import VaultCard from "../components/vaultCard/VaultCard";
 import Datagrid from "../components/dataGrid/Datagrid";
 
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
-import { ethers } from "ethers";
 import seurologo from "../assets/EUROs.svg";
 import swonlogo from "../assets/KRWs.svg";
 import sgbplogo from "../assets/GBPs.svg";
 import susdlogo from "../assets/USDs.svg";
-// import { useVaultsStore } from "../store/Store.ts";
-import { useAccount } from "wagmi";
+import { useAccount, useContractRead, useWalletClient, useNetwork } from "wagmi";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
   usePositionStore,
 } from "../store/Store.ts";
-// import createClientUtil from "../utils/createClientUtil.ts";
-import { getNetwork } from "@wagmi/core";
-import { useNetwork } from "wagmi";
+import {
+  arbitrumGoerli,
+} from "wagmi/chains";
 
 const items = [
   {
@@ -51,22 +49,26 @@ const items = [
 ];
 
 const HomePage = () => {
-  // const [tokenToId, setTokenToId] = useState<any[]>([]);
-  // const [resolved, setResolved] = useState(false);
-  const [myVaults, setMyVaults] = useState<any[]>([]);
-  const { connector: isConnected, address } = useAccount();
-  // const [loading, setLoading] = useState(true); // Add this line
+  const { address } = useAccount();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const {
-    contractAddress,
     arbitrumGoerliContractAddress,
     arbitrumContractAddress,
   } = useContractAddressStore();
 
+  const { chain } = useNetwork();
+  const vaultManagerAddress = chain?.id === arbitrumGoerli.id ? arbitrumGoerliContractAddress : arbitrumContractAddress;
+
+  const { data: walletClient } = useWalletClient()
+  const { data: myVaults } = useContractRead({
+    address: vaultManagerAddress,
+    abi: vaultManagerAbi,
+    functionName: 'vaults',
+    account: walletClient?.account
+  });
+
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
-
-  const { chain } = useNetwork();
 
   useLayoutEffect(() => {
     function updatePosition() {
@@ -81,63 +83,6 @@ const HomePage = () => {
 
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
-
-  useEffect(() => {
-    if (isConnected) {
-      console.log("connected");
-    }
-  });
-
-  const getVaults = async (conditionalAddress: any) => {
-    let provider: any;
-    if (chain?.id == 421613) {
-      provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
-      );
-    } else if (chain?.id === 42161) {
-      provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_ALCHEMY_URL
-      );
-    }
-    const signer = provider.getSigner(address);
-    console.log(signer);
-    const contract = new ethers.Contract(
-      conditionalAddress,
-      vaultManagerAbi,
-      signer
-    );
-    console.log(contract);
-    const vaults = await contract.vaults();
-
-    console.log("vaults", vaults);
-    setMyVaults(vaults);
-  };
-
-  const getCurrentChain = async () => {
-    const { chain } = getNetwork();
-    if (chain?.id == 421613) {
-      getVaults(arbitrumGoerliContractAddress);
-    } else if (chain?.id == 11155111) {
-      getVaults(contractAddress);
-    } else if (chain?.id == 42161) {
-      getVaults(arbitrumContractAddress);
-    }
-  };
-
-  useEffect(() => {
-    if (isConnected) {
-      //getVaults();
-      getCurrentChain();
-    }
-  }, [isConnected, chain]);
-
-  // useEffect(() => {
-  //   if (address) {
-  //     provider.on("chainChanged", () => {
-  //       getCurrentChain();
-  //     });
-  //   }
-  // }, []);
 
   return (
     <Box>
@@ -189,7 +134,7 @@ const HomePage = () => {
       >
         My Smart Vaults
       </Typography>
-      {myVaults.length > 0 ? ( // Update this line
+      {myVaults && myVaults.length > 0 ? ( // Update this line
         <Datagrid vaults={myVaults} />
       ) : (
         <Box></Box>
