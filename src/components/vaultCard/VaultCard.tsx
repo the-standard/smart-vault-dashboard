@@ -3,9 +3,11 @@ import { Box, Button, Typography } from "@mui/material";
 // import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import React from "react";
+import React, { useEffect } from "react";
 import {
+  useCircularProgressStore,
   useContractAddressStore,
+  useSnackBarStore,
   useVaultManagerAbiStore,
   // useSnackBarStore,
 } from "../../store/Store.ts";
@@ -73,7 +75,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   // const ethProvider = useEthereumProvider();
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
+  const mintVault = useContractWrite({
     address:
       chain?.id === 421613
         ? arbitrumGoerliContractAddress
@@ -87,33 +89,63 @@ const VaultCard: React.FC<VaultCardProps> = ({
   });
 
   // Define your function using async/await
-  const mintVault = async () => {
+  const handleMintVault = async () => {
+    const { data, isLoading, isSuccess, write } = mintVault;
     try {
       // Execute the contract method by calling the 'write' function
       write();
-
-      // Since useContractWrite returns a promise, you can wait for the result
-      if (isLoading) {
-        // Handle loading state
-      } else if (isSuccess) {
-        const transactionHash = data?.hash;
-        console.log("transactionHash", transactionHash);
-        // Handle success state
-        navigateToLatestVault();
-      }
     } catch (error) {
       console.error("error", error);
       // Handle error state
     }
   };
+  const { getCircularProgress, getProgressType } = useCircularProgressStore();
+  const { getSnackBar } = useSnackBarStore();
+  useEffect(() => {
+    const { isLoading, isSuccess, isError } = mintVault;
 
+    if (isLoading) {
+      getProgressType(3);
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
+      getSnackBar(0);
+      //handleSnackbarClick();
+      navigateToLatestVault();
+    } else if (isError) {
+      getCircularProgress(false); // Set getCircularProgress to false if there's an error
+      getSnackBar(1);
+    }
+  }, [
+    mintVault.data,
+    mintVault.error,
+    mintVault.isLoading,
+    mintVault.isSuccess,
+  ]);
+
+  let addressByChainId: any;
+  chain?.id === 421613
+    ? (addressByChainId = arbitrumGoerliContractAddress)
+    : chain?.id === 11155111
+    ? (addressByChainId = contractAddress)
+    : chain?.id === 42161
+    ? (addressByChainId = arbitrumContractAddress)
+    : null;
   const navigateToLatestVault = async () => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_ALCHEMY_URL
-    );
+    let provider: any;
+    if (chain?.id == 421613) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
+      );
+    } else if (chain?.id === 42161) {
+      provider = new ethers.providers.JsonRpcProvider(
+        import.meta.env.VITE_ALCHEMY_URL
+      );
+    }
+
     const signer = provider.getSigner(address);
     const contract = new ethers.Contract(
-      arbitrumContractAddress,
+      addressByChainId,
       vaultManagerAbi,
       signer
     );
@@ -126,6 +158,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
     // Navigate to the Collateral/{vaultId} route
     if (lastVault) {
       const vaultId = fromHex(lastVault[0], "number");
+      console.log("vaultId", vaultId);
       navigate(`Collateral/${vaultId}`);
     }
 
@@ -236,7 +269,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
           }}
           className="myBtn"
           // onClick={() => write?.()}
-          onClick={() => mintVault()}
+          onClick={() => handleMintVault()}
         >
           <Typography
             sx={{
