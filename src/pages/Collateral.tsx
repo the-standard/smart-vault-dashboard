@@ -136,6 +136,7 @@ const Collateral = () => {
       if (Number(tokenId) === Number(vaultId)) {
         //set vault to state
         getVaultStore(vault);
+
         console.log("vault", vault);
 
         getVaultAddress(vault.status.vaultAddress);
@@ -144,25 +145,24 @@ const Collateral = () => {
   }
 
   const displayTokens = () => {
-    if (vaultStore.status.collateral !== undefined) {
-      const { collateral } = vaultStore.status;
-      if (!collateral || collateral.length === 0) {
-        return <div>Loading...</div>;
-      }
-
-      return collateral.map((asset: any, index: number) => {
-        return (
-          <AcceptedToken
-            key={index}
-            symbol={ethers.utils.parseBytes32String(asset.token.symbol)}
-            amount={ethers.BigNumber.from(asset.amount).toString()}
-            tokenAddress={asset.token.addr}
-            decimals={asset.token.dec}
-            token={asset.token}
-          />
-        );
-      });
+    const { collateral } = vaultStore.status;
+    console.log("collateral", collateral);
+    if (!collateral || collateral.length === 0) {
+      return <div>Loading...</div>;
     }
+
+    return collateral.map((asset: any, index: number) => {
+      return (
+        <AcceptedToken
+          key={index}
+          symbol={ethers.utils.parseBytes32String(asset.token.symbol)}
+          amount={ethers.BigNumber.from(asset.amount).toString()}
+          tokenAddress={asset.token.addr}
+          decimals={asset.token.dec}
+          token={asset.token}
+        />
+      );
+    });
   };
 
   const displayDebt = () => {

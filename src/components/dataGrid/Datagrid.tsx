@@ -10,6 +10,7 @@ import {
   useContractAddressStore,
   useVaultManagerAbiStore,
   useVaultForListingStore,
+  useVaultStore,
 } from "../../store/Store.ts";
 import {
   Button,
@@ -38,6 +39,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     useContractAddressStore();
   const { getVaultID } = useVaultIdStore();
   const { getVaultForListing } = useVaultForListingStore();
+  const { getVaultStore } = useVaultStore();
   //modal state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -144,6 +146,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       setModalChildState(params.vaultID);
       getVaultID(params.vaultID);
       getVaultForListing(params.smartVault);
+      getVaultStore(params.smartVault);
       console.log("vault", params.smartVault);
     };
 
