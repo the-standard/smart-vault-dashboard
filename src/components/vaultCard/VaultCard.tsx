@@ -9,6 +9,7 @@ import {
   useContractAddressStore,
   useSnackBarStore,
   useVaultManagerAbiStore,
+  useVaultStore,
   // useSnackBarStore,
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
@@ -57,6 +58,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   // const { getProgressType, getCircularProgress } = useCircularProgressStore();
   const navigate = useNavigate();
   const { address } = useAccount();
+  const { getVaultStore } = useVaultStore();
 
   // const [vaultCreated, setVaultCreated] = useState(false);
 
@@ -159,6 +161,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
     if (lastVault) {
       const vaultId = fromHex(lastVault[0], "number");
       console.log("vaultId", vaultId);
+      getVaultStore(lastVault);
       navigate(`Collateral/${vaultId}`);
     }
 

@@ -7,15 +7,18 @@ import seurologo from "../assets/EUROs.svg";
 import swonlogo from "../assets/KRWs.svg";
 import sgbplogo from "../assets/GBPs.svg";
 import susdlogo from "../assets/USDs.svg";
-import { useAccount, useContractRead, useWalletClient, useNetwork } from "wagmi";
+import {
+  useAccount,
+  useContractRead,
+  useWalletClient,
+  useNetwork,
+} from "wagmi";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
   usePositionStore,
 } from "../store/Store.ts";
-import {
-  arbitrumGoerli,
-} from "wagmi/chains";
+import { arbitrumGoerli } from "wagmi/chains";
 
 const items = [
   {
@@ -51,21 +54,27 @@ const items = [
 const HomePage = () => {
   const { address } = useAccount();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const {
-    arbitrumGoerliContractAddress,
-    arbitrumContractAddress,
-  } = useContractAddressStore();
+  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+    useContractAddressStore();
 
   const { chain } = useNetwork();
-  const vaultManagerAddress = chain?.id === arbitrumGoerli.id ? arbitrumGoerliContractAddress : arbitrumContractAddress;
+  const vaultManagerAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliContractAddress
+      : arbitrumContractAddress;
 
-  const { data: walletClient } = useWalletClient()
+  const { data: walletClient } = useWalletClient();
   const { data: myVaults } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
-    functionName: 'vaults',
-    account: walletClient?.account
+    functionName: "vaults",
+    account: walletClient?.account,
   });
+
+  // console.log(myVaults);
+  // if (myVaults?.length > 0) {
+  //   console.log(myVaults[0].toString());
+  // }
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);

@@ -122,6 +122,10 @@ const Collateral = () => {
       ? arbitrumGoerliContractAddress
       : arbitrumContractAddress;
 
+  const setVaultToSessionStorage = (vault: any) => {
+    sessionStorage.setItem("vaultData", JSON.stringify(vault));
+  };
+
   if (!vaultStore.tokenId || vaultStore.tokenId.toString() !== vaultId) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { data: vaults } = useContractRead({
@@ -138,31 +142,40 @@ const Collateral = () => {
         getVaultStore(vault);
 
         console.log("vault", vault);
+        // Store the vault data in sessionStorage
+        setVaultToSessionStorage(vault);
 
         getVaultAddress(vault.status.vaultAddress);
       }
     });
   }
 
-  const displayTokens = () => {
-    const { collateral } = vaultStore.status;
-    console.log("collateral", collateral);
-    if (!collateral || collateral.length === 0) {
-      return <div>Loading...</div>;
-    }
+  useEffect(() => {
+    console.log("vaultStore", vaultStore);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vaultStore]);
 
-    return collateral.map((asset: any, index: number) => {
-      return (
-        <AcceptedToken
-          key={index}
-          symbol={ethers.utils.parseBytes32String(asset.token.symbol)}
-          amount={ethers.BigNumber.from(asset.amount).toString()}
-          tokenAddress={asset.token.addr}
-          decimals={asset.token.dec}
-          token={asset.token}
-        />
-      );
-    });
+  const displayTokens = () => {
+    if (vaultStore.status) {
+      const { collateral } = vaultStore.status;
+      console.log("collateral", collateral);
+      if (!collateral || collateral.length === 0) {
+        return <div>Loading...</div>;
+      }
+
+      return collateral.map((asset: any, index: number) => {
+        return (
+          <AcceptedToken
+            key={index}
+            symbol={ethers.utils.parseBytes32String(asset.token.symbol)}
+            amount={ethers.BigNumber.from(asset.amount).toString()}
+            tokenAddress={asset.token.addr}
+            decimals={asset.token.dec}
+            token={asset.token}
+          />
+        );
+      });
+    }
   };
 
   const displayDebt = () => {
