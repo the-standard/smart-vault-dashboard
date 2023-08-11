@@ -32,9 +32,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 import { useAccount, useContractRead } from "wagmi";
-import {
-  arbitrumGoerli,
-} from "wagmi/chains";
+import { arbitrumGoerli } from "wagmi/chains";
 
 type RouteParams = {
   vaultId: string;
@@ -45,10 +43,8 @@ const Collateral = () => {
   const { getVaultAddress, vaultAddress } = useVaultAddressStore();
   const { getVaultStore, vaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();
-  const {
-    arbitrumGoerliContractAddress,
-    arbitrumContractAddress,
-  } = useContractAddressStore();
+  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+    useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const [activeElement, setActiveElement] = useState(1);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
@@ -122,25 +118,30 @@ const Collateral = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionHash]);
 
-  const vaultManagerAddress = chain?.id === arbitrumGoerli.id ? arbitrumGoerliContractAddress : arbitrumContractAddress;
+  const vaultManagerAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliContractAddress
+      : arbitrumContractAddress;
 
   if (!vaultStore.tokenId || vaultStore.tokenId.toString() !== vaultId) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { data: vaults } = useContractRead({
       address: vaultManagerAddress,
       abi: vaultManagerAbi,
-      functionName: 'vaults',
-      account: address
+      functionName: "vaults",
+      account: address,
     });
-  
+
     vaults?.forEach((vault: any) => {
       const tokenId = ethers.BigNumber.from(vault.tokenId);
       if (Number(tokenId) === Number(vaultId)) {
         //set vault to state
         getVaultStore(vault);
+        console.log("vault", vault);
         //set vault to local state
         //set vault address to state
         getVaultAddress(vault.status.vaultAddress);
-      //   //set vault address to local state
+        //   //set vault address to local state
       }
     });
   }

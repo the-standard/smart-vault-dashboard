@@ -43,7 +43,8 @@ interface ChainlinkAbiState {
 
 export const useChainlinkAbiStore = create<ChainlinkAbiState>()((set) => ({
   chainlinkAbi: chainlinkAbi,
-  getChainlinkAbi: (chainlinkAbi) => set(() => ({ chainlinkAbi: chainlinkAbi })),
+  getChainlinkAbi: (chainlinkAbi) =>
+    set(() => ({ chainlinkAbi: chainlinkAbi })),
 }));
 
 interface USDToEuroAbiState {
@@ -233,13 +234,10 @@ interface Erc20AbiState {
   getErc20Abi: (erc20Abi: Array<any>) => void;
 }
 
-export const useErc20AbiStore = create<Erc20AbiState>()(
-  (set) => ({
-    erc20Abi: erc20Abi,
-    getErc20Abi: (erc20Abi) =>
-      set(() => ({ erc20Abi: erc20Abi })),
-  })
-);
+export const useErc20AbiStore = create<Erc20AbiState>()((set) => ({
+  erc20Abi: erc20Abi,
+  getErc20Abi: (erc20Abi) => set(() => ({ erc20Abi: erc20Abi })),
+}));
 
 interface VaultIdState {
   vaultID: any;
