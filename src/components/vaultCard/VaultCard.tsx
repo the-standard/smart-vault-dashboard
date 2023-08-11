@@ -90,7 +90,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   // Define your function using async/await
   const handleMintVault = async () => {
-    const { data, isLoading, isSuccess, write } = mintVault;
+    const { write } = mintVault;
     try {
       // Execute the contract method by calling the 'write' function
       write();

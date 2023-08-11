@@ -11,7 +11,7 @@ import {
   useGreyProgressBarValuesStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
@@ -96,9 +96,9 @@ const Deposit: React.FC<DepositProps> = ({
   };
   //clipboard logic end
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_ALCHEMY_URL
-  );
+  // const provider = new ethers.providers.JsonRpcProvider(
+  //   import.meta.env.VITE_ALCHEMY_URL
+  // );
   const [dynamicABI, setDynamicABI] = useState<any>([]);
 
   const { chain } = getNetwork();
@@ -258,6 +258,8 @@ const Deposit: React.FC<DepositProps> = ({
     } catch (error) {
       // waitForTransaction(txHashForError);
       console.log(error);
+      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
+      getSnackBar(1);
     }
   };
 
@@ -309,26 +311,26 @@ const Deposit: React.FC<DepositProps> = ({
     depositToken.isSuccess,
   ]);
 
-  const waitForTransaction = async (_transactionHash: string) => {
-    try {
-      getProgressType(2);
+  // const waitForTransaction = async (_transactionHash: string) => {
+  //   try {
+  //     getProgressType(2);
 
-      getCircularProgress(true);
-      await provider.waitForTransaction(_transactionHash);
-      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(0);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    } catch (error) {
-      console.log(error);
-      getCircularProgress(false);
-      getSnackBar(1);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    }
-  };
+  //     getCircularProgress(true);
+  //     await provider.waitForTransaction(_transactionHash);
+  //     getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
+  //     getSnackBar(0);
+  //     inputRef.current.value = "";
+  //     inputRef.current.focus();
+  //     getGreyBarUserInput(0);
+  //   } catch (error) {
+  //     console.log(error);
+  //     getCircularProgress(false);
+  //     getSnackBar(1);
+  //     inputRef.current.value = "";
+  //     inputRef.current.focus();
+  //     getGreyBarUserInput(0);
+  //   }
+  // };
 
   return (
     <Box>

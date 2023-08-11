@@ -57,7 +57,7 @@ const Index = () => {
     abi: chainlinkAbi,
     functionName: "latestRoundData",
   };
-
+  console.log(vaultStore.status.collateral);
   const { data: prices } = useContractReads({
     contracts: vaultStore.status.collateral.map((asset: any) => {
       return { ...contractFunction, address: asset.token.clAddr };
@@ -178,22 +178,35 @@ const Index = () => {
               if (collateral.id === "ETH") {
                 // Replace this calculation with the appropriate one for ETH
                 nativeValue = formatEther(
-                  BigInt(fromHex(vaultStore.status[4][0][1]._hex, "number"))
+                  BigInt(
+                    fromHex(
+                      vaultStore.status.collateral[0].collateralValue,
+                      "number"
+                    )
+                  )
                 );
               } else if (collateral.id === "WBTC") {
                 // Replace this calculation with the appropriate one for SUSD6
                 nativeValue = formatUnits(
-                  BigInt(fromHex(vaultStore.status[4][1][1]._hex, "number")),
+                  BigInt(
+                    fromHex(
+                      vaultStore.status.collateral[1].collateralValue,
+                      "number"
+                    )
+                  ),
                   8
                 );
+              } else {
+                // Replace this calculation with the appropriate one for SUSD18
+                nativeValue = formatEther(
+                  BigInt(
+                    fromHex(
+                      vaultStore.status.collateral[2].collateralValue,
+                      "number"
+                    )
+                  )
+                );
               }
-
-              // else {
-              //   // Replace this calculation with the appropriate one for SUSD18
-              //   nativeValue = formatEther(
-              //     BigInt(fromHex(vaultStore.status[4][2][1]._hex, "number"))
-              //   );
-              // }
 
               return {
                 ...collateral, // Copy all the properties from the original collateral object
@@ -257,73 +270,6 @@ const Index = () => {
 
   //delete this log later on
   console.log(symbolForGreyBar);
-
-  // const convertUsdToEuro = async (ethValueInUsd: number) => {
-  //   try {
-  //     const contract = new ethers.Contract(
-  //       arbitrumOneUSDToEuroAddress,
-  //       usdToEuroAbi,
-  //       provider
-  //     );
-  //     console.log(contract);
-  //     const price = await contract.latestRoundData();
-  //     console.log(price.answer);
-
-  //     const priceInEuro = fromHex(price.answer, "number");
-  //     console.log(priceInEuro);
-  //     const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
-  //     console.log(priceInEuroFormatted);
-  //     const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
-  //     console.log(euroValueConverted);
-  //     setEuroValueConverted(euroValueConverted);
-  //     return priceInEuroFormatted;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const getUsdPriceOfToken = async () => {
-  //   if (vaultStore.status) {
-  //     //the first [0] is the token type, so it should be dynamic
-  //     console.log(vaultStore.status.collateral[0].token);
-  //     if (symbolForGreyBar === "ETH") {
-  //       myToken = vaultStore.status.collateral[0].token;
-  //     } else if (symbolForGreyBar === "WBTC") {
-  //       myToken = vaultStore.status.collateral[1].token;
-  //       console.log(vaultStore.status.collateral[1].token);
-  //     } else if (symbolForGreyBar === "ARB") {
-  //       myToken = vaultStore.status.collateral[2].token;
-  //       console.log(
-  //         fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
-  //       );
-  //     } else if (symbolForGreyBar === "LINK") {
-  //       myToken = vaultStore.status.collateral[3].token;
-  //     } else if (symbolForGreyBar === "PAXG") {
-  //       myToken = vaultStore.status.collateral[4].token;
-  //       console.log(
-  //         fromHex(vaultStore.status?.collateral[4].token.symbol, "string")
-  //       );
-  //     }
-  //     console.log(symbolForGreyBar);
-  //     console.log(myToken);
-  //     const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
-  //     console.log(contract);
-  //     const price = await contract.latestRoundData();
-  //     console.log(price);
-  //     const priceInUsd = fromHex(price.answer, "number");
-  //     console.log(BigInt(priceInUsd));
-  //     const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
-  //     console.log(priceFormatted);
-  //     // setEthPriceInUsd(priceFormatted);
-  //     console.log(userInputForGreyBarOperation);
-  //     console.log(Number(priceFormatted) * userInputForGreyBarOperation);
-  //     const amountinUsd =
-  //       Number(userInputForGreyBarOperation) * Number(priceFormatted);
-  //     console.log(amountinUsd);
-  //     //not amountinusd but priceformatted as I need to see the price of 1 ether in euro and not the amount of user input
-  //     return Number(priceFormatted);
-  //   }
-  // };
 
   const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {
     console.log("euroValueConverted", euroValueConverted);

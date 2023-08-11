@@ -21,11 +21,9 @@ import {
 import "../../styles/progressBarStyle.css";
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther, formatUnits } from "viem";
-import { getNetwork } from "@wagmi/core";
-import { useAccount, useContractReads, useNetwork } from "wagmi";
-import {
-  arbitrumGoerli,
-} from "wagmi/chains";
+// import { getNetwork } from "@wagmi/core";
+import { useContractReads, useNetwork } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -36,10 +34,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const tokenMap = useRef(new Map());
   //store values
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const {
-    arbitrumGoerliContractAddress,
-    arbitrumContractAddress,
-  } = useContractAddressStore();
+  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+    useContractAddressStore();
   const { getVaultID } = useVaultIdStore();
   const { getVaultForListing } = useVaultForListingStore();
   //modal state
@@ -50,7 +46,10 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const [modalChildState, setModalChildState] = useState();
 
   const { chain } = useNetwork();
-  const vaultManagerAddress = chain?.id === arbitrumGoerli.id ? arbitrumGoerliContractAddress : arbitrumContractAddress;
+  const vaultManagerAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliContractAddress
+      : arbitrumContractAddress;
 
   const truncateValue = (value: string, length: number) => {
     if (value.length <= length) {
@@ -99,22 +98,25 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const contractFunction = {
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
-    functionName: 'tokenURI'
+    functionName: "tokenURI",
   };
 
   const { data: NFTsMetadata } = useContractReads({
-    contracts: vaults.map(vault => {
+    contracts: vaults.map((vault) => {
       console.log(vault.tokenId);
-      return { ...contractFunction, args: [vault.tokenId] }
+      return { ...contractFunction, args: [vault.tokenId] };
     }),
-  })
+  });
 
   NFTsMetadata?.forEach((data, index) => {
-    const decodable = data.result?.toString().split(',')[1];
+    const decodable = data.result?.toString().split(",")[1];
     if (decodable) {
       const decoded = atob(decodable);
       const parsed = JSON.parse(decoded);
-      tokenToNFTMap.current.set(ethers.BigNumber.from(vaults[index].tokenId).toString(), parsed.image_data);
+      tokenToNFTMap.current.set(
+        ethers.BigNumber.from(vaults[index].tokenId).toString(),
+        parsed.image_data
+      );
       tokenMap.current.set(
         ethers.BigNumber.from(vaults[index].tokenId).toString(),
         parsed
@@ -363,7 +365,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault.status.minted)),
                           Number(
-                            ethers.BigNumber.from(vault.status.totalCollateralValue)
+                            ethers.BigNumber.from(
+                              vault.status.totalCollateralValue
+                            )
                           )
                         )}
                       />
@@ -371,7 +375,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td style={{}}>
                       {" "}
                       {renderActions({
-                        vaultID: ethers.BigNumber.from(vault.tokenId).toString(),
+                        vaultID: ethers.BigNumber.from(
+                          vault.tokenId
+                        ).toString(),
                         smartVault: vault,
                       })}
                     </td>
@@ -473,7 +479,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault.status.minted)),
                           Number(
-                            ethers.BigNumber.from(vault.status.totalCollateralValue)
+                            ethers.BigNumber.from(
+                              vault.status.totalCollateralValue
+                            )
                           )
                         )}
                       />
@@ -481,7 +489,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td style={{}}>
                       {" "}
                       {renderActions({
-                        vaultID: ethers.BigNumber.from(vault.tokenId).toString(),
+                        vaultID: ethers.BigNumber.from(
+                          vault.tokenId
+                        ).toString(),
                         smartVault: vault,
                       })}
                     </td>
@@ -615,7 +625,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         progressValue={computeProgressBar(
                           Number(ethers.BigNumber.from(vault.status.minted)),
                           Number(
-                            ethers.BigNumber.from(vault.status.totalCollateralValue)
+                            ethers.BigNumber.from(
+                              vault.status.totalCollateralValue
+                            )
                           )
                         )}
                       />
@@ -623,7 +635,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td style={{}}>
                       {" "}
                       {renderActions({
-                        vaultID: ethers.BigNumber.from(vault.tokenId).toString(),
+                        vaultID: ethers.BigNumber.from(
+                          vault.tokenId
+                        ).toString(),
                         smartVault: vault,
                       })}
                     </td>

@@ -51,7 +51,7 @@ const Debt = () => {
     getCounter(1);
   };
 
-  const debtValue: any = ethers.BigNumber.from(vaultStore[4].minted);
+  const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
   console.log(debtValue.toString());
 
   const handleClick = (element: any) => {

@@ -17,12 +17,11 @@ import { Box, Modal, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 // import abi from "../abis/vaultManager.ts";
 // import tokenmanagerabi from "../abis/tokenManagerABI.ts";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
 import "../styles/buttonStyle.css";
-import { formatEther, fromHex } from "viem";
 import ChartComponent from "../components/chart/index.tsx";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -138,32 +137,32 @@ const Collateral = () => {
         //set vault to state
         getVaultStore(vault);
         console.log("vault", vault);
-        //set vault to local state
-        //set vault address to state
+
         getVaultAddress(vault.status.vaultAddress);
-        //   //set vault address to local state
       }
     });
   }
 
   const displayTokens = () => {
-    const { collateral } = vaultStore.status;
-    if (!collateral || collateral.length === 0) {
-      return <div>Loading...</div>;
-    }
+    if (vaultStore.status.collateral !== undefined) {
+      const { collateral } = vaultStore.status;
+      if (!collateral || collateral.length === 0) {
+        return <div>Loading...</div>;
+      }
 
-    return collateral.map((asset: any, index: number) => {
-      return (
-        <AcceptedToken
-          key={index}
-          symbol={ethers.utils.parseBytes32String(asset.token.symbol)}
-          amount={ethers.BigNumber.from(asset.amount).toString()}
-          tokenAddress={asset.token.addr}
-          decimals={asset.token.dec}
-          token={asset.token}
-        />
-      );
-    });
+      return collateral.map((asset: any, index: number) => {
+        return (
+          <AcceptedToken
+            key={index}
+            symbol={ethers.utils.parseBytes32String(asset.token.symbol)}
+            amount={ethers.BigNumber.from(asset.amount).toString()}
+            tokenAddress={asset.token.addr}
+            decimals={asset.token.dec}
+            token={asset.token}
+          />
+        );
+      });
+    }
   };
 
   const displayDebt = () => {
@@ -187,36 +186,30 @@ const Collateral = () => {
   //chang these to arbitrum
   const handleButtonActions = (id: number) => {
     if (id === 1) {
-      window.open(
-        `https://sepolia.etherscan.io/address/${vaultAddress}`,
-        "_blank"
-      );
+      window.open(`https://arbiscan.io/address/${vaultAddress}`, "_blank");
     } else if (id === 2) {
       // window.open(
-      //   `https://sepolia.etherscan.io/address/${vaultAddress}`,
+      //   `https://arbiscan.io/address/${vaultAddress}`,
       //   "_blank"
       // );
       handleWalletOpen();
     } else if (id === 3) {
-      window.open(
-        `https://sepolia.etherscan.io/address/${vaultAddress}`,
-        "_blank"
-      );
+      window.open(`https://arbiscan.io/address/${vaultAddress}`, "_blank");
     }
   };
 
-  function removeLast18Digits(num: number) {
-    // Convert the number to a string
-    const str = num.toString();
+  // function removeLast18Digits(num: number) {
+  //   // Convert the number to a string
+  //   const str = num.toString();
 
-    // Remove the last 18 characters using slice()
-    const resultStr = str.slice(0, -18);
+  //   // Remove the last 18 characters using slice()
+  //   const resultStr = str.slice(0, -18);
 
-    // Convert the resulting string back to a number
-    const resultNum = Number(resultStr);
+  //   // Convert the resulting string back to a number
+  //   const resultNum = Number(resultStr);
 
-    return resultNum;
-  }
+  //   return resultNum;
+  // }
 
   useEffect(() => {
     console.log(vaultId + "my vault update");
