@@ -43,7 +43,7 @@ const StepOne: React.FC<StepProps> = ({
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
   const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
+    import.meta.env.VITE_ALCHEMY_URL
   );
   const signer = provider.getSigner(address);
 
@@ -52,7 +52,7 @@ const StepOne: React.FC<StepProps> = ({
   const totalValueInEth = tokenMap.get(modalChildState).attributes[6].value;
 
   const convertETHToUSD = async (eth: number) => {
-    const ethclAddr = vaultForListing[4].collateral[0].token.clAddr;
+    const ethclAddr = vaultForListing.status.collateral[0].token.clAddr;
     console.log(ethclAddr);
 
     const contract = new ethers.Contract(ethclAddr, chainlinkAbi, signer);

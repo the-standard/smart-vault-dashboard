@@ -37,10 +37,14 @@ interface StepProps {
 const StepTwo: React.FC<StepProps> = ({
   modalChildState,
   tokenMap,
-  onDataFromChild,
+  // onDataFromChild,
 }) => {
   const { vaultForListing } = useVaultForListingStore();
-  const { contractAddress } = useContractAddressStore();
+  const {
+    // contractAddress,
+    arbitrumContractAddress,
+    arbitrumGoerliContractAddress,
+  } = useContractAddressStore();
   //this might be useless. where else do I use it?
   const { totalValue } = useNFTListingModalStore();
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
@@ -56,13 +60,13 @@ const StepTwo: React.FC<StepProps> = ({
   const [userInput, setUserInput] = useState<string>("");
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
 
-  console.log(onDataFromChild);
-  console.log(modalChildState);
+  // console.log(onDataFromChild);
+  // console.log(modalChildState);
 
   const { address } = useAccount();
 
   const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_QUICKNODE_URL
+    import.meta.env.VITE_ALCHEMY_URL
   );
   const signer = provider.getSigner(address);
   // console.log(signer);
@@ -72,11 +76,12 @@ const StepTwo: React.FC<StepProps> = ({
   if (chain?.id === 1) {
     openseaSDK = new OpenSeaSDK(provider, {
       chain: Chain.Mainnet,
-      // apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
+      apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
     });
   } else if (chain?.id === 42161) {
     openseaSDK = new OpenSeaSDK(provider, {
       chain: Chain.Arbitrum,
+      apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
     });
   } else if (chain?.id === 421613) {
     openseaSDK = new OpenSeaSDK(provider, {
@@ -89,17 +94,25 @@ const StepTwo: React.FC<StepProps> = ({
   // Expire this auction one day from now.
   // Note that we convert from the JavaScript timestamp (milliseconds):
 
-  const tokenIdBeforeConversion: any = vaultForListing[0];
+  const tokenIdBeforeConversion: any = vaultForListing.tokenId;
   const accountAddress: any = address;
   const tokenId: any = fromHex(tokenIdBeforeConversion, "number").toString();
-  const tokenAddress: any = contractAddress;
+
+  let tokenAddress: any;
+  if (chain?.id === 42161) {
+    tokenAddress = arbitrumContractAddress;
+  } else if (chain?.id === 421613) {
+    tokenAddress = arbitrumGoerliContractAddress;
+  }
 
   console.log(tokenAddress);
+  console.log(tokenIdBeforeConversion);
+  console.log(vaultForListing);
   console.log(tokenId);
 
   const userValueInUsd = async (eth: number) => {
     try {
-      const ethclAddr = vaultForListing[4].collateral[0].token.clAddr;
+      const ethclAddr = vaultForListing.status.collateral[0].token.clAddr;
       console.log(ethclAddr);
 
       const contract = new ethers.Contract(ethclAddr, chainlinkAbi, signer);
@@ -149,6 +162,9 @@ const StepTwo: React.FC<StepProps> = ({
   };
 
   const listSmartVault = async () => {
+    console.log(tokenId);
+    console.log(tokenAddress);
+    console.log(accountAddress);
     try {
       const listing = await openseaSDK.createSellOrder({
         asset: {

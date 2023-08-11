@@ -35,15 +35,15 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
   }
 
   const renderColor = () => {
-    //if the last element is greater than the second to last element, set lineColor to green
+    //if the last element is greater than the first ever element, set lineColor to green
     if (
       Number(convertedData[convertedData.length - 1][1]) >
-      Number(convertedData[convertedData.length - 2][1])
+      Number(convertedData[0][1])
     ) {
       setLineColor("green");
     } else if (
       Number(convertedData[convertedData.length - 1][1]) <
-      Number(convertedData[convertedData.length - 2][1])
+      Number(convertedData[0][1])
     ) {
       setLineColor("red");
     }
