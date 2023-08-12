@@ -6,8 +6,8 @@ import {
   useVaultStore,
   useVaultIdStore,
   useGreyProgressBarValuesStore,
-  useEthToUsdAbiStore,
-  useUSDToEuroAbiStore,
+  // useEthToUsdAbiStore,
+  // useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
   useChainlinkAbiStore,
 
@@ -24,9 +24,9 @@ const Index = () => {
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
-  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  // const { ethToUsdAbi } = useEthToUsdAbiStore();
   const { arbitrumOneUSDToEuroAddress } = useUSDToEuroAddressStore();
-  const { usdToEuroAbi } = useUSDToEuroAbiStore();
+  // const { usdToEuroAbi } = useUSDToEuroAbiStore();
   const { chainlinkAbi } = useChainlinkAbiStore();
 
   // const { counter } = useCounterStore();
