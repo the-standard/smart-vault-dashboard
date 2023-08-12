@@ -9,6 +9,8 @@ import {
   useEthToUsdAbiStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
+  useChainlinkAbiStore,
+
   // useCounterStore,
 } from "../../store/Store";
 import { ethers } from "ethers";
@@ -25,6 +27,7 @@ const Index = () => {
   const { ethToUsdAbi } = useEthToUsdAbiStore();
   const { arbitrumOneUSDToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
+  const { chainlinkAbi } = useChainlinkAbiStore();
 
   // const { counter } = useCounterStore();
 
@@ -71,7 +74,7 @@ const Index = () => {
         try {
           const contract = new ethers.Contract(
             arbitrumOneUSDToEuroAddress,
-            usdToEuroAbi,
+            chainlinkAbi,
             signer
           );
           console.log(contract);
@@ -96,7 +99,7 @@ const Index = () => {
 
       const token = vaultStore[4].collateral[0][0];
       console.log(token.clAddr);
-      const contract = new ethers.Contract(token.clAddr, ethToUsdAbi, signer);
+      const contract = new ethers.Contract(token.clAddr, chainlinkAbi, signer);
 
       const price = await contract.latestRoundData();
 
