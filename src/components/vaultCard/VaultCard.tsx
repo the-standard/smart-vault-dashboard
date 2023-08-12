@@ -234,6 +234,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
                   sm: "auto",
                   lg: "200px",
                 },
+                height: "15px",
               }}
               variant="body1"
             >

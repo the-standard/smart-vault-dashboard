@@ -72,9 +72,6 @@ const HomePage = () => {
   });
 
   // console.log(myVaults);
-  // if (myVaults?.length > 0) {
-  //   console.log(myVaults[0].toString());
-  // }
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
