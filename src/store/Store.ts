@@ -9,6 +9,7 @@ import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 import nativeCollateralAbi from "../abis/nativeCollateralABI.ts";
 import collateralAbi from "../abis/collateralABI.ts";
 import WBTCABI from "../abis/tokens/WBTCABI.ts";
+import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
 
 // interface PriceCalculatorState {
 //   priceCalculatorabi: Array<any>;
@@ -17,7 +18,15 @@ import WBTCABI from "../abis/tokens/WBTCABI.ts";
 // export const usePriceCalculatorStore = create<PriceCalculatorState>(() => ({
 //   priceCalculatorabi: priceCalculatorAbi,
 // }));
+interface EthToUsdAbiState {
+  ethToUsdAbi: Array<any>;
+  getEthToUsdAbi: (ethToUsdAbi: Array<any>) => void;
+}
 
+export const useEthToUsdAbiStore = create<EthToUsdAbiState>()((set) => ({
+  ethToUsdAbi: ethtousdAbi,
+  getEthToUsdAbi: (ethToUsdAbi) => set(() => ({ ethToUsdAbi: ethToUsdAbi })),
+}));
 interface UsdToEuroState {
   usdToEuroAbi: Array<any>;
 }

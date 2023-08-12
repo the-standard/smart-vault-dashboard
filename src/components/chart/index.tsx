@@ -6,7 +6,7 @@ import {
   useVaultStore,
   useVaultIdStore,
   useGreyProgressBarValuesStore,
-  useChainlinkAbiStore,
+  useEthToUsdAbiStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
   // useCounterStore,
@@ -14,7 +14,7 @@ import {
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 
 const Index = () => {
@@ -22,9 +22,8 @@ const Index = () => {
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
-  const { chainlinkAbi } = useChainlinkAbiStore();
-  const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } =
-    useUSDToEuroAddressStore();
+  const { ethToUsdAbi } = useEthToUsdAbiStore();
+  const { arbitrumOneUSDToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
 
   // const { counter } = useCounterStore();
@@ -52,24 +51,6 @@ const Index = () => {
     );
   }
   const signer = provider.getSigner(address);
-
-  const contractFunction = {
-    abi: chainlinkAbi,
-    functionName: "latestRoundData",
-  };
-  console.log(vaultStore.status.collateral);
-  const { data: prices } = useContractReads({
-    contracts: vaultStore.status.collateral.map((asset: any) => {
-      return { ...contractFunction, address: asset.token.clAddr };
-    }),
-  });
-
-  // TODO USE THESE PRICES:
-  prices?.forEach((price: any) => {
-    // this is the answer to each feed
-    console.log("xxx", price.result[1]);
-  });
-
   // let myToken: any = undefined;
 
   // useEffect(() => {
@@ -83,21 +64,13 @@ const Index = () => {
     label: string;
   }
 
-  let dynamicUSDToEuroAddress: string;
-
-  if (chain?.id == 421613) {
-    dynamicUSDToEuroAddress = arbitrumGoerliUSDToEuroAddress;
-  } else if (chain?.id === 42161) {
-    dynamicUSDToEuroAddress = arbitrumOneUSDToEuroAddress;
-  }
-
   const getChartValues = async () => {
-    if (vaultStore.status) {
+    if (vaultStore[4]) {
       //need to recreate this function here scoped to the function
       const convertUsdToEuro = async (ethValueInUsd: number) => {
         try {
           const contract = new ethers.Contract(
-            dynamicUSDToEuroAddress,
+            arbitrumOneUSDToEuroAddress,
             usdToEuroAbi,
             signer
           );
@@ -121,9 +94,9 @@ const Index = () => {
 
       const priceInEuro = await convertUsdToEuro(1);
 
-      const token = vaultStore.status.collateral[0].token;
+      const token = vaultStore[4].collateral[0][0];
       console.log(token.clAddr);
-      const contract = new ethers.Contract(token.clAddr, chainlinkAbi, signer);
+      const contract = new ethers.Contract(token.clAddr, ethToUsdAbi, signer);
 
       const price = await contract.latestRoundData();
 
@@ -131,23 +104,20 @@ const Index = () => {
 
       const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
       //price of eth in eth
+      console.log(
+        formatEther(BigInt(fromHex(vaultStore[4][4][0][1]._hex, "number")))
+      );
       console.log(vaultStore);
-      // console.log(
-      //   formatEther(BigInt(fromHex(vaultStore.status[4][0][1]._hex, "number")))
-      // );
 
       console.log(priceFormatted);
       if (chosenVault != undefined) {
         console.log("chosen vault", chosenVault);
         try {
           setLoading(true);
-          const collateralMapped = chosenVault.status.collateral.map(
+          const collateralMapped = chosenVault[4].collateral.map(
             (collateral: any) => {
-              const id = ethers.utils.parseBytes32String(
-                collateral.token.symbol
-              );
-              console.log(id);
-              let value = fromHex(collateral.collateralValue, "number");
+              const id = ethers.utils.parseBytes32String(collateral[0].symbol);
+              let value = fromHex(collateral[1]._hex, "number");
 
               if (id === "ETH") {
                 value =
@@ -178,33 +148,18 @@ const Index = () => {
               if (collateral.id === "ETH") {
                 // Replace this calculation with the appropriate one for ETH
                 nativeValue = formatEther(
-                  BigInt(
-                    fromHex(
-                      vaultStore.status.collateral[0].collateralValue,
-                      "number"
-                    )
-                  )
+                  BigInt(fromHex(vaultStore[4][4][0][1]._hex, "number"))
                 );
               } else if (collateral.id === "WBTC") {
                 // Replace this calculation with the appropriate one for SUSD6
                 nativeValue = formatUnits(
-                  BigInt(
-                    fromHex(
-                      vaultStore.status.collateral[1].collateralValue,
-                      "number"
-                    )
-                  ),
+                  BigInt(fromHex(vaultStore[4][4][1][1]._hex, "number")),
                   8
                 );
               } else {
                 // Replace this calculation with the appropriate one for SUSD18
                 nativeValue = formatEther(
-                  BigInt(
-                    fromHex(
-                      vaultStore.status.collateral[2].collateralValue,
-                      "number"
-                    )
-                  )
+                  BigInt(fromHex(vaultStore[4][4][2][1]._hex, "number"))
                 );
               }
 
@@ -219,11 +174,11 @@ const Index = () => {
           setChartData(collateralWithAdditions);
 
           const totalCollateralValueInUSD = removeLast18Digits(
-            fromHex(chosenVault.status.totalCollateralValue, "number")
+            fromHex(chosenVault[4].totalCollateralValue._hex, "number")
           );
           console.log("totalCollateralValueInUSD", totalCollateralValueInUSD);
 
-          const totalDebt = formatEther(chosenVault.status.minted);
+          const totalDebt = formatEther(chosenVault[4].minted);
           console.log("totalDebt", totalDebt);
 
           const totalLiquidationValue = Number(totalDebt) * 1.1;
@@ -270,6 +225,73 @@ const Index = () => {
 
   //delete this log later on
   console.log(symbolForGreyBar);
+
+  // const convertUsdToEuro = async (ethValueInUsd: number) => {
+  //   try {
+  //     const contract = new ethers.Contract(
+  //       arbitrumOneUSDToEuroAddress,
+  //       usdToEuroAbi,
+  //       provider
+  //     );
+  //     console.log(contract);
+  //     const price = await contract.latestRoundData();
+  //     console.log(price.answer);
+
+  //     const priceInEuro = fromHex(price.answer, "number");
+  //     console.log(priceInEuro);
+  //     const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
+  //     console.log(priceInEuroFormatted);
+  //     const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
+  //     console.log(euroValueConverted);
+  //     setEuroValueConverted(euroValueConverted);
+  //     return priceInEuroFormatted;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const getUsdPriceOfToken = async () => {
+  //   if (vaultStore[4]) {
+  //     //the first [0] is the token type, so it should be dynamic
+  //     console.log(vaultStore[4].collateral[0].token);
+  //     if (symbolForGreyBar === "ETH") {
+  //       myToken = vaultStore[4].collateral[0].token;
+  //     } else if (symbolForGreyBar === "WBTC") {
+  //       myToken = vaultStore[4].collateral[1].token;
+  //       console.log(vaultStore[4].collateral[1].token);
+  //     } else if (symbolForGreyBar === "ARB") {
+  //       myToken = vaultStore[4].collateral[2].token;
+  //       console.log(
+  //         fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
+  //       );
+  //     } else if (symbolForGreyBar === "LINK") {
+  //       myToken = vaultStore[4].collateral[3].token;
+  //     } else if (symbolForGreyBar === "PAXG") {
+  //       myToken = vaultStore[4].collateral[4].token;
+  //       console.log(
+  //         fromHex(vaultStore.status?.collateral[4].token.symbol, "string")
+  //       );
+  //     }
+  //     console.log(symbolForGreyBar);
+  //     console.log(myToken);
+  //     const contract = new ethers.Contract(myToken.clAddr, ethToUsdAbi, signer);
+  //     console.log(contract);
+  //     const price = await contract.latestRoundData();
+  //     console.log(price);
+  //     const priceInUsd = fromHex(price.answer, "number");
+  //     console.log(BigInt(priceInUsd));
+  //     const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
+  //     console.log(priceFormatted);
+  //     // setEthPriceInUsd(priceFormatted);
+  //     console.log(userInputForGreyBarOperation);
+  //     console.log(Number(priceFormatted) * userInputForGreyBarOperation);
+  //     const amountinUsd =
+  //       Number(userInputForGreyBarOperation) * Number(priceFormatted);
+  //     console.log(amountinUsd);
+  //     //not amountinusd but priceformatted as I need to see the price of 1 ether in euro and not the amount of user input
+  //     return Number(priceFormatted);
+  //   }
+  // };
 
   const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {
     console.log("euroValueConverted", euroValueConverted);
@@ -496,16 +518,12 @@ const Index = () => {
           </Typography>
           <ProgressBar
             progressValue={computeProgressBar(
-              Number(ethers.BigNumber.from(chosenVault.status.minted)),
-              Number(
-                ethers.BigNumber.from(chosenVault.status.totalCollateralValue)
-              )
+              Number(ethers.BigNumber.from(chosenVault[4].minted)),
+              Number(ethers.BigNumber.from(chosenVault[4].totalCollateralValue))
             )}
             greyBarValue={computeGreyBar(
-              Number(ethers.BigNumber.from(chosenVault.status.minted)),
-              Number(
-                ethers.BigNumber.from(chosenVault.status.totalCollateralValue)
-              )
+              Number(ethers.BigNumber.from(chosenVault[4].minted)),
+              Number(ethers.BigNumber.from(chosenVault[4].totalCollateralValue))
             )}
           />
           <Typography
