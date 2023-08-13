@@ -10,11 +10,13 @@ import {
   useChainlinkAbiStore,
   useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
+  useSnackBarStore,
 } from "../../store/Store.ts";
 import { ethers } from "ethers";
 import { formatUnits, fromHex } from "viem";
 // import axios from "axios";
 import { useAccount } from "wagmi";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,6 +43,7 @@ const StepOne: React.FC<StepProps> = ({
   const { chainlinkAbi } = useChainlinkAbiStore();
   const { usdToEuroAddress } = useUSDToEuroAddressStore();
   const { usdToEuroAbi } = useUSDToEuroAbiStore();
+  const { getSnackBar } = useSnackBarStore();
 
   const provider = new ethers.providers.JsonRpcProvider(
     import.meta.env.VITE_ALCHEMY_URL
@@ -48,6 +51,10 @@ const StepOne: React.FC<StepProps> = ({
   const signer = provider.getSigner(address);
 
   console.log(tokenMap.get(modalChildState));
+  console.log(tokenMap);
+  //the id of the vault
+  console.log(modalChildState);
+  console.log(vaultForListing);
 
   const totalValueInEth = tokenMap.get(modalChildState).attributes[6].value;
 
@@ -108,6 +115,29 @@ const StepOne: React.FC<StepProps> = ({
   const chosenNFT = tokenMap.get(modalChildState);
 
   console.log(vaultForListing);
+
+  // Function to handle copying the text
+  const handleCopyText = () => {
+    const textElement = vaultForListing.status.vaultAddress;
+
+    // Check if the browser supports the Clipboard API
+    if (navigator.clipboard && textElement) {
+      const text = textElement;
+
+      // Copy the text to the clipboard
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          console.log("Text copied to clipboard:", text);
+          getSnackBar(0);
+          //handleSnackbarClick();
+        })
+
+        .catch((error) => {
+          console.error("Error copying text to clipboard:", error);
+        });
+    }
+  };
   return (
     <Box sx={{}}>
       <Box sx={{}}>
@@ -508,6 +538,71 @@ const StepOne: React.FC<StepProps> = ({
               </Card>
             </Box>
           </Box>
+        </Box>
+        {/* add NFT part */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{ color: "#ffff", margin: "0.5rem 0" }}
+            variant="h5"
+            component="div"
+          >
+            Add NFT to your wallet
+          </Typography>
+          <Typography
+            sx={{
+              lineHeight: "24px",
+              color: "#ffff",
+              // margin: "20px 0 10px 0",
+              margin: "0 0 0.5rem 0",
+              display: "flex",
+              alignItems: "center",
+            }}
+            variant="body1"
+          >
+            Address:{" "}
+            <span
+              style={{
+                color: "white",
+              }}
+            >
+              {vaultForListing.status.vaultAddress}
+            </span>
+            <Box
+              sx={{
+                cursor: "pointer",
+                marginLeft: "0.5rem",
+              }}
+              onClick={handleCopyText}
+            >
+              {" "}
+              <ContentCopyIcon />
+            </Box>
+          </Typography>{" "}
+          <Typography
+            sx={{
+              lineHeight: "24px",
+              color: "#ffff",
+              //  margin: "20px 0 10px 0",
+            }}
+            variant="body1"
+            component="div"
+          >
+            Token ID:{" "}
+            <span
+              style={{
+                color: "white",
+              }}
+            >
+              {modalChildState}
+            </span>
+          </Typography>
         </Box>
         <Box
           sx={{

@@ -69,10 +69,8 @@ const StepTwo: React.FC<StepProps> = ({
 
   const { address } = useAccount();
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_ALCHEMY_URL
-  );
-  const signer = provider.getSigner(address);
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
   // console.log(signer);
 
   let openseaSDK: any;
@@ -418,7 +416,7 @@ const StepTwo: React.FC<StepProps> = ({
               variant="body2"
               component="div"
             >
-              approx: {euroValueConverted} Euro
+              approx: {euroValueConverted && euroValueConverted.toFixed(2)} Euro
             </Typography>
           </Box>
         </CardContent>
