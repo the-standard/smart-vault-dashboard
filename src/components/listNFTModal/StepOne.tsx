@@ -166,314 +166,349 @@ const StepOne: React.FC<StepProps> = ({
       </Box>
       {/* bg color different */}
       <Box>
-        <Typography
+        <Box
           sx={{
-            fontStyle: "normal",
-            fontWeight: "400",
-            fontSize: "16px",
-            lineHeight: "141.5%",
-            color: "#8E9BAE",
-            margin: "25px 0 10px 0",
-          }}
-          variant="body2"
-          component="div"
-        >
-          Collateral
-        </Typography>
-        <Card
-          sx={{
-            background:
-              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-            borderRadius: "10px",
-            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(13.9px)",
-            WebkitBackdropFilter: "blur(13.9px)",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <CardContent
+          <Typography
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              fontStyle: "normal",
+              fontWeight: "400",
+              fontSize: "16px",
+              lineHeight: "141.5%",
+              color: "#8E9BAE",
+              margin: "25px 0 10px 0",
             }}
+            variant="body2"
+            component="div"
           >
-            <Typography
-              sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[5].trait_type}
-            </Typography>{" "}
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-                fontFamily: "Poppins",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[5].value}
-            </Typography>
-          </CardContent>{" "}
-          <CardContent
+            Collateral
+          </Typography>{" "}
+          <Typography
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              fontStyle: "normal",
+              fontWeight: "400",
+              fontSize: "16px",
+              lineHeight: "141.5%",
+              color: "#8E9BAE",
+              margin: "25px 0 10px 0",
             }}
+            variant="body2"
+            component="div"
           >
-            <Typography
-              sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[6].trait_type}
-            </Typography>{" "}
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-                fontFamily: "Poppins",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[6].value}
-            </Typography>
-          </CardContent>{" "}
-          <CardContent
+            Debt
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gridGap: "1rem",
+          }}
+        >
+          <Card
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              background:
+                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+              borderRadius: "10px",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(13.9px)",
+              WebkitBackdropFilter: "blur(13.9px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              width: "auto",
             }}
           >
-            <Typography
+            <CardContent
               sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
-              gutterBottom
             >
-              {tokenMap.get(modalChildState).attributes[7].trait_type}
-            </Typography>{" "}
-            <Typography
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
+                {tokenMap.get(modalChildState).attributes[5].trait_type}
+              </Typography>{" "}
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                  color: "white",
+                  fontFamily: "Poppins",
+                }}
+                gutterBottom
+              >
+                {tokenMap.get(modalChildState).attributes[5].value}
+              </Typography>
+            </CardContent>{" "}
+            <CardContent
               sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-                fontFamily: "Poppins",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
-              gutterBottom
             >
-              {tokenMap.get(modalChildState).attributes[7].value}
-            </Typography>
-          </CardContent>{" "}
-          <div
-            style={{
-              height: "1px",
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              marginLeft: "1rem",
-            }}
-          >
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
+                {tokenMap.get(modalChildState).attributes[6].trait_type}
+              </Typography>{" "}
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                  color: "white",
+                  fontFamily: "Poppins",
+                }}
+                gutterBottom
+              >
+                {tokenMap.get(modalChildState).attributes[6].value}
+              </Typography>
+            </CardContent>{" "}
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
+                {tokenMap.get(modalChildState).attributes[7].trait_type}
+              </Typography>{" "}
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                  color: "white",
+                  fontFamily: "Poppins",
+                }}
+                gutterBottom
+              >
+                {tokenMap.get(modalChildState).attributes[7].value}
+              </Typography>
+            </CardContent>{" "}
             <div
               style={{
                 height: "1px",
-                width: "90%",
-                background: "#8E9BAE",
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                marginLeft: "1rem",
               }}
-            ></div>
-          </div>
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
-              }}
-              gutterBottom
             >
-              Total value
-            </Typography>{" "}
-            <Typography
+              <div
+                style={{
+                  height: "1px",
+                  width: "90%",
+                  background: "#8E9BAE",
+                }}
+              ></div>
+            </div>
+            <CardContent
               sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-                fontFamily: "Poppins",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
-              gutterBottom
             >
-              {tokenMap.get(modalChildState).attributes[3].value} EUROs
-            </Typography>
-          </CardContent>
-        </Card>
-        <Typography
-          sx={{
-            fontStyle: "normal",
-            fontWeight: "400",
-            fontSize: "16px",
-            lineHeight: "141.5%",
-            color: "#8E9BAE",
-            margin: "25px 0 10px 0",
-          }}
-          variant="body2"
-          component="div"
-        >
-          Debt
-        </Typography>
-        <Card
-          sx={{
-            background:
-              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.5%, rgba(0, 0, 0, 0.6) 101.11%)",
-            borderRadius: "10px",
-            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
-            // backdropFilter: "blur(14px)",
-          }}
-        >
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
+              <Typography
+                sx={{
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                  fontSize: {
+                    xs: "12px",
+                    sm: "16px",
+                  },
+                  lineHeight: "141.5%",
+                  color: "#8E9BAE",
+                }}
+                gutterBottom
+              >
+                Total value
+              </Typography>{" "}
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "12px",
+                    sm: "14px",
+                  },
+                  color: "white",
+                  fontFamily: "Poppins",
+                }}
+                gutterBottom
+              >
+                {tokenMap.get(modalChildState).attributes[3].value} EUROs
+              </Typography>
+            </CardContent>
+          </Card>
+          {/* SECOND CARD */}
+          <Box sx={{}}>
+            {" "}
+            <Box
               sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
+                //  border: "2px solid red",
+                // display: "flex",
+                // flexDirection: "column",
+                // justifyContent: "center",
+                // alignItems: "center",
+                height: "100%",
               }}
-              gutterBottom
             >
-              {tokenMap.get(modalChildState).attributes[1].trait_type}
-            </Typography>{" "}
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-                fontFamily: "Poppins",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[1].value}
-            </Typography>
-          </CardContent>{" "}
-          <div
-            style={{
-              height: "1px",
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              marginLeft: "1rem",
-            }}
-          >
-            <div
-              style={{
-                height: "1px",
-                width: "90%",
-                background: "#8E9BAE",
-              }}
-            ></div>
-          </div>
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontStyle: "normal",
-                fontWeight: "400",
-                fontSize: {
-                  xs: "12px",
-                  sm: "16px",
-                },
-                lineHeight: "141.5%",
-                color: "#8E9BAE",
-              }}
-              gutterBottom
-            >
-              Total value minus debt
-            </Typography>{" "}
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "12px",
-                  sm: "14px",
-                },
-                color: "white",
-              }}
-              gutterBottom
-            >
-              {tokenMap.get(modalChildState).attributes[4].value}
-            </Typography>
-          </CardContent>
-        </Card>
+              <Card
+                sx={{
+                  background:
+                    "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.5%, rgba(0, 0, 0, 0.6) 101.11%)",
+                  borderRadius: "10px",
+                  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  // backdropFilter: "blur(14px)",
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <CardContent
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontStyle: "normal",
+                      fontWeight: "400",
+                      fontSize: {
+                        xs: "12px",
+                        sm: "16px",
+                      },
+                      lineHeight: "141.5%",
+                      color: "#8E9BAE",
+                    }}
+                    gutterBottom
+                  >
+                    {tokenMap.get(modalChildState).attributes[1].trait_type}
+                  </Typography>{" "}
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "12px",
+                        sm: "14px",
+                      },
+                      color: "white",
+                      fontFamily: "Poppins",
+                    }}
+                    gutterBottom
+                  >
+                    {tokenMap.get(modalChildState).attributes[1].value}
+                  </Typography>
+                </CardContent>{" "}
+                <div
+                  style={{
+                    height: "1px",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: "1rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      height: "1px",
+                      width: "90%",
+                      background: "#8E9BAE",
+                    }}
+                  ></div>
+                </div>
+                <CardContent
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontStyle: "normal",
+                      fontWeight: "400",
+                      fontSize: {
+                        xs: "12px",
+                        sm: "16px",
+                      },
+                      lineHeight: "141.5%",
+                      color: "#8E9BAE",
+                    }}
+                    gutterBottom
+                  >
+                    Total value minus debt
+                  </Typography>{" "}
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "12px",
+                        sm: "14px",
+                      },
+                      color: "white",
+                    }}
+                    gutterBottom
+                  >
+                    {tokenMap.get(modalChildState).attributes[4].value}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          </Box>
+        </Box>
         <Box
           sx={{
             display: "flex",

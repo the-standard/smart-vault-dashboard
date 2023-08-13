@@ -15,7 +15,7 @@ import {
   useVaultForListingStore,
   useContractAddressStore,
   useNFTListingModalStore,
-  useUSDToEuroAbiStore,
+  // useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
   useChainlinkAbiStore,
 } from "../../store/Store";
@@ -45,10 +45,14 @@ const StepTwo: React.FC<StepProps> = ({
     arbitrumContractAddress,
     arbitrumGoerliContractAddress,
   } = useContractAddressStore();
-  //this might be useless. where else do I use it?
+  //this might be useless. where else do I u,se it?
   const { totalValue } = useNFTListingModalStore();
-  const { usdToEuroAddress } = useUSDToEuroAddressStore();
-  const { usdToEuroAbi } = useUSDToEuroAbiStore();
+  const {
+    // usdToEuroAddress,
+    arbitrumOneUSDToEuroAddress,
+    arbitrumGoerliUSDToEuroAddress,
+  } = useUSDToEuroAddressStore();
+  // const { usdToEuroAbi } = useUSDToEuroAbiStore();
   // const { ethToUsdAddress } = useEthToUsdAddressStore();
   const { chainlinkAbi } = useChainlinkAbiStore();
   const { chain } = useNetwork();
@@ -117,6 +121,7 @@ const StepTwo: React.FC<StepProps> = ({
 
       const contract = new ethers.Contract(ethclAddr, chainlinkAbi, signer);
       const price = await contract.latestRoundData();
+      console.log(price.answer);
 
       const priceInUsd = fromHex(price.answer, "number");
 
@@ -137,11 +142,19 @@ const StepTwo: React.FC<StepProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInput]);
 
+  let conversionAddress: any;
+
+  if (chain?.id == 421613) {
+    conversionAddress = arbitrumGoerliUSDToEuroAddress;
+  } else if (chain?.id === 42161) {
+    conversionAddress = arbitrumOneUSDToEuroAddress;
+  }
+
   const convertUsdToEuro = async (ethValueInUsd: number) => {
     try {
       const contract = new ethers.Contract(
-        usdToEuroAddress,
-        usdToEuroAbi,
+        conversionAddress,
+        chainlinkAbi,
         signer
       );
       console.log(contract);

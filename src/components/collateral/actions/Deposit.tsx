@@ -67,6 +67,7 @@ const Deposit: React.FC<DepositProps> = ({
     console.log(e.target.value);
     getSymbolForGreyBar(symbol);
     getGreyBarUserInput(Number(e.target.value));
+    console.log(e.target.value);
   };
 
   //clipboard logic
