@@ -10,7 +10,6 @@ import susdlogo from "../assets/USDs.svg";
 import {
   useAccount,
   useContractRead,
-  useWalletClient,
   useNetwork,
 } from "wagmi";
 import {
@@ -63,12 +62,11 @@ const HomePage = () => {
       ? arbitrumGoerliContractAddress
       : arbitrumContractAddress;
 
-  const { data: walletClient } = useWalletClient();
   const { data: myVaults } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaults",
-    account: walletClient?.account,
+    account: address,
   });
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
