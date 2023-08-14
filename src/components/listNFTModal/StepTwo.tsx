@@ -4,25 +4,19 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
-import { ethers } from "ethers";
-// import { Seaport } from "@opensea/seaport-js";
-// import { ItemType } from "@opensea/seaport-js/lib/constants";
-// import axios from "axios";
-import { useAccount } from "wagmi";
+import { BigNumber, ethers } from "ethers";
+import { useAccount, useContractReads } from "wagmi";
 import { OpenSeaSDK, Chain } from "opensea-js";
-// import { OpenSeaAsset, TokenStandard } from "opensea-js/lib/types";
 import {
   useVaultForListingStore,
   useContractAddressStore,
-  useNFTListingModalStore,
-  // useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
   useChainlinkAbiStore,
+  useEthToUsdAddressStore,
 } from "../../store/Store";
-import { formatUnits, fromHex } from "viem";
-// import { getETHPrice } from "../../utils/getETHPrice";
-// import axios from "axios";
+import { fromHex } from "viem";
 import { useNetwork } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,47 +25,49 @@ interface StepProps {
   tokenMap: any;
   onDataFromChild: (data: number) => void;
 }
-// const url =
-//   "https://testnets-api.opensea.io/v2/orders/goerli/seaport/listings?limit=1";
 
 const StepTwo: React.FC<StepProps> = ({
   modalChildState,
   tokenMap,
-  // onDataFromChild,
 }) => {
   const { vaultForListing } = useVaultForListingStore();
   const {
-    // contractAddress,
     arbitrumContractAddress,
     arbitrumGoerliContractAddress,
   } = useContractAddressStore();
   //this might be useless. where else do I u,se it?
-  const { totalValue } = useNFTListingModalStore();
-  const {
-    // usdToEuroAddress,
-    arbitrumOneUSDToEuroAddress,
-    arbitrumGoerliUSDToEuroAddress,
-  } = useUSDToEuroAddressStore();
-  // const { usdToEuroAbi } = useUSDToEuroAbiStore();
-  // const { ethToUsdAddress } = useEthToUsdAddressStore();
   const { chainlinkAbi } = useChainlinkAbiStore();
   const { chain } = useNetwork();
+  const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } = useUSDToEuroAddressStore();
+  const { arbitrumOneEthToUsdAddress, arbitrumGoerliethToUsdAddress } = useEthToUsdAddressStore();
 
-  useEffect(() => {
-    console.log("totalValue" + totalValue);
-  }, []);
+  const chainlinkContract = {
+    abi: chainlinkAbi,
+    functionName: 'latestRoundData'
+  }
+  const eurUsdAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerliUSDToEuroAddress :
+    arbitrumOneUSDToEuroAddress;
+  const ethUsdAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerliethToUsdAddress :
+    arbitrumOneEthToUsdAddress;
+
+  const { data: priceData } = useContractReads({
+    contracts: [{
+      address: ethUsdAddress,
+      ... chainlinkContract
+    }, {
+      address: eurUsdAddress,
+      ... chainlinkContract
+    }]
+  });
 
   const [userInput, setUserInput] = useState<string>("");
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
 
-  // console.log(onDataFromChild);
-  // console.log(modalChildState);
-
-  const { address } = useAccount();
+  const { address: accountAddress } = useAccount();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  // console.log(signer);
 
   let openseaSDK: any;
 
@@ -91,13 +87,10 @@ const StepTwo: React.FC<StepProps> = ({
     });
   }
 
-  console.log(openseaSDK);
-
   // Expire this auction one day from now.
   // Note that we convert from the JavaScript timestamp (milliseconds):
 
   const tokenIdBeforeConversion: any = vaultForListing.tokenId;
-  const accountAddress: any = address;
   const tokenId: any = fromHex(tokenIdBeforeConversion, "number").toString();
 
   let tokenAddress: any;
@@ -107,75 +100,19 @@ const StepTwo: React.FC<StepProps> = ({
     tokenAddress = arbitrumGoerliContractAddress;
   }
 
-  console.log(tokenAddress);
-  console.log(tokenIdBeforeConversion);
-  console.log(vaultForListing);
-  console.log(tokenId);
-
-  const userValueInUsd = async (eth: number) => {
-    try {
-      const ethclAddr = vaultForListing.status.collateral[0].token.clAddr;
-      console.log(ethclAddr);
-
-      const contract = new ethers.Contract(ethclAddr, chainlinkAbi, signer);
-      const price = await contract.latestRoundData();
-      console.log(price.answer);
-
-      const priceInUsd = fromHex(price.answer, "number");
-
-      const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
-
-      console.log(priceFormatted);
-
-      const ethValueInUSD = eth * Number(priceFormatted);
-      console.log(ethValueInUSD);
-      return convertUsdToEuro(ethValueInUSD);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    userValueInUsd(Number(userInput));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInput]);
-
-  let conversionAddress: any;
-
-  if (chain?.id == 421613) {
-    conversionAddress = arbitrumGoerliUSDToEuroAddress;
-  } else if (chain?.id === 42161) {
-    conversionAddress = arbitrumOneUSDToEuroAddress;
+  const convertEthToEur = (eth:string) => {
+    if (eth.length === 0) eth = "0";
+    const bigNumEth = ethers.utils.parseEther(eth);
+    const prices = priceData?.map(data => data.result && BigNumber.from(data.result[1]?.toString()));
+    return prices && prices[0] && prices[1] ?
+      Number(ethers.utils.formatEther(bigNumEth.mul(prices[0]).div(prices[1]))) : 0;
   }
 
-  const convertUsdToEuro = async (ethValueInUsd: number) => {
-    try {
-      const contract = new ethers.Contract(
-        conversionAddress,
-        chainlinkAbi,
-        signer
-      );
-      console.log(contract);
-      const price = await contract.latestRoundData();
-      console.log(price.answer);
-
-      const priceInEuro = fromHex(price.answer, "number");
-      console.log(priceInEuro);
-      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
-      console.log(priceInEuroFormatted);
-      const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
-      console.log(euroValueConverted);
-      setEuroValueConverted(euroValueConverted);
-      return priceInEuroFormatted;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    setEuroValueConverted(convertEthToEur(userInput));
+  }, [userInput]);
 
   const listSmartVault = async () => {
-    console.log(tokenId);
-    console.log(tokenAddress);
-    console.log(accountAddress);
     try {
       const listing = await openseaSDK.createSellOrder({
         asset: {
@@ -191,7 +128,7 @@ const StepTwo: React.FC<StepProps> = ({
       console.log(error);
     }
   };
-  console.log(tokenMap.get(modalChildState));
+  
   const chosenNFT = tokenMap.get(modalChildState);
   return (
     <Box sx={{ color: "white" }}>
@@ -389,7 +326,7 @@ const StepTwo: React.FC<StepProps> = ({
               variant="outlined"
             />{" "} */}
             <input
-              type="text"
+              type="number"
               placeholder="Enter the amount in ETH"
               style={{
                 background: "transparent",

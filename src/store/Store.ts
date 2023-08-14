@@ -7,6 +7,7 @@ import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 import smartVaultABI from "../abis/smartVault.ts";
 import WBTCABI from "../abis/tokens/WBTCABI.ts";
 import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
+import { Address } from "viem";
 
 // interface PriceCalculatorState {
 //   priceCalculatorabi: Array<any>;
@@ -65,25 +66,27 @@ export const useUSDToEuroAbiStore = create<USDToEuroAbiState>()((set) => ({
 }));
 
 interface EthToUsdAddressState {
-  ethToUsdAddress: string;
-  arbitrumGoerliethToUsdAddress: string;
-  getEthToUsdAddress: (ethToUsdAddress: string) => void;
+  ethToUsdAddress: Address;
+  arbitrumGoerliethToUsdAddress: Address;
+  arbitrumOneEthToUsdAddress: Address;
+  getEthToUsdAddress: (ethToUsdAddress: Address) => void;
 }
 
 export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
   (set) => ({
     ethToUsdAddress: "0x10742171dD4aB632653869d3a03b2195a10C5f1F",
     arbitrumGoerliethToUsdAddress: "0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08",
+    arbitrumOneEthToUsdAddress: "0x639fe6ab55c921f74e7fac1ee960c0b6293ba612",
     getEthToUsdAddress: (ethToUsdAddress) =>
       set(() => ({ ethToUsdAddress: ethToUsdAddress })),
   })
 );
 
 interface USDToEuroAddressState {
-  usdToEuroAddress: string;
-  arbitrumGoerliUSDToEuroAddress: string;
-  arbitrumOneUSDToEuroAddress: string;
-  getUSDToEuroAddress: (usdToEuroAddress: string) => void;
+  usdToEuroAddress: Address;
+  arbitrumGoerliUSDToEuroAddress: Address;
+  arbitrumOneUSDToEuroAddress: Address;
+  getUSDToEuroAddress: (usdToEuroAddress: Address) => void;
 }
 
 export const useUSDToEuroAddressStore = create<USDToEuroAddressState>()(
@@ -92,7 +95,7 @@ export const useUSDToEuroAddressStore = create<USDToEuroAddressState>()(
     arbitrumGoerliUSDToEuroAddress:
       "0xe5CD8A83fc9E1bb87b2576B2999f99A1328D3888",
     arbitrumOneUSDToEuroAddress: "0xA14d53bC1F1c0F31B4aA3BD109344E5009051a84",
-    getUSDToEuroAddress: (usdToEuroAddress) =>
+    getUSDToEuroAddress: (usdToEuroAddress: Address) =>
       set(() => ({ usdToEuroAddress: usdToEuroAddress })),
   })
 );
