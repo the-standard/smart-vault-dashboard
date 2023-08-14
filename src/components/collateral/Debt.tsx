@@ -13,13 +13,13 @@ import {
   useTransactionHashStore,
   useVaultAddressStore,
   useVaultStore,
-  usesEuroAbiStore,
   usesEuroAddressStore,
   useCircularProgressStore,
   useSnackBarStore,
   useVaultIdStore,
   useGreyProgressBarValuesStore,
   useCounterStore,
+  useErc20AbiStore,
 } from "../../store/Store";
 import { formatEther, parseEther } from "viem";
 import CheckIcon from "@mui/icons-material/Check";
@@ -36,7 +36,7 @@ const Debt = () => {
   const { vaultStore }: any = useVaultStore();
   const { arbitrumsEuroAddress, arbitrumGoerlisEuroAddress } =
     usesEuroAddressStore();
-  const { sEuroAbi } = usesEuroAbiStore();
+  const { erc20Abi } = useErc20AbiStore();
   const { getTransactionHash } = useTransactionHashStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
@@ -146,7 +146,7 @@ const Debt = () => {
   const approvePayment = useContractWrite({
     //make this dynamic
     address: approveAddress as any,
-    abi: sEuroAbi,
+    abi: erc20Abi,
     functionName: "approve",
     args: [vaultAddress as any, feeAmount],
   });

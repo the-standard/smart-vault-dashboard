@@ -2,13 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   useCollateralSymbolStore,
   useVaultAddressStore,
-  // useTransactionHashStore,
   useCircularProgressStore,
   useSnackBarStore,
   useGreyProgressBarValuesStore,
-  // useVaultManagerAbiStore,
-  useNativeCollateralABIStore,
-  useCollateralABIStore,
+  useSmartVaultABIStore,
 } from "../../../store/Store";
 import { Box } from "@mui/material";
 import { useAccount, useContractWrite } from "wagmi";
@@ -35,8 +32,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
   const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore();
   // const { getTransactionHash } = useTransactionHashStore();
-  const { nativeCollateralABI } = useNativeCollateralABIStore();
-  const { collateralABI } = useCollateralABIStore();
+  const { smartVaultABI } = useSmartVaultABIStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
   // const { vaultManagerAbi } = useVaultManagerAbiStore();
@@ -80,7 +76,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
 
   const withdrawCollateralNative = useContractWrite({
     address: vaultAddress as any,
-    abi: nativeCollateralABI,
+    abi: smartVaultABI,
     functionName: "removeCollateralNative",
     args: [ethers.utils.parseUnits(amount.toString()), address],
   });
@@ -92,7 +88,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
 
   const withdrawCollateral = useContractWrite({
     address: vaultAddress as any,
-    abi: collateralABI,
+    abi: smartVaultABI,
     functionName: "removeCollateral",
     args: [
       ethers.utils.formatBytes32String(symbol),

@@ -2,12 +2,9 @@ import { create } from "zustand";
 import vaultManagerAbi from "../abis/vaultManager.ts";
 import erc20Abi from "../abis/erc20.ts";
 import sEuroAbi from "../abis/testTokens/sEuro.ts";
-import sUSD6Abi from "../abis/testTokens/sUsd6.ts";
-import sUSD18Abi from "../abis/testTokens/sUsd18.ts";
 import chainlinkAbi from "../abis/priceFeeds/chainlink.ts";
 import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
-import nativeCollateralAbi from "../abis/nativeCollateralABI.ts";
-import collateralAbi from "../abis/collateralABI.ts";
+import smartVaultABI from "../abis/smartVault.ts";
 import WBTCABI from "../abis/tokens/WBTCABI.ts";
 import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
 
@@ -115,67 +112,15 @@ export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
     set(() => ({ sEuroAddress: sEuroAddress })),
 }));
 
-interface sEuroAbiState {
-  sEuroAbi: Array<any>;
-  getsEuroAbi: (sEuroAbi: Array<any>) => void;
+interface smartVaultABIState {
+  smartVaultABI: Array<any>;
 }
 
-export const usesEuroAbiStore = create<sEuroAbiState>()((set) => ({
-  sEuroAbi: sEuroAbi,
-  getsEuroAbi: (sEuroAbi) => set(() => ({ sEuroAbi: sEuroAbi })),
-}));
-
-interface nativeCollateralABIState {
-  nativeCollateralABI: Array<any>;
-}
-
-export const useNativeCollateralABIStore = create<nativeCollateralABIState>(
+export const useSmartVaultABIStore = create<smartVaultABIState>(
   () => ({
-    nativeCollateralABI: nativeCollateralAbi,
+    smartVaultABI,
   })
 );
-
-interface collateralABIState {
-  collateralABI: Array<any>;
-}
-
-export const useCollateralABIStore = create<collateralABIState>(() => ({
-  collateralABI: collateralAbi,
-}));
-
-interface sUSD6State {
-  sUSD6Address: string;
-  arbitrumGoerlisUSD6Address: string;
-  getsUSD6Address: (sUSD6Address: string) => void;
-  sUSD6Abi: Array<any>;
-  getsUSD6Abi: (sUSD6Abi: Array<any>) => void;
-}
-
-export const usesUSD6Store = create<sUSD6State>()((set) => ({
-  sUSD6Address: "0x78D4BDd6771C87B66d66a5A89FE52d5F19D778c5",
-  arbitrumGoerlisUSD6Address: "0x96eB9C75B1e2DA3eb2bD5eBE1aaDA7f8f34C975C",
-  getsUSD6Address: (sUSD6Address) =>
-    set(() => ({ sUSD6Address: sUSD6Address })),
-  sUSD6Abi: sUSD6Abi,
-  getsUSD6Abi: (sUSD6Abi) => set(() => ({ sUSD6Abi: sUSD6Abi })),
-}));
-
-interface sUSD18State {
-  sUSD18Address: string;
-  arbitrumGoerlisUSD18Address: string;
-  getsUSD18Address: (sUSD18Address: string) => void;
-  sUSD18Abi: Array<any>;
-  getsUSD18Abi: (sUSD18Abi: Array<any>) => void;
-}
-
-export const usesUSD18Store = create<sUSD18State>()((set) => ({
-  sUSD18Address: "0x4904AFBf65480Ca77Eb2DdfF39EdcEABE53D4373",
-  arbitrumGoerlisUSD18Address: "0x208CD13FDc8a5EFc2ff3908082e8c24D515F0006",
-  getsUSD18Address: (sUSD18Address) =>
-    set(() => ({ sUSD18Address: sUSD18Address })),
-  sUSD18Abi: sUSD18Abi,
-  getsUSD18Abi: (sUSD18Abi) => set(() => ({ sUSD18Abi: sUSD18Abi })),
-}));
 
 interface contractAddressState {
   contractAddress: any;
