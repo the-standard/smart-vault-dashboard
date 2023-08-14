@@ -5,11 +5,7 @@ import Actions from "./Actions";
 import {
   useCollateralSymbolStore,
   useWidthStore,
-  useVaultStore,
-  useGreyProgressBarValuesStore,
-  useUSDToEuroAbiStore,
-  useUSDToEuroAddressStore,
-  useChainlinkAbiStore,
+  useGreyProgressBarValuesStore
 } from "../../store/Store";
 import LineChart from "./LineChart";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
@@ -17,14 +13,15 @@ import wbtclogo from "../../assets/wbtclogo.svg";
 import linklogo from "../../assets/linklogo.svg";
 import paxglogo from "../../assets/paxglogo.svg";
 import arblogo from "../../assets/arblogo.svg";
-import { formatUnits, fromHex } from "viem";
+import { formatUnits } from "viem";
 import axios from "axios";
 import { getNetwork } from "@wagmi/core";
-import { useAccount } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
 
 interface AcceptedTokenProps {
   amount: any;
   token: any;
+  collateralValue: any;
 }
 
 const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
@@ -49,114 +46,18 @@ const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   amount,
   token,
+  collateralValue
 }) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore();
-  const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
-  const { chainlinkAbi } = useChainlinkAbiStore();
-  const { vaultStore } = useVaultStore();
   const { getOperationType, getGreyBarUserInput } =
     useGreyProgressBarValuesStore();
-  const { arbitrumOneUSDToEuroAddress } = useUSDToEuroAddressStore();
-  const { usdToEuroAbi } = useUSDToEuroAbiStore();
-  const { address } = useAccount();
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_ALCHEMY_URL
-  );
-  const signer = provider.getSigner(address);
-  let myToken: any = undefined;
-  // console.log('xxxx',vaultStore)
-  // const myToken2 = vaultStore.status.collateral.filter(asset => console.log('xxx',asset));
-  // console.log('xxx', symbol, myToken2);
-  const symbol = ethers.utils.parseBytes32String(token.symbol) 
+  const formattedCollateralValue = Number(ethers.utils.formatEther(collateralValue)).toFixed(2);
 
-  const getUsdPriceOfToken = async () => {
-    //the first [0] is the token type, so it should be dynamic
-    if (symbol === "ETH") {
-      myToken = vaultStore.status.collateral[0].token;
-    } else if (symbol === "WBTC") {
-      myToken = vaultStore.status.collateral[1].token;
-      console.log(vaultStore.status.collateral[1].token);
-    } else if (symbol === "ARB") {
-      myToken = vaultStore.status.collateral[2].token;
-      console.log(
-        fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
-      );
-    } else if (symbol === "LINK") {
-      myToken = vaultStore.status.collateral[3].token;
-    } else if (symbol === "PAXG") {
-      myToken = vaultStore.status.collateral[4].token;
-      console.log(
-        fromHex(vaultStore.status?.collateral[4].token.symbol, "string")
-      );
-    } else if (symbol === "AGOR") {
-      myToken = vaultStore.status.collateral[0].token;
-      console.log(
-        fromHex(vaultStore.status?.collateral[0].token.symbol, "string")
-      );
-    } else if (symbol === "SUSD6") {
-      myToken = vaultStore.status.collateral[1].token;
-      console.log(
-        fromHex(vaultStore.status?.collateral[1].token.symbol, "string")
-      );
-    } else if (symbol === "SUSD18") {
-      myToken = vaultStore.status.collateral[2].token;
-      console.log(
-        fromHex(vaultStore.status?.collateral[2].token.symbol, "string")
-      );
-    }
-    const contract = new ethers.Contract(myToken.clAddr, chainlinkAbi, signer);
-    console.log(contract);
-    const price = await contract.latestRoundData();
-    console.log(price);
-    const priceInUsd = fromHex(price.answer, "number");
-    console.log(BigInt(priceInUsd));
-    const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
-    console.log(priceFormatted);
-    console.log(amount);
-
-    const amountFormatted = formatUnits(amount, token.dec);
-    console.log(amountFormatted);
-
-    const amountinUsd = Number(amountFormatted) * Number(priceFormatted);
-    console.log(amountinUsd.toFixed(2));
-    convertUsdToEuro(amountinUsd.toFixed(2));
-  };
+  const symbol = ethers.utils.parseBytes32String(token.symbol)
 
   const { chain } = getNetwork();
-
-  const convertUsdToEuro = async (priceInUsd: any) => {
-    try {
-      const contract = new ethers.Contract(
-        arbitrumOneUSDToEuroAddress,
-        usdToEuroAbi,
-        signer
-      );
-      console.log(contract);
-      const price = await contract.latestRoundData();
-      console.log(price.answer);
-
-      const priceInEuro = fromHex(price.answer, "number");
-      console.log(priceInEuro);
-      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
-      console.log(priceInEuroFormatted);
-      const euroValueConverted = priceInUsd / priceInEuroFormatted;
-      console.log(euroValueConverted);
-      setEuroValueConverted(euroValueConverted.toFixed(2));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getUsdPriceOfToken();
-  }, []);
-
-  useEffect(() => {
-    console.log(amount);
-    getUsdPriceOfToken();
-  }, [amount]);
 
   //ref to width sharing
   const ref = useRef<HTMLDivElement>(null);
@@ -169,8 +70,10 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
       const response = await axios.get(
         "https://smart-vault-api.thestandard.io/"
       );
-      console.log(response.data);
-      setChartData(response.data);
+      const chainData = chain?.id === arbitrumGoerli.id ?
+        response.data.arbitrum_goerli :
+        response.data.arbitrum;
+      setChartData(chainData);
     } catch (error) {
       console.log(error);
     }
@@ -182,77 +85,10 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
 
   const renderLineChartForArbitrum = () => {
     if (chartData) {
-      if (symbol === "ETH") {
-        return (
-          <LineChart data={chartData.arbitrum.ETH.prices} symbol={symbol} />
-        );
-      } else if (symbol === "WBTC") {
-        return (
-          <LineChart data={chartData.arbitrum.WBTC.prices} symbol={symbol} />
-        );
-      } else if (symbol === "LINK") {
-        return (
-          <LineChart data={chartData.arbitrum.LINK.prices} symbol={symbol} />
-        );
-      } else if (symbol === "ARB") {
-        return (
-          <LineChart data={chartData.arbitrum.ARB.prices} symbol={symbol} />
-        );
-      } else if (symbol === "PAXG") {
-        return (
-          <LineChart data={chartData.arbitrum.PAXG.prices} symbol={symbol} />
-        );
-      }
+      return (
+        <LineChart data={chartData[symbol].prices} symbol={symbol} />
+      );
     }
-  };
-
-  const renderLineChartForSepolia = () => {
-    if (chartData) {
-      if (symbol === "SUSD6") {
-        return (
-          <LineChart data={chartData.sepolia.SUSD6.prices} symbol={symbol} />
-        );
-      } else if (symbol === "SUSD18") {
-        return (
-          <LineChart data={chartData.sepolia.SUSD18.prices} symbol={symbol} />
-        );
-      } else {
-        return (
-          <LineChart data={chartData.sepolia.ETH.prices} symbol={symbol} />
-        );
-      }
-    }
-
-    return null; // Return null or some fallback content if chartData is not available yet.
-  };
-
-  const renderLineChartForArbitrumGoerli = () => {
-    if (chartData) {
-      if (symbol === "SUSD6") {
-        return (
-          <LineChart
-            data={chartData.arbitrum_goerli.SUSD6.prices}
-            symbol={symbol}
-          />
-        );
-      } else if (symbol === "SUSD18") {
-        return (
-          <LineChart
-            data={chartData.arbitrum_goerli.SUSD18.prices}
-            symbol={symbol}
-          />
-        );
-      } else {
-        return (
-          <LineChart
-            data={chartData.arbitrum_goerli.AGOR.prices}
-            symbol={symbol}
-          />
-        );
-      }
-    }
-
-    return null; // Return null or some fallback content if chartData is not available yet.
   };
 
   const handleClick = (element: number) => {
@@ -362,7 +198,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
               }}
               variant="body1"
             >
-              {euroValueConverted ? <div>€{euroValueConverted}</div> : null}
+              <div>€{formattedCollateralValue}</div>
             </Typography>
           </Box>
         </Box>
@@ -374,14 +210,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
             height: { xs: "100px", sm: "150px", md: "200px" },
           }}
         >
-          {chain?.id == 421613
-            ? renderLineChartForArbitrumGoerli()
-            : chain?.id == 11155111
-            ? renderLineChartForSepolia()
-            : chain?.id == 42161
-            ? renderLineChartForArbitrum()
-            : /* <LineChart /> */
-              null}
+          {renderLineChartForArbitrum()}
           {/* <LineChart /> */}
         </Box>
       </Box>

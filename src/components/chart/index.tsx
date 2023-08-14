@@ -1,4 +1,3 @@
-// import React, { useEffect, useRef, useState } from "react";
 import FullChart from "./FullChart";
 import { Box, Typography } from "@mui/material";
 import ProgressBar from "../ProgressBar";
@@ -6,80 +5,63 @@ import {
   useVaultStore,
   useVaultIdStore,
   useGreyProgressBarValuesStore,
-  // useEthToUsdAbiStore,
-  // useUSDToEuroAbiStore,
   useUSDToEuroAddressStore,
-  useChainlinkAbiStore,
-
-  // useCounterStore,
+  useChainlinkAbiStore
 } from "../../store/Store";
 import { ethers } from "ethers";
 import { formatEther, formatUnits, fromHex } from "viem";
 import { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import { useContractReads } from "wagmi";
 import { getNetwork } from "@wagmi/core";
+import { arbitrumGoerli } from "wagmi/chains";
 
 const Index = () => {
   const { vaultStore } = useVaultStore();
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
-  // const { ethToUsdAbi } = useEthToUsdAbiStore();
   const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } =
     useUSDToEuroAddressStore();
-  // const { usdToEuroAbi } = useUSDToEuroAbiStore();
   const { chainlinkAbi } = useChainlinkAbiStore();
-
-  // const { counter } = useCounterStore();
 
   console.log("vault store" + vaultStore);
   const chosenVault: any = vaultStore;
   const [chartValues, setChartValues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  // const [euroPrice] = useState<any>(undefined);
-  // const [ethToEuro] = useState<any>(undefined);
   const [chartData, setChartData] = useState<any>([]);
-  //add setstate here
   const [euroValueConverted, setEuroValueConverted] = useState<any>(undefined);
-  const { address } = useAccount();
   const { chain } = getNetwork();
 
-  let provider: any;
-  if (chain?.id == 421613) {
-    provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
-    );
-  } else if (chain?.id === 42161) {
-    provider = new ethers.providers.JsonRpcProvider(
-      import.meta.env.VITE_ALCHEMY_URL
-    );
+  const clEurUsdAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerliUSDToEuroAddress :
+    arbitrumOneUSDToEuroAddress;
+
+  const chainlinkContract = {
+    abi: chainlinkAbi,
+    functionName: "latestRoundData"
   }
-  const signer = provider.getSigner(address);
-  // let myToken: any = undefined;
+  const { data: priceData } = useContractReads({
+    contracts: [
+      {
+        ... chainlinkContract,
+        address: clEurUsdAddress
+      },
+      ...   vaultStore.status.collateral.map((asset: any) => {
+        return {
+          ... chainlinkContract,
+          address: asset.token.clAddr
+        }
+      })
+    ]
+  });
 
-  // useEffect(() => {
-  //   alert(counter);
-
-  // }, [counter]);
-
-  interface CollateralData {
-    id: string;
-    value: number;
-    label: string;
-  }
-
-  let dynamicAddress: any = undefined;
-  if (chain?.id == 421613) {
-    dynamicAddress = arbitrumGoerliUSDToEuroAddress;
-  } else if (chain?.id === 42161) {
-    dynamicAddress = arbitrumOneUSDToEuroAddress;
-  }
+  const eurUsdPrice = priceData && priceData[0].result?.toString();
 
   const getChartValues = async () => {
     if (vaultStore[4]) {
       //need to recreate this function here scoped to the function
       const convertUsdToEuro = async (ethValueInUsd: number) => {
-        try {
+      try {
           const contract = new ethers.Contract(
             dynamicAddress,
             chainlinkAbi,
@@ -108,7 +90,6 @@ const Index = () => {
       const token = vaultStore[4].collateral[0][0];
       console.log(token.clAddr);
       const contract = new ethers.Contract(token.clAddr, chainlinkAbi, signer);
-
       const price = await contract.latestRoundData();
 
       const priceInUsd = fromHex(price.answer, "number");
@@ -239,17 +220,7 @@ const Index = () => {
 
   const convertUsdToEuro = async (ethValueInUsd: number) => {
     try {
-      const contract = new ethers.Contract(
-        dynamicAddress,
-        chainlinkAbi,
-        provider
-      );
-      console.log(contract);
-      const price = await contract.latestRoundData();
-      console.log(price.answer);
-
-      const priceInEuro = fromHex(price.answer, "number");
-      console.log(priceInEuro);
+      const priceInEuro = Number(eurUsdPrice);
       const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
       console.log(priceInEuroFormatted);
       const euroValueConverted = ethValueInUsd / priceInEuroFormatted;
@@ -260,10 +231,6 @@ const Index = () => {
       console.log(error);
     }
   };
-
-  // useEffect(() => {
-  //   convertUsdToEuro(1);
-  // }, []);
 
   const getUsdPriceOfToken = async () => {
     let myToken: any = undefined;
@@ -376,12 +343,6 @@ const Index = () => {
   }, [userInputForGreyBarOperation]);
 
   const computeProgressBar = (totalDebt: any, totalCollateralValue: any) => {
-    // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
-    console.log("totalDebt", totalDebt);
-    console.log("totalCollateralValue", totalCollateralValue);
-    console.log(formatUnits(totalDebt, 18));
-    console.log(formatUnits(totalCollateralValue, 18));
-
     const ratio =
       Number(formatUnits(totalDebt, 18)) /
       Number(formatUnits(totalCollateralValue, 18));

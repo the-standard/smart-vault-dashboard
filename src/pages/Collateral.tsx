@@ -116,14 +116,14 @@ const Collateral = () => {
   const vaultManagerAddress = chain?.id === arbitrumGoerli.id ?
     arbitrumGoerliContractAddress :
     arbitrumContractAddress;
-  const { data: vaults2 } = useContractRead({
+  const { data: vaults } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaults",
     account: address,
   });
 
-  const currentVault:any = vaults2?.filter((vault:any) => vault && vault.tokenId.toString() === vaultId)[0];
+  const currentVault:any = vaults?.filter((vault:any) => vault && vault.tokenId.toString() === vaultId)[0];
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
   if (vaultStore.tokenId !== currentVault.tokenId) {
@@ -153,6 +153,7 @@ const Collateral = () => {
           key={index}
           amount={ethers.BigNumber.from(asset.amount).toString()}
           token={asset.token}
+          collateralValue={asset.collateralValue}
         />
       );
     });
