@@ -123,7 +123,6 @@ const StepTwo: React.FC<StepProps> = ({
         accountAddress,
         startAmount: Number(userInput),
       });
-      console.log('xxx',listing);
     } catch (error) {
       console.log(error);
     }

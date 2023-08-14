@@ -24,9 +24,6 @@ import { useAccount } from "wagmi";
 
 interface AcceptedTokenProps {
   amount: any;
-  symbol: string;
-  tokenAddress: string;
-  decimals: number;
   token: any;
 }
 
@@ -51,9 +48,6 @@ const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
 
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   amount,
-  symbol,
-  tokenAddress,
-  decimals,
   token,
 }) => {
   const [activeElement, setActiveElement] = useState(0);
@@ -72,6 +66,10 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   );
   const signer = provider.getSigner(address);
   let myToken: any = undefined;
+  // console.log('xxxx',vaultStore)
+  // const myToken2 = vaultStore.status.collateral.filter(asset => console.log('xxx',asset));
+  // console.log('xxx', symbol, myToken2);
+  const symbol = ethers.utils.parseBytes32String(token.symbol) 
 
   const getUsdPriceOfToken = async () => {
     //the first [0] is the token type, so it should be dynamic
@@ -118,7 +116,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
     console.log(priceFormatted);
     console.log(amount);
 
-    const amountFormatted = formatUnits(amount, decimals);
+    const amountFormatted = formatUnits(amount, token.dec);
     console.log(amountFormatted);
 
     const amountinUsd = Number(amountFormatted) * Number(priceFormatted);
@@ -356,7 +354,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
               }}
               variant="body1"
             >
-              {formatUnits(amount, decimals)} {symbol}
+              {formatUnits(amount, token.dec)} {symbol}
             </Typography>{" "}
             <Typography
               sx={{
@@ -572,8 +570,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
       <Actions
         activeElement={activeElement}
         symbol={symbol}
-        tokenAddress={tokenAddress}
-        decimals={decimals}
+        tokenAddress={token.addr}
+        decimals={token.dec}
         token={token}
       />
     </Box>
