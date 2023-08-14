@@ -2,12 +2,13 @@ import { Box, Typography } from "@mui/material";
 import metamasklogo from "../../assets/metamasklogo.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useRef } from "react";
-import { useSnackBarStore } from "../../store/Store";
+import { useSnackBarStore, usesEuroAddressStore } from "../../store/Store";
 import { useNetwork } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 const AddEuros = () => {
   const { getSnackBar } = useSnackBarStore();
   const { chain } = useNetwork();
+  const { arbitrumGoerlisEuroAddress, arbitrumsEuroAddress } = usesEuroAddressStore();
 
   //clipboard logic
   const textRef = useRef<HTMLSpanElement>(null);
@@ -37,8 +38,8 @@ const AddEuros = () => {
   //clipboard logic end
 
   const eurosAddress = chain?.id === arbitrumGoerli.id ?
-    '0x9C777AD2575010E3ED67F6E849cfE1115BFE2A50' :
-    '0x643b34980e635719c15a2d4ce69571a258f940e9'
+    arbitrumGoerlisEuroAddress :
+    arbitrumsEuroAddress;
 
   const addToken = async () => {
     if (window.ethereum) {
