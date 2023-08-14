@@ -3,8 +3,11 @@ import metamasklogo from "../../assets/metamasklogo.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useRef } from "react";
 import { useSnackBarStore } from "../../store/Store";
+import { useNetwork } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
 const AddEuros = () => {
   const { getSnackBar } = useSnackBarStore();
+  const { chain } = useNetwork();
 
   //clipboard logic
   const textRef = useRef<HTMLSpanElement>(null);
@@ -33,6 +36,10 @@ const AddEuros = () => {
   };
   //clipboard logic end
 
+  const eurosAddress = chain?.id === arbitrumGoerli.id ?
+    '0x9C777AD2575010E3ED67F6E849cfE1115BFE2A50' :
+    '0x643b34980e635719c15a2d4ce69571a258f940e9'
+
   const addToken = async () => {
     if (window.ethereum) {
       try {
@@ -42,7 +49,7 @@ const AddEuros = () => {
             params: {
               type: "ERC20",
               options: {
-                address: "0x643b34980e635719c15a2d4ce69571a258f940e9",
+                address: eurosAddress,
                 symbol: "EUROs", // A string of 2-6 characters.
                 decimals: 18, // A number between 1-36.
                 image:
@@ -117,7 +124,7 @@ const AddEuros = () => {
             marginBottom: "10px",
           }}
         >
-          0x643b34980e635719c15a2d4ce69571a258f940e9
+          {eurosAddress}
         </span>
         <Box
           sx={{
