@@ -10,9 +10,7 @@ import {
 import { Box } from "@mui/material";
 import { useAccount, useContractWrite } from "wagmi";
 import { ethers } from "ethers";
-// import smartVaultAbi from "../../../abis/smartVault";
 import { parseUnits } from "viem";
-import axios from "axios";
 
 interface WithdrawProps {
   symbol: string;
@@ -23,19 +21,15 @@ interface WithdrawProps {
 
 const Withdraw: React.FC<WithdrawProps> = ({
   symbol,
-  tokenAddress,
-  decimals,
-  // token,
+  decimals
 }) => {
   const { collateralSymbol } = useCollateralSymbolStore();
   const [amount, setAmount] = useState<any>(0);
   const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore();
-  // const { getTransactionHash } = useTransactionHashStore();
   const { smartVaultABI } = useSmartVaultABIStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
-  // const { vaultManagerAbi } = useVaultManagerAbiStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
 
   const handleAmount = (e: any) => {
@@ -44,30 +38,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
     getSymbolForGreyBar(symbol);
     getGreyBarUserInput(Number(e.target.value));
   };
-
-  const [dynamicABI, setDynamicABI] = useState<any>([]);
-  console.log(dynamicABI);
-
-  //for some reason, this does not really work with usecontractwrite
-  const getContractABI = async () => {
-    try {
-      const res = await axios.get(
-        `https://api.arbiscan.io/api?module=contract&action=getabi&address=${vaultAddress}&apikey=${
-          import.meta.env.VITE_ARBISCAN_API_KEY
-        }`
-      );
-      console.log(tokenAddress);
-      console.log(res.data.result);
-      setDynamicABI(res.data.result);
-      return res.data.result;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getContractABI();
-  }, [vaultAddress]);
 
   //snackbar config
   const { getSnackBar } = useSnackBarStore();
@@ -111,7 +81,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
-      //handleSnackbarClick();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -137,7 +106,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
-      //handleSnackbarClick();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -285,7 +253,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
               ? handlewithdrawCollateralNative
               : handlewithdrawCollateral
           }
-          // onClick={withdrawCollateral}
         >
           Withdraw
         </Box>
