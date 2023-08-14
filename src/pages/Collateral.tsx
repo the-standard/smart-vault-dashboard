@@ -1,69 +1,48 @@
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import {
-  // useVaultIdStore,
   useVaultAddressStore,
   useVaultStore,
   useVaultIdStore,
   useTransactionHashStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
-  usePositionStore,
-  // useChainIdStore,
+  usePositionStore
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
-// import QRicon from "../assets/qricon.png";
-// import EmptyCard from "../components/collateral/EmptyCard";
-// import SmallCard from "../components/collateral/SmallCard";
-// import FullChart from "../components/chart/FullChart.tsx";
-// import HalfChart from "../components/collateral/halfChart/index.tsx";
 import QRCode from "react-qr-code";
-// import abi from "../abis/vaultManager.ts";
-// import tokenmanagerabi from "../abis/tokenManagerABI.ts";
 import { ethers } from "ethers";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
 import "../styles/buttonStyle.css";
-import { formatEther, fromHex } from "viem";
 import ChartComponent from "../components/chart/index.tsx";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-// import arbitrumLogo from "../assets/arbitrum.svg";
-// import sepolialogo from "../assets/sepolialogo.svg";
-// import createClientUtil from "../utils/createClientUtil.ts";
 import { getNetwork } from "@wagmi/core";
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
-import { useAccount } from "wagmi";
+import { useAccount, useContractRead } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
 type RouteParams = {
   vaultId: string;
 };
 
 const Collateral = () => {
-  // const { getVaultID } = useVaultIdStore();
   const { vaultId } = useParams<RouteParams>();
   const { getVaultAddress } = useVaultAddressStore();
-  const { getVaultStore } = useVaultStore();
+  const { vaultStore, getVaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();
-  // const { tokenManagerAbi } = useTokenManagerAbiStore();
   const {
-    contractAddress,
     arbitrumGoerliContractAddress,
-    arbitrumContractAddress,
+    arbitrumContractAddress
   } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getVaultID } = useVaultIdStore();
-  // const { tokenManagerAddress } = useTokenManagerAddressStore();
   //local states
-  const [vaultAddressLocal, setVaultAddressLocal] = useState("");
-  const [localVault, setLocalVault] = useState<any[]>([]);
   const [activeElement, setActiveElement] = useState(1);
-  const [acceptedTokens, setAcceptedTokens] = useState<any[]>([]);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
   //modal states
   const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  // console.log(handleOpen)
   const [openWalletModal, setOpenWalletModal] = useState(false);
   const handleWalletOpen = () => setOpenWalletModal(true);
   const handleWalletClose = () => setOpenWalletModal(false);
@@ -134,79 +113,46 @@ const Collateral = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionHash]);
 
-  const returnAcceptedTokensList = async (conditionalAddress: any) => {
-    let provider: any;
-    if (chain?.id == 421613) {
-      provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
-      );
-    } else if (chain?.id === 42161) {
-      provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_ALCHEMY_URL
-      );
-    }
-    const signer = provider.getSigner(address);
-    const contract = new ethers.Contract(
-      conditionalAddress,
-      vaultManagerAbi,
-      signer
-    );
-    const vaults = await contract.vaults();
-    console.log(vaults);
+  const vaultManagerAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerliContractAddress :
+    arbitrumContractAddress;
+  const { data: vaults2 } = useContractRead({
+    address: vaultManagerAddress,
+    abi: vaultManagerAbi,
+    functionName: "vaults",
+    account: address,
+  });
 
-    let foundValue: any;
-
-    vaults.map((vault: any) => {
-      const tokenId = ethers.BigNumber.from(vault[0]);
-      console.log(vault);
-      console.log(vaultId);
-      console.log(tokenId);
-      if (Number(tokenId) === Number(vaultId)) {
-        console.log("found");
-        console.log(vault);
-        console.log(vault[4].collateral);
-        foundValue = vault[4].collateral;
-        //set vault to state
-        getVaultStore(vault);
-        //set vault to local state
-        setLocalVault(vault);
-        //set vault address to state
-        getVaultAddress(vault.status.vaultAddress);
-        console.log(vault.status.vaultAddress);
-        //set vault address to local state
-        setVaultAddressLocal(vault.status.vaultAddress);
-      }
-    });
-    console.log(foundValue);
-    setAcceptedTokens(foundValue);
-  };
+  const currentVault:any = vaults2?.filter((vault:any) => vault && vault.tokenId.toString() === vaultId)[0];
+  const assets = currentVault.status.collateral;
+  const { vaultAddress } = currentVault.status;
+  if (vaultStore.tokenId !== currentVault.tokenId) {
+    getVaultStore(currentVault);
+    getVaultAddress(vaultAddress);
+  }
 
   const getCurrentChain = async () => {
-    const { chain } = getNetwork();
-    if (chain?.id == 421613) {
-      returnAcceptedTokensList(arbitrumGoerliContractAddress);
-    } else if (chain?.id == 11155111) {
-      returnAcceptedTokensList(contractAddress);
-    } else if (chain?.id == 42161) {
-      returnAcceptedTokensList(arbitrumContractAddress);
-    }
+    // const { chain } = getNetwork();
+    // if (chain?.id == 421613) {
+    //   returnassetsList(arbitrumGoerliContractAddress);
+    // } else if (chain?.id == 11155111) {
+    //   returnassetsList(contractAddress);
+    // } else if (chain?.id == 42161) {
+    //   returnassetsList(arbitrumContractAddress);
+    // }
   };
 
   const displayTokens = () => {
-    if (acceptedTokens.length === 0) {
+    if (assets.length === 0) {
       return <div>Loading...</div>;
     }
 
-    return acceptedTokens.map((token: any, index: number) => {
-      console.log(token);
+    return assets.map((asset: any, index: number) => {
       return (
         <AcceptedToken
           key={index}
-          symbol={ethers.utils.parseBytes32String(token[0][0])}
-          amount={ethers.BigNumber.from(token[1]).toString()}
-          tokenAddress={token[0][1]}
-          decimals={token[0][2]}
-          token={token[0]}
+          amount={ethers.BigNumber.from(asset.amount).toString()}
+          token={asset.token}
         />
       );
     });
@@ -230,101 +176,25 @@ const Collateral = () => {
       title: "Earn Yield on EUROs",
     },
   ];
-  //chang these to arbitrum
+
   const handleButtonActions = (id: number) => {
+    const arbiscanUrl = chain?.id === arbitrumGoerli.id ? 
+      `https://goerli.arbiscan.io/address/${vaultAddress}` :
+      `https://arbiscan.io/address/${vaultAddress}`;
     if (id === 1) {
       window.open(
-        `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
+        arbiscanUrl,
         "_blank"
       );
     } else if (id === 2) {
-      // window.open(
-      //   `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
-      //   "_blank"
-      // );
       handleWalletOpen();
     } else if (id === 3) {
       window.open(
-        `https://sepolia.etherscan.io/address/${vaultAddressLocal}`,
+        arbiscanUrl,
         "_blank"
       );
     }
   };
-
-  useEffect(() => {
-    console.log(vaultId + "my vault");
-    // returntokens();
-    getCurrentChain();
-    // console.log(tokenmanagerabi);
-  }, []);
-
-  const [smallCardValues, setSmallCardValues] = useState<any[]>([]);
-  console.log(smallCardValues);
-  const [totalCollateralValueForChart, setTotalCollateralValueForChart] =
-    useState<string>("");
-
-  function removeLast18Digits(num: number) {
-    // Convert the number to a string
-    const str = num.toString();
-
-    // Remove the last 18 characters using slice()
-    const resultStr = str.slice(0, -18);
-
-    // Convert the resulting string back to a number
-    const resultNum = Number(resultStr);
-
-    return resultNum;
-  }
-
-  useEffect(() => {
-    if (localVault[5] != undefined) {
-      console.log(localVault[5][2]);
-      const totalCollateralValue = removeLast18Digits(
-        fromHex(localVault[5][2]._hex, "number")
-      );
-      console.log(removeLast18Digits(fromHex(localVault[5][2]._hex, "number")));
-      setTotalCollateralValueForChart(
-        ethers.utils.formatEther(totalCollateralValue)
-      );
-      console.log(ethers.utils.formatEther(totalCollateralValue));
-      console.log(localVault);
-      //fix this issue
-      console.log(totalCollateralValueForChart);
-      //minted
-      const totalDebtValue = formatEther(localVault[5][0]);
-      console.log(localVault[5][0]);
-      console.log(totalDebtValue);
-      //collateralrate
-      // const collateralRate = ethers.BigNumber.from(localVault[2].toString());
-      //this is wrong
-      const totalLiquidationValue = Number(totalDebtValue) * 1.1;
-
-      setSmallCardValues([
-        //everything that's in the vault added up together and priced in euros
-        {
-          title: "Total Collateral",
-          value: totalCollateralValue,
-          type: "sEURO",
-        },
-        //the total amount minted so far
-        {
-          title: "Debt",
-          value: totalDebtValue,
-          type: "sEURO",
-        },
-        //if you take total collateral amount, minus the debt, the above minted divited by 0.9091
-        {
-          title: "Liquidates at",
-          value: totalLiquidationValue,
-          type: "sEURO",
-        },
-      ]);
-    }
-  }, [localVault]);
-
-  useEffect(() => {
-    console.log(vaultId + "my vault update");
-  }, []);
 
   return (
     <Box
@@ -726,7 +596,7 @@ const Collateral = () => {
             }}
           >
             <Box style={{ background: "white", padding: "16px" }}>
-              <QRCode value={vaultAddressLocal} />{" "}
+              <QRCode value={vaultAddress} />{" "}
             </Box>
             <Typography variant="body1" component="div" sx={{ mt: 2 }}>
               Scan QR code to deposit collateral
