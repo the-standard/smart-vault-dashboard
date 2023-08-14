@@ -7,15 +7,8 @@ import { Button } from "@mui/material";
 import {
   useVaultForListingStore,
   useNFTListingModalStore,
-  useChainlinkAbiStore,
-  useUSDToEuroAbiStore,
-  useUSDToEuroAddressStore,
   useSnackBarStore,
 } from "../../store/Store.ts";
-import { ethers } from "ethers";
-import { formatUnits, fromHex } from "viem";
-// import axios from "axios";
-import { useAccount } from "wagmi";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 interface StepProps {
@@ -34,73 +27,14 @@ const StepOne: React.FC<StepProps> = ({
     const data = 2;
     onDataFromChild(data);
   }
-  const { address } = useAccount();
   const { vaultForListing } = useVaultForListingStore();
   const {
     getNFTListingModalTotalValue,
     getNFTListingModalTotalValueMinusDebt,
   } = useNFTListingModalStore();
-  const { chainlinkAbi } = useChainlinkAbiStore();
-  const { usdToEuroAddress } = useUSDToEuroAddressStore();
-  const { usdToEuroAbi } = useUSDToEuroAbiStore();
   const { getSnackBar } = useSnackBarStore();
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    import.meta.env.VITE_ALCHEMY_URL
-  );
-  const signer = provider.getSigner(address);
-
-  console.log(tokenMap.get(modalChildState));
-  console.log(tokenMap);
-  //the id of the vault
-  console.log(modalChildState);
-  console.log(vaultForListing);
-
-  const totalValueInEth = tokenMap.get(modalChildState).attributes[6].value;
-
-  const convertETHToUSD = async (eth: number) => {
-    const ethclAddr = vaultForListing.status.collateral[0].token.clAddr;
-    console.log(ethclAddr);
-
-    const contract = new ethers.Contract(ethclAddr, chainlinkAbi, signer);
-    const price = await contract.latestRoundData();
-
-    const priceInUsd = fromHex(price.answer, "number");
-
-    const priceFormatted = formatUnits(BigInt(priceInUsd), 8);
-
-    console.log(priceFormatted);
-
-    const ethValueInUSD = eth * Number(priceFormatted);
-    console.log(ethValueInUSD);
-    return convertUsdToEuro(ethValueInUSD);
-  };
-
-  const convertUsdToEuro = async (priceInUsd: any) => {
-    console.log(priceInUsd);
-    try {
-      const contract = new ethers.Contract(
-        usdToEuroAddress,
-        usdToEuroAbi,
-        signer
-      );
-      console.log(contract);
-      const price = await contract.latestRoundData();
-      console.log(price.answer);
-
-      const priceInEuro = fromHex(price.answer, "number");
-      console.log(priceInEuro);
-      const priceInEuroFormatted = Number(formatUnits(BigInt(priceInEuro), 8));
-      console.log(priceInEuroFormatted);
-      console.log(tokenMap.get(modalChildState).attributes);
-      return priceInEuroFormatted;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    convertETHToUSD(totalValueInEth);
     getNFTListingModalTotalValue(
       tokenMap.get(modalChildState).attributes[4].value
     );
@@ -109,12 +43,7 @@ const StepOne: React.FC<StepProps> = ({
     );
   }, []);
 
-  console.log(tokenMap);
-  console.log(modalChildState);
-  console.log(tokenMap.get(modalChildState));
   const chosenNFT = tokenMap.get(modalChildState);
-
-  console.log(vaultForListing);
 
   // Function to handle copying the text
   const handleCopyText = () => {
