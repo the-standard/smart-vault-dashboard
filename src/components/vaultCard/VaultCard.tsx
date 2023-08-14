@@ -1,6 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-// import { useContractWrite, usePrepareContractWrite } from "wagmi";
-// import abi from "../../abis/vaultManager.ts";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { useEffect } from "react";
@@ -8,19 +6,14 @@ import {
   useCircularProgressStore,
   useContractAddressStore,
   useSnackBarStore,
-  useVaultManagerAbiStore,
-  useVaultStore,
-  // useSnackBarStore,
+  useVaultManagerAbiStore
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
-// import { ethers } from "ethers";
-import { fromHex } from "viem";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
-// import useEthereumProvider from "../../hooks/useEthereumProvider.ts";
-import { useAccount, useContractEvent, useContractRead } from "wagmi";
+import { useAccount, useContractEvent } from "wagmi";
 import { useContractWrite } from "wagmi";
-import { ethers } from "ethers";
+import { arbitrumGoerli } from "wagmi/chains";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -47,20 +40,14 @@ const VaultCard: React.FC<VaultCardProps> = ({
 }) => {
   //snackbar config
   const [open, setOpen] = React.useState(false);
-  // const { getSnackBar } = useSnackBarStore();
   const {
     contractAddress,
     arbitrumGoerliContractAddress,
     arbitrumContractAddress,
   } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  // const { getTransactionHash } = useTransactionHashStore();
-  // const { getProgressType, getCircularProgress } = useCircularProgressStore();
   const navigate = useNavigate();
   const { address } = useAccount();
-  const { getVaultStore } = useVaultStore();
-
-  // const [vaultCreated, setVaultCreated] = useState(false);
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
@@ -75,17 +62,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const { chain } = getNetwork();
 
-  // const ethProvider = useEthereumProvider();
-
   const mintVault = useContractWrite({
-    address:
-      chain?.id === 421613
-        ? arbitrumGoerliContractAddress
-        : chain?.id === 11155111
-        ? contractAddress
-        : chain?.id === 42161
-        ? arbitrumContractAddress
-        : null, // Set a default value or handle this case as per your requirement
+    address: chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliContractAddress
+      : arbitrumContractAddress, // Set a default value or handle this case as per your requirement
     abi: vaultManagerAbi, // Make sure you have vaultManagerAbi defined
     functionName: "mint", // Assuming the function name is 'mint'
   });
@@ -105,7 +85,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { getSnackBar } = useSnackBarStore();
   useEffect(() => {
-    const { data, isLoading, isSuccess, isError } = mintVault;
+    const { isLoading, isSuccess, isError } = mintVault;
 
     if (isLoading) {
       getProgressType(3);
@@ -113,8 +93,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
-      //handleSnackbarClick();
-      // navigateToLatestVault();
     } else if (isError) {
       getCircularProgress(false); // Set getCircularProgress to false if there's an error
       getSnackBar(1);
@@ -144,49 +122,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
       }
     },
   });
-
-  let addressByChainId: any;
-  chain?.id === 421613
-    ? (addressByChainId = arbitrumGoerliContractAddress)
-    : chain?.id === 11155111
-    ? (addressByChainId = contractAddress)
-    : chain?.id === 42161
-    ? (addressByChainId = arbitrumContractAddress)
-    : null;
-  const navigateToLatestVault = async () => {
-    let provider: any;
-    if (chain?.id == 421613) {
-      provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
-      );
-    } else if (chain?.id === 42161) {
-      provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_ALCHEMY_URL
-      );
-    }
-
-    const signer = provider.getSigner(address);
-    const contract = new ethers.Contract(
-      addressByChainId,
-      vaultManagerAbi,
-      signer
-    );
-    const vaults = await contract.vaults();
-    console.log("vaults", vaults);
-    // Get the last vault in the array
-    const lastVault = vaults[vaults.length - 1];
-    console.log("lastVault", lastVault);
-
-    // Navigate to the Collateral/{vaultId} route
-    if (lastVault) {
-      const vaultId = fromHex(lastVault[0], "number");
-      console.log("vaultId", vaultId);
-      getVaultStore(lastVault);
-      navigate(`Collateral/${vaultId}`);
-    }
-
-    return vaults;
-  };
 
   return (
     <Box
