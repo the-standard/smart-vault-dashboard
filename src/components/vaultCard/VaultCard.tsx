@@ -18,7 +18,7 @@ import { fromHex } from "viem";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
 // import useEthereumProvider from "../../hooks/useEthereumProvider.ts";
-import { useAccount } from "wagmi";
+import { useAccount, useContractEvent, useContractRead } from "wagmi";
 import { useContractWrite } from "wagmi";
 import { ethers } from "ethers";
 
@@ -101,10 +101,11 @@ const VaultCard: React.FC<VaultCardProps> = ({
       // Handle error state
     }
   };
+
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { getSnackBar } = useSnackBarStore();
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = mintVault;
+    const { data, isLoading, isSuccess, isError } = mintVault;
 
     if (isLoading) {
       getProgressType(3);
@@ -113,7 +114,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
       //handleSnackbarClick();
-      navigateToLatestVault();
+      // navigateToLatestVault();
     } else if (isError) {
       getCircularProgress(false); // Set getCircularProgress to false if there's an error
       getSnackBar(1);
@@ -124,6 +125,25 @@ const VaultCard: React.FC<VaultCardProps> = ({
     mintVault.isLoading,
     mintVault.isSuccess,
   ]);
+
+  const unwatchDeployEvent = useContractEvent({
+    address: chain?.id === 421613
+        ? arbitrumGoerliContractAddress
+        : chain?.id === 11155111
+        ? contractAddress
+        : chain?.id === 42161
+        ? arbitrumContractAddress
+        : null,
+    abi: vaultManagerAbi,
+    eventName: 'VaultDeployed',
+    listener(log) {
+      const { owner, tokenId } = log[0].args;
+      if (owner === address) {
+        unwatchDeployEvent?.()
+        navigate(`Collateral/${tokenId.toString()}`);
+      }
+    },
+  });
 
   let addressByChainId: any;
   chain?.id === 421613
