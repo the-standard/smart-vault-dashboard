@@ -11,8 +11,7 @@ import {
 import "../../styles/buttonStyle.css";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
-import { useAccount, useContractEvent } from "wagmi";
-import { useContractWrite } from "wagmi";
+import { useAccount, useContractEvent, useContractWrite } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 
 //for snackbar
@@ -114,7 +113,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
         : null,
     abi: vaultManagerAbi,
     eventName: 'VaultDeployed',
-    listener(log) {
+    listener(log:any) {
       const { owner, tokenId } = log[0].args;
       if (owner === address) {
         unwatchDeployEvent?.()
