@@ -16,7 +16,7 @@ import {
 } from "../../store/Store";
 import { fromHex } from "viem";
 import { useNetwork } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
+import { arbitrum, arbitrumGoerli } from "wagmi/chains";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -76,12 +76,12 @@ const StepTwo: React.FC<StepProps> = ({
       chain: Chain.Mainnet,
       apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
     });
-  } else if (chain?.id === 42161) {
+  } else if (chain?.id === arbitrum.id) {
     openseaSDK = new OpenSeaSDK(provider, {
       chain: Chain.Arbitrum,
       apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
     });
-  } else if (chain?.id === 421613) {
+  } else if (chain?.id === arbitrumGoerli.id) {
     openseaSDK = new OpenSeaSDK(provider, {
       chain: Chain.ArbitrumGoerli,
     });
@@ -123,7 +123,7 @@ const StepTwo: React.FC<StepProps> = ({
         accountAddress,
         startAmount: Number(userInput),
       });
-      console.log(listing);
+      console.log('xxx',listing);
     } catch (error) {
       console.log(error);
     }
