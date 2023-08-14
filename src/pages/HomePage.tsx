@@ -71,8 +71,6 @@ const HomePage = () => {
     account: walletClient?.account,
   });
 
-  // console.log(myVaults);
-
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
 

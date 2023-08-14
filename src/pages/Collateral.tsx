@@ -41,7 +41,6 @@ type RouteParams = {
 const Collateral = () => {
   // const { getVaultID } = useVaultIdStore();
   const { vaultId } = useParams<RouteParams>();
-  console.log(vaultId);
   const { getVaultAddress } = useVaultAddressStore();
   const { getVaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();

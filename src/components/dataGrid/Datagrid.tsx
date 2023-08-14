@@ -142,7 +142,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   const renderActions = (params: any) => {
     const handleManageClick = () => {
-      console.log(params.vaultID);
       setModalChildState(params.vaultID);
       getVaultID(params.vaultID);
       getVaultForListing(params.smartVault);

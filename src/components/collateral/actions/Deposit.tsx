@@ -6,9 +6,8 @@ import {
   useTransactionHashStore,
   useCircularProgressStore,
   useSnackBarStore,
-  usesUSD6Store,
-  usesUSD18Store,
   useGreyProgressBarValuesStore,
+  useErc20AbiStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
 // import { ethers } from "ethers";
@@ -19,8 +18,6 @@ import { parseEther, parseUnits } from "viem";
 // import { arbitrumGoerli } from "viem/chains";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
-import { getNetwork } from "@wagmi/core";
-import axios from "axios";
 import { useContractWrite } from "wagmi";
 
 interface DepositProps {
@@ -34,8 +31,7 @@ interface DepositProps {
 const Deposit: React.FC<DepositProps> = ({
   symbol,
   tokenAddress,
-  decimals,
-  token,
+  decimals
 }) => {
   //modal states
   const [open, setOpen] = useState(false);
@@ -46,21 +42,12 @@ const Deposit: React.FC<DepositProps> = ({
   const { vaultAddress } = useVaultAddressStore();
   const { getTransactionHash } = useTransactionHashStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
-  const { sUSD6Abi } = usesUSD6Store();
-  const { sUSD18Abi } = usesUSD18Store();
+  const { erc20Abi } = useErc20AbiStore();
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
-  // const { WBTCAbi } = useWBTCAbiStore();
-  // //local
-  // const { address } = useAccount();
 
   const inputRef: any = useRef<HTMLInputElement>(null);
-
-  console.log(symbol);
-  console.log(token);
-
-  // const { address } = useAccount();
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
@@ -95,124 +82,10 @@ const Deposit: React.FC<DepositProps> = ({
         });
     }
   };
-  //clipboard logic end
-
-  // const provider = new ethers.providers.JsonRpcProvider(
-  //   import.meta.env.VITE_ALCHEMY_URL
-  // );
-  const [dynamicABI, setDynamicABI] = useState<any>([]);
-
-  const { chain } = getNetwork();
-
-  const getContractABI = async (implementation: any) => {
-    if (chain?.id === 11155111) {
-      try {
-        const res = await axios.get(
-          `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${implementation}&apikey=${
-            import.meta.env.VITE_ETHERSCAN_API_KEY
-          }`
-        );
-        console.log(implementation);
-        console.log(res.data.result);
-        setDynamicABI(res.data.result);
-        return res.data.result;
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (chain?.id === 1) {
-      try {
-        const res = await axios.get(
-          `https://api.etherscan.io/api?module=contract&action=getabi&address=${implementation}&apikey=${
-            import.meta.env.VITE_ETHERSCAN_API_KEY
-          }`
-        );
-        console.log(implementation);
-        console.log(res.data.result);
-        setDynamicABI(res.data.result);
-        return res.data.result;
-      } catch (error) {
-        console.log(error);
-      }
-      //arbitrum one
-    } else if (chain?.id === 42161) {
-      try {
-        const res = await axios.get(
-          `https://api.arbiscan.io/api?module=contract&action=getabi&address=${implementation}&apikey=${
-            import.meta.env.VITE_ARBISCAN_API_KEY
-          }`
-        );
-        console.log(implementation);
-        console.log(JSON.parse(res.data.result));
-        setDynamicABI(JSON.parse(res.data.result));
-        return res.data.result;
-      } catch (error) {
-        console.log(error);
-      }
-      //arbitrum goerli
-    } else if (chain?.id === 421613) {
-      try {
-        const res = await axios.get(
-          `https://api-goerli.arbiscan.io/api?module=contract&action=getabi&address=${implementation}&apikey=${
-            import.meta.env.VITE_ARBISCAN_API_KEY
-          }`
-        );
-        console.log(implementation);
-        console.log(JSON.parse(res.data.result));
-        setDynamicABI(JSON.parse(res.data.result));
-        return res.data.result;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  //const [implementationAddress, setImplementationAddress] = useState<any>([]);
-
-  const getImplementationAddress = async () => {
-    let res: any;
-    try {
-      if (chain?.id === 42161) {
-        res = await axios.get(
-          `https://api.arbiscan.io/api?module=contract&action=getsourcecode&address=${tokenAddress}&apikey=${
-            import.meta.env.VITE_ARBISCAN_API_KEY
-          }`
-        );
-      } else if (chain?.id === 421613) {
-        res = await axios.get(
-          `https://api-goerli.arbiscan.io/api?module=contract&action=getsourcecode&address=${tokenAddress}&apikey=${
-            import.meta.env.VITE_ARBISCAN_API_KEY
-          }`
-        );
-      }
-      console.log(tokenAddress);
-      console.log(res.data.result[0].Implementation);
-      //setImplementationAddress(res.data.result[0].Implementation);
-      getContractABI(res.data.result[0].Implementation);
-      return res.data.result;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getImplementationAddress();
-  }, []);
-
-  let abiForTestAndMainnet: any;
-
-  if (chain?.id == 421613) {
-    if (symbol === "SUSD6") {
-      abiForTestAndMainnet = sUSD6Abi;
-    } else if (symbol === "SUSD18") {
-      abiForTestAndMainnet = sUSD18Abi;
-    }
-  } else if (chain?.id === 42161) {
-    abiForTestAndMainnet = dynamicABI;
-  }
 
   const depositToken = useContractWrite({
     address: tokenAddress as any,
-    abi: abiForTestAndMainnet,
+    abi: erc20Abi,
     functionName: "transfer",
     args: [vaultAddress, parseUnits(amount.toString(), decimals)],
   });
@@ -239,20 +112,16 @@ const Deposit: React.FC<DepositProps> = ({
 
       const toAddress: any = vaultAddress;
       const { hash } = await sendTransaction({
-        //chain: conditionalChain,
         account: account.address,
         to: toAddress,
         value: parseEther(txAmount.toString()),
       });
-      //  txHashForError = hash;
 
       console.log("Transaction sent:", hash);
       getTransactionHash(hash);
-      // waitForTransaction(hash);
 
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
-      //handleSnackbarClick();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -311,27 +180,6 @@ const Deposit: React.FC<DepositProps> = ({
     depositToken.isLoading,
     depositToken.isSuccess,
   ]);
-
-  // const waitForTransaction = async (_transactionHash: string) => {
-  //   try {
-  //     getProgressType(2);
-
-  //     getCircularProgress(true);
-  //     await provider.waitForTransaction(_transactionHash);
-  //     getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-  //     getSnackBar(0);
-  //     inputRef.current.value = "";
-  //     inputRef.current.focus();
-  //     getGreyBarUserInput(0);
-  //   } catch (error) {
-  //     console.log(error);
-  //     getCircularProgress(false);
-  //     getSnackBar(1);
-  //     inputRef.current.value = "";
-  //     inputRef.current.focus();
-  //     getGreyBarUserInput(0);
-  //   }
-  // };
 
   return (
     <Box>
