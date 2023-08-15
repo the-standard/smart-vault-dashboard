@@ -83,16 +83,17 @@ const Index = () => {
       currency: "EUROs",
     },
     {
-      title: "Collateral Value Liquidation Trigger",
-      value: Number(formatEther(liquidationTrigger)).toFixed(2),
-      currency: "EUROs",
-    },
-    {
       title: "You can borrow up to:",
       value: Number(formatEther(chosenVault.status.maxMintable)).toFixed(2),
       currency: "EUROs",
-    },
+    }
   ];
+
+  if (Number(chosenVault.status.minted) > 0) chartValues.push({
+    title: "Minimum Collateral Value Required",
+    value: Number(formatEther(liquidationTrigger)).toFixed(2),
+    currency: "EUROs",
+  });
 
   const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {
     const debt = Number(formatUnits(totalDebt, 18));
@@ -267,6 +268,7 @@ const Index = () => {
           sx={{
             marginLeft: "5px",
             fontWeight: "200",
+            marginBottom: "7px"
           }}
           variant="body1"
         >
@@ -288,6 +290,7 @@ const Index = () => {
             float: "right",
             marginRight: "5px",
             fontWeight: "200",
+            marginTop: "7px"
           }}
           variant="body1"
         >
