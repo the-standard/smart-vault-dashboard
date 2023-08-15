@@ -61,8 +61,8 @@ const Index = () => {
     (asset: any) => {
       return {
         id: ethers.utils.parseBytes32String(asset.token.symbol),
-        value: formatEther(asset.collateralValue),
-        label: formatUnits(asset.amount, asset.token.dec)
+        value: Number(formatEther(asset.collateralValue)).toFixed(2),
+        label: Number(formatUnits(asset.amount, asset.token.dec)).toFixed(2)
       }
     }
   );
