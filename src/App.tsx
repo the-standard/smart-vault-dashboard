@@ -39,10 +39,14 @@ import { Box } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
-import { useCircularProgressStore, useChainIdStore } from "./store/Store.ts";
+import {
+  useCircularProgressStore,
+  useChainIdStore,
+  useRenderAppCounterStore,
+} from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fromHex } from "viem";
 import Stats from "./pages/Stats.tsx";
 import Yield from "./pages/Yield.tsx";
@@ -52,7 +56,13 @@ function App() {
   const { getChainId } = useChainIdStore();
   useBackgroundImage();
   console.log(circularProgress);
+  const { renderAppCounter } = useRenderAppCounterStore();
 
+  // const [key, setKey] = useState(0);
+
+  // const handleRemountClick = () => {
+  //   setKey((prevKey) => prevKey + 1); // Update the key to trigger remount
+  // };
   useEffect(() => {
     const fetchChainId = async () => {
       if (window.ethereum) {
@@ -80,13 +90,12 @@ function App() {
         },
       }}
     >
+      {/* <button onClick={handleRemountClick}>Remount</button>{" "} */}
       <CircularProgressComponent />
-
       <SnackbarComponent />
-
       <WagmiConfig config={wagmiConfig}>
         <Navbar />
-        <Routes>
+        <Routes key={renderAppCounter}>
           <Route path="/" element={<HomePage />} />
           <Route path="collateral/:vaultId" element={<Collateral />} />
           <Route path="stats" element={<Stats />} />

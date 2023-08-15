@@ -8,6 +8,7 @@ import {
   useSnackBarStore,
   useGreyProgressBarValuesStore,
   useErc20AbiStore,
+  useRenderAppCounterStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
 // import { ethers } from "ethers";
@@ -19,6 +20,7 @@ import { parseEther, parseUnits } from "viem";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
+import { useWaitForTransaction } from "wagmi";
 
 interface DepositProps {
   symbol: string;
@@ -46,6 +48,8 @@ const Deposit: React.FC<DepositProps> = ({
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
+  const { incrementRenderAppCounter } = useRenderAppCounterStore();
+  const [txdata, setTxdata] = useState<any>(null);
 
   const inputRef: any = useRef<HTMLInputElement>(null);
 
@@ -119,6 +123,7 @@ const Deposit: React.FC<DepositProps> = ({
 
       console.log("Transaction sent:", hash);
       getTransactionHash(hash);
+      setTxdata(hash);
 
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
@@ -153,9 +158,8 @@ const Deposit: React.FC<DepositProps> = ({
       }
     }
   };
-
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = depositToken;
+    const { isLoading, isSuccess, isError, data } = depositToken;
 
     if (isLoading) {
       getProgressType(2);
@@ -167,6 +171,8 @@ const Deposit: React.FC<DepositProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
+      console.log(data);
+      setTxdata(data);
     } else if (isError) {
       inputRef.current.value = "";
       inputRef.current.focus();
@@ -180,6 +186,22 @@ const Deposit: React.FC<DepositProps> = ({
     depositToken.isLoading,
     depositToken.isSuccess,
   ]);
+
+  const { data, isError, isLoading } = useWaitForTransaction({
+    hash: txdata,
+  });
+
+  console.log(data, isError, isLoading);
+
+  useEffect(() => {
+    if (data) {
+      incrementRenderAppCounter();
+    } else if (isError) {
+      incrementRenderAppCounter();
+    } else if (isLoading) {
+      incrementRenderAppCounter();
+    }
+  }, [data, isError, isLoading]);
 
   return (
     <Box>
@@ -293,7 +315,10 @@ const Deposit: React.FC<DepositProps> = ({
       </Box>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={() => {
+          handleClose();
+          incrementRenderAppCounter();
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

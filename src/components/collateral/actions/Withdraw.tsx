@@ -6,9 +6,10 @@ import {
   useSnackBarStore,
   useGreyProgressBarValuesStore,
   useSmartVaultABIStore,
+  useRenderAppCounterStore,
 } from "../../../store/Store";
 import { Box } from "@mui/material";
-import { useAccount, useContractWrite } from "wagmi";
+import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
 import { ethers } from "ethers";
 import { parseUnits } from "viem";
 
@@ -28,6 +29,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
+  const [txdata, setTxdata] = useState<any>(null);
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
@@ -64,13 +66,15 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
     ],
   });
 
+  console.log(vaultAddress);
+
   const handlewithdrawCollateral = async () => {
     const { write } = withdrawCollateral;
     write();
   };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = withdrawCollateral;
+    const { isLoading, isSuccess, isError, data } = withdrawCollateral;
 
     if (isLoading) {
       getProgressType(1);
@@ -81,6 +85,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
+      setTxdata(data);
     } else if (isError) {
       inputRef.current.value = "";
       inputRef.current.focus();
@@ -95,7 +100,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
   ]);
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = withdrawCollateralNative;
+    const { isLoading, isSuccess, isError, data } = withdrawCollateralNative;
     if (isLoading) {
       getProgressType(1);
 
@@ -106,6 +111,7 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
+      setTxdata(data);
     } else if (isError) {
       inputRef.current.value = "";
       inputRef.current.focus();
@@ -126,6 +132,24 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
   };
 
   const shortenedAddress = shortenAddress(address);
+
+  const { incrementRenderAppCounter } = useRenderAppCounterStore();
+
+  const { data, isError, isLoading } = useWaitForTransaction({
+    hash: txdata,
+  });
+
+  console.log(data, isError, isLoading);
+
+  useEffect(() => {
+    if (data) {
+      incrementRenderAppCounter();
+    } else if (isError) {
+      incrementRenderAppCounter();
+    } else if (isLoading) {
+      incrementRenderAppCounter();
+    }
+  }, [data, isError, isLoading]);
 
   return (
     <Box>

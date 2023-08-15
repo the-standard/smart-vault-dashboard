@@ -5,7 +5,7 @@ import Actions from "./Actions";
 import {
   useCollateralSymbolStore,
   useWidthStore,
-  useGreyProgressBarValuesStore
+  useGreyProgressBarValuesStore,
 } from "../../store/Store";
 import LineChart from "./LineChart";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
@@ -46,16 +46,23 @@ const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
 const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   amount,
   token,
-  collateralValue
+  collateralValue,
 }) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore();
   const { getOperationType, getGreyBarUserInput } =
     useGreyProgressBarValuesStore();
 
-  const formattedCollateralValue = Number(ethers.utils.formatEther(collateralValue)).toFixed(2);
+  const formattedCollateralValue = Number(
+    ethers.utils.formatEther(collateralValue)
+  ).toFixed(2);
 
-  const symbol = ethers.utils.parseBytes32String(token.symbol)
+  console.log(token);
+
+  const symbol = ethers.utils.parseBytes32String(token.symbol);
+  const tokenAddress = token.addr;
+  console.log(tokenAddress);
+  console.log(symbol);
 
   const { chain } = getNetwork();
 
@@ -70,9 +77,10 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
       const response = await axios.get(
         "https://smart-vault-api.thestandard.io/"
       );
-      const chainData = chain?.id === arbitrumGoerli.id ?
-        response.data.arbitrum_goerli :
-        response.data.arbitrum;
+      const chainData =
+        chain?.id === arbitrumGoerli.id
+          ? response.data.arbitrum_goerli
+          : response.data.arbitrum;
       setChartData(chainData);
     } catch (error) {
       console.log(error);
@@ -85,9 +93,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
 
   const renderLineChartForArbitrum = () => {
     if (chartData) {
-      return (
-        <LineChart data={chartData[symbol].prices} symbol={symbol} />
-      );
+      return <LineChart data={chartData[symbol].prices} symbol={symbol} />;
     }
   };
 

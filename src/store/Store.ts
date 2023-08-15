@@ -118,11 +118,9 @@ interface smartVaultABIState {
   smartVaultABI: Array<any>;
 }
 
-export const useSmartVaultABIStore = create<smartVaultABIState>(
-  () => ({
-    smartVaultABI,
-  })
-);
+export const useSmartVaultABIStore = create<smartVaultABIState>(() => ({
+  smartVaultABI,
+}));
 
 interface contractAddressState {
   contractAddress: any;
@@ -398,3 +396,16 @@ interface WBTCAbiState {
 export const useWBTCAbiStore = create<WBTCAbiState>(() => ({
   WBTCAbi: WBTCABI,
 }));
+
+interface RenderAppCounterState {
+  renderAppCounter: number;
+  incrementRenderAppCounter: () => void;
+}
+
+export const useRenderAppCounterStore = create<RenderAppCounterState>(
+  (set) => ({
+    renderAppCounter: 0,
+    incrementRenderAppCounter: () =>
+      set((state) => ({ renderAppCounter: state.renderAppCounter + 1 })),
+  })
+);
