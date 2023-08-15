@@ -93,7 +93,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
 
   const handleClick = (element: number) => {
     setActiveElement(element);
-    console.log(symbol);
     getCollateralSymbol(symbol);
     getOperationType(element);
     getGreyBarUserInput(0);

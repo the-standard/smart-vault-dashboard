@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import vaultManagerAbi from "../abis/vaultManager.ts";
 import erc20Abi from "../abis/erc20.ts";
-import sEuroAbi from "../abis/testTokens/sEuro.ts";
 import chainlinkAbi from "../abis/priceFeeds/chainlink.ts";
 import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 import smartVaultABI from "../abis/smartVault.ts";

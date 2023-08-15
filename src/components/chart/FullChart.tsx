@@ -65,7 +65,7 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
         }}
       >
         <strong>
-          {value.toFixed(2)} € <br />
+          {value} € <br />
           {label} {id}
         </strong>
       </div>

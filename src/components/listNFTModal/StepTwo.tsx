@@ -114,7 +114,7 @@ const StepTwo: React.FC<StepProps> = ({
 
   const listSmartVault = async () => {
     try {
-      const listing = await openseaSDK.createSellOrder({
+      await openseaSDK.createSellOrder({
         asset: {
           tokenId,
           //this one is actually the address of the smart vault manager for some reason
