@@ -89,7 +89,7 @@ const Index = () => {
     },
     {
       title: "You can borrow up to:",
-      value: Number(formatEther(chosenVault.status.totalCollateralValue)).toFixed(2),
+      value: Number(formatEther(chosenVault.status.maxMintable)).toFixed(2),
       currency: "EUROs",
     },
   ];
