@@ -10,7 +10,6 @@ import {
 } from "../../store/Store";
 import { BigNumber, ethers } from "ethers";
 import { formatEther, formatUnits, parseEther } from "viem";
-import { useState } from "react";
 import { arbitrumGoerli } from "wagmi/chains";
 import { useContractReads, useNetwork } from "wagmi";
 import { parseBytes32String } from "ethers/lib/utils";
@@ -98,7 +97,6 @@ const Index = () => {
   const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {
     const debt = Number(formatUnits(totalDebt, 18));
     const collateral = Number(formatUnits(totalCollateralValue, 18));
-    const euroValueConverted = 0;
     let operation: any;
     let userInputInEur = 0;
 
