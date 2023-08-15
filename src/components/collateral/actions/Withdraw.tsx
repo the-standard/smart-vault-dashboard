@@ -19,10 +19,7 @@ interface WithdrawProps {
   token: any;
 }
 
-const Withdraw: React.FC<WithdrawProps> = ({
-  symbol,
-  decimals
-}) => {
+const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
   const { collateralSymbol } = useCollateralSymbolStore();
   const [amount, setAmount] = useState<any>(0);
   const { address } = useAccount();

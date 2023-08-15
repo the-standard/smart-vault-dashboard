@@ -31,7 +31,7 @@ interface DepositProps {
 const Deposit: React.FC<DepositProps> = ({
   symbol,
   tokenAddress,
-  decimals
+  decimals,
 }) => {
   //modal states
   const [open, setOpen] = useState(false);

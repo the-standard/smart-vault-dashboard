@@ -8,8 +8,10 @@ import {
   useVaultForListingStore,
   useNFTListingModalStore,
   useSnackBarStore,
+  useContractAddressStore,
 } from "../../store/Store.ts";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useNetwork } from "wagmi";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,6 +35,19 @@ const StepOne: React.FC<StepProps> = ({
     getNFTListingModalTotalValueMinusDebt,
   } = useNFTListingModalStore();
   const { getSnackBar } = useSnackBarStore();
+
+  const { chain } = useNetwork();
+
+  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+    useContractAddressStore();
+
+  let vaultManagerAddress;
+
+  if (chain?.id == 421613) {
+    vaultManagerAddress = arbitrumGoerliContractAddress;
+  } else if (chain?.id === 42161) {
+    vaultManagerAddress = arbitrumContractAddress;
+  }
 
   useEffect(() => {
     getNFTListingModalTotalValue(
@@ -501,7 +516,7 @@ const StepOne: React.FC<StepProps> = ({
                 color: "white",
               }}
             >
-              {vaultForListing.status.vaultAddress}
+              {vaultManagerAddress}
             </span>
             <Box
               sx={{

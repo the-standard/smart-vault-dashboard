@@ -6,7 +6,7 @@ import {
   useTransactionHashStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
-  usePositionStore
+  usePositionStore,
 } from "../store/Store";
 import { Box, Modal, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
@@ -31,10 +31,8 @@ const Collateral = () => {
   const { getVaultAddress } = useVaultAddressStore();
   const { vaultStore, getVaultStore } = useVaultStore();
   const { transactionHash } = useTransactionHashStore();
-  const {
-    arbitrumGoerliContractAddress,
-    arbitrumContractAddress
-  } = useContractAddressStore();
+  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+    useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getVaultID } = useVaultIdStore();
   //local states
@@ -113,9 +111,10 @@ const Collateral = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionHash]);
 
-  const vaultManagerAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerliContractAddress :
-    arbitrumContractAddress;
+  const vaultManagerAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliContractAddress
+      : arbitrumContractAddress;
   const { data: vaults } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
@@ -123,7 +122,9 @@ const Collateral = () => {
     account: address,
   });
 
-  const currentVault:any = vaults?.filter((vault:any) => vault && vault.tokenId.toString() === vaultId)[0];
+  const currentVault: any = vaults?.filter(
+    (vault: any) => vault && vault.tokenId.toString() === vaultId
+  )[0];
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
   if (vaultStore.tokenId !== currentVault.tokenId) {
@@ -179,21 +180,16 @@ const Collateral = () => {
   ];
 
   const handleButtonActions = (id: number) => {
-    const arbiscanUrl = chain?.id === arbitrumGoerli.id ? 
-      `https://goerli.arbiscan.io/address/${vaultAddress}` :
-      `https://arbiscan.io/address/${vaultAddress}`;
+    const arbiscanUrl =
+      chain?.id === arbitrumGoerli.id
+        ? `https://goerli.arbiscan.io/address/${vaultAddress}`
+        : `https://arbiscan.io/address/${vaultAddress}`;
     if (id === 1) {
-      window.open(
-        arbiscanUrl,
-        "_blank"
-      );
+      window.open(arbiscanUrl, "_blank");
     } else if (id === 2) {
       handleWalletOpen();
     } else if (id === 3) {
-      window.open(
-        arbiscanUrl,
-        "_blank"
-      );
+      window.open(arbiscanUrl, "_blank");
     }
   };
 

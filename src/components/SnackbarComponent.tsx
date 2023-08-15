@@ -55,7 +55,7 @@ const SnackbarComponent = () => {
             severity="success"
             sx={{ width: "100%" }}
           >
-            <Box>Transaction successful!</Box>
+            <Box>Success!</Box>
           </Alert>
         ) : snackBar === 1 ? (
           <Alert
