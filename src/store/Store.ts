@@ -249,22 +249,6 @@ export const useCollateralSymbolStore = create<CollateralSymbolState>()(
   })
 );
 
-interface TransactionHashState {
-  transactionHash: Hash;
-  getTransactionHash: (transactionHash: Hash) => void;
-  resetTransactionHash: () => void;
-}
-
-export const useTransactionHashStore = create<TransactionHashState>()(
-  (set) => ({
-    transactionHash: ethers.constants.HashZero,
-    getTransactionHash: (transactionHash) =>
-      set(() => ({ transactionHash: transactionHash })),
-    resetTransactionHash: () =>
-      set(() => ({ transactionHash: ethers.constants.AddressZero })),
-  })
-);
-
 interface PositionState {
   setPosition: any;
   right: number;

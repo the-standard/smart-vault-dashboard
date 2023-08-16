@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import {
   useVaultAddressStore,
-  useTransactionHashStore,
   useCircularProgressStore,
   useSnackBarStore,
   useGreyProgressBarValuesStore,
@@ -42,7 +41,6 @@ const Deposit: React.FC<DepositProps> = ({
   const [amount, setAmount] = useState(0);
   ///store
   const { vaultAddress } = useVaultAddressStore();
-  const { getTransactionHash } = useTransactionHashStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { erc20Abi } = useErc20AbiStore();
   const { getSnackBar } = useSnackBarStore();
@@ -122,7 +120,6 @@ const Deposit: React.FC<DepositProps> = ({
       });
 
       console.log("Transaction sent:", hash);
-      getTransactionHash(hash);
       setTxdata(hash);
 
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
@@ -171,7 +168,6 @@ const Deposit: React.FC<DepositProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
-      if (data?.hash) getTransactionHash(data?.hash)
       setTxdata(data);
     } else if (isError) {
       inputRef.current.value = "";

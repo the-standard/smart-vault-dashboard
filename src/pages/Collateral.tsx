@@ -3,7 +3,6 @@ import {
   useVaultAddressStore,
   useVaultStore,
   useVaultIdStore,
-  useTransactionHashStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
   usePositionStore,
@@ -20,7 +19,7 @@ import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
-import { useAccount, useContractRead, useWaitForTransaction } from "wagmi";
+import { useAccount, useBlockNumber, useContractRead, useWaitForTransaction } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 type RouteParams = {
   vaultId: string;
@@ -30,7 +29,6 @@ const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
   const { getVaultAddress } = useVaultAddressStore();
   const { vaultStore, getVaultStore } = useVaultStore();
-  const { transactionHash, resetTransactionHash } = useTransactionHashStore();
   const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
@@ -38,7 +36,9 @@ const Collateral = () => {
   //local states
   const [activeElement, setActiveElement] = useState(1);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
-  const [refetching, setRefetching] = useState(false);
+  const { data: blockNumber } = useBlockNumber();
+  const [renderedBlock, setRenderedBlock] = useState(blockNumber);
+
   //modal states
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -85,11 +85,12 @@ const Collateral = () => {
     chain?.id === arbitrumGoerli.id
       ? arbitrumGoerliContractAddress
       : arbitrumContractAddress;
-  const { data: vaults, refetch: refetchVaults } = useContractRead({
+  const { data: vaults } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaults",
-    account: address
+    account: address,
+    watch: true
   });
 
   const currentVault: any = vaults?.filter(
@@ -98,20 +99,10 @@ const Collateral = () => {
 
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
-  if (vaultStore.tokenId !== currentVault.tokenId || refetching) {
+  if (vaultStore.tokenId !== currentVault.tokenId || blockNumber !== renderedBlock) {
     getVaultStore(currentVault);
     getVaultAddress(vaultAddress);
-    setRefetching(false);
-  }
-
-  const { data: txData } = useWaitForTransaction({
-    hash: transactionHash,
-  });
-
-  if (txData?.status === 'success') {
-    setRefetching(true);
-    refetchVaults();
-    resetTransactionHash();
+    setRenderedBlock(blockNumber);
   }
 
   const displayTokens = () => {

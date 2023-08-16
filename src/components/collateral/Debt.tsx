@@ -10,7 +10,6 @@ import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
 import {
-  useTransactionHashStore,
   useVaultAddressStore,
   useVaultStore,
   usesEuroAddressStore,
@@ -37,7 +36,6 @@ const Debt = () => {
   const { arbitrumsEuroAddress, arbitrumGoerlisEuroAddress } =
     usesEuroAddressStore();
   const { erc20Abi } = useErc20AbiStore();
-  const { getTransactionHash } = useTransactionHashStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { getSnackBar } = useSnackBarStore();
@@ -106,7 +104,6 @@ const Debt = () => {
       getProgressType(1);
     } else if (isSuccess) {
       getCircularProgress(false);
-      getTransactionHash(data?.hash as any);
       incrementCounter();
       getSnackBar(0);
       inputRef.current.value = "";
@@ -160,7 +157,6 @@ const Debt = () => {
     } else if (isSuccess) {
       handleRepayMoney();
       getCircularProgress(false);
-      getTransactionHash(data?.hash as any);
       incrementCounter();
       getSnackBar(0);
       inputRef.current.value = "";
@@ -209,7 +205,6 @@ const Debt = () => {
       setModalStep(1);
       getProgressType(2);
       getCircularProgress(false);
-      getTransactionHash(data?.hash as any);
       incrementCounter();
       getSnackBar(0);
       inputRef.current.value = "";
@@ -245,28 +240,6 @@ const Debt = () => {
       handleApprovePayment();
     }
   };
-
-  // const waitForTransaction = async (_transactionHash: string) => {
-  //   try {
-  //     getCircularProgress(true);
-  //     //  await provider.waitForTransaction(_transactionHash);
-  //     getCircularProgress(false); // Set isLoading to false after the transaction is mined
-  //     incrementCounter();
-  //     getSnackBar(0);
-  //     //   handleSnackbarClick();
-  //     inputRef.current.value = "";
-  //     inputRef.current.focus();
-  //     getGreyBarUserInput(0);
-  //   } catch (error) {
-  //     console.log(error);
-  //     getCircularProgress(false);
-  //     getSnackBar(1);
-  //     inputRef.current.value = "";
-  //     inputRef.current.focus();
-  //     getGreyBarUserInput(0);
-  //     //  handleSnackbarClick();
-  //   }
-  // };
 
   useEffect(() => {
     setActiveElement(4);
