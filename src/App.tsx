@@ -46,7 +46,7 @@ import {
 } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { fromHex } from "viem";
 import Stats from "./pages/Stats.tsx";
 import Yield from "./pages/Yield.tsx";
@@ -58,11 +58,6 @@ function App() {
   console.log(circularProgress);
   const { renderAppCounter } = useRenderAppCounterStore();
 
-  // const [key, setKey] = useState(0);
-
-  // const handleRemountClick = () => {
-  //   setKey((prevKey) => prevKey + 1); // Update the key to trigger remount
-  // };
   useEffect(() => {
     const fetchChainId = async () => {
       if (window.ethereum) {

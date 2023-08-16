@@ -41,7 +41,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const { getVaultID } = useVaultIdStore();
   const { getVaultForListing } = useVaultForListingStore();
   const { getVaultStore } = useVaultStore();
-  const { vaultAddress, getVaultAddress } = useVaultAddressStore();
+  const { getVaultAddress } = useVaultAddressStore();
   //modal state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -107,7 +107,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   const { data: NFTsMetadata } = useContractReads({
     contracts: vaults.map((vault) => {
-      console.log(vault.tokenId);
       return { ...contractFunction, args: [vault.tokenId] };
     }),
   });
