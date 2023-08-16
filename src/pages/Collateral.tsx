@@ -19,7 +19,7 @@ import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
-import { useAccount, useBlockNumber, useContractRead, useWaitForTransaction } from "wagmi";
+import { useAccount, useBlockNumber, useContractRead } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 type RouteParams = {
   vaultId: string;

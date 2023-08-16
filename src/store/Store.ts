@@ -6,8 +6,7 @@ import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 import smartVaultABI from "../abis/smartVault.ts";
 import WBTCABI from "../abis/tokens/WBTCABI.ts";
 import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
-import { Address, Hash } from "viem";
-import { ethers } from "ethers";
+import { Address } from "viem";
 
 // interface PriceCalculatorState {
 //   priceCalculatorabi: Array<any>;

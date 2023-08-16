@@ -98,7 +98,7 @@ const Debt = () => {
     write();
   };
   useEffect(() => {
-    const { isLoading, isSuccess, data, isError } = borrowMoney;
+    const { isLoading, isSuccess, isError } = borrowMoney;
 
     if (isLoading) {
       getProgressType(1);
@@ -149,7 +149,7 @@ const Debt = () => {
   });
 
   useEffect(() => {
-    const { isLoading, isSuccess, data, isError } = approvePayment;
+    const { isLoading, isSuccess, isError } = approvePayment;
 
     if (isLoading) {
       handleOpen();
@@ -195,7 +195,7 @@ const Debt = () => {
   });
 
   useEffect(() => {
-    const { isLoading, isSuccess, data, isError } = repayMoney;
+    const { isLoading, isSuccess, isError } = repayMoney;
 
     if (isLoading) {
       setModalStep(2);
