@@ -6,7 +6,8 @@ import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 import smartVaultABI from "../abis/smartVault.ts";
 import WBTCABI from "../abis/tokens/WBTCABI.ts";
 import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
-import { Address } from "viem";
+import { Address, Hash } from "viem";
+import { ethers } from "ethers";
 
 // interface PriceCalculatorState {
 //   priceCalculatorabi: Array<any>;
@@ -249,15 +250,18 @@ export const useCollateralSymbolStore = create<CollateralSymbolState>()(
 );
 
 interface TransactionHashState {
-  transactionHash: string;
-  getTransactionHash: (transactionHash: string) => void;
+  transactionHash: Hash;
+  getTransactionHash: (transactionHash: Hash) => void;
+  resetTransactionHash: () => void;
 }
 
 export const useTransactionHashStore = create<TransactionHashState>()(
   (set) => ({
-    transactionHash: "",
+    transactionHash: ethers.constants.HashZero,
     getTransactionHash: (transactionHash) =>
       set(() => ({ transactionHash: transactionHash })),
+    resetTransactionHash: () =>
+      set(() => ({ transactionHash: ethers.constants.AddressZero })),
   })
 );
 

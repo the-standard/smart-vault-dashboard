@@ -20,7 +20,7 @@ import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
-import { useAccount, useContractRead } from "wagmi";
+import { useAccount, useContractRead, useWaitForTransaction } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 type RouteParams = {
   vaultId: string;
@@ -30,7 +30,7 @@ const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
   const { getVaultAddress } = useVaultAddressStore();
   const { vaultStore, getVaultStore } = useVaultStore();
-  const { transactionHash } = useTransactionHashStore();
+  const { transactionHash, resetTransactionHash } = useTransactionHashStore();
   const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
@@ -38,6 +38,7 @@ const Collateral = () => {
   //local states
   const [activeElement, setActiveElement] = useState(1);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
+  const [refetching, setRefetching] = useState(false);
   //modal states
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -80,68 +81,38 @@ const Collateral = () => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
   }, []);
 
-  async function listenToTransaction(transactionHash: string) {
-    let provider: any;
-    if (chain?.id == 421613) {
-      provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_ALCHEMY_ARBITRUMGOERLI_URL
-      );
-    } else if (chain?.id === 42161) {
-      provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_ALCHEMY_URL
-      );
-    }
-    const receipt = await provider.waitForTransaction(transactionHash);
-
-    // Check if the transaction is successful
-    if (receipt.status === 1) {
-      // Transaction was successful, perform rerender or any other necessary action
-      console.log("Transaction successful");
-      getCurrentChain();
-      // Trigger rerender or any other necessary action
-    } else {
-      // Transaction failed
-      console.log("Transaction failed");
-    }
-  }
-
-  useEffect(() => {
-    listenToTransaction(transactionHash);
-    console.log("transactionHash", transactionHash);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactionHash]);
-
   const vaultManagerAddress =
     chain?.id === arbitrumGoerli.id
       ? arbitrumGoerliContractAddress
       : arbitrumContractAddress;
-  const { data: vaults } = useContractRead({
+  const { data: vaults, refetch: refetchVaults } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaults",
-    account: address,
+    account: address
   });
 
   const currentVault: any = vaults?.filter(
     (vault: any) => vault && vault.tokenId.toString() === vaultId
   )[0];
+
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
-  if (vaultStore.tokenId !== currentVault.tokenId) {
+  if (vaultStore.tokenId !== currentVault.tokenId || refetching) {
     getVaultStore(currentVault);
     getVaultAddress(vaultAddress);
+    setRefetching(false);
   }
 
-  const getCurrentChain = async () => {
-    // const { chain } = getNetwork();
-    // if (chain?.id == 421613) {
-    //   returnassetsList(arbitrumGoerliContractAddress);
-    // } else if (chain?.id == 11155111) {
-    //   returnassetsList(contractAddress);
-    // } else if (chain?.id == 42161) {
-    //   returnassetsList(arbitrumContractAddress);
-    // }
-  };
+  const { data: txData } = useWaitForTransaction({
+    hash: transactionHash,
+  });
+
+  if (txData?.status === 'success') {
+    setRefetching(true);
+    refetchVaults();
+    resetTransactionHash();
+  }
 
   const displayTokens = () => {
     if (assets.length === 0) {

@@ -171,7 +171,7 @@ const Deposit: React.FC<DepositProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
-      console.log(data);
+      if (data?.hash) getTransactionHash(data?.hash)
       setTxdata(data);
     } else if (isError) {
       inputRef.current.value = "";
