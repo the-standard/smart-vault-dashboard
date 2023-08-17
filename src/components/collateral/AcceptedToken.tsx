@@ -62,7 +62,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const symbol = ethers.utils.parseBytes32String(token.symbol);
   const tokenAddress = token.addr;
   console.log(tokenAddress);
-  console.log(symbol);
 
   const { chain } = getNetwork();
 
