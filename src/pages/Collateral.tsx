@@ -54,6 +54,7 @@ const Collateral = () => {
 
   useEffect(() => {
     getVaultID(vaultId);
+    console.log(vaultStore);
   }, []);
 
   useLayoutEffect(() => {
@@ -90,7 +91,7 @@ const Collateral = () => {
     abi: vaultManagerAbi,
     functionName: "vaults",
     account: address,
-    watch: true
+    watch: true,
   });
 
   const currentVault: any = vaults?.filter(
@@ -99,7 +100,10 @@ const Collateral = () => {
 
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
-  if (vaultStore.tokenId !== currentVault.tokenId || blockNumber !== renderedBlock) {
+  if (
+    vaultStore.tokenId !== currentVault.tokenId ||
+    blockNumber !== renderedBlock
+  ) {
     getVaultStore(currentVault);
     getVaultAddress(vaultAddress);
     setRenderedBlock(blockNumber);

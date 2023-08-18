@@ -14,7 +14,6 @@ import { arbitrumGoerli } from "wagmi/chains";
 import { useContractReads, useNetwork } from "wagmi";
 import { parseBytes32String } from "ethers/lib/utils";
 
-
 const Index = () => {
   const { vaultStore } = useVaultStore();
   const { vaultID } = useVaultIdStore();
@@ -24,52 +23,58 @@ const Index = () => {
   const chosenVault: any = vaultStore;
   const { chain } = useNetwork();
   const { chainlinkAbi } = useChainlinkAbiStore();
-  const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } = useUSDToEuroAddressStore();
+  const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } =
+    useUSDToEuroAddressStore();
 
   const chainlinkContract = {
     abi: chainlinkAbi,
-    functionName: 'latestRoundData'
-  }
+    functionName: "latestRoundData",
+  };
 
-  const eurUsdAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerliUSDToEuroAddress :
-    arbitrumOneUSDToEuroAddress;
+  const eurUsdAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliUSDToEuroAddress
+      : arbitrumOneUSDToEuroAddress;
 
-  const contracts = [{
-    address: eurUsdAddress,
-    ... chainlinkContract
-  }];
+  const contracts = [
+    {
+      address: eurUsdAddress,
+      ...chainlinkContract,
+    },
+  ];
 
   if (symbolForGreyBar.length > 0) {
-    const focusedAsset = chosenVault.status.collateral.filter((asset:any) => parseBytes32String(asset.token.symbol) === symbolForGreyBar)[0];
+    const focusedAsset = chosenVault.status.collateral.filter(
+      (asset: any) =>
+        parseBytes32String(asset.token.symbol) === symbolForGreyBar
+    )[0];
     contracts.push({
       address: focusedAsset.token.clAddr,
-      ... chainlinkContract
-    })
+      ...chainlinkContract,
+    });
   }
 
   const { data: priceData } = useContractReads({
-      contracts
+    contracts,
   });
 
-  const prices = priceData?.map(data => {
-    const result:any = data.result;
+  const prices = priceData?.map((data) => {
+    const result: any = data.result;
     return result[1];
   });
 
-  const chartData = chosenVault.status.collateral.map(
-    (asset: any) => {
-      return {
-        id: ethers.utils.parseBytes32String(asset.token.symbol),
-        value: Number(formatEther(asset.collateralValue)).toFixed(2),
-        label: Number(formatUnits(asset.amount, asset.token.dec)).toFixed(2)
-      }
-    }
-  );
-  
+  const chartData = chosenVault.status.collateral.map((asset: any) => {
+    return {
+      id: ethers.utils.parseBytes32String(asset.token.symbol),
+      value: Number(formatEther(asset.collateralValue)).toFixed(2),
+      label: Number(formatUnits(asset.amount, asset.token.dec)).toFixed(2),
+    };
+  });
+
   // smart vaults use 100000 as 100%
-  const liquidationTrigger:any = BigNumber.from(chosenVault.status.minted)
-  .mul(chosenVault.collateralRate).div(100000);
+  const liquidationTrigger: any = BigNumber.from(chosenVault.status.minted)
+    .mul(chosenVault.collateralRate)
+    .div(100000);
 
   const chartValues = [
     {
@@ -79,21 +84,29 @@ const Index = () => {
     },
     {
       title: "Vault Collateral Value",
-      value: Number(formatEther(chosenVault.status.totalCollateralValue)).toFixed(2),
+      value: Number(
+        formatEther(chosenVault.status.totalCollateralValue)
+      ).toFixed(2),
       currency: "EUROs",
     },
     {
       title: "You can borrow up to:",
-      value: Number(formatEther(chosenVault.status.maxMintable)).toFixed(2),
+      value: (
+        ((Number(formatEther(chosenVault.status.maxMintable)) -
+          Number(formatEther(chosenVault.status.minted))) *
+          (100000 - Number(chosenVault.mintFeeRate))) /
+        100000
+      ).toFixed(2),
       currency: "EUROs",
-    }
+    },
   ];
 
-  if (Number(chosenVault.status.minted) > 0) chartValues.push({
-    title: "Minimum Collateral Value Required",
-    value: Number(formatEther(liquidationTrigger)).toFixed(2),
-    currency: "EUROs",
-  });
+  if (Number(chosenVault.status.minted) > 0)
+    chartValues.push({
+      title: "Minimum Collateral Value Required",
+      value: Number(formatEther(liquidationTrigger)).toFixed(2),
+      currency: "EUROs",
+    });
 
   const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {
     const debt = Number(formatUnits(totalDebt, 18));
@@ -102,8 +115,11 @@ const Index = () => {
     let userInputInEur = 0;
 
     if (prices && prices[0] && prices[1]) {
-      const converted:any = BigNumber.from(parseEther(userInputForGreyBarOperation.toString()))
-        .mul(prices[1]).div(prices[0])
+      const converted: any = BigNumber.from(
+        parseEther(userInputForGreyBarOperation.toString())
+      )
+        .mul(prices[1])
+        .div(prices[0]);
       userInputInEur = Number(formatEther(converted));
     }
 
@@ -177,60 +193,58 @@ const Index = () => {
             gridTemplateColumns: { xs: "1fr 1fr" },
           }}
         >
-          {
-            chartValues.map((item, index) => (
+          {chartValues.map((item, index) => (
+            <Box
+              sx={{
+                marginBottom: "25px",
+                marginRight: { xs: "1.5rem", sm: "0" },
+                width: "auto",
+              }}
+              key={index}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "Poppins",
+                  fontSize: "0.88rem",
+                }}
+                variant="body2"
+              >
+                {item.title}
+              </Typography>
               <Box
                 sx={{
-                  marginBottom: "25px",
-                  marginRight: { xs: "1.5rem", sm: "0" },
-                  width: "auto",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
                 }}
-                key={index}
               >
                 <Typography
+                  variant="body1"
                   sx={{
+                    fontSize: "1.5rem",
+                    color: "#fff",
+                    marginRight: "10px",
                     fontFamily: "Poppins",
-                    fontSize: "0.88rem",
+                    fontWeight: "200",
+                  }}
+                >
+                  {item.value}
+                </Typography>
+                <Typography
+                  sx={{
+                    position: "relative",
+                    top: "4.2px",
+                    fontFamily: "Poppins",
+                    fontWeight: "200",
                   }}
                   variant="body2"
                 >
-                  {item.title}
+                  {item.currency}
                 </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontSize: "1.5rem",
-                      color: "#fff",
-                      marginRight: "10px",
-                      fontFamily: "Poppins",
-                      fontWeight: "200",
-                    }}
-                  >
-                    {item.value}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      position: "relative",
-                      top: "4.2px",
-                      fontFamily: "Poppins",
-                      fontWeight: "200",
-                    }}
-                    variant="body2"
-                  >
-                    {item.currency}
-                  </Typography>
-                </Box>
               </Box>
-            ))
-          }
+            </Box>
+          ))}
         </Box>
         <Box
           sx={{
@@ -268,7 +282,7 @@ const Index = () => {
           sx={{
             marginLeft: "5px",
             fontWeight: "200",
-            marginBottom: "7px"
+            marginBottom: "7px",
           }}
           variant="body1"
         >
@@ -277,11 +291,15 @@ const Index = () => {
         <ProgressBar
           progressValue={computeProgressBar(
             Number(ethers.BigNumber.from(chosenVault.status.minted)),
-            Number(ethers.BigNumber.from(chosenVault.status.totalCollateralValue))
+            Number(
+              ethers.BigNumber.from(chosenVault.status.totalCollateralValue)
+            )
           )}
           greyBarValue={computeGreyBar(
             Number(ethers.BigNumber.from(chosenVault.status.minted)),
-            Number(ethers.BigNumber.from(chosenVault.status.totalCollateralValue))
+            Number(
+              ethers.BigNumber.from(chosenVault.status.totalCollateralValue)
+            )
           )}
         />
         <Typography
@@ -290,7 +308,7 @@ const Index = () => {
             float: "right",
             marginRight: "5px",
             fontWeight: "200",
-            marginTop: "7px"
+            marginTop: "7px",
           }}
           variant="body1"
         >

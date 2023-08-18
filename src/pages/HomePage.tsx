@@ -7,11 +7,7 @@ import seurologo from "../assets/EUROs.svg";
 import swonlogo from "../assets/KRWs.svg";
 import sgbplogo from "../assets/GBPs.svg";
 import susdlogo from "../assets/USDs.svg";
-import {
-  useAccount,
-  useContractRead,
-  useNetwork,
-} from "wagmi";
+import { useAccount, useContractRead, useNetwork } from "wagmi";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
