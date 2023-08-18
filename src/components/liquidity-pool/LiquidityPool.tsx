@@ -30,7 +30,7 @@ const LiquidityPool = () => {
         >
           <img
             style={{
-              width: "100%",
+              width: "230px",
               height: "100%",
             }}
             src={coins}

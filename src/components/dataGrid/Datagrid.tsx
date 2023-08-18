@@ -190,7 +190,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 textAlign: "center",
                 width: "100%",
                 fontSize: { xs: "0.8rem", md: "1rem" },
-                color: "#afafaf",
+                color: "#f1fbfa",
                 fontFamily: "Poppins",
                 fontWeight: 300,
               }}
@@ -208,7 +208,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             alignItems: "center",
             justifyContent: "center",
             padding: 0,
-            marginRight: "2rem",
+            marginRight: "1rem",
             backgroundColor: "rgba(0, 0, 0, 0.2)",
           }}
           className="myBtn"
@@ -223,7 +223,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               textAlign: "center",
               width: "100%",
               fontSize: { xs: "0.8rem", md: "1rem" },
-              color: "#afafaf",
+              color: "#f1fbfa",
               fontFamily: "Poppins",
               fontWeight: 300,
             }}
@@ -282,7 +282,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   return (
     <Box
       sx={{
-        color: "#afafaf",
+        color: "#f1fbfa",
         fontFamily: "Poppins",
         fontWeight: 300,
         fontSize: "1rem",
@@ -314,8 +314,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               backdropFilter: "blur(13.9px)",
               WebkitBackdropFilter: "blur(13.9px)",
               border: "1px solid rgba(255, 255, 255, 0.3)",
-              color: "#afafaf",
-              fontFamily: "Open Sans, sans-serif",
+              color: "#f1fbfa",
+              fontFamily: "Poppins",
               width: "76%",
               margin: "40px auto",
               alignItems: "center",
@@ -358,7 +358,16 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         textAlign: "center",
                       }}
                     >
-                      {ethers.BigNumber.from(vault.tokenId).toString()}
+                      {" "}
+                      <Box
+                        sx={{
+                          margin: "1rem", // Add margin to the wrapping Box
+                        }}
+                      >
+                        {/* ... (table cell content) */}
+
+                        {ethers.BigNumber.from(vault.tokenId).toString()}
+                      </Box>
                     </td>
                     <td
                       style={{
@@ -376,7 +385,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         )}
                       />
                     </td>
-                    <td style={{}}>
+                    <td>
                       {" "}
                       {renderActions({
                         vaultID: ethers.BigNumber.from(
@@ -406,8 +415,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               backdropFilter: "blur(13.9px)",
               WebkitBackdropFilter: "blur(13.9px)",
               border: "1px solid rgba(255, 255, 255, 0.3)",
-              color: "#afafaf",
-              fontFamily: "Open Sans, sans-serif",
+              color: "#f1fbfa",
+              fontFamily: "Poppins",
               width: "76%",
               margin: "40px auto",
               alignItems: "center",
@@ -452,6 +461,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td
                       style={{
                         textAlign: "center",
+                        color: "#f1fbfa",
+                        width: "100px",
                       }}
                     >
                       {tokenToNFTMap.current.has(
@@ -469,6 +480,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td
                       style={{
                         textAlign: "center",
+                        color: "#f1fbfa",
                       }}
                     >
                       {ethers.BigNumber.from(vault.tokenId).toString()}
@@ -477,6 +489,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td
                       style={{
                         textAlign: "center",
+                        color: "#f1fbfa",
                       }}
                     >
                       <ProgressBar
@@ -520,8 +533,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               backdropFilter: "blur(13.9px)",
               WebkitBackdropFilter: "blur(13.9px)",
               border: "1px solid rgba(255, 255, 255, 0.3)",
-              color: "#afafaf",
-              fontFamily: "Open Sans, sans-serif",
+              color: "#f1fbfa",
+              fontFamily: "Poppins",
               width: "76%",
               margin: "40px auto",
               alignItems: "center",
@@ -556,7 +569,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style={{}}>
               {sortedVaults
 
                 .slice(
@@ -573,6 +586,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td
                       style={{
                         textAlign: "center",
+                        color: "#f1fbfa",
+                        width: "150px",
+                        height: "100px",
                       }}
                     >
                       {tokenToNFTMap.current.has(
@@ -583,7 +599,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                             width: "auto",
                             height: "100px",
                             //border: "5px solid red",
-                            marginBottom: "100px",
+                            //  marginBottom: "100px",
                           }}
                           dangerouslySetInnerHTML={{
                             __html: tokenToNFTMap.current.get(
@@ -596,6 +612,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     <td
                       style={{
                         textAlign: "center",
+                        color: "#f1fbfa",
                       }}
                     >
                       {ethers.BigNumber.from(vault.tokenId).toString()}

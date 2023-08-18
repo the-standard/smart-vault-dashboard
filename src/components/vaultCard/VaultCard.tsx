@@ -6,7 +6,7 @@ import {
   useCircularProgressStore,
   useContractAddressStore,
   useSnackBarStore,
-  useVaultManagerAbiStore
+  useVaultManagerAbiStore,
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
 import { useNavigate } from "react-router-dom";
@@ -62,9 +62,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const { chain } = getNetwork();
 
   const mintVault = useContractWrite({
-    address: chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliContractAddress
-      : arbitrumContractAddress, // Set a default value or handle this case as per your requirement
+    address:
+      chain?.id === arbitrumGoerli.id
+        ? arbitrumGoerliContractAddress
+        : arbitrumContractAddress, // Set a default value or handle this case as per your requirement
     abi: vaultManagerAbi, // Make sure you have vaultManagerAbi defined
     functionName: "mint", // Assuming the function name is 'mint'
   });
@@ -104,7 +105,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
   ]);
 
   const unwatchDeployEvent = useContractEvent({
-    address: chain?.id === 421613
+    address:
+      chain?.id === 421613
         ? arbitrumGoerliContractAddress
         : chain?.id === 11155111
         ? contractAddress
@@ -112,11 +114,11 @@ const VaultCard: React.FC<VaultCardProps> = ({
         ? arbitrumContractAddress
         : null,
     abi: vaultManagerAbi,
-    eventName: 'VaultDeployed',
-    listener(log:any) {
+    eventName: "VaultDeployed",
+    listener(log: any) {
       const { owner, tokenId } = log[0].args;
       if (owner === address) {
-        unwatchDeployEvent?.()
+        unwatchDeployEvent?.();
         navigate(`Collateral/${tokenId.toString()}`);
       }
     },
@@ -157,7 +159,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            width: "250px",
+            width: "auto",
           }}
         >
           <img
@@ -184,12 +186,12 @@ const VaultCard: React.FC<VaultCardProps> = ({
             </Typography>
             <Typography
               sx={{
-                width: {
-                  sm: "auto",
-                  lg: "200px",
-                },
+                width: "auto",
                 height: "15px",
-                marginBottom: "0.5rem",
+                marginBottom: {
+                  xs: "2rem",
+                  lg: "0.5rem",
+                },
               }}
               variant="body1"
             >

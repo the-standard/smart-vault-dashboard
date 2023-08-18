@@ -1,6 +1,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
+import { Box } from "@mui/material";
 import React, { useEffect, useState, useRef } from "react";
 
 interface ProgressBarProps {
@@ -140,9 +141,19 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           id="progress-bar-grey"
           ref={progressBarGreyRef}
         ></div>
-        <div className="percentage" id="percentage" ref={percentageDivRef}>
+        <Box
+          sx={{
+            fontSize: {
+              xs: "0.8rem",
+              md: "1rem",
+            },
+          }}
+          className="percentage"
+          id="percentage"
+          ref={percentageDivRef}
+        >
           {progressValue}%
-        </div>
+        </Box>
       </div>
     </div>
   );

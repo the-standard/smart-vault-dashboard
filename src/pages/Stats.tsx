@@ -5,7 +5,7 @@ const Stats = () => {
   return (
     <Box
       sx={{
-        color: "#8E9BAE",
+        color: "#f1fbfa",
         margin: { xs: "0", sm: "3% 12%" },
         padding: "1%",
         // marginTop: "50px",
@@ -37,8 +37,8 @@ const Stats = () => {
         <Typography
           sx={{
             fontSize: {
-              md: "2rem",
-              lg: "5rem",
+              md: "1.2rem",
+              lg: "2.5rem",
             },
             textAlign: "center",
           }}

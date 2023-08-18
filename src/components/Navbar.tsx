@@ -45,46 +45,93 @@ const Navbar = () => {
   if (chain) {
     if (chain?.id === 42161) {
       logoComponent = (
-        <img
-          src={isMediumOrLarger ? arbitrumLogoLong : arbitrumLogoShort}
-          alt="logo"
-          style={{
-            width: "auto",
-            height: "50px",
-            // marginRight: "1rem",
-            // margin: "36px 0",
+        <Box
+          sx={{
+            width: {
+              xs: "25px",
+              sm: "50px",
+              md: "auto",
+            },
+            height: {
+              xs: "25px",
+              sm: "50px",
+              md: "auto",
+            },
           }}
-        />
+        >
+          <img
+            src={isMediumOrLarger ? arbitrumLogoLong : arbitrumLogoShort}
+            alt="logo"
+            style={{
+              width: "100%",
+              height: "100%",
+              // marginRight: "1rem",
+              // margin: "36px 0",
+            }}
+          />
+        </Box>
       );
     } else if (chain?.id === 421613) {
       logoComponent = (
-        <img
-          src={isMediumOrLarger ? arbitrumTestLogoLong : arbitrumTestLogoShort}
-          alt="logo"
-          style={{
-            width: "auto",
-            height: "50px",
-            // marginRight: "1rem",
-            // margin: "36px 0",
+        <Box
+          sx={{
+            width: {
+              xs: "25px",
+              sm: "70px",
+              md: "auto",
+            },
+            height: {
+              xs: "25px",
+              sm: "70px",
+              md: "auto",
+            },
           }}
-        />
+        >
+          <img
+            src={
+              isMediumOrLarger ? arbitrumTestLogoLong : arbitrumTestLogoShort
+            }
+            alt="logo"
+            style={{
+              width: "100%",
+              height: "100%",
+              // marginRight: "1rem",
+              // margin: "36px 0",
+            }}
+          />
+        </Box>
       );
     } else {
       logoComponent = (
-        <img
-          src={
-            isMediumOrLarger
-              ? networkNotSupportedLong
-              : networkNotSupportedShort
-          }
-          alt="logo"
-          style={{
-            width: "auto",
-            height: "50px",
-            // marginRight: "1rem",
-            // margin: "36px 0",
+        <Box
+          sx={{
+            width: {
+              xs: "25px",
+              sm: "70px",
+              md: "auto",
+            },
+            height: {
+              xs: "25px",
+              sm: "70px",
+              md: "auto",
+            },
           }}
-        />
+        >
+          <img
+            src={
+              isMediumOrLarger
+                ? networkNotSupportedLong
+                : networkNotSupportedShort
+            }
+            alt="logo"
+            style={{
+              width: "100%",
+              height: "100%",
+              // marginRight: "1rem",
+              // margin: "36px 0",
+            }}
+          />
+        </Box>
       );
     }
   }
@@ -223,6 +270,7 @@ const Navbar = () => {
               position: "relative",
               float: "right",
               top: { xs: "1rem", sm: "0.7rem" },
+              right: { xs: "0.7rem", sm: "0.5rem" },
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
