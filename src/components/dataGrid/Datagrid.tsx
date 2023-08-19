@@ -21,6 +21,8 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import "../../styles/progressBarStyle.css";
+import "../../styles/datagridStyles.css";
+
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther, formatUnits } from "viem";
 // import { getNetwork } from "@wagmi/core";
@@ -156,8 +158,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         sx={{
           display: "flex",
           flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
           margin: "0",
           padding: "0",
+          width: "100%",
         }}
       >
         <Link
@@ -298,232 +303,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         }
       >
         {" "}
-        {/* small screen table */}
-        <Box
-          sx={{
-            display: { xs: "block", md: "none" },
-          }}
-        >
-          <table
-            style={{
-              background:
-                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-
-              borderRadius: "10px",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              color: "#f1fbfa",
-              fontFamily: "Poppins",
-              width: "76%",
-              margin: "40px auto",
-              alignItems: "center",
-              overflow: "hidden",
-            }}
-          >
-            <thead>
-              <tr>
-                {" "}
-                <th scope="col">Vault ID</th>
-                <th scope="col">Debt Range</th>
-                {/* width is not actually 20px, but it makes the table look good */}
-                <th style={{ width: "20px" }} scope="col">
-                  {/* just one of them makes all of them have a margin */}
-                  <p
-                    style={{
-                      margin: "20px 0",
-                    }}
-                  >
-                    Actions
-                  </p>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedVaults
-                .slice(
-                  (currentPage - 1) * itemsPerPage,
-                  currentPage * itemsPerPage
-                )
-                .sort((a, b) =>
-                  ethers.BigNumber.from(b.tokenId)
-                    .sub(ethers.BigNumber.from(a.tokenId))
-                    .toNumber()
-                )
-                .map((vault: any, index: number) => (
-                  <tr key={index}>
-                    <td
-                      style={{
-                        textAlign: "center",
-                      }}
-                    >
-                      {" "}
-                      <Box
-                        sx={{
-                          margin: "1rem", // Add margin to the wrapping Box
-                        }}
-                      >
-                        {/* ... (table cell content) */}
-
-                        {ethers.BigNumber.from(vault.tokenId).toString()}
-                      </Box>
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                      }}
-                    >
-                      <ProgressBar
-                        progressValue={computeProgressBar(
-                          Number(ethers.BigNumber.from(vault.status.minted)),
-                          Number(
-                            ethers.BigNumber.from(
-                              vault.status.totalCollateralValue
-                            )
-                          )
-                        )}
-                      />
-                    </td>
-                    <td>
-                      {" "}
-                      {renderActions({
-                        vaultID: ethers.BigNumber.from(
-                          vault.tokenId
-                        ).toString(),
-                        smartVault: vault,
-                      })}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>{" "}
-        </Box>
-        {/* medium screen table */}
-        <Box
-          sx={{
-            display: { xs: "none", md: "block", lg: "none" },
-          }}
-        >
-          <table
-            style={{
-              background:
-                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-
-              borderRadius: "10px",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              color: "#f1fbfa",
-              fontFamily: "Poppins",
-              width: "76%",
-              margin: "40px auto",
-              alignItems: "center",
-              overflow: "hidden",
-            }}
-          >
-            <thead>
-              <tr>
-                <th scope="col">Vault NFT</th>
-                <th scope="col">Vault ID</th>
-
-                <th scope="col">
-                  {" "}
-                  {/* just one of them makes all of them have a margin */}
-                  <p
-                    style={{
-                      margin: "20px 0",
-                    }}
-                  >
-                    Ratio
-                  </p>
-                </th>
-                {/* width is not actually 20px, but it makes the table look good */}
-                <th style={{ width: "20px" }} scope="col">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedVaults
-                .slice(
-                  (currentPage - 1) * itemsPerPage,
-                  currentPage * itemsPerPage
-                )
-                .sort((a, b) =>
-                  ethers.BigNumber.from(b.tokenId)
-                    .sub(ethers.BigNumber.from(a.tokenId))
-                    .toNumber()
-                )
-                .map((vault: any, index: number) => (
-                  <tr key={index}>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        color: "#f1fbfa",
-                        width: "100px",
-                      }}
-                    >
-                      {tokenToNFTMap.current.has(
-                        ethers.BigNumber.from(vault.tokenId).toString()
-                      ) ? (
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: tokenToNFTMap.current.get(
-                              ethers.BigNumber.from(vault.tokenId).toString()
-                            ),
-                          }}
-                        />
-                      ) : null}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        color: "#f1fbfa",
-                      }}
-                    >
-                      {ethers.BigNumber.from(vault.tokenId).toString()}
-                    </td>
-
-                    <td
-                      style={{
-                        textAlign: "center",
-                        color: "#f1fbfa",
-                      }}
-                    >
-                      <ProgressBar
-                        progressValue={computeProgressBar(
-                          Number(ethers.BigNumber.from(vault.status.minted)),
-                          Number(
-                            ethers.BigNumber.from(
-                              vault.status.totalCollateralValue
-                            )
-                          )
-                        )}
-                      />
-                    </td>
-                    <td style={{}}>
-                      {" "}
-                      {renderActions({
-                        vaultID: ethers.BigNumber.from(
-                          vault.tokenId
-                        ).toString(),
-                        smartVault: vault,
-                      })}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>{" "}
-        </Box>
         {/* big screen table */}
-        <Box
-          sx={{
-            display: { xs: "none", lg: "block" },
-          }}
-        >
-          <table
+        <Box>
+          {/* <table
             style={{
               background:
                 "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
@@ -665,7 +447,101 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                   </tr>
                 ))}
             </tbody>
-          </table>{" "}
+          </table>{" "} */}
+          <table
+            style={{
+              width: "76%",
+              margin: "40px auto",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+          >
+            <thead>
+              <tr>
+                <th>NFT</th>
+                <th>Vault ID</th>
+                <th>Collateral</th>
+                <th>Ratio</th>
+                <th>Debt</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {sortedVaults
+                .slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .sort((a, b) =>
+                  ethers.BigNumber.from(b.tokenId)
+                    .sub(ethers.BigNumber.from(a.tokenId))
+                    .toNumber()
+                )
+                .map((vault, index) => (
+                  <tr key={index}>
+                    <td>
+                      {tokenToNFTMap.current.has(
+                        ethers.BigNumber.from(vault.tokenId).toString()
+                      ) ? (
+                        <div
+                          style={{}}
+                          dangerouslySetInnerHTML={{
+                            __html: tokenToNFTMap.current.get(
+                              ethers.BigNumber.from(vault.tokenId).toString()
+                            ),
+                          }}
+                        />
+                      ) : null}
+                    </td>
+                    <td>{ethers.BigNumber.from(vault.tokenId).toString()}</td>{" "}
+                    <TruncatedTableCell
+                      value={truncateToTwoDecimals(
+                        ethers.utils.formatEther(
+                          ethers.BigNumber.from(
+                            vault.status.totalCollateralValue
+                          ).toString()
+                        )
+                      )}
+                      length={12}
+                    />{" "}
+                    <td>
+                      {truncateToTwoDecimals(
+                        formatEther(vault.status.minted.toString())
+                      )}
+                    </td>{" "}
+                    <td>
+                      <ProgressBar
+                        progressValue={computeProgressBar(
+                          Number(ethers.BigNumber.from(vault.status.minted)),
+                          Number(
+                            ethers.BigNumber.from(
+                              vault.status.totalCollateralValue
+                            )
+                          )
+                        )}
+                      />
+                    </td>
+                    <td
+                      style={{
+                        // border: "5px solid white",
+
+                        width: "50px",
+                        height: "auto",
+                      }}
+                    >
+                      {" "}
+                      {renderActions({
+                        vaultID: ethers.BigNumber.from(
+                          vault.tokenId
+                        ).toString(),
+                        smartVault: vault,
+                      })}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </Box>
         {/* big screen table ends */}
         <Box

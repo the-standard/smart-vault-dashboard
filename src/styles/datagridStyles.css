@@ -1,0 +1,114 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-image: url("https://vaults-beta.thestandard.io/backgrounds/Home.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+table {
+  width: 80%;
+  margin: 50px auto;
+  border-collapse: separate;
+  border-spacing: 0 15px; /* Space between rows */
+  color: white;
+  border-radius: 10px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://uploads-ssl.webflow.com/6422757f5e8ba638bea66086/64df8dab018df1e246202334_Home_blurred%20(1).png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  box-shadow: inset 1px 1px 1px 0px grey,
+    /* Inset shadow for top and left white line */ 5px 5px 25px 0px
+      rgba(0, 0, 0, 0.6); /* Outside shadow for bottom and right */
+}
+
+tr {
+  background-color: transparent; /* Fully transparent row background */
+  border-bottom: 15px solid transparent; /* Space between rows */
+}
+
+tr:not(:last-child) {
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.5) 15%,
+    rgba(255, 255, 255, 0.5) 85%,
+    transparent
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: center bottom;
+}
+tr:not(:last-child) td,
+tr:not(:last-child) th {
+  padding-bottom: 40px; /* Adjust this value as needed */
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  padding-top: 0px; /* Adjust this value as needed */
+}
+
+th {
+  font-weight: bold;
+}
+
+table img {
+  width: 80px;
+  height: auto;
+}
+
+.glass-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: white;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Tablet breakpoint: Hide Debt and Collateral columns */
+@media (max-width: 1024px) {
+  /* Hide the Debt and Collateral headers */
+  th:nth-child(3),
+  th:nth-child(5) {
+    display: none;
+  }
+
+  /* Hide the Debt and Collateral data */
+  td:nth-child(3),
+  td:nth-child(5) {
+    display: none;
+  }
+}
+
+/* Mobile breakpoint: Hide NFT column */
+@media (max-width: 767px) {
+  /* Hide the NFT header */
+  th:nth-child(1) {
+    display: none;
+  }
+  /* Hide the NFT data */
+  td:nth-child(1) {
+    display: none;
+  }
+}
