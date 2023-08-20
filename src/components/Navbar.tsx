@@ -50,12 +50,12 @@ const Navbar = () => {
             width: {
               xs: "25px",
               sm: "50px",
-              md: "auto",
+              md: "170px",
             },
             height: {
               xs: "25px",
               sm: "50px",
-              md: "auto",
+              md: "170px",
             },
           }}
         >
@@ -78,12 +78,12 @@ const Navbar = () => {
             width: {
               xs: "25px",
               sm: "70px",
-              md: "auto",
+              md: "170px",
             },
             height: {
               xs: "25px",
               sm: "70px",
-              md: "auto",
+              md: "170px",
             },
           }}
         >
@@ -108,12 +108,12 @@ const Navbar = () => {
             width: {
               xs: "25px",
               sm: "70px",
-              md: "auto",
+              md: "170px",
             },
             height: {
               xs: "25px",
               sm: "70px",
-              md: "auto",
+              md: "170px",
             },
           }}
         >

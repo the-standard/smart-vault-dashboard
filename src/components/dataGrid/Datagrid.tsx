@@ -303,151 +303,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         }
       >
         {" "}
-        {/* big screen table */}
         <Box>
-          {/* <table
-            style={{
-              background:
-                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-
-              borderRadius: "10px",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              color: "#f1fbfa",
-              fontFamily: "Poppins",
-              width: "76%",
-              margin: "40px auto",
-              alignItems: "center",
-              overflow: "hidden",
-            }}
-          >
-            <thead>
-              <tr>
-                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
-                  Vault NFT
-                </th>
-                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
-                  Vault ID
-                </th>
-                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
-                  Collateral
-                </th>
-                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
-                  Debt
-                </th>
-                <th style={{ textAlign: "center", verticalAlign: "middle" }}>
-                  <p style={{ margin: "20px 0" }}>Ratio</p>
-                </th>
-                <th
-                  style={{
-                    width: "20px",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody style={{}}>
-              {sortedVaults
-
-                .slice(
-                  (currentPage - 1) * itemsPerPage,
-                  currentPage * itemsPerPage
-                )
-                .sort((a, b) =>
-                  ethers.BigNumber.from(b.tokenId)
-                    .sub(ethers.BigNumber.from(a.tokenId))
-                    .toNumber()
-                )
-                .map((vault: any, index: number) => (
-                  <tr key={index}>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        color: "#f1fbfa",
-                        width: "150px",
-                        height: "100px",
-                      }}
-                    >
-                      {tokenToNFTMap.current.has(
-                        ethers.BigNumber.from(vault.tokenId).toString()
-                      ) ? (
-                        <div
-                          style={{
-                            width: "auto",
-                            height: "100px",
-                            //border: "5px solid red",
-                            //  marginBottom: "100px",
-                          }}
-                          dangerouslySetInnerHTML={{
-                            __html: tokenToNFTMap.current.get(
-                              ethers.BigNumber.from(vault.tokenId).toString()
-                            ),
-                          }}
-                        />
-                      ) : null}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        color: "#f1fbfa",
-                      }}
-                    >
-                      {ethers.BigNumber.from(vault.tokenId).toString()}
-                    </td>
-                    <TruncatedTableCell
-                      value={truncateToTwoDecimals(
-                        ethers.utils.formatEther(
-                          ethers.BigNumber.from(
-                            vault.status.totalCollateralValue
-                          ).toString()
-                        )
-                      )}
-                      length={12}
-                    />
-
-                    <td
-                      style={{
-                        textAlign: "center",
-                      }}
-                    >
-                      {truncateToTwoDecimals(
-                        formatEther(vault.status.minted.toString())
-                      )}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                      }}
-                    >
-                      <ProgressBar
-                        progressValue={computeProgressBar(
-                          Number(ethers.BigNumber.from(vault.status.minted)),
-                          Number(
-                            ethers.BigNumber.from(
-                              vault.status.totalCollateralValue
-                            )
-                          )
-                        )}
-                      />
-                    </td>
-                    <td style={{}}>
-                      {" "}
-                      {renderActions({
-                        vaultID: ethers.BigNumber.from(
-                          vault.tokenId
-                        ).toString(),
-                        smartVault: vault,
-                      })}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>{" "} */}
           <table
             style={{
               width: "76%",
@@ -461,8 +317,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 <th>NFT</th>
                 <th>Vault ID</th>
                 <th>Collateral</th>
-                <th>Ratio</th>
                 <th>Debt</th>
+                <th>Ratio</th>
                 <th>Actions</th>
               </tr>
             </thead>
