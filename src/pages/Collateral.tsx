@@ -21,6 +21,7 @@ import { getNetwork } from "@wagmi/core";
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 import { useAccount, useBlockNumber, useContractRead } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
+import vaultLiauidatedImg from "../assets/vault-liquidated.png";
 type RouteParams = {
   vaultId: string;
 };
@@ -417,7 +418,17 @@ const Collateral = () => {
               padding: "1.5rem",
             }}
           >
-            <ChartComponent />
+            {vaultStore.status.liquidated ? (
+              <Box>
+                <img
+                  src={vaultLiauidatedImg}
+                  alt="vault-liquidated"
+                  style={{ width: "100%" }}
+                />
+              </Box>
+            ) : (
+              <ChartComponent />
+            )}
           </Box>
           <Box
             sx={{

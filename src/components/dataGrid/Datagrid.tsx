@@ -367,16 +367,22 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       )}
                     </td>{" "}
                     <td>
-                      <ProgressBar
-                        progressValue={computeProgressBar(
-                          Number(ethers.BigNumber.from(vault.status.minted)),
-                          Number(
-                            ethers.BigNumber.from(
-                              vault.status.totalCollateralValue
+                      {vault.status.liquidated ? (
+                        <Typography sx={{ color: "red" }}>
+                          Vault Liquidated
+                        </Typography>
+                      ) : (
+                        <ProgressBar
+                          progressValue={computeProgressBar(
+                            Number(ethers.BigNumber.from(vault.status.minted)),
+                            Number(
+                              ethers.BigNumber.from(
+                                vault.status.totalCollateralValue
+                              )
                             )
-                          )
-                        )}
-                      />
+                          )}
+                        />
+                      )}
                     </td>
                     <td
                       style={{
