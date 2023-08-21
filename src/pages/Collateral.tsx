@@ -97,9 +97,7 @@ const Collateral = () => {
     watch: true,
   });
 
-  const currentVault: any = vaults?.filter(
-    (vault: any) => vault && vault.tokenId.toString() === vaultId
-  )[0];
+  const currentVault: any = vaultStore;
 
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;

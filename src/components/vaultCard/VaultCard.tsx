@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useCircularProgressStore,
   useContractAddressStore,
@@ -84,17 +84,19 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { getSnackBar } = useSnackBarStore();
+  const [tokenId, setTokenId] = useState<any>();
+
   useEffect(() => {
     const { isLoading, isSuccess, isError } = mintVault;
-
     if (isLoading) {
       getProgressType(3);
       getCircularProgress(true);
-    } else if (isSuccess) {
-      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
+    } else if (isSuccess && tokenId) {
+      getCircularProgress(false);
       getSnackBar(0);
+      navigate(`Collateral/${tokenId.toString()}`);
     } else if (isError) {
-      getCircularProgress(false); // Set getCircularProgress to false if there's an error
+      getCircularProgress(false);
       getSnackBar(1);
     }
   }, [
@@ -102,6 +104,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
     mintVault.error,
     mintVault.isLoading,
     mintVault.isSuccess,
+    tokenId,
   ]);
 
   const unwatchDeployEvent = useContractEvent({
@@ -116,10 +119,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
     abi: vaultManagerAbi,
     eventName: "VaultDeployed",
     listener(log: any) {
-      const { owner, tokenId } = log[0].args;
+      const { owner, tokenId: newTokenId } = log[0].args;
       if (owner === address) {
         unwatchDeployEvent?.();
-        navigate(`Collateral/${tokenId.toString()}`);
+        setTokenId(newTokenId);
       }
     },
   });
