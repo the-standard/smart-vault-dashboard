@@ -145,6 +145,16 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     }
   });
 
+  //the same function as below, but for NFT thumbnails
+  const handleNFTClick = (params: any) => {
+    setModalChildState(params.vaultID);
+    getVaultID(params.vaultID);
+    getVaultForListing(params.smartVault);
+    getVaultStore(params.smartVault);
+    console.log("vault", params.smartVault);
+    getVaultAddress(params.smartVault.status.vaultAddress);
+  };
+
   const renderActions = (params: any) => {
     const handleManageClick = () => {
       setModalChildState(params.vaultID);
@@ -312,6 +322,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               margin: "40px auto",
               alignItems: "center",
               overflow: "hidden",
+              paddingLeft: "1rem",
             }}
           >
             <thead>
@@ -358,7 +369,16 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         <div
                           style={{
                             borderRadius: "10px",
-                            // border: "5px solid white",
+                            overflow: "hidden",
+                          }}
+                          onClick={() => {
+                            handleOpen();
+                            handleNFTClick({
+                              vaultID: ethers.BigNumber.from(
+                                vault.tokenId
+                              ).toString(),
+                              smartVault: vault,
+                            });
                           }}
                         >
                           {parse(
