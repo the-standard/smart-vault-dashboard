@@ -1,25 +1,26 @@
 import { Box, Typography } from "@mui/material";
 import metamasklogo from "../../assets/metamasklogo.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useSnackBarStore, usesEuroAddressStore } from "../../store/Store";
 import { useNetwork } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 const AddEuros = () => {
   const { getSnackBar } = useSnackBarStore();
   const { chain } = useNetwork();
-  const { arbitrumGoerlisEuroAddress, arbitrumsEuroAddress } = usesEuroAddressStore();
+  const { arbitrumGoerlisEuroAddress, arbitrumsEuroAddress } =
+    usesEuroAddressStore();
 
   //clipboard logic
-  const textRef = useRef<HTMLSpanElement>(null);
+  // const textRef = useRef<HTMLSpanElement>(null);
 
   // Function to handle copying the text
   const handleCopyText = () => {
-    const textElement = textRef.current;
+    const textElement = eurosAddress;
 
     // Check if the browser supports the Clipboard API
     if (navigator.clipboard && textElement) {
-      const text = textElement.innerText;
+      const text = textElement;
 
       // Copy the text to the clipboard
       navigator.clipboard
@@ -37,9 +38,10 @@ const AddEuros = () => {
   };
   //clipboard logic end
 
-  const eurosAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerlisEuroAddress :
-    arbitrumsEuroAddress;
+  const eurosAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerlisEuroAddress
+      : arbitrumsEuroAddress;
 
   const addToken = async () => {
     if (window.ethereum) {
@@ -73,6 +75,35 @@ const AddEuros = () => {
       console.log("MetaMask is not installed!");
     }
   };
+
+  //trunate string logic
+  const [width, setWidth] = useState(window.innerWidth);
+
+  const [truncatedAddress, setTruncatedAddress] = useState(eurosAddress);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (width < 768) {
+      // breakpoint changed to 768px
+      const firstFourChars = eurosAddress.slice(0, 4);
+      const lastFourChars = eurosAddress.slice(-4);
+      setTruncatedAddress(`${firstFourChars}...${lastFourChars}`);
+    } else {
+      setTruncatedAddress(eurosAddress);
+    }
+  }, [width, eurosAddress]);
+
   return (
     <Box
       sx={{
@@ -117,7 +148,7 @@ const AddEuros = () => {
         }}
       >
         <span
-          ref={textRef}
+          // ref={textRef}
           style={{
             flexGrow: 1,
             alignSelf: "flex-start",
@@ -125,7 +156,7 @@ const AddEuros = () => {
             marginBottom: "10px",
           }}
         >
-          {eurosAddress}
+          {truncatedAddress}
         </span>
         <Box
           sx={{

@@ -122,7 +122,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         marginBottom: "1rem",
         display: "flex",
         flexDirection: "column",
-        height: "auto",
+        minHeight: "250px",
         overflow: "auto",
       }}
     >

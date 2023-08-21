@@ -22,6 +22,7 @@ import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 import { useAccount, useBlockNumber, useContractRead } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 import vaultLiauidatedImg from "../assets/vault-liquidated.png";
+import { useNavigate } from "react-router-dom";
 type RouteParams = {
   vaultId: string;
 };
@@ -39,6 +40,7 @@ const Collateral = () => {
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
   const { data: blockNumber } = useBlockNumber();
   const [renderedBlock, setRenderedBlock] = useState(blockNumber);
+  const navigate = useNavigate();
 
   //modal states
   const [open, setOpen] = useState(false);
@@ -156,7 +158,7 @@ const Collateral = () => {
     } else if (id === 2) {
       handleWalletOpen();
     } else if (id === 3) {
-      window.open(arbiscanUrl, "_blank");
+      navigate("/yield");
     }
   };
 
@@ -167,11 +169,11 @@ const Collateral = () => {
         margin: { xs: "0", sm: "3% 12%" },
         padding: "1%",
         // marginTop: "50px",
-        background:
-          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        border: "1px solid rgba(52, 52, 52, 0.3)",
-        boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        borderRadius: "10px",
+        // background:
+        //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+        // border: "1px solid rgba(52, 52, 52, 0.3)",
+        // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
+        // borderRadius: "10px",
         minHeight: "100vh",
         height: "100%",
       }}
@@ -406,8 +408,8 @@ const Collateral = () => {
               background:
                 "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
               boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
+              // backdropFilter: "blur(13.9px)",
+              // WebkitBackdropFilter: "blur(13.9px)",
               border: "1px solid rgba(255, 255, 255, 0.3)",
 
               borderRadius: "10px ",
@@ -448,11 +450,16 @@ const Collateral = () => {
                   display: "flex",
                   justifyContent: "center",
                   marginTop: "1rem",
+                  background:
+                    "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+
+                  borderRadius: "10px",
+                  WebkitBackdropFilter: "blur(13.9px)",
 
                   alignItems: "center",
                   cursor: "pointer",
                   textAlign: "center",
-                  borderRadius: "6.24932px",
+                  // borderRadius: "6.24932px",
                   border: "2px solid rgba(255, 255, 255, 0.2)",
                   boxShadow:
                     "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",

@@ -28,6 +28,8 @@ import { formatEther, formatUnits } from "viem";
 // import { getNetwork } from "@wagmi/core";
 import { useContractReads, useNetwork } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
+import parse from "html-react-parser";
+import DOMPurify from "dompurify";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -336,18 +338,38 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault, index) => (
                   <tr key={index}>
-                    <td>
+                    {/* <td>
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault.tokenId).toString()
                       ) ? (
                         <div
-                          style={{}}
                           dangerouslySetInnerHTML={{
                             __html: tokenToNFTMap.current.get(
                               ethers.BigNumber.from(vault.tokenId).toString()
                             ),
                           }}
                         />
+                      ) : null}
+                    </td> */}
+                    <td>
+                      {tokenToNFTMap.current.has(
+                        ethers.BigNumber.from(vault.tokenId).toString()
+                      ) ? (
+                        <div
+                          style={{
+                            borderRadius: "10px",
+                            // border: "5px solid white",
+                          }}
+                        >
+                          {parse(
+                            DOMPurify.sanitize(
+                              tokenToNFTMap.current.get(
+                                ethers.BigNumber.from(vault.tokenId).toString()
+                              )
+                            )
+                          )}
+                          {/* {console.log(vault.tokenId)} */}
+                        </div>
                       ) : null}
                     </td>
                     <td>{ethers.BigNumber.from(vault.tokenId).toString()}</td>{" "}
@@ -368,7 +390,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                     </td>{" "}
                     <td>
                       {vault.status.liquidated ? (
-                        <Typography sx={{ color: "red" }}>
+                        <Typography sx={{ color: "white" }}>
                           Vault Liquidated
                         </Typography>
                       ) : (
