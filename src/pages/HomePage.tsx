@@ -63,6 +63,7 @@ const HomePage = () => {
     abi: vaultManagerAbi,
     functionName: "vaults",
     account: address,
+    watch: true
   });
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);

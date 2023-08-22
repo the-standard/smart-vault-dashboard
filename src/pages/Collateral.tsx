@@ -95,10 +95,12 @@ const Collateral = () => {
     functionName: "vaults",
     account: address,
     watch: true,
+    structuralSharing: (prev, next) => (prev === next ? prev : next)
   });
+
   //this log is just for build command
   console.log("vaults", vaults);
-  const currentVault: any = vaultStore;
+  const currentVault:any = vaults?.filter((vault:any) => vault.tokenId.toString() === vaultId)[0];
 
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
