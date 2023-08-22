@@ -95,12 +95,19 @@ const Collateral = () => {
     functionName: "vaults",
     account: address,
     watch: true,
-    structuralSharing: (prev, next) => (prev === next ? prev : next)
+    structuralSharing: (prev, next) => (prev === next ? prev : next),
   });
 
   //this log is just for build command
   console.log("vaults", vaults);
-  const currentVault:any = vaults?.filter((vault:any) => vault.tokenId.toString() === vaultId)[0];
+  const currentVault: any = vaults?.filter(
+    (vault: any) => vault.tokenId.toString() === vaultId
+  )[0];
+
+  if (!currentVault) {
+    // vault not found
+    return <div>Loading...</div>;
+  }
 
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
