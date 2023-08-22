@@ -412,7 +412,6 @@ const Collateral = () => {
               `,
               backdropFilter: "blur(13.9px)",
               WebkitBackdropFilter: "blur(13.9px)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
 
               borderRadius: "10px ",
               display: "flex",
@@ -521,10 +520,12 @@ const Collateral = () => {
             sx={{
               background:
                 "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              boxShadow: `
+                inset 1px 1px 1px 0px grey,
+                5px 5px 25px 0px rgba(0, 0, 0, 0.6)
+              `,
               backdropFilter: "blur(13.9px)",
               WebkitBackdropFilter: "blur(13.9px)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
 
               borderRadius: "10px ",
               display: "flex",

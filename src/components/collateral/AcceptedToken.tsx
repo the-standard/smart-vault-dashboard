@@ -118,7 +118,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
 `,
         backdropFilter: "blur(13.9px)",
         WebkitBackdropFilter: "blur(13.9px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
         width: "auto",
         padding: "1rem",
         marginTop: "0.5rem",
