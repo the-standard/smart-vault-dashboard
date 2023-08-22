@@ -134,17 +134,27 @@ const VaultCard: React.FC<VaultCardProps> = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        background:
-          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        borderRadius: "10px",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
 
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        // backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://uploads-ssl.webflow.com/6422757f5e8ba638bea66086/64df8dab018df1e246202334_Home_blurred%20(1).png")`,
-        // backgroundRepeat: "no-repeat",
-        // backgroundSize: "cover",
-        // backgroundPosition: "center",
+        borderRadius: "10px",
+
+        // border: "1px solid rgba(255, 255, 255, 0.3)",
+
         padding: "0",
+        borderCollapse: "separate",
+        borderSpacing: "0 15px",
+        color: "white",
+        backgroundImage: `
+          linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+          url('https://uploads-ssl.webflow.com/6422757f5e8ba638bea66086/64df8dab018df1e246202334_Home_blurred%20(1).png')
+        `,
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+        boxShadow: `
+  inset 1px 1px 1px 0px grey,
+  5px 5px 25px 0px rgba(0, 0, 0, 0.6)
+`,
       }}
     >
       <Box
