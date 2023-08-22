@@ -83,14 +83,14 @@ const Index = () => {
       currency: "EUROs",
     },
     {
-      title: "Vault Collateral Value",
+      title: "Collateral Value",
       value: Number(
         formatEther(chosenVault.status.totalCollateralValue)
       ).toFixed(2),
       currency: "EUROs",
     },
     {
-      title: "You can borrow up to:",
+      title: "Borrow up to:",
       value: (
         ((Number(formatEther(chosenVault.status.maxMintable)) -
           Number(formatEther(chosenVault.status.minted))) *

@@ -369,8 +369,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) ? (
                         <div
                           style={{
-                            borderRadius: "10px",
+                            borderRadius: "5px",
                             overflow: "hidden",
+                            // border: "1px solid red",
+                            objectFit: "contain",
+                            //  width: "70px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                           onClick={() => {
                             handleOpen();

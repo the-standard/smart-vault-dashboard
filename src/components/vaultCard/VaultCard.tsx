@@ -134,11 +134,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-
         borderRadius: "10px",
-
-        // border: "1px solid rgba(255, 255, 255, 0.3)",
-
         padding: "0",
         borderCollapse: "separate",
         borderSpacing: "0 15px",
