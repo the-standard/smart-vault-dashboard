@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import metamasklogo from "../../assets/metamasklogo.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSnackBarStore, usesEuroAddressStore } from "../../store/Store";
 import { useNetwork } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";

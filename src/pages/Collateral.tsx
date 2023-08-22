@@ -96,7 +96,8 @@ const Collateral = () => {
     account: address,
     watch: true,
   });
-
+  //this log is just for build command
+  console.log("vaults", vaults);
   const currentVault: any = vaultStore;
 
   const assets = currentVault.status.collateral;

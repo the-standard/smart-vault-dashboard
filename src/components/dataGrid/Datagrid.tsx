@@ -296,6 +296,20 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     }
   }, [isMobile]);
 
+  const sanitizedNFTs = sortedVaults.map((vault) => {
+    console.log(tokenToNFTMap);
+    const nft = tokenToNFTMap.current.get(
+      ethers.BigNumber.from(vault.tokenId).toString()
+    );
+    const NFTPurified = DOMPurify.sanitize(nft);
+    console.log("nft", NFTPurified);
+    return {
+      ...vault,
+      NFTPurified,
+    };
+  });
+  console.log("sanitizedNFTs", sanitizedNFTs);
+
   return (
     <Box
       sx={{
@@ -337,7 +351,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             </thead>
 
             <tbody>
-              {sortedVaults
+              {sanitizedNFTs
                 .slice(
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage
@@ -349,19 +363,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 )
                 .map((vault, index) => (
                   <tr key={index}>
-                    {/* <td>
-                      {tokenToNFTMap.current.has(
-                        ethers.BigNumber.from(vault.tokenId).toString()
-                      ) ? (
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: tokenToNFTMap.current.get(
-                              ethers.BigNumber.from(vault.tokenId).toString()
-                            ),
-                          }}
-                        />
-                      ) : null}
-                    </td> */}
                     <td>
                       {tokenToNFTMap.current.has(
                         ethers.BigNumber.from(vault.tokenId).toString()
@@ -381,13 +382,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                             });
                           }}
                         >
-                          {parse(
-                            DOMPurify.sanitize(
-                              tokenToNFTMap.current.get(
-                                ethers.BigNumber.from(vault.tokenId).toString()
-                              )
-                            )
-                          )}
+                          {parse(vault.NFTPurified)}
                           {/* {console.log(vault.tokenId)} */}
                         </div>
                       ) : null}
@@ -490,8 +485,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
               borderRadius: "10px",
               boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
+
               border: "1px solid rgba(255, 255, 255, 0.3)",
 
               p: 4,
