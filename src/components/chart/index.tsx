@@ -312,7 +312,7 @@ const Index = () => {
           }}
           variant="body1"
         >
-          Vault Liquidates at 100%
+          Smart Vault liquidates at 90.91%{" "}
         </Typography>
       </Box>
     </Box>

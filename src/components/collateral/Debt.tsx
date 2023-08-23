@@ -862,9 +862,9 @@ const Debt = () => {
                   the maximum amount your wallet can use for a fee.
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  We suggest a cap of {amount} for this transaction. This fee
-                  (0.5%) is rewarded to TST stakers, helping the DAO grow and
-                  build more features.{" "}
+                  We suggest a cap of {amount * 0.01} for this transaction. This
+                  fee (0.5%) is rewarded to TST stakers, helping the DAO grow
+                  and build more features.{" "}
                 </Typography>{" "}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   Interested in receiving a share of all fees collected?{" "}
