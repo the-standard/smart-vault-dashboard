@@ -94,8 +94,7 @@ const Collateral = () => {
     abi: vaultManagerAbi,
     functionName: "vaults",
     account: address,
-    watch: true,
-    structuralSharing: (prev, next) => (prev === next ? prev : next),
+    watch: true
   });
 
   //this log is just for build command
