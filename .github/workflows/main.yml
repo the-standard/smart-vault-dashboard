@@ -44,9 +44,6 @@ jobs:
     
     - run: |-
         gcloud --quiet auth configure-docker
-        echo "xxxxxxxxx"
-        echo ${{ vars.VITE_OPENSEA_API_KEY }}
-        echo "xxxxxxxxx"
 
     - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
       with:
