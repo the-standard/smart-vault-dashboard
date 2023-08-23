@@ -94,8 +94,7 @@ const Collateral = () => {
     abi: vaultManagerAbi,
     functionName: "vaults",
     account: address,
-    watch: true,
-    structuralSharing: (prev, next) => (prev === next ? prev : next),
+    watch: true
   });
 
   //this log is just for build command
@@ -106,7 +105,78 @@ const Collateral = () => {
 
   if (!currentVault) {
     // vault not found
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Box
+          sx={{
+            color: "#ffffff",
+            margin: { xs: "0", sm: "3% 12%" },
+            padding: "1%",
+          }}
+          ref={rectangleRef}
+        >
+          <Link
+            style={{
+              textDecoration: "none",
+              display: "flex",
+            }}
+            to="/"
+          >
+            <Box
+              sx={{
+                padding: "10px 10px",
+                border: "2px solid rgba(255, 255, 255, 0.2)",
+                boxShadow:
+                  "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+                fontFamily: '"Poppins", sans-serif',
+                color: "#ffffff",
+                fontSize: "1rem",
+                letterSpacing: "1px",
+                backdropFilter: "blur(8px)",
+                cursor: "pointer",
+                borderRadius: "10px",
+                transition: "0.5s",
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+
+                "&:after": {
+                  content: '""',
+                  position: "absolute",
+                  height: "100%",
+                  width: "100%",
+                  top: "0",
+                  left: "0",
+                  background:
+                    "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+                  backgroundSize: "300% 100%",
+                  backgroundPosition: "165% 0",
+                  transition: "0.7s",
+                },
+                "&:hover:after": {
+                  backgroundPosition: "-20% 0",
+                },
+                "&:hover": {
+                  boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+                  transform: "translateY(-5px)",
+                },
+
+                "&.activeBtn": {
+                  background:
+                    "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+                  border: "1px solid white",
+                  boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
+                },
+              }}
+            >
+              <ArrowBackIosNewIcon />
+            </Box>{" "}
+          </Link>
+          <p>Vault not found</p>
+        </Box>
+      </>
+    );
   }
 
   const assets = currentVault.status.collateral;
