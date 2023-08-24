@@ -371,8 +371,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                           style={{
                             borderRadius: "5px",
                             overflow: "hidden",
-                            // border: "1px solid red",
                             objectFit: "contain",
+                            // border: "1px solid red",
                             //  width: "70px",
                             display: "flex",
                             alignItems: "center",

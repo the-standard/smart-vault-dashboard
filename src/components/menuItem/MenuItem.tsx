@@ -48,7 +48,7 @@ const NavButton: React.FC<NavButtonProps> = ({
           fontSize: { xs: "1rem", md: "0.8rem", lg: "1rem" },
           fontFamily: "Poppins",
           fontWeight: 200,
-          color: " #afafaf",
+          color: " #f1fbfa",
         }}
       >
         {text}

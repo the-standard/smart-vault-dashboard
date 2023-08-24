@@ -64,11 +64,11 @@ const Deposit: React.FC<DepositProps> = ({
 
   // Function to handle copying the text
   const handleCopyText = () => {
-    const textElement = textRef.current;
+    const textElement = vaultAddress;
 
     // Check if the browser supports the Clipboard API
     if (navigator.clipboard && textElement) {
-      const text = textElement.innerText;
+      const text = textElement;
 
       // Copy the text to the clipboard
       navigator.clipboard
@@ -198,6 +198,34 @@ const Deposit: React.FC<DepositProps> = ({
       incrementRenderAppCounter();
     }
   }, [data, isError, isLoading]);
+
+  //trunate string logic
+  const [width, setWidth] = useState(window.innerWidth);
+
+  const [truncatedAddress, setTruncatedAddress] = useState(vaultAddress);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (width < 768) {
+      // breakpoint changed to 768px
+      const firstFourChars = vaultAddress.slice(0, 4);
+      const lastFourChars = vaultAddress.slice(-4);
+      setTruncatedAddress(`${firstFourChars}...${lastFourChars}`);
+    } else {
+      setTruncatedAddress(vaultAddress);
+    }
+  }, [width, vaultAddress]);
 
   return (
     <Box>
@@ -369,7 +397,7 @@ const Deposit: React.FC<DepositProps> = ({
                 alignItems: "center",
               }}
             >
-              <span ref={textRef}>{vaultAddress}</span>
+              <span ref={textRef}>{truncatedAddress}</span>
               <Box
                 sx={{
                   cursor: "pointer",

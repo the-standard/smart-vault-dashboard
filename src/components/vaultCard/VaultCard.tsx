@@ -245,6 +245,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
           <Typography
             sx={{
               color: "#f1fbfa",
+              fontFamily: "Poppins",
+              fontSize: { xs: "1rem", md: "0.8rem", lg: "1rem" },
             }}
           >
             {isActive ? "Create Smart Vault" : "Coming Soon"}
