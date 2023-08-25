@@ -113,6 +113,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     contracts: vaults.map((vault) => {
       return { ...contractFunction, args: [vault.tokenId] };
     }),
+    watch: true
   });
 
   NFTsMetadata?.forEach((data, index) => {
