@@ -273,41 +273,41 @@ const Debt = () => {
   const borrowValues = [
     {
       key: "Mint to address",
-      value: shortenedAddress,
+      value: shortenedAddress
     },
     {
       key: "Fixed interest %",
-      value: "0",
+      value: "0"
     },
     {
       key: `Minting Fee (${toPercentage(vaultStore.mintFeeRate)}%)`,
-      value: calculateRateAmount(amount, vaultStore.mintFeeRate),
+      value: calculateRateAmount(amount, vaultStore.mintFeeRate)
     },
     {
       key: "Borrowing",
-      value: amount + calculateRateAmount(amount, vaultStore.mintFeeRate),
+      value: amount + calculateRateAmount(amount, vaultStore.mintFeeRate)
     },
     {
       key: "Receiving",
-      value: amount,
+      value: amount
     },
   ];
   const repayValues = [
     {
       key: "Fixed interest %",
-      value: "0",
+      value: "0"
     },
     {
-      key: "Burn Fee (1%)",
-      value: amount * 0.01,
+      key: `Burn Fee (${toPercentage(vaultStore.burnFeeRate)}%)`,
+      value: calculateRateAmount(amount, vaultStore.burnFeeRate)
     },
     {
       key: "Actual Repayment",
-      value: amount,
+      value: amount
     },
     {
       key: "Send",
-      value: amount + amount * 0.01,
+      value: amount + calculateRateAmount(amount, vaultStore.burnFeeRate)
     },
   ];
 
