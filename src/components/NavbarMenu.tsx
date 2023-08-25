@@ -49,6 +49,13 @@ const menuItems = [
     isWorking: true,
     route: "staking",
   },
+  {
+    text: "Tokens",
+    icon: borrowinglogo,
+    icon2: borrowinglogo2,
+    route: "tokens",
+    isWorking: false
+  }
 ];
 
 const NavbarMenu = () => {
