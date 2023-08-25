@@ -61,7 +61,7 @@ const Debt = () => {
   };
 
   const handleAmount = (e: any) => {
-    setAmount(Number(e.target.value));
+    setAmount(Number(Math.round(e.target.value)));
     console.log(e.target.value);
     getGreyBarUserInput(e.target.value);
   };
@@ -262,52 +262,52 @@ const Debt = () => {
 
   const shortenedAddress = shortenAddress(address);
 
-  const toPercentage = (rate:BigInt) => {
-    return Number(rate) * 100 / HUNDRED_PC;
-  }
+  const toPercentage = (rate: BigInt) => {
+    return (Number(rate) * 100) / HUNDRED_PC;
+  };
 
-  const calculateRateAmount = (amount:number, rate:BigInt) => {
-    return Number(rate) * amount / HUNDRED_PC;
-  }
+  const calculateRateAmount = (amount: number, rate: BigInt) => {
+    return (Number(rate) * amount) / HUNDRED_PC;
+  };
 
   const borrowValues = [
     {
       key: "Mint to address",
-      value: shortenedAddress
+      value: shortenedAddress,
     },
     {
       key: "Fixed interest %",
-      value: "0"
+      value: "0",
     },
     {
       key: `Minting Fee (${toPercentage(vaultStore.mintFeeRate)}%)`,
-      value: calculateRateAmount(amount, vaultStore.mintFeeRate)
+      value: calculateRateAmount(amount, vaultStore.mintFeeRate),
     },
     {
       key: "Borrowing",
-      value: amount + calculateRateAmount(amount, vaultStore.mintFeeRate)
+      value: amount + calculateRateAmount(amount, vaultStore.mintFeeRate),
     },
     {
       key: "Receiving",
-      value: amount
+      value: amount,
     },
   ];
   const repayValues = [
     {
       key: "Fixed interest %",
-      value: "0"
+      value: "0",
     },
     {
       key: `Burn Fee (${toPercentage(vaultStore.burnFeeRate)}%)`,
-      value: calculateRateAmount(amount, vaultStore.burnFeeRate)
+      value: calculateRateAmount(amount, vaultStore.burnFeeRate),
     },
     {
       key: "Actual Repayment",
-      value: amount
+      value: amount,
     },
     {
       key: "Send",
-      value: amount + calculateRateAmount(amount, vaultStore.burnFeeRate)
+      value: amount + calculateRateAmount(amount, vaultStore.burnFeeRate),
     },
   ];
 
