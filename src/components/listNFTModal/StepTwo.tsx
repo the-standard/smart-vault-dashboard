@@ -13,6 +13,7 @@ import {
   useUSDToEuroAddressStore,
   useChainlinkAbiStore,
   useEthToUsdAddressStore,
+  useSnackBarStore,
 } from "../../store/Store";
 import { fromHex } from "viem";
 import { useNetwork } from "wagmi";
@@ -26,40 +27,43 @@ interface StepProps {
   onDataFromChild: (data: number) => void;
 }
 
-const StepTwo: React.FC<StepProps> = ({
-  modalChildState,
-  tokenMap,
-}) => {
+const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
   const { vaultForListing } = useVaultForListingStore();
-  const {
-    arbitrumContractAddress,
-    arbitrumGoerliContractAddress,
-  } = useContractAddressStore();
+  const { arbitrumContractAddress, arbitrumGoerliContractAddress } =
+    useContractAddressStore();
   //this might be useless. where else do I u,se it?
   const { chainlinkAbi } = useChainlinkAbiStore();
   const { chain } = useNetwork();
-  const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } = useUSDToEuroAddressStore();
-  const { arbitrumOneEthToUsdAddress, arbitrumGoerliethToUsdAddress } = useEthToUsdAddressStore();
+  const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } =
+    useUSDToEuroAddressStore();
+  const { arbitrumOneEthToUsdAddress, arbitrumGoerliethToUsdAddress } =
+    useEthToUsdAddressStore();
+  const { getSnackBar } = useSnackBarStore();
 
   const chainlinkContract = {
     abi: chainlinkAbi,
-    functionName: 'latestRoundData'
-  }
-  const eurUsdAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerliUSDToEuroAddress :
-    arbitrumOneUSDToEuroAddress;
-  const ethUsdAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerliethToUsdAddress :
-    arbitrumOneEthToUsdAddress;
+    functionName: "latestRoundData",
+  };
+  const eurUsdAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliUSDToEuroAddress
+      : arbitrumOneUSDToEuroAddress;
+  const ethUsdAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliethToUsdAddress
+      : arbitrumOneEthToUsdAddress;
 
   const { data: priceData } = useContractReads({
-    contracts: [{
-      address: ethUsdAddress,
-      ... chainlinkContract
-    }, {
-      address: eurUsdAddress,
-      ... chainlinkContract
-    }]
+    contracts: [
+      {
+        address: ethUsdAddress,
+        ...chainlinkContract,
+      },
+      {
+        address: eurUsdAddress,
+        ...chainlinkContract,
+      },
+    ],
   });
 
   const [userInput, setUserInput] = useState<string>("");
@@ -100,13 +104,18 @@ const StepTwo: React.FC<StepProps> = ({
     tokenAddress = arbitrumGoerliContractAddress;
   }
 
-  const convertEthToEur = (eth:string) => {
+  const convertEthToEur = (eth: string) => {
     if (eth.length === 0) eth = "0";
     const bigNumEth = ethers.utils.parseEther(eth);
-    const prices = priceData?.map(data => data.result && BigNumber.from(data.result[1]?.toString()));
-    return prices && prices[0] && prices[1] ?
-      Number(ethers.utils.formatEther(bigNumEth.mul(prices[0]).div(prices[1]))) : 0;
-  }
+    const prices = priceData?.map(
+      (data) => data.result && BigNumber.from(data.result[1]?.toString())
+    );
+    return prices && prices[0] && prices[1]
+      ? Number(
+          ethers.utils.formatEther(bigNumEth.mul(prices[0]).div(prices[1]))
+        )
+      : 0;
+  };
 
   useEffect(() => {
     setEuroValueConverted(convertEthToEur(userInput));
@@ -117,20 +126,35 @@ const StepTwo: React.FC<StepProps> = ({
       await openseaSDK.createSellOrder({
         asset: {
           tokenId,
-          //this one is actually the address of the smart vault manager for some reason
-          tokenAddress,
+          tokenAddress, // Address of the smart vault manager
         },
         accountAddress,
         startAmount: Number(userInput),
       });
+
+      //  alert("Your NFT is now listed on OpenSea!"); // Removed the comma at the end
+      getSnackBar(0);
     } catch (error) {
       console.log(error);
+      //  alert("Something went wrong, please try again");
+      getSnackBar(1);
     }
   };
-  
+
   const chosenNFT = tokenMap.get(modalChildState);
   return (
-    <Box sx={{ color: "white" }}>
+    <Box
+      sx={{
+        color: "white",
+        background:
+          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+        borderRadius: "10px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(13.9px)",
+        WebkitBackdropFilter: "blur(13.9px)",
+        padding: "1rem",
+      }}
+    >
       <Box sx={{}}>
         <div
           style={{ width: "100%", height: "100%" }}

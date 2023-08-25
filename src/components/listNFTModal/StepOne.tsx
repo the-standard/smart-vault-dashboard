@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -29,6 +29,7 @@ const StepOne: React.FC<StepProps> = ({
     const data = 2;
     onDataFromChild(data);
   }
+
   const { vaultForListing } = useVaultForListingStore();
   const {
     getNFTListingModalTotalValue,
@@ -41,7 +42,7 @@ const StepOne: React.FC<StepProps> = ({
   const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
 
-  let vaultManagerAddress;
+  let vaultManagerAddress: any;
 
   if (chain?.id == 421613) {
     vaultManagerAddress = arbitrumGoerliContractAddress;
@@ -82,8 +83,26 @@ const StepOne: React.FC<StepProps> = ({
         });
     }
   };
+
+  const handleWenmoon = useCallback(() => {
+    const url = `https://wenmoon.market/asset/arbitrum/${vaultManagerAddress}/7?tab=listings`;
+
+    window.open(url, "_blank");
+  }, [vaultManagerAddress]);
+
   return (
-    <Box sx={{}}>
+    <Box
+      sx={{
+        background:
+          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+
+        borderRadius: "10px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(13.9px)",
+        WebkitBackdropFilter: "blur(13.9px)",
+        padding: "1rem",
+      }}
+    >
       <Box sx={{}}>
         <div
           style={{ width: "100%", height: "100%" }}
@@ -449,6 +468,12 @@ const StepOne: React.FC<StepProps> = ({
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    background:
+                      "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                    borderRadius: "10px",
+                    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                    backdropFilter: "blur(13.9px)",
+                    WebkitBackdropFilter: "blur(13.9px)",
                   }}
                 >
                   <Typography
@@ -514,6 +539,7 @@ const StepOne: React.FC<StepProps> = ({
             <span
               style={{
                 color: "white",
+                marginLeft: "0.5rem",
               }}
             >
               {vaultManagerAddress}
@@ -572,62 +598,127 @@ const StepOne: React.FC<StepProps> = ({
             need liquidity, you can sell your smart Vault NFT and the owner can
             pay down the debt and unlock the collateral.
           </Typography>
-          <Button
-            onClick={handleClick}
+          <Box
             sx={{
-              marginLeft: "10px",
-              padding: "10px 10px",
-              border: "2px solid rgba(255, 255, 255, 0.2)",
-              boxShadow:
-                "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-              fontFamily: '"Poppins", sans-serif',
-              color: "#ffffff",
-              fontSize: "1rem",
-              letterSpacing: "1px",
-              //backdropFilter: "blur(8px)",
-              cursor: "pointer",
-              borderRadius: "10px",
-              transition: "0.5s",
-              position: "relative",
-              "&:after": {
-                content: '""',
-                position: "absolute",
-                height: "100%",
-                width: "100%",
-                top: "0",
-                left: "0",
-                background:
-                  "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-                backgroundSize: "200% 100%",
-                backgroundPosition: "165% 0",
-                transition: "0.7s",
-              },
-              "&:hover:after": {
-                backgroundPosition: "-20% 0",
-              },
-              "&:hover": {
-                boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-                transform: "translateY(-5px)",
-              },
-              "&:active": {
-                transform: "translateY(0)",
-                border: "2px solid rgba(152, 250, 250, 0.5)",
-                boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
-              },
-              "&.activeBtn": {
-                background:
-                  "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-              },
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <Typography
+            <Button
+              onClick={handleClick}
               sx={{
-                color: "#afafaf",
+                marginLeft: "10px",
+                padding: "10px 10px",
+                border: "2px solid rgba(255, 255, 255, 0.2)",
+                boxShadow:
+                  "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+                fontFamily: '"Poppins", sans-serif',
+                color: "#ffffff",
+                fontSize: "1rem",
+                letterSpacing: "1px",
+                //backdropFilter: "blur(8px)",
+                cursor: "pointer",
+                borderRadius: "10px",
+                transition: "0.5s",
+                position: "relative",
+                "&:after": {
+                  content: '""',
+                  position: "absolute",
+                  height: "100%",
+                  width: "100%",
+                  top: "0",
+                  left: "0",
+                  background:
+                    "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+                  backgroundSize: "200% 100%",
+                  backgroundPosition: "165% 0",
+                  transition: "0.7s",
+                },
+                "&:hover:after": {
+                  backgroundPosition: "-20% 0",
+                },
+                "&:hover": {
+                  boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+                  transform: "translateY(-5px)",
+                },
+                "&:active": {
+                  transform: "translateY(0)",
+                  border: "2px solid rgba(152, 250, 250, 0.5)",
+                  boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+                },
+                "&.activeBtn": {
+                  background:
+                    "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+                },
               }}
             >
-              List on opensea
-            </Typography>
-          </Button>{" "}
+              <Typography
+                sx={{
+                  color: "#afafaf",
+                }}
+              >
+                List on Opensea
+              </Typography>
+            </Button>{" "}
+            <Button
+              onClick={handleWenmoon}
+              sx={{
+                marginLeft: "10px",
+                padding: "10px 10px",
+                border: "2px solid rgba(255, 255, 255, 0.2)",
+                boxShadow:
+                  "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+                fontFamily: '"Poppins", sans-serif',
+                color: "#ffffff",
+                fontSize: "1rem",
+                letterSpacing: "1px",
+                //backdropFilter: "blur(8px)",
+                cursor: "pointer",
+                borderRadius: "10px",
+                transition: "0.5s",
+                position: "relative",
+                "&:after": {
+                  content: '""',
+                  position: "absolute",
+                  height: "100%",
+                  width: "100%",
+                  top: "0",
+                  left: "0",
+                  background:
+                    "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+                  backgroundSize: "200% 100%",
+                  backgroundPosition: "165% 0",
+                  transition: "0.7s",
+                },
+                "&:hover:after": {
+                  backgroundPosition: "-20% 0",
+                },
+                "&:hover": {
+                  boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+                  transform: "translateY(-5px)",
+                },
+                "&:active": {
+                  transform: "translateY(0)",
+                  border: "2px solid rgba(152, 250, 250, 0.5)",
+                  boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+                },
+                "&.activeBtn": {
+                  background:
+                    "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "#afafaf",
+                }}
+              >
+                List on Wenmoon
+              </Typography>
+            </Button>{" "}
+          </Box>
         </Box>
       </Box>
     </Box>
