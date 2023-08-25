@@ -44,6 +44,7 @@ const Debt = () => {
     useGreyProgressBarValuesStore();
   const { getCounter } = useCounterStore();
   const { chain } = getNetwork();
+  const HUNDRED_PC = 100_000;
 
   const incrementCounter = () => {
     getCounter(1);
@@ -261,6 +262,14 @@ const Debt = () => {
 
   const shortenedAddress = shortenAddress(address);
 
+  const toPercentage = (rate:BigInt) => {
+    return Number(rate) * 100 / HUNDRED_PC;
+  }
+
+  const calculateRateAmount = (amount:number, rate:BigInt) => {
+    return Number(rate) * amount / HUNDRED_PC;
+  }
+
   const borrowValues = [
     {
       key: "Mint to address",
@@ -271,12 +280,12 @@ const Debt = () => {
       value: "0",
     },
     {
-      key: "Minting Fee (1%)",
-      value: amount * 0.01,
+      key: `Minting Fee (${toPercentage(vaultStore.mintFeeRate)}%)`,
+      value: calculateRateAmount(amount, vaultStore.mintFeeRate),
     },
     {
       key: "Borrowing",
-      value: amount + amount * 0.01,
+      value: amount + calculateRateAmount(amount, vaultStore.mintFeeRate),
     },
     {
       key: "Receiving",
