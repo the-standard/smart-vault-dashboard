@@ -262,11 +262,11 @@ const Debt = () => {
 
   const shortenedAddress = shortenAddress(address);
 
-  const toPercentage = (rate: BigInt) => {
+  const toPercentage = (rate: bigint) => {
     return (Number(rate) * 100) / HUNDRED_PC;
   };
 
-  const calculateRateAmount = (amount: number, rate: BigInt) => {
+  const calculateRateAmount = (amount: number, rate: bigint) => {
     return (Number(rate) * amount) / HUNDRED_PC;
   };
 

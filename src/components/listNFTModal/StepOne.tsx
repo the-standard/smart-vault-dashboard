@@ -98,8 +98,7 @@ const StepOne: React.FC<StepProps> = ({
 
         borderRadius: "10px",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(13.9px)",
-        WebkitBackdropFilter: "blur(13.9px)",
+
         padding: "1rem",
       }}
     >
@@ -199,7 +198,10 @@ const StepOne: React.FC<StepProps> = ({
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
+            gridTemplateColumns: {
+              xs: "repeat(1, 1fr)", // On extra small (xs) screens, make it 1 column
+              md: "repeat(2, 1fr)", // On small (sm) and larger screens, make it 2 columns
+            },
             gridGap: "1rem",
           }}
         >
@@ -209,8 +211,7 @@ const StepOne: React.FC<StepProps> = ({
                 "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
               borderRadius: "10px",
               boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
+
               border: "1px solid rgba(255, 255, 255, 0.3)",
               width: "auto",
             }}
@@ -472,8 +473,6 @@ const StepOne: React.FC<StepProps> = ({
                       "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
                     borderRadius: "10px",
                     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                    backdropFilter: "blur(13.9px)",
-                    WebkitBackdropFilter: "blur(13.9px)",
                   }}
                 >
                   <Typography
