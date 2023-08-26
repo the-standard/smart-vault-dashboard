@@ -22,7 +22,7 @@ const menuItems = [
     isWorking: true,
   },
   {
-    text: "EUROs YIELD",
+    text: "Earn YIELD",
     icon: tststakinglogo,
     icon2: tststakinglogo2,
     isWorking: true,
@@ -46,7 +46,8 @@ const menuItems = [
     text: "TST Staking",
     icon: historylogo,
     icon2: historylogo2,
-    isWorking: false,
+    isWorking: true,
+    route: "staking",
   },
 ];
 

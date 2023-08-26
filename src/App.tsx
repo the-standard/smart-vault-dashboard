@@ -51,6 +51,7 @@ import { fromHex } from "viem";
 import Stats from "./pages/Stats.tsx";
 import Yield from "./pages/Yield.tsx";
 import Dex from "./pages/Dex.tsx";
+import Staking from "./pages/Staking.tsx";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
@@ -97,6 +98,7 @@ function App() {
           <Route path="stats" element={<Stats />} />
           <Route path="yield" element={<Yield />} />
           <Route path="dex" element={<Dex />} />
+          <Route path="staking" element={<Staking />} />
         </Routes>
         <Footer />
       </WagmiConfig>
