@@ -50,6 +50,7 @@ import { useEffect } from "react";
 import { fromHex } from "viem";
 import Stats from "./pages/Stats.tsx";
 import Yield from "./pages/Yield.tsx";
+import Dex from "./pages/Dex.tsx";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
@@ -95,6 +96,7 @@ function App() {
           <Route path="collateral/:vaultId" element={<Collateral />} />
           <Route path="stats" element={<Stats />} />
           <Route path="yield" element={<Yield />} />
+          <Route path="dex" element={<Dex />} />
         </Routes>
         <Footer />
       </WagmiConfig>

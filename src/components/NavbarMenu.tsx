@@ -29,6 +29,13 @@ const menuItems = [
     route: "yield",
   },
   {
+    text: "Buy TST",
+    icon: borrowinglogo,
+    icon2: borrowinglogo2,
+    isWorking: true,
+    route: "dex",
+  },
+  {
     text: "Statistics",
     icon: liquidatorslogo,
     icon2: liquidatorslogo2,
@@ -39,13 +46,6 @@ const menuItems = [
     text: "TST Staking",
     icon: historylogo,
     icon2: historylogo2,
-    isWorking: false,
-  },
-  {
-    text: "TST Membership token",
-    icon: borrowinglogo,
-    icon2: borrowinglogo2,
-    route: "",
     isWorking: false,
   },
 ];
