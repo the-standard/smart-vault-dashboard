@@ -230,15 +230,19 @@ const VaultCard: React.FC<VaultCardProps> = ({
       >
         <Button
           disabled={!isActive}
-          sx={{
-            background:
-              "linear-gradient(119.96deg, rgba(255, 255, 255, 0.1) 26.6%, rgba(255, 255, 255, 0) 64.62%)",
-            border: "1px solid rgba(70, 205, 235, 0.3)",
-            borderRadius: "3.88576px",
-            // margin: "4rem 0 0.8rem 0",
-            width: "100%",
-          }}
-          className="myBtn"
+          sx={
+            !isActive
+              ? {}
+              : {
+                  background:
+                    "linear-gradient(119.96deg, rgba(255, 255, 255, 0.1) 26.6%, rgba(255, 255, 255, 0) 64.62%)",
+                  border: "1px solid rgba(70, 205, 235, 0.3)",
+                  borderRadius: "3.88576px",
+                  // margin: "4rem 0 0.8rem 0",
+                  width: "100%",
+                }
+          }
+          className={isActive ? "myBtn" : ""}
           // onClick={() => write?.()}
           onClick={() => handleMintVault()}
         >

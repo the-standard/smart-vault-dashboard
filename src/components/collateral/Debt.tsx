@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 
 // import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
-import seurologo from "../../assets/seurologo.png";
+import seurologo from "../../assets/EUROs.svg";
 // import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
