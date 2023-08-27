@@ -404,6 +404,5 @@ interface CurrentPageState {
 
 export const useCurrentPageStore = create<CurrentPageState>((set) => ({
   currentPage: 1,
-  getCurrentPage: (currentPage) =>
-    set((state) => ({ currentPage: currentPage })),
+  getCurrentPage: (currentPage) => set(() => ({ currentPage: currentPage })),
 }));
