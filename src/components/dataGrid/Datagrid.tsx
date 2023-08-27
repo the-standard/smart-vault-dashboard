@@ -12,6 +12,7 @@ import {
   useVaultForListingStore,
   useVaultStore,
   useVaultAddressStore,
+  useCurrentPageStore,
 } from "../../store/Store.ts";
 import {
   Button,
@@ -46,6 +47,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const { getVaultForListing } = useVaultForListingStore();
   const { getVaultStore } = useVaultStore();
   const { getVaultAddress } = useVaultAddressStore();
+  const { getCurrentPage, currentPage } = useCurrentPageStore();
   //modal state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -113,7 +115,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     contracts: vaults.map((vault) => {
       return { ...contractFunction, args: [vault.tokenId] };
     }),
-    watch: true
+    watch: true,
   });
 
   NFTsMetadata?.forEach((data, index) => {
@@ -253,7 +255,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     );
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, getCurrentPage] = useState<any>(1);
   const itemsPerPage = 5;
 
   const totalPages = Math.ceil(vaults.length / itemsPerPage);
@@ -262,8 +264,21 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     _event: React.ChangeEvent<unknown>,
     page: number
   ) => {
-    setCurrentPage(page);
+    getCurrentPage(page);
   };
+
+  useEffect(() => {
+    return () => {
+      localStorage.setItem("currentPage", currentPage);
+    };
+  }, [currentPage]);
+
+  useEffect(() => {
+    const page = localStorage.getItem("currentPage");
+    if (page) {
+      getCurrentPage(Number(page));
+    }
+  }, []);
 
   const isMobile = useMediaQuery("(max-width:600px)");
 

@@ -396,3 +396,14 @@ export const useRenderAppCounterStore = create<RenderAppCounterState>(
       set((state) => ({ renderAppCounter: state.renderAppCounter + 1 })),
   })
 );
+
+interface CurrentPageState {
+  currentPage: any;
+  getCurrentPage: (currentPage: any) => void;
+}
+
+export const useCurrentPageStore = create<CurrentPageState>((set) => ({
+  currentPage: 1,
+  getCurrentPage: (currentPage) =>
+    set((state) => ({ currentPage: currentPage })),
+}));
