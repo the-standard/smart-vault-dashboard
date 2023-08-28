@@ -1,7 +1,6 @@
 import { LiFiWidget, WidgetConfig, WidgetWalletManagement, WidgetVariant } from '@lifi/widget';
-import { Address, Chain, useWalletClient } from "wagmi";
+import { Address, useWalletClient } from "wagmi";
 import { providers } from "ethers";
-import { arbitrum } from "wagmi/chains";
 
 interface ExchangeProps {
   variant?: WidgetVariant,
