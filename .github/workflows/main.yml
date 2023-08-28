@@ -10,7 +10,7 @@ env:
   PROJECT_NAME: ${{ secrets.GKE_PROJECT }}
   CLUSTER_NAME: cluster-1
   CLOUDSDK_COMPUTE_ZONE: europe-west2-c
-  DEPLOYMENT: smart-vault-${{ github.ref_name }}
+  DEPLOYMENT: smart-vault
   NAMESPACE: default
 
 jobs:
@@ -68,7 +68,4 @@ jobs:
           export IMAGE_TAG="gcr.io/${PROJECT_NAME}/$DEPLOYMENT:${GITHUB_REF##*/}.${GITHUB_SHA}"
           gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials cluster-1 --zone $CLOUDSDK_COMPUTE_ZONE --project $PROJECT_NAME
-          echo xxxxxxxxx
-          echo ${GITHUB_REF##*/}
-          echo oooooooooo
           kubectl set image deployment/$DEPLOYMENT-deployment-${GITHUB_REF##*/} $DEPLOYMENT=${IMAGE_TAG} -n ${NAMESPACE}
