@@ -32,16 +32,6 @@ export const useUsdToEuroStore = create<UsdToEuroState>(() => ({
   usdToEuroAbi: usdToEuroAbi,
 }));
 
-interface ChainIdState {
-  chainId: number;
-  getChainId: (chainId: number) => void;
-}
-
-export const useChainIdStore = create<ChainIdState>((set) => ({
-  chainId: 1,
-  getChainId: (chainId) => set(() => ({ chainId: chainId })),
-}));
-
 interface ChainlinkAbiState {
   chainlinkAbi: Array<any>;
   getChainlinkAbi: (chainlinkAbi: Array<any>) => void;

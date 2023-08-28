@@ -41,13 +41,10 @@ import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
 import {
   useCircularProgressStore,
-  useChainIdStore,
-  useRenderAppCounterStore,
+  useRenderAppCounterStore
 } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
-import { useEffect } from "react";
-import { fromHex } from "viem";
 import Stats from "./pages/Stats.tsx";
 import Yield from "./pages/Yield.tsx";
 import Dex from "./pages/Dex.tsx";
@@ -55,28 +52,9 @@ import Staking from "./pages/Staking.tsx";
 
 function App() {
   const { circularProgress } = useCircularProgressStore();
-  const { getChainId } = useChainIdStore();
   useBackgroundImage();
   console.log(circularProgress);
   const { renderAppCounter } = useRenderAppCounterStore();
-
-  useEffect(() => {
-    const fetchChainId = async () => {
-      if (window.ethereum) {
-        const idFromHex = fromHex(window.ethereum.chainId, "number");
-        getChainId(idFromHex);
-      }
-    };
-
-    fetchChainId();
-
-    if (window.ethereum) {
-      window.ethereum.on("chainChanged", (chainId: any) => {
-        const idFromHex = fromHex(chainId, "number");
-        getChainId(idFromHex);
-      });
-    }
-  }, []);
 
   return (
     <Box
