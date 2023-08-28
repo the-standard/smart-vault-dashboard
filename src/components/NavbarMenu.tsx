@@ -48,13 +48,6 @@ const menuItems = [
     icon2: historylogo2,
     isWorking: true,
     route: "staking",
-  },
-  {
-    text: "Tokens",
-    icon: borrowinglogo,
-    icon2: borrowinglogo2,
-    route: "tokens",
-    isWorking: false
   }
 ];
 

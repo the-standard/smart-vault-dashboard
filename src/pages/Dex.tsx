@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import Exchange from "./Exchange";
 
 const Dex = () => {
   return (
@@ -17,7 +18,9 @@ const Dex = () => {
         height: "100%",
         backdropFilter: "blur(13.9px)",
       }}
-    ></Box>
+    >
+      <Exchange />
+    </Box>
   );
 };
 
