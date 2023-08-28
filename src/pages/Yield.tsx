@@ -29,7 +29,7 @@ const Yield = () => {
       sx={{
         color: "#8E9BAE",
         margin: { xs: "0", sm: "3% 12%" },
-        padding: "5%",
+        padding: "2%",
         // marginTop: "50px",
         background:
           "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
@@ -50,7 +50,18 @@ const Yield = () => {
           alignItems: "center",
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            width: {
+              xs: "100%",
+              lg: "50%",
+            },
+            marginRight: {
+              xs: "0",
+              lg: "1rem",
+            },
+          }}
+        >
           <Typography variant="h4" sx={{ color: "#fff" }}>
             Earn up to 15% APR yield
           </Typography>
@@ -107,7 +118,10 @@ const Yield = () => {
         <Box
           sx={{
             height: "250px",
-            width: "250px",
+            width: {
+              xs: "100%",
+              lg: "50%",
+            },
             border: "1px solid #fff",
           }}
         >
@@ -123,7 +137,18 @@ const Yield = () => {
           alignItems: "center",
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            width: {
+              xs: "100%",
+              lg: "50%",
+            },
+            marginRight: {
+              xs: "0",
+              lg: "1rem",
+            },
+          }}
+        >
           <Typography
             sx={{
               fontWeight: "bold",
@@ -143,15 +168,26 @@ const Yield = () => {
             Choose EUROs and USDC.e from the treasure trove of pairs.
           </Typography>
         </Box>
-        <img
-          src={step2}
-          alt="step2"
-          width="100%"
-          style={{
-            maxWidth: "500px",
+        <Box
+          sx={{
+            width: { xs: "100%", sm: "50%" },
+            marginBottom: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          height="250px"
-        />
+        >
+          <img
+            src={step2}
+            alt="step2"
+            style={{
+              width: "100%",
+              marginBottom: "1rem",
+            }}
+            height="200px"
+          />
+        </Box>
       </Box>
       {/* step 2 continues */}
       <Box
@@ -162,7 +198,18 @@ const Yield = () => {
           alignItems: "center",
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            width: {
+              xs: "100%",
+              lg: "50%",
+            },
+            marginRight: {
+              xs: "0",
+              lg: "1rem",
+            },
+          }}
+        >
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
             Set "AUTO" and let GAMMA, the wise liquidity wizard, optimize your
             rewards without you lifting a finger.{" "}
@@ -172,16 +219,24 @@ const Yield = () => {
             rewards without you lifting a finger.{" "}
           </Typography>{" "}
         </Box>
-        <img
-          src={step2Mode}
-          alt="step2"
-          width="100%"
-          max-width="500px"
-          height="250px"
-          style={{
-            maxWidth: "500px",
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
+        >
+          <img
+            src={step2Mode}
+            alt="step2"
+            height="250px"
+            style={{
+              maxWidth: "500px",
+              width: "100%",
+            }}
+          />
+        </Box>
       </Box>
       {/* step 3 */}
       <Box
@@ -192,7 +247,18 @@ const Yield = () => {
           alignItems: "center",
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            width: {
+              xs: "100%",
+              lg: "50%",
+            },
+            marginRight: {
+              xs: "0",
+              lg: "1rem",
+            },
+          }}
+        >
           <Typography
             sx={{
               fontWeight: "bold",
@@ -227,7 +293,15 @@ const Yield = () => {
           },
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            width: "auto",
+            marginRight: {
+              xs: "0",
+              lg: "1rem",
+            },
+          }}
+        >
           <Typography
             sx={{
               fontWeight: "bold",
@@ -248,14 +322,12 @@ const Yield = () => {
           </Typography>{" "}
         </Box>
         <Box
-          sx={
-            {
-              // display: "flex",
-              // flexDirection: "column",
-              // justifyContent: "center",
-              // alignItems: "center",
-            }
-          }
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            // justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <img
             src={step4Staking}
@@ -263,6 +335,7 @@ const Yield = () => {
             width="100%"
             style={{
               maxWidth: "500px",
+              marginBottom: "1rem",
             }}
             height="auto"
           />
@@ -271,7 +344,7 @@ const Yield = () => {
             alt="nitro-pools"
             width="100%"
             style={{
-              maxWidth: "500px",
+              maxWidth: "400px",
             }}
             height="250px"
           />
