@@ -124,7 +124,13 @@ const Yield = () => {
             Choose EUROs and USDC.e from the treasure trove of pairs.
           </Typography>
         </Box>
-        <img src={step2} alt="step2" width="auto" height="250px" />
+        <img
+          src={step2}
+          alt="step2"
+          width="100%"
+          max-width="500px"
+          height="250px"
+        />
       </Box>
       {/* step 2 continues */}
       <Box
@@ -145,7 +151,13 @@ const Yield = () => {
             rewards without you lifting a finger.{" "}
           </Typography>{" "}
         </Box>
-        <img src={step2Mode} alt="step2" width="auto" height="250px" />
+        <img
+          src={step2Mode}
+          alt="step2"
+          width="100%"
+          max-width="500px"
+          height="250px"
+        />
       </Box>
       {/* step 3 */}
       <Box
@@ -182,10 +194,13 @@ const Yield = () => {
       {/* step 4 */}
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 2,
+
+          "@media (max-width: 600px)": {
+            gridTemplateColumns: "1fr",
+          },
         }}
       >
         <Box>
@@ -208,14 +223,30 @@ const Yield = () => {
             Join us, and let's make crypto magic together on Camelot! 🏰✨{" "}
           </Typography>{" "}
         </Box>
-        <Box>
+        <Box
+          sx={
+            {
+              // display: "flex",
+              // flexDirection: "column",
+              // justifyContent: "center",
+              // alignItems: "center",
+            }
+          }
+        >
           <img
             src={step4Staking}
             alt="step4-staking"
-            width="450px"
+            width="100%"
+            max-width="700px"
             height="auto"
           />
-          <img src={nitroPools} alt="nitro-pools" width="auto" height="250px" />
+          <img
+            src={nitroPools}
+            alt="nitro-pools"
+            width="100%"
+            max-width="500px"
+            height="250px"
+          />
         </Box>
       </Box>
     </Box>
