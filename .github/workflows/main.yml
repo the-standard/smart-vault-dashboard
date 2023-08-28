@@ -10,7 +10,7 @@ env:
   PROJECT_NAME: ${{ secrets.GKE_PROJECT }}
   CLUSTER_NAME: cluster-1
   CLOUDSDK_COMPUTE_ZONE: europe-west2-c
-  DEPLOYMENT: smart-vault
+  DEPLOYMENT: smart-vault-${{ github.ref_name }}
   NAMESPACE: default
 
 jobs:
