@@ -1,7 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import coins from "../../assets/coins.png";
+import { useNavigate } from "react-router-dom";
 
 const LiquidityPool = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/yield");
+  };
   return (
     <Box>
       <Box
@@ -65,21 +71,12 @@ const LiquidityPool = () => {
           GRAIL tokens earn you a share of all fees collected by the biggest DEX
           on Arbitrum!
         </Typography>{" "}
-        <Box>
+        <Box onClick={handleClick}>
           <Typography
             variant="body1"
-            sx={{ color: "#fff", marginBottom: "10px" }}
+            sx={{ color: "#fff", marginBottom: "10px", cursor: "pointer" }}
           >
-            <a
-              style={{
-                color: "#fff",
-                textUnderlineOffset: "5px",
-              }}
-              href="https://app.camelot.exchange/"
-              target="_blank"
-            >
-              Let's go
-            </a>
+            Let's go
           </Typography>
         </Box>
       </Box>
