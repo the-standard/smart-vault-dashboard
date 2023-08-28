@@ -96,7 +96,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="collateral/:vaultId" element={<Collateral />} />
           <Route path="stats" element={<Stats />} />
-          <Route path="yield" element={<Yield />} />
+          <Route path="yield/*" element={<Yield />} />
           <Route path="dex/*" element={<Dex />} />
           <Route path="staking" element={<Staking />} />
         </Routes>

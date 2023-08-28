@@ -6,6 +6,7 @@ import step4Staking from "../assets/auto-staking.png";
 import nitroPools from "../assets/nitro-pools.png";
 import { usePositionStore } from "../store/Store.ts";
 import { useLayoutEffect, useRef } from "react";
+import Exchange from "./Exchange.tsx";
 
 const Yield = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
@@ -117,19 +118,7 @@ const Yield = () => {
             USDC.e on Arbitrum!
           </Typography>
         </Box>
-        {/* widget */}
-        <Box
-          sx={{
-            height: "250px",
-            width: {
-              xs: "100%",
-              lg: "50%",
-            },
-            border: "1px solid #fff",
-          }}
-        >
-          WIDGET HERE
-        </Box>
+        <Exchange />
       </Box>
       {/* step 2 */}
       <Box
