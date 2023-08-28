@@ -70,10 +70,11 @@ const Yield = () => {
             sx={{
               fontWeight: "bold",
               color: "#fff",
+              margin: "1rem 0",
             }}
-            variant="h6"
+            variant="h4"
           >
-            🌟🌟🌟 Unleash the Magic of Crypto with Camelot! 🌟🌟🌟{" "}
+            🌟 Unleash the Magic of Crypto with Camelot! 🌟{" "}
           </Typography>
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
             Boost your EUROs by placing them into liquidity pools. By doing
@@ -90,15 +91,17 @@ const Yield = () => {
             sx={{
               fontWeight: "bold",
               color: "#fff",
+              margin: "3rem 0 1rem 0",
             }}
             variant="h5"
           >
-            🔥 Ignite Your Journey in 3 Simple Steps: 🔥{" "}
+            Ignite Your Journey in 3 Simple Steps: 🔥{" "}
           </Typography>{" "}
           <Typography
             sx={{
               fontWeight: "bold",
               color: "#fff",
+              marginBottom: "1rem",
             }}
             variant="h6"
           >
@@ -153,14 +156,12 @@ const Yield = () => {
             sx={{
               fontWeight: "bold",
               color: "#fff",
+              marginTop: "2rem",
             }}
             variant="h6"
           >
             STEP TWO: Dive into Camelot’s Pools! 🌊{" "}
           </Typography>
-          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-            Set sail to Camelot's Liquidity Haven.
-          </Typography>{" "}
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
             V3 awaits you (already set for your convenience).
           </Typography>{" "}
@@ -184,6 +185,8 @@ const Yield = () => {
             style={{
               width: "100%",
               marginBottom: "1rem",
+              maxWidth: "400px",
+              borderRadius: "10px",
             }}
             height="200px"
           />
@@ -214,13 +217,11 @@ const Yield = () => {
             Set "AUTO" and let GAMMA, the wise liquidity wizard, optimize your
             rewards without you lifting a finger.{" "}
           </Typography>{" "}
-          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-            Set "AUTO" and let GAMMA, the wise liquidity wizard, optimize your
-            rewards without you lifting a finger.{" "}
-          </Typography>{" "}
         </Box>
         <Box
           sx={{
+            width: { xs: "100%", sm: "50%" },
+            marginBottom: "1rem",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -232,8 +233,9 @@ const Yield = () => {
             alt="step2"
             height="250px"
             style={{
-              maxWidth: "500px",
+              maxWidth: "400px",
               width: "100%",
+              borderRadius: "10px",
             }}
           />
         </Box>
@@ -245,6 +247,10 @@ const Yield = () => {
           flexDirection: { xs: "column", lg: "row" },
           justifyContent: "space-between",
           alignItems: "center",
+          marginTop: {
+            xs: "2rem",
+            lg: "0",
+          },
         }}
       >
         <Box
@@ -269,21 +275,22 @@ const Yield = () => {
             STEP THREE: Make It Rain Rewards! 🌧️💰{" "}
           </Typography>
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-            Decide how much shimmering EUROs or USDC you wish to pour into the
-            liquidity cauldron.{" "}
+            Decide how much EUROs or USDC you wish to pour into the liquidity
+            cauldron.{" "}
           </Typography>{" "}
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
             Grant your royal approval and seal the deal with "Create Position".{" "}
           </Typography>{" "}
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-            Decide how much shimmering EUROs or USDC you wish to pour into the
-            liquidity cauldron.{" "}
-          </Typography>
+            🌈 Voilà! Revel in the continuous shower of trading fees and a 10%
+            APR in the majestic GRAIL tokens.{" "}
+          </Typography>{" "}
         </Box>
       </Box>
       {/* step 4 */}
       <Box
         sx={{
+          marginTop: "3rem",
           display: "grid",
           gridTemplateColumns: "repeat(2, 1fr)",
           gap: 2,
@@ -334,8 +341,9 @@ const Yield = () => {
             alt="step4-staking"
             width="100%"
             style={{
-              maxWidth: "500px",
+              maxWidth: "400px",
               marginBottom: "1rem",
+              borderRadius: "10px",
             }}
             height="auto"
           />
@@ -345,6 +353,7 @@ const Yield = () => {
             width="100%"
             style={{
               maxWidth: "400px",
+              borderRadius: "10px",
             }}
             height="250px"
           />
