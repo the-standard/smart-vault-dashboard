@@ -65,7 +65,7 @@ const Yield = () => {
           }}
         >
           <Typography variant="h4" sx={{ color: "#fff" }}>
-            Earn up to 15% APR yield
+            Earn a large yield with your EUROs!
           </Typography>
           <img src={yields} alt="yields" width="auto" height="130px" />
           <Typography
@@ -76,7 +76,7 @@ const Yield = () => {
             }}
             variant="h4"
           >
-            🌟 Unleash the Magic of Crypto with Camelot! 🌟{" "}
+            Unleash the Magic of Crypto with Camelot! 🌟{" "}
           </Typography>
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
             Boost your EUROs by placing them into liquidity pools. By doing
@@ -86,8 +86,8 @@ const Yield = () => {
           </Typography>
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
             The Standard DAO and Camelot DEX, the hottest exchange on Arbitrum,
-            are rolling out the red carpet for YOU, offering a dazzling yield of
-            15% PLUS trading fees! Ready to grow your assets? Here's how:
+            are rolling out the red carpet for YOU, offering a dazzling yield
+            PLUS trading fees! Ready to grow your assets? Here's how:
           </Typography>
           <Typography
             sx={{
@@ -119,7 +119,10 @@ const Yield = () => {
             USDC.e on Arbitrum!
           </Typography>
         </Box>
-        <Exchange toChain={arbitrum.id} toToken='0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8' />
+        <Exchange
+          toChain={arbitrum.id}
+          toToken="0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
+        />
       </Box>
       {/* step 2 */}
       <Box
@@ -282,8 +285,8 @@ const Yield = () => {
             Grant your royal approval and seal the deal with "Create Position".{" "}
           </Typography>{" "}
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-            🌈 Voilà! Revel in the continuous shower of trading fees and a 10%
-            APR in the majestic GRAIL tokens.{" "}
+            🌈 Voilà! Revel in the continuous shower of trading fees and a
+            strong yield paid in the majestic GRAIL tokens.{" "}
           </Typography>{" "}
         </Box>
       </Box>
@@ -319,10 +322,10 @@ const Yield = () => {
             STEP FOUR: Let’s up the reward by 5%{" "}
           </Typography>
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-            But why stop there? Supercharge that up to a whopping 15% by placing
+            But why stop there? Supercharge your yield even higher by placing
             your spNFT liquidity tokens into the NITRO pool. This will grant you
-            the extra 5% APR in TST tokens. These tokens are what will give you
-            a cut of all fees generated on TheStandard Protocol.{" "}
+            the extra APR in TST tokens. These tokens are what will give you a
+            cut of all fees generated on TheStandard Protocol.{" "}
           </Typography>{" "}
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
             Join us, and let's make crypto magic together on Camelot! 🏰✨{" "}
