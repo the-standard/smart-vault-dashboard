@@ -1,6 +1,24 @@
 import { Box, Typography } from "@mui/material";
+import { usePositionStore } from "../store/Store.ts";
+import { useLayoutEffect, useRef } from "react";
 
 const Staking = () => {
+  const rectangleRef = useRef<HTMLDivElement | null>(null);
+  const setPosition = usePositionStore((state) => state.setPosition);
+
+  useLayoutEffect(() => {
+    function updatePosition() {
+      if (rectangleRef.current) {
+        const { right, top } = rectangleRef.current.getBoundingClientRect();
+        setPosition({ right, top });
+      }
+    }
+
+    window.addEventListener("resize", updatePosition);
+    updatePosition();
+
+    return () => window.removeEventListener("resize", updatePosition);
+  }, [setPosition]);
   return (
     <Box
       sx={{
@@ -16,6 +34,7 @@ const Staking = () => {
         minHeight: "100vh",
         height: "100%",
       }}
+      ref={rectangleRef}
     >
       <Box
         sx={{
