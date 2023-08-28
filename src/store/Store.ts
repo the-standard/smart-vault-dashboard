@@ -2,57 +2,8 @@ import { create } from "zustand";
 import vaultManagerAbi from "../abis/vaultManager.ts";
 import erc20Abi from "../abis/erc20.ts";
 import chainlinkAbi from "../abis/priceFeeds/chainlink.ts";
-import usdToEuroAbi from "../abis/priceFeeds/usdtoeuro.ts";
 import smartVaultABI from "../abis/smartVault.ts";
-import WBTCABI from "../abis/tokens/WBTCABI.ts";
-import ethtousdAbi from "../abis/priceFeeds/ethtousd.ts";
 import { Address } from "viem";
-
-// interface PriceCalculatorState {
-//   priceCalculatorabi: Array<any>;
-// }
-// //this one is eth to usd price calculator
-// export const usePriceCalculatorStore = create<PriceCalculatorState>(() => ({
-//   priceCalculatorabi: priceCalculatorAbi,
-// }));
-interface EthToUsdAbiState {
-  ethToUsdAbi: Array<any>;
-  getEthToUsdAbi: (ethToUsdAbi: Array<any>) => void;
-}
-
-export const useEthToUsdAbiStore = create<EthToUsdAbiState>()((set) => ({
-  ethToUsdAbi: ethtousdAbi,
-  getEthToUsdAbi: (ethToUsdAbi) => set(() => ({ ethToUsdAbi: ethToUsdAbi })),
-}));
-interface UsdToEuroState {
-  usdToEuroAbi: Array<any>;
-}
-
-export const useUsdToEuroStore = create<UsdToEuroState>(() => ({
-  usdToEuroAbi: usdToEuroAbi,
-}));
-
-interface ChainlinkAbiState {
-  chainlinkAbi: Array<any>;
-  getChainlinkAbi: (chainlinkAbi: Array<any>) => void;
-}
-
-export const useChainlinkAbiStore = create<ChainlinkAbiState>()((set) => ({
-  chainlinkAbi: chainlinkAbi,
-  getChainlinkAbi: (chainlinkAbi) =>
-    set(() => ({ chainlinkAbi: chainlinkAbi })),
-}));
-
-interface USDToEuroAbiState {
-  usdToEuroAbi: Array<any>;
-  getUSDToEuroAbi: (usdToEuroAbi: Array<any>) => void;
-}
-
-export const useUSDToEuroAbiStore = create<USDToEuroAbiState>()((set) => ({
-  usdToEuroAbi: usdToEuroAbi,
-  getUSDToEuroAbi: (usdToEuroAbi) =>
-    set(() => ({ usdToEuroAbi: usdToEuroAbi })),
-}));
 
 interface EthToUsdAddressState {
   ethToUsdAddress: Address;
@@ -104,6 +55,17 @@ export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
     set(() => ({ sEuroAddress: sEuroAddress })),
 }));
 
+interface ChainlinkAbiState {
+  chainlinkAbi: Array<any>;
+  getChainlinkAbi: (chainlinkAbi: Array<any>) => void;
+}
+
+export const useChainlinkAbiStore = create<ChainlinkAbiState>()((set) => ({
+  chainlinkAbi: chainlinkAbi,
+  getChainlinkAbi: (chainlinkAbi) =>
+    set(() => ({ chainlinkAbi: chainlinkAbi })),
+}));
+
 interface smartVaultABIState {
   smartVaultABI: Array<any>;
 }
@@ -126,37 +88,6 @@ export const useContractAddressStore = create<contractAddressState>()(
     arbitrumContractAddress: "0xba169cceCCF7aC51dA223e04654Cf16ef41A68CC",
     getContractAddress: (contractAddress) =>
       set(() => ({ contractAddress: contractAddress })),
-  })
-);
-
-interface TokenManagerAddressState {
-  tokenManagerAddress: string;
-  arbitrumGoerliTokenManagerAddress: string;
-  arbitrumTokenManagerAddress: string;
-  getTokenManagerAddress: (tokenManagerAddress: string) => void;
-}
-
-export const useTokenManagerAddressStore = create<TokenManagerAddressState>()(
-  (set) => ({
-    tokenManagerAddress: "0xEB704FE5B1F5C23f7062780CE23323027a58d996",
-    arbitrumGoerliTokenManagerAddress:
-      "0x08A9Aae3Fb5581D57fbE509451042cb446495b57",
-    arbitrumTokenManagerAddress: "0x33c5A816382760b6E5fb50d8854a61b3383a32a0",
-    getTokenManagerAddress: (tokenManagerAddress) =>
-      set(() => ({ tokenManagerAddress: tokenManagerAddress })),
-  })
-);
-
-interface TokenManagerAbiState {
-  tokenManagerAbi: Array<any>;
-  getTokenManagerAbi: (tokenManagerAbi: Array<any>) => void;
-}
-
-export const useTokenManagerAbiStore = create<TokenManagerAbiState>()(
-  (set) => ({
-    tokenManagerAbi: [],
-    getTokenManagerAbi: (tokenManagerAbi) =>
-      set(() => ({ tokenManagerAbi: tokenManagerAbi })),
   })
 );
 
@@ -192,18 +123,6 @@ export const useVaultIdStore = create<VaultIdState>()((set) => ({
   vaultID: 1,
   getVaultID: (id) => set(() => ({ vaultID: id })),
 }));
-
-interface VaultsState {
-  vaultsStore: Array<any>;
-  getVaultsStore: (vaultsStore: Array<any>) => void;
-}
-
-export const useVaultsStore = create<VaultsState>()((set) => ({
-  vaultsStore: [],
-  getVaultsStore: (vaultsStore) => set(() => ({ vaultsStore: vaultsStore })),
-}));
-
-//individual vault
 
 interface VaultState {
   vaultStore: any;
@@ -346,16 +265,6 @@ export const useNFTListingModalStore = create<NFTListingModalState>((set) => ({
     set({ totalValueMinusDebt }),
 }));
 
-interface InputValueAsGlobalState {
-  inputValue: number;
-  getInputValue: (inputValue: number) => void;
-}
-
-export const useInputValueStore = create<InputValueAsGlobalState>((set) => ({
-  inputValue: 0,
-  getInputValue: (inputValue) => set({ inputValue }),
-}));
-
 interface CounterState {
   counter: number;
   getCounter: (delta: number) => void;
@@ -364,14 +273,6 @@ interface CounterState {
 export const useCounterStore = create<CounterState>((set) => ({
   counter: 0,
   getCounter: (delta) => set((state) => ({ counter: state.counter + delta })),
-}));
-
-interface WBTCAbiState {
-  WBTCAbi: any;
-}
-
-export const useWBTCAbiStore = create<WBTCAbiState>(() => ({
-  WBTCAbi: WBTCABI,
 }));
 
 interface RenderAppCounterState {
