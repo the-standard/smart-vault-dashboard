@@ -37,6 +37,7 @@ const Exchange: React.FC<ExchangeProps> = ({
 
   const widgetConfig: WidgetConfig = {
     integrator: 'The Standard',
+    appearance: 'dark',
     variant,
     containerStyle: {
       border: '1px solid rgb(234, 234, 234)',
