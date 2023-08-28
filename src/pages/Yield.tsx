@@ -173,23 +173,33 @@ const Yield = () => {
           sx={{
             width: { xs: "100%", sm: "50%" },
             marginBottom: "1rem",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
           }}
         >
-          <img
-            src={step2}
-            alt="step2"
-            style={{
+          <Box
+            sx={{
+              height: {
+                xs: "150px",
+                lg: "200px",
+              },
               width: "100%",
-              marginBottom: "1rem",
-              maxWidth: "500px",
-              borderRadius: "10px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-            height="200px"
-          />
+          >
+            <img
+              src={step2}
+              alt="step2"
+              style={{
+                width: "100%",
+                marginBottom: "1rem",
+                maxWidth: "500px",
+                borderRadius: "10px",
+              }}
+              height="100%"
+            />
+          </Box>
         </Box>
       </Box>
       {/* step 2 continues */}
