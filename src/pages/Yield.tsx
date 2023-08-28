@@ -1,5 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import yields from "../assets/yields.png";
+import step2 from "../assets/yield-step-2.png";
+import step2Mode from "../assets/select-mode.png";
+import step4Staking from "../assets/auto-staking.png";
+import nitroPools from "../assets/nitro-pools.png";
 
 const Yield = () => {
   return (
@@ -19,50 +23,201 @@ const Yield = () => {
         backdropFilter: "blur(13.9px)",
       }}
     >
-      <Typography variant="h4" sx={{ color: "#fff" }}>
-        Earn up to 15% APR yield
-      </Typography>
-      <img src={yields} alt="yields" width="auto" height="130px" />
-      <Typography
+      <Box
         sx={{
-          fontWeight: "bold",
-          color: "#fff",
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
-        variant="h6"
       >
-        Made up of 10% in GRAIL and 5% TST
-      </Typography>
-      <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-        GRAIL is the token that earns a share of all fees collected on Camelot
-        DEX, the largest exchange on Arbitrum. Somedays volume exceeds volume on
-        the Ethereum base layer, this is an opportunity not to be missed. TST is
-        the TheStandard Token that earns a share of all the fees paid when
-        people take out and pay back loans on The Standard Protocol.
-      </Typography>
-      <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-        <span
-          style={{
-            borderBottom: "1px solid #fff",
-            color: "#fff",
+        <Box>
+          <Typography variant="h4" sx={{ color: "#fff" }}>
+            Earn up to 15% APR yield
+          </Typography>
+          <img src={yields} alt="yields" width="auto" height="130px" />
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+            variant="h6"
+          >
+            🌟🌟🌟 Unleash the Magic of Crypto with Camelot! 🌟🌟🌟{" "}
+          </Typography>
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Boost your EUROs by placing them into liquidity pools. By doing
+            this, you can own a slice of the biggest decentralized exchange on
+            Arbitrum, where every trade funnels rewards straight into your
+            crypto wallet using the GRAIL token.
+          </Typography>
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            The Standard DAO and Camelot DEX, the hottest exchange on Arbitrum,
+            are rolling out the red carpet for YOU, offering a dazzling yield of
+            15% PLUS trading fees! Ready to grow your assets? Here's how:
+          </Typography>
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+            variant="h5"
+          >
+            🔥 Ignite Your Journey in 3 Simple Steps: 🔥{" "}
+          </Typography>{" "}
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+            variant="h6"
+          >
+            STEP ONE: Gather Your Treasures! 🪙{" "}
+          </Typography>
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Need EUROs? Lock assets with The Standard. Borrow EUROs at a 0%
+            interest rate. Magic, right?
+          </Typography>
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            For USDC.e, swap any asset using our easy-breezy widget.The cool
+            thing with our widget is you can swap any token on any chain over to
+            USDC.e on Arbitrum!
+          </Typography>
+        </Box>
+        {/* widget */}
+        <Box
+          sx={{
+            height: "250px",
+            width: "250px",
+            border: "1px solid #fff",
           }}
         >
-          Simply head over to Camelot {""}
-        </span>
-        and place EUROs and USDC into the official liquidity pool.
-      </Typography>{" "}
-      <Typography variant="h6" sx={{ color: "#fff" }}>
-        Then take your LP tokens and place them into Camelot NITRO where you can
-        earn an extra 5% TST.
-      </Typography>{" "}
-      <Typography variant="h6" sx={{ color: "#fff", fontWeight: "bold" }}>
-        CONTENT BOUNTY
-      </Typography>{" "}
-      <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-        CREATE A TUTORIAL VIDEO AND EARN 500 euro worth of TST.
-      </Typography>{" "}
-      <Typography variant="h6" sx={{ color: "#fff" }}>
-        Eventually, we will integrate it into this page to make it even easier.
-      </Typography>
+          WIDGET HERE
+        </Box>
+      </Box>
+      {/* step 2 */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+            variant="h6"
+          >
+            STEP TWO: Dive into Camelot’s Pools! 🌊{" "}
+          </Typography>
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Set sail to Camelot's Liquidity Haven.
+          </Typography>{" "}
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            V3 awaits you (already set for your convenience).
+          </Typography>{" "}
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Choose EUROs and USDC.e from the treasure trove of pairs.
+          </Typography>
+        </Box>
+        <img src={step2} alt="step2" width="auto" height="250px" />
+      </Box>
+      {/* step 2 continues */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Set "AUTO" and let GAMMA, the wise liquidity wizard, optimize your
+            rewards without you lifting a finger.{" "}
+          </Typography>{" "}
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Set "AUTO" and let GAMMA, the wise liquidity wizard, optimize your
+            rewards without you lifting a finger.{" "}
+          </Typography>{" "}
+        </Box>
+        <img src={step2Mode} alt="step2" width="auto" height="250px" />
+      </Box>
+      {/* step 3 */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+            variant="h6"
+          >
+            STEP THREE: Make It Rain Rewards! 🌧️💰{" "}
+          </Typography>
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Decide how much shimmering EUROs or USDC you wish to pour into the
+            liquidity cauldron.{" "}
+          </Typography>{" "}
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Grant your royal approval and seal the deal with "Create Position".{" "}
+          </Typography>{" "}
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Decide how much shimmering EUROs or USDC you wish to pour into the
+            liquidity cauldron.{" "}
+          </Typography>
+        </Box>
+      </Box>
+      {/* step 4 */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+            variant="h6"
+          >
+            STEP FOUR: Let’s up the reward by 5%{" "}
+          </Typography>
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            But why stop there? Supercharge that up to a whopping 15% by placing
+            your spNFT liquidity tokens into the NITRO pool. This will grant you
+            the extra 5% APR in TST tokens. These tokens are what will give you
+            a cut of all fees generated on TheStandard Protocol.{" "}
+          </Typography>{" "}
+          <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
+            Join us, and let's make crypto magic together on Camelot! 🏰✨{" "}
+          </Typography>{" "}
+        </Box>
+        <Box>
+          <img
+            src={step4Staking}
+            alt="step4-staking"
+            width="450px"
+            height="auto"
+          />
+          <img src={nitroPools} alt="nitro-pools" width="auto" height="250px" />
+        </Box>
+      </Box>
     </Box>
   );
 };
