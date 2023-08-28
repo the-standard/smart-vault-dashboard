@@ -128,7 +128,9 @@ const Yield = () => {
           src={step2}
           alt="step2"
           width="100%"
-          max-width="500px"
+          style={{
+            maxWidth: "500px",
+          }}
           height="250px"
         />
       </Box>
@@ -157,6 +159,9 @@ const Yield = () => {
           width="100%"
           max-width="500px"
           height="250px"
+          style={{
+            maxWidth: "500px",
+          }}
         />
       </Box>
       {/* step 3 */}
@@ -237,14 +242,18 @@ const Yield = () => {
             src={step4Staking}
             alt="step4-staking"
             width="100%"
-            max-width="700px"
+            style={{
+              maxWidth: "500px",
+            }}
             height="auto"
           />
           <img
             src={nitroPools}
             alt="nitro-pools"
             width="100%"
-            max-width="500px"
+            style={{
+              maxWidth: "500px",
+            }}
             height="250px"
           />
         </Box>
