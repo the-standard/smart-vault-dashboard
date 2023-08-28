@@ -7,6 +7,7 @@ import nitroPools from "../assets/nitro-pools.png";
 import { usePositionStore } from "../store/Store.ts";
 import { useLayoutEffect, useRef } from "react";
 import Exchange from "./Exchange.tsx";
+import { arbitrum } from "wagmi/chains";
 
 const Yield = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
@@ -118,7 +119,7 @@ const Yield = () => {
             USDC.e on Arbitrum!
           </Typography>
         </Box>
-        <Exchange />
+        <Exchange toChain={arbitrum.id} toToken='0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8' />
       </Box>
       {/* step 2 */}
       <Box

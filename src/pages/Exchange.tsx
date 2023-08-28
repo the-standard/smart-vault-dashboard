@@ -1,13 +1,21 @@
 import { LiFiWidget, WidgetConfig, WidgetWalletManagement, WidgetVariant } from '@lifi/widget';
-import { useWalletClient } from "wagmi";
+import { Address, Chain, useWalletClient } from "wagmi";
 import { providers } from "ethers";
 import { arbitrum } from "wagmi/chains";
 
 interface ExchangeProps {
-  variant?: WidgetVariant
+  variant?: WidgetVariant,
+  fromChain?: number,
+  toChain?: number,
+  fromToken?: Address,
+  toToken?: Address
 }
 const Exchange: React.FC<ExchangeProps> = ({
-  variant = 'default'
+  variant = 'default',
+  fromChain,
+  toChain,
+  fromToken,
+  toToken
 }) => {
   let signer:any;
   const { data: walletClient } = useWalletClient();
@@ -36,9 +44,10 @@ const Exchange: React.FC<ExchangeProps> = ({
       borderRadius: '16px',
     },
     walletManagement: walletConfig,
-    fromChain: arbitrum.id,
-    toChain: arbitrum.id,
-    toToken: '0xf5A27E55C748bCDdBfeA5477CB9Ae924f0f7fd2e',
+    fromChain,
+    toChain,
+    toToken,
+    fromToken,
     tokens: {
       featured: [
         {

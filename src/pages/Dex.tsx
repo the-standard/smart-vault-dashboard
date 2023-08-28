@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import Exchange from "./Exchange";
+import { arbitrum } from "wagmi/chains";
 
 const Dex = () => {
   return (
@@ -19,7 +20,7 @@ const Dex = () => {
         backdropFilter: "blur(13.9px)",
       }}
     >
-      <Exchange />
+      <Exchange toChain={arbitrum.id} toToken='0xf5A27E55C748bCDdBfeA5477CB9Ae924f0f7fd2e' />
     </Box>
   );
 };
