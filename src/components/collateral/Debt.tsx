@@ -60,7 +60,12 @@ const Debt = () => {
   };
 
   const handleAmount = (e: any) => {
-    setAmount(Number(Math.round(e.target.value)));
+    setAmount(Number(e.target.value));
+    console.log(
+      123123,
+      Number(e.target.value),
+      Number(Math.round(e.target.value))
+    )
     getGreyBarUserInput(e.target.value);
   };
 
