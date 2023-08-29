@@ -12,8 +12,6 @@ interface RangeSliderProps {
 export default function RangeSlider(props: RangeSliderProps) {
   const value = props.step;
 
-  console.log(value);
-
   return (
     <Box sx={{ width: 200 }}>
       <Slider

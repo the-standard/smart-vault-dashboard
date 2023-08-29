@@ -35,8 +35,6 @@ const Actions: React.FC<ActionsProps> = ({
     window.open(shareUrl, "_blank", "noopener,noreferrer");
   };
 
-  console.log(activeElement);
-
   switch (activeElement) {
     case 1:
       content = (

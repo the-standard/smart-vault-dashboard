@@ -139,7 +139,7 @@ const Index = () => {
       operation =
         ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
     }
-    console.log(operation);
+
     //not sure about this line, test it
     // If 'operation' is greater than or equal to 100, set it to 100
     // If 'operation' is less than or equal to 0, set it to 1

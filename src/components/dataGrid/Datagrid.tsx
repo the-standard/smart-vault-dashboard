@@ -134,8 +134,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     }
   });
 
-  console.log("vaults", vaults);
-
   const sortedVaults = [...vaults].sort((a, b) => {
     const idA = BigNumber.from(a.tokenId);
     const idB = BigNumber.from(b.tokenId);
@@ -154,7 +152,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     getVaultID(params.vaultID);
     getVaultForListing(params.smartVault);
     getVaultStore(params.smartVault);
-    console.log("vault", params.smartVault);
     getVaultAddress(params.smartVault.status.vaultAddress);
   };
 
@@ -164,7 +161,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       getVaultID(params.vaultID);
       getVaultForListing(params.smartVault);
       getVaultStore(params.smartVault);
-      console.log("vault", params.smartVault);
       getVaultAddress(params.smartVault.status.vaultAddress);
     };
 
@@ -284,15 +280,9 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   const computeProgressBar = (totalDebt: any, totalCollateralValue: any) => {
     // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
-    console.log("totalDebt", totalDebt);
-    console.log("totalCollateralValue", totalCollateralValue);
-    console.log(formatUnits(totalDebt, 18));
-    console.log(formatUnits(totalCollateralValue, 18));
     const ratio =
       Number(formatUnits(totalDebt, 18)) /
       Number(formatUnits(totalCollateralValue, 18));
-    console.log("ratio", ratio.toFixed(2));
-    console.log("ratio", (ratio * 100).toFixed(2));
     const returnVal = (ratio * 100).toFixed(2);
     if (isNaN(Number(returnVal))) {
       return "0.00";
@@ -313,18 +303,15 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   }, [isMobile]);
 
   const sanitizedNFTs = sortedVaults.map((vault) => {
-    console.log(tokenToNFTMap);
     const nft = tokenToNFTMap.current.get(
       ethers.BigNumber.from(vault.tokenId).toString()
     );
     const NFTPurified = DOMPurify.sanitize(nft);
-    console.log("nft", NFTPurified);
     return {
       ...vault,
       NFTPurified,
     };
   });
-  console.log("sanitizedNFTs", sanitizedNFTs);
 
   return (
     <Box
@@ -405,7 +392,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                           }}
                         >
                           {parse(vault.NFTPurified)}
-                          {/* {console.log(vault.tokenId)} */}
                         </div>
                       ) : null}
                     </td>

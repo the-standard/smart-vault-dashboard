@@ -51,7 +51,6 @@ const Debt = () => {
   };
 
   const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
-  console.log(debtValue.toString());
 
   const handleClick = (element: any) => {
     setActiveElement(element);
@@ -62,7 +61,6 @@ const Debt = () => {
 
   const handleAmount = (e: any) => {
     setAmount(Number(Math.round(e.target.value)));
-    console.log(e.target.value);
     getGreyBarUserInput(e.target.value);
   };
 
@@ -93,8 +91,6 @@ const Debt = () => {
 
   const handleBorrowMoney = async () => {
     const { write } = borrowMoney;
-    console.log(vaultAddress);
-    console.log(address);
 
     write();
   };
@@ -231,10 +227,8 @@ const Debt = () => {
     if (activeElement === 4) {
       getCircularProgress(true);
 
-      console.log("borrow");
       handleBorrowMoney();
     } else {
-      console.log("paydown");
       getCircularProgress(true);
       getProgressType(5);
 
