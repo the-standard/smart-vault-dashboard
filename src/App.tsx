@@ -30,7 +30,7 @@ const wagmiConfig = createConfig({
   publicClient,
 });
 const ethereumClient = new EthereumClient(wagmiConfig, chains);
-console.log(ethereumClient);
+
 import HomePage from "./pages/HomePage.tsx";
 //import navbar
 import Navbar from "./components/Navbar.tsx";
@@ -40,7 +40,7 @@ import { Routes, Route } from "react-router-dom";
 import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
 import {
-  useCircularProgressStore,
+  // useCircularProgressStore,
   useRenderAppCounterStore
 } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
@@ -51,9 +51,9 @@ import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
 
 function App() {
-  const { circularProgress } = useCircularProgressStore();
+  // const { circularProgress } = useCircularProgressStore();
   useBackgroundImage();
-  console.log(circularProgress);
+  // console.log(circularProgress);
   const { renderAppCounter } = useRenderAppCounterStore();
 
   return (

@@ -12,8 +12,6 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
   const [lineColor, setLineColor] = useState("green");
 
   const convertedData = data.map(({ ts, price }) => [ts, price]);
-  console.log(data);
-  console.log(convertedData);
   const series = [
     {
       //symbol should come here

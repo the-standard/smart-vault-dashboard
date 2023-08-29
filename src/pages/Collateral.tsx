@@ -57,7 +57,6 @@ const Collateral = () => {
 
   useEffect(() => {
     getVaultID(vaultId);
-    console.log(vaultStore);
   }, []);
 
   useLayoutEffect(() => {
@@ -78,7 +77,6 @@ const Collateral = () => {
     setActiveElement(element);
     //set state
     setCollateralOrDebt(element);
-    console.log("element", element);
   };
   //scroll to the top of the page on page load
   useEffect(() => {
@@ -98,7 +96,6 @@ const Collateral = () => {
   });
 
   //this log is just for build command
-  console.log("vaults", vaults);
   const currentVault: any = vaults?.filter(
     (vault: any) => vault.tokenId.toString() === vaultId
   )[0];
