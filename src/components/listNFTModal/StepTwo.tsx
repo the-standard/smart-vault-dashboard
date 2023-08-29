@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
-import { BigNumber, ethers } from "ethers";
-import { useAccount, useContractReads } from "wagmi";
+import { providers, BigNumber, ethers } from "ethers";
+import { useAccount, useContractReads, useWalletClient } from "wagmi";
 import { OpenSeaSDK, Chain } from "opensea-js";
 import {
   useVaultForListingStore,
@@ -17,7 +17,7 @@ import {
 } from "../../store/Store";
 import { fromHex } from "viem";
 import { useNetwork } from "wagmi";
-import { arbitrum, arbitrumGoerli } from "wagmi/chains";
+import { arbitrumGoerli } from "wagmi/chains";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,24 +71,27 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
 
   const { address: accountAddress } = useAccount();
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  let provider:any;
+  let openseaSDK:any;
+  const { data: walletClient } = useWalletClient();
+  
+  if (walletClient) {
+    const { chain: walletChain, transport } = walletClient;
+    const network = {
+      chainId: walletChain.id,
+      name: walletChain.name,
+      ensAddress: walletChain.contracts?.ensRegistry?.address,
+    };
+    provider = new providers.Web3Provider(transport, network);
 
-  let openseaSDK: any;
-
-  if (chain?.id === 1) {
-    openseaSDK = new OpenSeaSDK(provider, {
-      chain: Chain.Mainnet,
-      apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
-    });
-  } else if (chain?.id === arbitrum.id) {
-    openseaSDK = new OpenSeaSDK(provider, {
-      chain: Chain.Arbitrum,
-      apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
-    });
-  } else if (chain?.id === arbitrumGoerli.id) {
-    openseaSDK = new OpenSeaSDK(provider, {
-      chain: Chain.ArbitrumGoerli,
-    });
+    openseaSDK = chain?.id === arbitrumGoerli.id ?
+      new OpenSeaSDK(provider, {
+        chain: Chain.ArbitrumGoerli,
+      }) :
+      new OpenSeaSDK(provider, {
+        chain: Chain.Arbitrum,
+        apiKey: import.meta.env.VITE_OPENSEA_API_KEY,
+      });
   }
 
   // Expire this auction one day from now.
@@ -97,18 +100,15 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
   const tokenIdBeforeConversion: any = vaultForListing.tokenId;
   const tokenId: any = fromHex(tokenIdBeforeConversion, "number").toString();
 
-  let tokenAddress: any;
-  if (chain?.id === 42161) {
-    tokenAddress = arbitrumContractAddress;
-  } else if (chain?.id === 421613) {
-    tokenAddress = arbitrumGoerliContractAddress;
-  }
+  const tokenAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerliContractAddress :
+    arbitrumContractAddress;
 
   const convertEthToEur = (eth: string) => {
     if (eth.length === 0) eth = "0";
     const bigNumEth = ethers.utils.parseEther(eth);
     const prices = priceData?.map(
-      (data) => data.result && BigNumber.from(data.result[1]?.toString())
+      (data:any) => data.result && BigNumber.from(data.result[1]?.toString())
     );
     return prices && prices[0] && prices[1]
       ? Number(
