@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import instagramLogo from "../assets/instagramlogo.svg";
 import twitterLogo from "../assets/twitterlogo.svg";
 import linkedinlogo from "../assets/linkedinlogo.svg";
 import youtubelogo from "../assets/youtubelogo.svg";
@@ -19,23 +18,17 @@ const links = [
 
 const icons = [
   {
-    logo: instagramLogo,
-    link: "https://www.instagram.com/standardprotocol/",
+    logo: discordlogo,
+    link: "https://discord.gg/THWyBQ4RzQ",
   },
   {
     logo: linkedinlogo,
     link: "https://www.linkedin.com/company/the-standard-io",
   },
   {
-    logo: discordlogo,
-    link: "https://discord.gg/THWyBQ4RzQ",
-  },
-
-  {
     logo: twitterLogo,
     link: "https://twitter.com/thestandard_io",
   },
-
   {
     logo: youtubelogo,
     link: "https://www.youtube.com/@TheStandard_io",
