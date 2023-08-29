@@ -563,7 +563,7 @@ const Debt = () => {
               paddingLeft: "0.5rem",
             }}
             placeholder="Amount of EUROs you want to repay "
-            type="text"
+            type="number"
             onChange={handleAmount}
             autoFocus
             ref={inputRef}
