@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import instagramLogo from "../assets/instagramlogo.svg";
 import twitterLogo from "../assets/twitterlogo.svg";
 import linkedinlogo from "../assets/linkedinlogo.svg";
 import youtubelogo from "../assets/youtubelogo.svg";
