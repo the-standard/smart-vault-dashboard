@@ -61,11 +61,6 @@ const Debt = () => {
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
-    console.log(
-      123123,
-      Number(e.target.value),
-      Number(Math.round(e.target.value))
-    )
     getGreyBarUserInput(e.target.value);
   };
 
@@ -563,7 +558,7 @@ const Debt = () => {
               paddingLeft: "0.5rem",
             }}
             placeholder="Amount of EUROs you want to repay "
-            type="text"
+            type="number"
             onChange={handleAmount}
             autoFocus
             ref={inputRef}
