@@ -19,23 +19,17 @@ const links = [
 
 const icons = [
   {
-    logo: instagramLogo,
-    link: "https://www.instagram.com/standardprotocol/",
+    logo: discordlogo,
+    link: "https://discord.gg/THWyBQ4RzQ",
   },
   {
     logo: linkedinlogo,
     link: "https://www.linkedin.com/company/the-standard-io",
   },
   {
-    logo: discordlogo,
-    link: "https://discord.gg/THWyBQ4RzQ",
-  },
-
-  {
     logo: twitterLogo,
     link: "https://twitter.com/thestandard_io",
   },
-
   {
     logo: youtubelogo,
     link: "https://www.youtube.com/@TheStandard_io",
