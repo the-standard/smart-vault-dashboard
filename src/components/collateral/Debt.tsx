@@ -61,8 +61,10 @@ const Debt = () => {
   };
 
   const handleAmount = (e: any) => {
-    setAmount(Number(e.target.value));
-    getGreyBarUserInput(e.target.value);
+    if (Number(e.target.value) < 10n ** 21n) {
+      setAmount(Number(e.target.value));
+      getGreyBarUserInput(e.target.value);
+    }
   };
 
   useEffect(() => {
