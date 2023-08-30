@@ -179,7 +179,7 @@ const Debt = () => {
   ]);
 
   const handleApprovePayment = async () => {
-    if (allowance >= repayFee) {
+    if (allowance && allowance as any >= repayFee) {
       handleRepayMoney()
     } else {
       const { write } = approvePayment;

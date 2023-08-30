@@ -41,10 +41,10 @@ export const useUSDToEuroAddressStore = create<USDToEuroAddressState>()(
 );
 
 interface sEuroAddressState {
-  sEuroAddress: string;
-  arbitrumGoerlisEuroAddress: string;
-  arbitrumsEuroAddress: string;
-  getsEuroAddress: (sEuroAddress: string) => void;
+  sEuroAddress: Address;
+  arbitrumGoerlisEuroAddress: Address;
+  arbitrumsEuroAddress: Address;
+  getsEuroAddress: (sEuroAddress: Address) => void;
 }
 
 export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
