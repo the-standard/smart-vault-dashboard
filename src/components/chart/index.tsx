@@ -58,7 +58,7 @@ const Index = () => {
     contracts,
   });
 
-  const prices = priceData?.map((data) => {
+  const prices: bigint[] = priceData?.map((data) => {
     const result: any = data.result;
     return result[1];
   });
@@ -123,7 +123,6 @@ const Index = () => {
       userInputInEur = Number(formatEther(converted));
     }
 
-    // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
     if (operationType === 1) {
       //deposit
       operation = (debt / (collateral + userInputInEur)) * 100;
@@ -153,16 +152,38 @@ const Index = () => {
     return userInputForGreyBarOperation === 0 ? 0 : operation;
   };
 
-  const computeProgressBar = (totalDebt: any, totalCollateralValue: any) => {
-    const ratio =
-      Number(formatEther(totalDebt)) /
-      Number(formatEther(totalCollateralValue));
-    const returnVal = (ratio * 100).toFixed(2);
-    if (isNaN(Number(returnVal))) {
-      return "0.00";
-    } else {
-      return Math.abs(Number(returnVal));
+  const computeGreyBar2 = (totalDebt: bigint, totalCollateralValue: bigint) => {
+    let operation: any;
+    let userInputInEur = 0n;
+    const userInputInWei = parseEther(userInputForGreyBarOperation.toString());
+    const convertInflatedPercentageTo2Dec = (inflatedValue:bigint) => {
+      return parseFloat((Number(inflatedValue) / 100).toFixed(2));
     }
+
+    if (prices && prices[0] && prices[1]) {
+      userInputInEur = userInputInWei * prices[1] / prices[0];
+    }
+
+    if (operationType === 1) {
+      //deposit
+      operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue + userInputInEur));
+    } else if (operationType === 2) {
+      //withdraw
+      operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue - userInputInEur));
+    } else if (operationType === 4) {
+      //borrow
+      operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt + userInputInWei) / totalCollateralValue);
+    } else if (operationType === 5) {
+      //repay
+      operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt - userInputInWei) / totalCollateralValue);
+    }
+
+    return operation < 0 ? 0 : operation > 100 ? 100 : operation;
+  };
+
+  const computeProgressBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
+    const safeBigIntWithNoDec = 10000n * totalDebt / totalCollateralValue;
+    return parseFloat((Number(safeBigIntWithNoDec) / 100).toFixed(2));
   };
 
   return (
@@ -290,16 +311,12 @@ const Index = () => {
         </Typography>
         <ProgressBar
           progressValue={computeProgressBar(
-            Number(ethers.BigNumber.from(chosenVault.status.minted)),
-            Number(
-              ethers.BigNumber.from(chosenVault.status.totalCollateralValue)
-            )
+            chosenVault.status.minted,
+            chosenVault.status.totalCollateralValue
           )}
-          greyBarValue={computeGreyBar(
-            Number(ethers.BigNumber.from(chosenVault.status.minted)),
-            Number(
-              ethers.BigNumber.from(chosenVault.status.totalCollateralValue)
-            )
+          greyBarValue={computeGreyBar2(
+            chosenVault.status.minted,
+            chosenVault.status.totalCollateralValue
           )}
         />
         <Typography
