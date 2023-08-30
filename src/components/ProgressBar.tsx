@@ -68,9 +68,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       let now = new Date().getTime();
       let remaining = Math.max((endTime - now) / duration, 0);
       let value = Math.round(end - remaining * range);
-      if (percentageDivRef.current) {
-        percentageDivRef.current.innerHTML = `${value}%`;
-      }
       if (value === end) {
         clearInterval(timer);
       }
