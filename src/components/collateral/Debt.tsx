@@ -253,7 +253,7 @@ const Debt = () => {
   const shortenedAddress = shortenAddress(address);
 
   const toPercentage = (rate: bigint) => {
-    return rate * 100n / HUNDRED_PC
+    return Number(rate) * 100 / Number(HUNDRED_PC);
   };
 
   const calculateRateAmount = (fullAmount: bigint, rate: bigint) => {
@@ -853,7 +853,7 @@ const Debt = () => {
                   variant="h6"
                   component="h2"
                 >
-                  Confirm Your EURst Spending cap
+                  Confirm Your EUROs Spending cap
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   For optimal security and transparency, trustworthy DApps
@@ -861,8 +861,8 @@ const Debt = () => {
                   the maximum amount your wallet can use for a fee.
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  We suggest a cap of {amount * 0.01} for this transaction. This
-                  fee (0.5%) is rewarded to TST stakers, helping the DAO grow
+                  We suggest a cap of {formatEther(repayFee)} for this transaction. This
+                  fee ({toPercentage(vaultStore.burnFeeRate)}%) is rewarded to TST stakers, helping the DAO grow
                   and build more features.{" "}
                 </Typography>{" "}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
