@@ -58,7 +58,7 @@ const Index = () => {
     contracts,
   });
 
-  const prices: bigint[] = priceData?.map((data) => {
+  const prices: any = priceData?.map((data:any) => {
     const result: any = data.result;
     return result[1];
   });
@@ -107,50 +107,6 @@ const Index = () => {
       value: Number(formatEther(liquidationTrigger)).toFixed(2),
       currency: "EUROs",
     });
-
-  const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {
-    const debt = Number(formatUnits(totalDebt, 18));
-    const collateral = Number(formatUnits(totalCollateralValue, 18));
-    let operation: any;
-    let userInputInEur = 0;
-
-    if (prices && prices[0] && prices[1]) {
-      const converted: any = BigNumber.from(
-        parseEther(userInputForGreyBarOperation.toString())
-      )
-        .mul(prices[1])
-        .div(prices[0]);
-      userInputInEur = Number(formatEther(converted));
-    }
-
-    if (operationType === 1) {
-      //deposit
-      operation = (debt / (collateral + userInputInEur)) * 100;
-    } else if (operationType === 2) {
-      //withdraw
-      operation = (debt / (collateral - userInputInEur)) * 100;
-    } else if (operationType === 4) {
-      //borrow
-      operation =
-        ((debt + Number(userInputForGreyBarOperation)) / collateral) * 100;
-    } else if (operationType === 5) {
-      //repay
-      operation =
-        ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
-    }
-
-    //not sure about this line, test it
-    // If 'operation' is greater than or equal to 100, set it to 100
-    // If 'operation' is less than or equal to 0, set it to 1
-    // Otherwise, keep the 'operation' value unchanged
-    if (operationType === 2) {
-      operation = operation >= 100 ? 100 : operation < 0 ? 551 : operation;
-    } else {
-      operation = operation >= 100 ? 100 : operation <= 0 ? 0.1 : operation;
-    }
-
-    return userInputForGreyBarOperation === 0 ? 0 : operation;
-  };
 
   const computeGreyBar2 = (totalDebt: bigint, totalCollateralValue: bigint) => {
     let operation: any;
