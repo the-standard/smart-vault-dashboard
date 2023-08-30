@@ -2,10 +2,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
-// import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/EUROs.svg";
-// import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
@@ -76,8 +74,6 @@ const Debt = () => {
   }, []);
 
   useEffect(() => {
-    // This function will run just before the component unmounts
-
     return () => {
       // Perform any cleanup tasks or actions you want before the component unmounts
       setAmount(0);
@@ -86,8 +82,8 @@ const Debt = () => {
   }, []);
 
   const borrowMoney = useContractWrite({
-    address: vaultAddress as any, // Replace with your vault address
-    abi: smartVaultAbi, // Replace with your smartVault ABI
+    address: vaultAddress as any,
+    abi: smartVaultAbi,
     functionName: "mint",
     args: [address as any, amountInWei],
   });
