@@ -78,7 +78,7 @@ const AddEuros = () => {
   //trunate string logic
   const [width, setWidth] = useState(window.innerWidth);
 
-  const [truncatedAddress, setTruncatedAddress] = useState(eurosAddress);
+  const [truncatedAddress, setTruncatedAddress] = useState(eurosAddress as string);
 
   useEffect(() => {
     const handleResize = () => {

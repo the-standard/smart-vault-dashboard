@@ -23,7 +23,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
-import { useContractWrite } from "wagmi";
+import { useContractWrite, useContractRead } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 
 const Debt = () => {
@@ -66,6 +66,18 @@ const Debt = () => {
       getGreyBarUserInput(e.target.value);
     }
   };
+
+  const eurosAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerlisEuroAddress :
+    arbitrumsEuroAddress;
+    
+  const { data: allowance } = useContractRead({
+    address: eurosAddress,
+    abi: erc20Abi,
+    functionName: "allowance",
+    args: [address, vaultAddress],
+    watch: true
+  });
 
   useEffect(() => {
     setAmount(0);
@@ -130,12 +142,8 @@ const Debt = () => {
   const burnFeeRate: bigint = vaultStore.burnFeeRate;
   const repayFee = amountInWei * burnFeeRate / HUNDRED_PC;
 
-  const approveAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerlisEuroAddress :
-    arbitrumsEuroAddress;
-
   const approvePayment = useContractWrite({
-    address: approveAddress as any,
+    address: eurosAddress as any,
     abi: erc20Abi,
     functionName: "approve",
     args: [vaultAddress as any, repayFee],
@@ -171,8 +179,12 @@ const Debt = () => {
   ]);
 
   const handleApprovePayment = async () => {
-    const { write } = approvePayment;
-    write();
+    if (allowance && allowance as any >= repayFee) {
+      handleRepayMoney()
+    } else {
+      const { write } = approvePayment;
+      write();
+    }
   };
 
   const handleRepayMoney = async () => {
@@ -222,12 +234,10 @@ const Debt = () => {
   const handleWithdraw = () => {
     if (activeElement === 4) {
       getCircularProgress(true);
-
       handleBorrowMoney();
     } else {
       getCircularProgress(true);
       getProgressType(5);
-
       handleApprovePayment();
     }
   };
@@ -323,7 +333,6 @@ const Debt = () => {
       <Box>
         <Box
           sx={{
-            //  backgroundImage: `url(${handshake})`,
             display: "flex",
             flexDirection: "row",
           }}
@@ -351,16 +360,10 @@ const Debt = () => {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
-                // marginTop: "1rem",
+                alignItems: "center"
               }}
             >
               <Typography
-                sx={
-                  {
-                    // margin: "0 10px",
-                  }
-                }
                 variant="body1"
               >
                 EUROs outstanding: €{formatEther(debtValue.toString())}
@@ -377,11 +380,6 @@ const Debt = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          // background: " rgba(18, 18, 18, 0.5)",
-          // boxShadow:
-          //   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          // borderRadius: "6.24932px",
-          // padding: "1%",
         }}
       >
         <Box
@@ -631,26 +629,11 @@ const Debt = () => {
             ))}
       </Box>
 
-      {/* {activeElement === 1 ? (
-        <Typography variant="body1" sx={{ color: "red", marginTop: "1rem" }}>
-          Note: Stake LP tokens to earn & make Minting fee 0%{" "}
-          <a
-            href="https://app.uniswap.org/#/add/ETH/0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb"
-            target="_blank"
-          >
-            learn more
-          </a>
-        </Typography>
-      ) : (
-        <div></div>
-      )} */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-
-          borderRadius: "10px",
-          // padding: "1%",
+          borderRadius: "10px"
         }}
       >
         <Box
@@ -716,7 +699,6 @@ const Debt = () => {
         </Box>
       </Box>
       <div>
-        {/* <Button onClick={handleOpen}>Open modal</Button> */}
         <Modal
           open={open}
           onClose={handleClose}
@@ -750,11 +732,9 @@ const Debt = () => {
                   width: { xs: "350px", md: "500px" },
                 }}
               >
-                {/* stepper starts */}
                 <Box
                   sx={{
                     width: "100%",
-                    //  border: "1px solid #ffffff",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -765,7 +745,6 @@ const Debt = () => {
                   <Box
                     sx={{
                       width: "40%",
-                      // border: "3px solid red",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -801,7 +780,6 @@ const Debt = () => {
                         width: "2.5rem",
                         height: "1.5rem",
                         borderRadius: "50%",
-                        //  border: "0.2px solid white",
                         background: "black",
                         display: "flex",
                         justifyContent: "center",
@@ -812,7 +790,6 @@ const Debt = () => {
                       2
                     </Box>
                   </Box>
-                  {/* stepper bottom texts */}
                   <Box
                     sx={{
                       width: "45%",
@@ -914,11 +891,9 @@ const Debt = () => {
                   width: "500px",
                 }}
               >
-                {/* stepper starts */}
                 <Box
                   sx={{
                     width: "100%",
-                    //  border: "1px solid #ffffff",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -929,7 +904,6 @@ const Debt = () => {
                   <Box
                     sx={{
                       width: "40%",
-                      // border: "3px solid red",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -976,11 +950,9 @@ const Debt = () => {
                       2
                     </Box>
                   </Box>
-                  {/* stepper bottom texts */}
                   <Box
                     sx={{
                       width: "45%",
-                      //    border: "3px solid red",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
@@ -1008,7 +980,6 @@ const Debt = () => {
                     </Typography>
                   </Box>
                 </Box>
-                {/* stepper ends */}
                 <Typography
                   sx={{
                     fontWeight: "600",
