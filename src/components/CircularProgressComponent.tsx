@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useCircularProgressStore } from "../store/Store";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import withdrawLottie from "../lotties/withdrawal.json";
 import depositLottie from "../lotties/deposit.json";
 import newVaultLottie from "../lotties/newVault.json";
@@ -12,9 +12,9 @@ const CircularProgressComponent = () => {
   // const zIndexValue = circularProgress ? 9999 : -9999;
   // let progressType = 5;
   // let circularProgress = true;
-  useEffect(() => {
-    console.log(circularProgress);
-  }, []);
+  // useEffect(() => {
+  //   console.log(circularProgress);
+  // }, []);
 
   return (
     <Box>

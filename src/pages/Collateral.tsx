@@ -57,7 +57,6 @@ const Collateral = () => {
 
   useEffect(() => {
     getVaultID(vaultId);
-    console.log(vaultStore);
   }, []);
 
   useLayoutEffect(() => {
@@ -78,7 +77,6 @@ const Collateral = () => {
     setActiveElement(element);
     //set state
     setCollateralOrDebt(element);
-    console.log("element", element);
   };
   //scroll to the top of the page on page load
   useEffect(() => {
@@ -98,7 +96,6 @@ const Collateral = () => {
   });
 
   //this log is just for build command
-  console.log("vaults", vaults);
   const currentVault: any = vaults?.filter(
     (vault: any) => vault.tokenId.toString() === vaultId
   )[0];
@@ -110,8 +107,7 @@ const Collateral = () => {
         <Box
           sx={{
             color: "#ffffff",
-            margin: { xs: "0", sm: "3% 12%" },
-            padding: "1%",
+            margin: { xs: "0% 2%", sm: "3% 12%" },
           }}
           ref={rectangleRef}
         >
@@ -244,8 +240,7 @@ const Collateral = () => {
     <Box
       sx={{
         color: "#8E9BAE",
-        margin: { xs: "0", sm: "3% 12%" },
-        padding: "1%",
+        margin: { xs: "0% 2%", sm: "3% 12%" },
         // marginTop: "50px",
         // background:
         //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
@@ -265,6 +260,8 @@ const Collateral = () => {
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
           alignItems: "center",
+          marginBottom: "1rem",
+          marginTop: { xs: "1rem", sm: "0px" },
         }}
       >
         <Box

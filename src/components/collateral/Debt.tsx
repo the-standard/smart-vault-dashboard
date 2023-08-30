@@ -2,10 +2,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
-// import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/EUROs.svg";
-// import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
@@ -26,6 +24,7 @@ import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
@@ -44,14 +43,15 @@ const Debt = () => {
     useGreyProgressBarValuesStore();
   const { getCounter } = useCounterStore();
   const { chain } = getNetwork();
-  const HUNDRED_PC = 100_000;
+  const HUNDRED_PC = 100_000n;
 
   const incrementCounter = () => {
     getCounter(1);
   };
 
+  const amountInWei = parseEther(amount.toString());
+
   const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
-  console.log(debtValue.toString());
 
   const handleClick = (element: any) => {
     setActiveElement(element);
@@ -61,8 +61,7 @@ const Debt = () => {
   };
 
   const handleAmount = (e: any) => {
-    setAmount(Number(Math.round(e.target.value)));
-    console.log(e.target.value);
+    setAmount(Number(e.target.value));
     getGreyBarUserInput(e.target.value);
   };
 
@@ -75,8 +74,6 @@ const Debt = () => {
   }, []);
 
   useEffect(() => {
-    // This function will run just before the component unmounts
-
     return () => {
       // Perform any cleanup tasks or actions you want before the component unmounts
       setAmount(0);
@@ -85,16 +82,14 @@ const Debt = () => {
   }, []);
 
   const borrowMoney = useContractWrite({
-    address: vaultAddress as any, // Replace with your vault address
-    abi: smartVaultAbi, // Replace with your smartVault ABI
+    address: vaultAddress as any,
+    abi: smartVaultAbi,
     functionName: "mint",
-    args: [address as any, parseEther(amount.toString())],
+    args: [address as any, amountInWei],
   });
 
   const handleBorrowMoney = async () => {
     const { write } = borrowMoney;
-    console.log(vaultAddress);
-    console.log(address);
 
     write();
   };
@@ -130,23 +125,18 @@ const Debt = () => {
   const handleClose = () => setOpen(false);
   const [modalStep, setModalStep] = useState(1);
 
-  const sEuroFee: any = (amount * 0.01).toString();
-  const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
+  const burnFeeRate: bigint = vaultStore.burnFeeRate;
+  const repayFee = amountInWei * burnFeeRate / HUNDRED_PC;
 
-  let approveAddress: any;
-
-  if (chain?.id == 421613) {
-    approveAddress = arbitrumGoerlisEuroAddress;
-  } else if (chain?.id === 42161) {
-    approveAddress = arbitrumsEuroAddress;
-  }
+  const approveAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerlisEuroAddress :
+    arbitrumsEuroAddress;
 
   const approvePayment = useContractWrite({
-    //make this dynamic
     address: approveAddress as any,
     abi: erc20Abi,
     functionName: "approve",
-    args: [vaultAddress as any, feeAmount],
+    args: [vaultAddress as any, repayFee],
   });
 
   useEffect(() => {
@@ -192,7 +182,7 @@ const Debt = () => {
     address: vaultAddress as any,
     abi: smartVaultAbi,
     functionName: "burn",
-    args: [parseEther(amount.toString())],
+    args: [amountInWei],
   });
 
   useEffect(() => {
@@ -231,10 +221,8 @@ const Debt = () => {
     if (activeElement === 4) {
       getCircularProgress(true);
 
-      console.log("borrow");
       handleBorrowMoney();
     } else {
-      console.log("paydown");
       getCircularProgress(true);
       getProgressType(5);
 
@@ -263,11 +251,11 @@ const Debt = () => {
   const shortenedAddress = shortenAddress(address);
 
   const toPercentage = (rate: bigint) => {
-    return (Number(rate) * 100) / HUNDRED_PC;
+    return rate * 100n / HUNDRED_PC
   };
 
-  const calculateRateAmount = (amount: number, rate: bigint) => {
-    return (Number(rate) * amount) / HUNDRED_PC;
+  const calculateRateAmount = (fullAmount: bigint, rate: bigint) => {
+    return fullAmount * rate / HUNDRED_PC;
   };
 
   const borrowValues = [
@@ -281,11 +269,11 @@ const Debt = () => {
     },
     {
       key: `Minting Fee (${toPercentage(vaultStore.mintFeeRate)}%)`,
-      value: calculateRateAmount(amount, vaultStore.mintFeeRate),
+      value: formatEther(calculateRateAmount(amountInWei, vaultStore.mintFeeRate)),
     },
     {
       key: "Borrowing",
-      value: amount + calculateRateAmount(amount, vaultStore.mintFeeRate),
+      value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.mintFeeRate)),
     },
     {
       key: "Receiving",
@@ -299,7 +287,7 @@ const Debt = () => {
     },
     {
       key: `Burn Fee (${toPercentage(vaultStore.burnFeeRate)}%)`,
-      value: calculateRateAmount(amount, vaultStore.burnFeeRate),
+      value: formatEther(calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
     },
     {
       key: "Actual Repayment",
@@ -307,7 +295,7 @@ const Debt = () => {
     },
     {
       key: "Send",
-      value: amount + calculateRateAmount(amount, vaultStore.burnFeeRate),
+      value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
     },
   ];
 
@@ -564,7 +552,7 @@ const Debt = () => {
               paddingLeft: "0.5rem",
             }}
             placeholder="Amount of EUROs you want to repay "
-            type="text"
+            type="number"
             onChange={handleAmount}
             autoFocus
             ref={inputRef}

@@ -33,7 +33,6 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
-    console.log(e.target.value);
     getSymbolForGreyBar(symbol);
     getGreyBarUserInput(Number(e.target.value));
   };
@@ -65,8 +64,6 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
       address,
     ],
   });
-
-  console.log(vaultAddress);
 
   const handlewithdrawCollateral = async () => {
     const { write } = withdrawCollateral;
@@ -138,8 +135,6 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
   const { data, isError, isLoading } = useWaitForTransaction({
     hash: txdata,
   });
-
-  console.log(data, isError, isLoading);
 
   useEffect(() => {
     if (data) {

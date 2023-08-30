@@ -26,7 +26,6 @@ const AddEuros = () => {
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          console.log("Text copied to clipboard:", text);
           getSnackBar(0);
           //handleSnackbarClick();
         })
@@ -62,7 +61,7 @@ const AddEuros = () => {
           })
           .then((success: any) => {
             if (success) {
-              console.log("Successfully added asset.");
+              // console.log("Successfully added asset.");
             } else {
               throw new Error("Something went wrong.");
             }

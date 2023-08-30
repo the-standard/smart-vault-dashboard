@@ -60,8 +60,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
     ethers.utils.formatEther(collateralValue)
   ).toFixed(2);
 
-  console.log(token);
-
   const symbol = ethers.utils.parseBytes32String(token.symbol);
   // const tokenAddress = token.addr;
 

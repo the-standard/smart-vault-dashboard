@@ -53,10 +53,8 @@ const Deposit: React.FC<DepositProps> = ({
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
-    console.log(e.target.value);
     getSymbolForGreyBar(symbol);
     getGreyBarUserInput(Number(e.target.value));
-    console.log(e.target.value);
   };
 
   //clipboard logic
@@ -74,7 +72,6 @@ const Deposit: React.FC<DepositProps> = ({
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          console.log("Text copied to clipboard:", text);
           getSnackBar(0);
           //handleSnackbarClick();
         })
@@ -105,12 +102,10 @@ const Deposit: React.FC<DepositProps> = ({
     getProgressType(2);
     getCircularProgress(true);
     const account = getAccount();
-    console.log(account.address);
 
     // let txHashForError = "";
     try {
       const txAmount: any = amount;
-      console.log(txAmount);
 
       const toAddress: any = vaultAddress;
       const { hash } = await sendTransaction({
@@ -119,7 +114,6 @@ const Deposit: React.FC<DepositProps> = ({
         value: parseEther(txAmount.toString()),
       });
 
-      console.log("Transaction sent:", hash);
       setTxdata(hash);
 
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
@@ -186,8 +180,6 @@ const Deposit: React.FC<DepositProps> = ({
   const { data, isError, isLoading } = useWaitForTransaction({
     hash: txdata,
   });
-
-  console.log(data, isError, isLoading);
 
   useEffect(() => {
     if (data) {
