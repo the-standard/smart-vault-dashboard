@@ -84,16 +84,7 @@ const HomePage = () => {
   }, [setPosition]);
 
   return (
-    <Box
-      sx={
-        {
-          // backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://uploads-ssl.webflow.com/6422757f5e8ba638bea66086/64df8dab018df1e246202334_Home_blurred%20(1).png")`,
-          // backgroundRepeat: "no-repeat",
-          // backgroundSize: "cover",
-          // backgroundPosition: "center",
-        }
-      }
-    >
+    <Box>
       <Grid
         sx={{
           padding: "0 12%",
@@ -110,7 +101,6 @@ const HomePage = () => {
             gap: "2rem",
             marginRight: "1rem",
             marginTop: "1.5rem",
-            //border: "2px solid red",
           }}
           ref={rectangleRef}
         >
