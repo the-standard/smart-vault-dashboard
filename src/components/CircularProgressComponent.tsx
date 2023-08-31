@@ -7,6 +7,8 @@ import depositLottie from "../lotties/deposit.json";
 import newVaultLottie from "../lotties/newVault.json";
 import Lottie from "lottie-react";
 
+import Card from "../components/Card";
+
 const CircularProgressComponent = () => {
   const { circularProgress, progressType } = useCircularProgressStore();
   // const zIndexValue = circularProgress ? 9999 : -9999;
@@ -33,18 +35,12 @@ const CircularProgressComponent = () => {
             }}
           >
             {" "}
-            <Box
+            <Card
               sx={{
-                background:
-                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-                borderRadius: "10px",
-                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                backdropFilter: "blur(13.9px)",
-                WebkitBackdropFilter: "blur(13.9px)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                padding: "0px",
                 width: "450px",
                 height: "300px",
               }}
@@ -66,7 +62,7 @@ const CircularProgressComponent = () => {
                 </Typography>
                 <Lottie animationData={withdrawLottie} />{" "}
               </Box>
-            </Box>
+            </Card>
           </Box>
         ) : progressType === 2 ? (
           <Box
@@ -83,18 +79,12 @@ const CircularProgressComponent = () => {
             }}
           >
             {" "}
-            <Box
+            <Card
               sx={{
-                background:
-                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-                borderRadius: "10px",
-                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                backdropFilter: "blur(13.9px)",
-                WebkitBackdropFilter: "blur(13.9px)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                padding: "0px",
                 width: "450px",
                 height: "300px",
               }}
@@ -115,7 +105,7 @@ const CircularProgressComponent = () => {
                 </Typography>
                 <Lottie animationData={depositLottie} />{" "}
               </Box>
-            </Box>
+            </Card>
           </Box>
         ) : progressType === 3 ? (
           <Box
@@ -131,18 +121,12 @@ const CircularProgressComponent = () => {
             }}
           >
             {" "}
-            <Box
+            <Card
               sx={{
-                background:
-                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-                borderRadius: "10px",
-                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                backdropFilter: "blur(13.9px)",
-                WebkitBackdropFilter: "blur(13.9px)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                padding: "0px",
                 width: "450px",
                 height: "300px",
               }}
@@ -164,7 +148,7 @@ const CircularProgressComponent = () => {
                 </Typography>
                 <Lottie animationData={newVaultLottie} />{" "}
               </Box>
-            </Box>
+            </Card>
           </Box>
         ) : // moved this one to debt.tsx
         progressType === 5 ? (
