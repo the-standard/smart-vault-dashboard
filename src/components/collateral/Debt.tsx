@@ -26,6 +26,8 @@ import { getNetwork } from "@wagmi/core";
 import { useContractWrite, useContractRead } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 
+import Card from "../../components/Card";
+
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
   const { address } = useAccount();
@@ -312,22 +314,9 @@ const Debt = () => {
   ];
 
   return (
-    <Box
+    <Card
       sx={{
-        background:
-          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(13.9px)",
-        WebkitBackdropFilter: "blur(13.9px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        borderRadius: "10px ",
-        width: "auto",
-        height: "auto",
-        padding: "1rem",
         marginTop: "0.5rem",
-        display: "flex",
-        flexDirection: "column",
-        color: "white",
       }}
     >
       <Box>
@@ -1002,7 +991,7 @@ const Debt = () => {
           </Box>
         </Modal>
       </div>
-    </Box>
+    </Card>
   );
 };
 

@@ -19,6 +19,8 @@ import axios from "axios";
 import { getNetwork } from "@wagmi/core";
 import { arbitrumGoerli } from "wagmi/chains";
 
+import Card from "../../components/Card";
+
 interface AcceptedTokenProps {
   amount: any;
   token: any;
@@ -104,24 +106,10 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   };
 
   return (
-    <Box
+    <Card
       sx={{
-        background:
-          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-
-        borderRadius: "10px",
-        boxShadow: `
-  inset 1px 1px 1px 0px grey,
-  5px 5px 25px 0px rgba(0, 0, 0, 0.6)
-`,
-        backdropFilter: "blur(13.9px)",
-        WebkitBackdropFilter: "blur(13.9px)",
-        width: "auto",
-        padding: "1rem",
         marginTop: "0.5rem",
         marginBottom: "1rem",
-        display: "flex",
-        flexDirection: "column",
         minHeight: "250px",
         overflow: "auto",
       }}
@@ -412,7 +400,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         decimals={token.dec}
         token={token}
       />
-    </Box>
+    </Card>
   );
 };
 

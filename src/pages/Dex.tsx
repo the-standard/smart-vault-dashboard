@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import Exchange from "./Exchange";
 import { arbitrum } from "wagmi/chains";
 
