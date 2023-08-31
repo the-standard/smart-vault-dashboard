@@ -278,17 +278,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   const isMobile = useMediaQuery("(max-width:600px)");
 
-  const computeProgressBar = (totalDebt: any, totalCollateralValue: any) => {
-    // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
-    const ratio =
-      Number(formatUnits(totalDebt, 18)) /
-      Number(formatUnits(totalCollateralValue, 18));
-    const returnVal = (ratio * 100).toFixed(2);
-    if (isNaN(Number(returnVal))) {
-      return "0.00";
-    } else {
-      return (ratio * 100).toFixed(2);
-    }
+  const computeProgressBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
+    return totalCollateralValue === 0n ? '0.0' : (Number(10000n * totalDebt / totalCollateralValue) / 100).toFixed(2);
   };
 
   function truncateToTwoDecimals(num: any) {
@@ -419,12 +410,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) : (
                         <ProgressBar
                           progressValue={computeProgressBar(
-                            Number(ethers.BigNumber.from(vault.status.minted)),
-                            Number(
-                              ethers.BigNumber.from(
-                                vault.status.totalCollateralValue
-                              )
-                            )
+                            vault.status.minted,
+                            vault.status.totalCollateralValue
                           )}
                         />
                       )}
