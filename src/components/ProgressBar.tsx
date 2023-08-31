@@ -13,17 +13,13 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   progressValue,
   greyBarValue = 0,
 }) => {
+
   const [percentage, setPercentage] = useState(progressValue);
   const [percentageCalculate, setPercentageCalculate] = useState(0);
 
   const progressBarRef = useRef<HTMLDivElement>(null);
   const progressBarGreyRef = useRef<HTMLDivElement>(null);
   const percentageDivRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   updateProgressBar();
-  //   run();
-  // }, [percentage]);
 
   useEffect(() => {
     updateProgressBar();
@@ -123,7 +119,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         progressBarGreyRef.current.classList.remove("pulse-red", "red-bar");
       }
     }
-  }, [greyBarValue]);
+  }, [greyBarValue, progressValue]);
 
   return (
     <div>
