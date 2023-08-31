@@ -11,7 +11,7 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({
   progressValue,
-  greyBarValue,
+  greyBarValue = 0,
 }) => {
   const [percentage, setPercentage] = useState(progressValue);
   const [percentageCalculate, setPercentageCalculate] = useState(0);
@@ -68,9 +68,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       let now = new Date().getTime();
       let remaining = Math.max((endTime - now) / duration, 0);
       let value = Math.round(end - remaining * range);
-      if (percentageDivRef.current) {
-        percentageDivRef.current.innerHTML = `${value}%`;
-      }
       if (value === end) {
         clearInterval(timer);
       }
@@ -97,7 +94,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         if (percentageDivRef.current) {
           percentageDivRef.current.innerHTML = `${progressValue}%`;
         }
-      } else if (calcPercentage < progressValue) {
+      } else if (calcPercentage <= progressValue) {
         setTimeout(function () {
           progressBarGreyRef.current.style.width = `${
             progressValue - calcPercentage

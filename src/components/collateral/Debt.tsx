@@ -2,10 +2,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
-// import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/EUROs.svg";
-// import handshake from "../../assets/handshake.png";
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
@@ -25,7 +23,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
-import { useContractWrite } from "wagmi";
+import { useContractWrite, useContractRead } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
@@ -44,11 +43,13 @@ const Debt = () => {
     useGreyProgressBarValuesStore();
   const { getCounter } = useCounterStore();
   const { chain } = getNetwork();
-  const HUNDRED_PC = 100_000;
+  const HUNDRED_PC = 100_000n;
 
   const incrementCounter = () => {
     getCounter(1);
   };
+
+  const amountInWei = parseEther(amount.toString());
 
   const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
 
@@ -60,9 +61,23 @@ const Debt = () => {
   };
 
   const handleAmount = (e: any) => {
-    setAmount(Number(e.target.value));
-    getGreyBarUserInput(e.target.value);
+    if (Number(e.target.value) < 10n ** 21n) {
+      setAmount(Number(e.target.value));
+      getGreyBarUserInput(e.target.value);
+    }
   };
+
+  const eurosAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerlisEuroAddress :
+    arbitrumsEuroAddress;
+    
+  const { data: allowance } = useContractRead({
+    address: eurosAddress,
+    abi: erc20Abi,
+    functionName: "allowance",
+    args: [address, vaultAddress],
+    watch: true
+  });
 
   useEffect(() => {
     setAmount(0);
@@ -73,8 +88,6 @@ const Debt = () => {
   }, []);
 
   useEffect(() => {
-    // This function will run just before the component unmounts
-
     return () => {
       // Perform any cleanup tasks or actions you want before the component unmounts
       setAmount(0);
@@ -83,10 +96,10 @@ const Debt = () => {
   }, []);
 
   const borrowMoney = useContractWrite({
-    address: vaultAddress as any, // Replace with your vault address
-    abi: smartVaultAbi, // Replace with your smartVault ABI
+    address: vaultAddress as any,
+    abi: smartVaultAbi,
     functionName: "mint",
-    args: [address as any, parseEther(amount.toString())],
+    args: [address as any, amountInWei],
   });
 
   const handleBorrowMoney = async () => {
@@ -126,23 +139,14 @@ const Debt = () => {
   const handleClose = () => setOpen(false);
   const [modalStep, setModalStep] = useState(1);
 
-  const sEuroFee: any = (amount * 0.01).toString();
-  const feeAmount = ethers.utils.parseUnits(sEuroFee, 18); // Replace "1" with the calculated fee amount (1% of the amount to repay)
-
-  let approveAddress: any;
-
-  if (chain?.id == 421613) {
-    approveAddress = arbitrumGoerlisEuroAddress;
-  } else if (chain?.id === 42161) {
-    approveAddress = arbitrumsEuroAddress;
-  }
+  const burnFeeRate: bigint = vaultStore.burnFeeRate;
+  const repayFee = amountInWei * burnFeeRate / HUNDRED_PC;
 
   const approvePayment = useContractWrite({
-    //make this dynamic
-    address: approveAddress as any,
+    address: eurosAddress as any,
     abi: erc20Abi,
     functionName: "approve",
-    args: [vaultAddress as any, feeAmount],
+    args: [vaultAddress as any, repayFee],
   });
 
   useEffect(() => {
@@ -175,8 +179,12 @@ const Debt = () => {
   ]);
 
   const handleApprovePayment = async () => {
-    const { write } = approvePayment;
-    write();
+    if (allowance && allowance as any >= repayFee) {
+      handleRepayMoney()
+    } else {
+      const { write } = approvePayment;
+      write();
+    }
   };
 
   const handleRepayMoney = async () => {
@@ -188,7 +196,7 @@ const Debt = () => {
     address: vaultAddress as any,
     abi: smartVaultAbi,
     functionName: "burn",
-    args: [parseEther(amount.toString())],
+    args: [amountInWei],
   });
 
   useEffect(() => {
@@ -226,12 +234,10 @@ const Debt = () => {
   const handleWithdraw = () => {
     if (activeElement === 4) {
       getCircularProgress(true);
-
       handleBorrowMoney();
     } else {
       getCircularProgress(true);
       getProgressType(5);
-
       handleApprovePayment();
     }
   };
@@ -257,11 +263,11 @@ const Debt = () => {
   const shortenedAddress = shortenAddress(address);
 
   const toPercentage = (rate: bigint) => {
-    return (Number(rate) * 100) / HUNDRED_PC;
+    return Number(rate) * 100 / Number(HUNDRED_PC);
   };
 
-  const calculateRateAmount = (amount: number, rate: bigint) => {
-    return (Number(rate) * amount) / HUNDRED_PC;
+  const calculateRateAmount = (fullAmount: bigint, rate: bigint) => {
+    return fullAmount * rate / HUNDRED_PC;
   };
 
   const borrowValues = [
@@ -275,11 +281,11 @@ const Debt = () => {
     },
     {
       key: `Minting Fee (${toPercentage(vaultStore.mintFeeRate)}%)`,
-      value: calculateRateAmount(amount, vaultStore.mintFeeRate),
+      value: formatEther(calculateRateAmount(amountInWei, vaultStore.mintFeeRate)),
     },
     {
       key: "Borrowing",
-      value: amount + calculateRateAmount(amount, vaultStore.mintFeeRate),
+      value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.mintFeeRate)),
     },
     {
       key: "Receiving",
@@ -293,7 +299,7 @@ const Debt = () => {
     },
     {
       key: `Burn Fee (${toPercentage(vaultStore.burnFeeRate)}%)`,
-      value: calculateRateAmount(amount, vaultStore.burnFeeRate),
+      value: formatEther(calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
     },
     {
       key: "Actual Repayment",
@@ -301,7 +307,7 @@ const Debt = () => {
     },
     {
       key: "Send",
-      value: amount + calculateRateAmount(amount, vaultStore.burnFeeRate),
+      value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
     },
   ];
 
@@ -327,7 +333,6 @@ const Debt = () => {
       <Box>
         <Box
           sx={{
-            //  backgroundImage: `url(${handshake})`,
             display: "flex",
             flexDirection: "row",
           }}
@@ -355,16 +360,10 @@ const Debt = () => {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
-                // marginTop: "1rem",
+                alignItems: "center"
               }}
             >
               <Typography
-                sx={
-                  {
-                    // margin: "0 10px",
-                  }
-                }
                 variant="body1"
               >
                 EUROs outstanding: €{formatEther(debtValue.toString())}
@@ -381,11 +380,6 @@ const Debt = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          // background: " rgba(18, 18, 18, 0.5)",
-          // boxShadow:
-          //   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-          // borderRadius: "6.24932px",
-          // padding: "1%",
         }}
       >
         <Box
@@ -635,26 +629,11 @@ const Debt = () => {
             ))}
       </Box>
 
-      {/* {activeElement === 1 ? (
-        <Typography variant="body1" sx={{ color: "red", marginTop: "1rem" }}>
-          Note: Stake LP tokens to earn & make Minting fee 0%{" "}
-          <a
-            href="https://app.uniswap.org/#/add/ETH/0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb"
-            target="_blank"
-          >
-            learn more
-          </a>
-        </Typography>
-      ) : (
-        <div></div>
-      )} */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-
-          borderRadius: "10px",
-          // padding: "1%",
+          borderRadius: "10px"
         }}
       >
         <Box
@@ -720,7 +699,6 @@ const Debt = () => {
         </Box>
       </Box>
       <div>
-        {/* <Button onClick={handleOpen}>Open modal</Button> */}
         <Modal
           open={open}
           onClose={handleClose}
@@ -754,11 +732,9 @@ const Debt = () => {
                   width: { xs: "350px", md: "500px" },
                 }}
               >
-                {/* stepper starts */}
                 <Box
                   sx={{
                     width: "100%",
-                    //  border: "1px solid #ffffff",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -769,7 +745,6 @@ const Debt = () => {
                   <Box
                     sx={{
                       width: "40%",
-                      // border: "3px solid red",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -805,7 +780,6 @@ const Debt = () => {
                         width: "2.5rem",
                         height: "1.5rem",
                         borderRadius: "50%",
-                        //  border: "0.2px solid white",
                         background: "black",
                         display: "flex",
                         justifyContent: "center",
@@ -816,7 +790,6 @@ const Debt = () => {
                       2
                     </Box>
                   </Box>
-                  {/* stepper bottom texts */}
                   <Box
                     sx={{
                       width: "45%",
@@ -857,7 +830,7 @@ const Debt = () => {
                   variant="h6"
                   component="h2"
                 >
-                  Confirm Your EURst Spending cap
+                  Confirm Your EUROs Spending cap
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   For optimal security and transparency, trustworthy DApps
@@ -865,8 +838,8 @@ const Debt = () => {
                   the maximum amount your wallet can use for a fee.
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  We suggest a cap of {amount * 0.01} for this transaction. This
-                  fee (0.5%) is rewarded to TST stakers, helping the DAO grow
+                  We suggest a cap of {formatEther(repayFee)} for this transaction. This
+                  fee ({toPercentage(vaultStore.burnFeeRate)}%) is rewarded to TST stakers, helping the DAO grow
                   and build more features.{" "}
                 </Typography>{" "}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -918,11 +891,9 @@ const Debt = () => {
                   width: "500px",
                 }}
               >
-                {/* stepper starts */}
                 <Box
                   sx={{
                     width: "100%",
-                    //  border: "1px solid #ffffff",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -933,7 +904,6 @@ const Debt = () => {
                   <Box
                     sx={{
                       width: "40%",
-                      // border: "3px solid red",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -980,11 +950,9 @@ const Debt = () => {
                       2
                     </Box>
                   </Box>
-                  {/* stepper bottom texts */}
                   <Box
                     sx={{
                       width: "45%",
-                      //    border: "3px solid red",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
@@ -1012,7 +980,6 @@ const Debt = () => {
                     </Typography>
                   </Box>
                 </Box>
-                {/* stepper ends */}
                 <Typography
                   sx={{
                     fontWeight: "600",

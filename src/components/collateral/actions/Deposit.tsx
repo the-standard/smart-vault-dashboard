@@ -10,12 +10,9 @@ import {
   useRenderAppCounterStore,
 } from "../../../store/Store";
 import QRicon from "../../../assets/qricon.png";
-// import { ethers } from "ethers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
-// import createClientUtil from "../../../utils/createClientUtil";
-// import { arbitrumGoerli } from "viem/chains";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
@@ -23,7 +20,6 @@ import { useWaitForTransaction } from "wagmi";
 
 interface DepositProps {
   symbol: string;
-  //1 = deposit, 2 = withdraw, 3 = swap, 4 = borrow 5 = pay down
   tokenAddress: string;
   decimals: number;
   token: any;
@@ -52,9 +48,11 @@ const Deposit: React.FC<DepositProps> = ({
   const inputRef: any = useRef<HTMLInputElement>(null);
 
   const handleAmount = (e: any) => {
-    setAmount(Number(e.target.value));
-    getSymbolForGreyBar(symbol);
-    getGreyBarUserInput(Number(e.target.value));
+    if (Number(e.target.value) < 10n ** 21n) {
+      setAmount(Number(e.target.value));
+      getSymbolForGreyBar(symbol);
+      getGreyBarUserInput(Number(e.target.value));
+    }
   };
 
   //clipboard logic
@@ -73,7 +71,6 @@ const Deposit: React.FC<DepositProps> = ({
         .writeText(text)
         .then(() => {
           getSnackBar(0);
-          //handleSnackbarClick();
         })
 
         .catch((error) => {
@@ -103,7 +100,6 @@ const Deposit: React.FC<DepositProps> = ({
     getCircularProgress(true);
     const account = getAccount();
 
-    // let txHashForError = "";
     try {
       const txAmount: any = amount;
 
@@ -122,7 +118,6 @@ const Deposit: React.FC<DepositProps> = ({
       inputRef.current.focus();
       getGreyBarUserInput(0);
     } catch (error) {
-      // waitForTransaction(txHashForError);
       console.log(error);
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(1);
@@ -158,7 +153,6 @@ const Deposit: React.FC<DepositProps> = ({
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
       getSnackBar(0);
-      //handleSnackbarClick();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -221,7 +215,6 @@ const Deposit: React.FC<DepositProps> = ({
 
   return (
     <Box>
-      {/* <button onClick={getImplementationAddress}>Open Modal</button> */}
       <Box
         sx={{
           display: "flex",
@@ -229,14 +222,11 @@ const Deposit: React.FC<DepositProps> = ({
           justifyContent: "space-between",
           alignItems: "center",
           marginTop: "1rem",
-          // marginLeft: "6px",
-          // border: "2px solid red",
           padding: "0",
         }}
       >
         <Box
           sx={{
-            //    margin: "2px",
             padding: "5px 0",
             cursor: "pointer",
             height: "2rem",

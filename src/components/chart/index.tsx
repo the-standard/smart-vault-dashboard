@@ -58,7 +58,7 @@ const Index = () => {
     contracts,
   });
 
-  const prices = priceData?.map((data) => {
+  const prices: any = priceData?.map((data:any) => {
     const result: any = data.result;
     return result[1];
   });
@@ -108,61 +108,38 @@ const Index = () => {
       currency: "EUROs",
     });
 
-  const computeGreyBar = (totalDebt: any, totalCollateralValue: any) => {
-    const debt = Number(formatUnits(totalDebt, 18));
-    const collateral = Number(formatUnits(totalCollateralValue, 18));
+  const computeGreyBar2 = (totalDebt: bigint, totalCollateralValue: bigint) => {
     let operation: any;
-    let userInputInEur = 0;
+    let userInputInEur = 0n;
+    const userInputInWei = parseEther(userInputForGreyBarOperation.toString());
+    const convertInflatedPercentageTo2Dec = (inflatedValue:bigint) => {
+      return parseFloat((Number(inflatedValue) / 100).toFixed(2));
+    }
 
     if (prices && prices[0] && prices[1]) {
-      const converted: any = BigNumber.from(
-        parseEther(userInputForGreyBarOperation.toString())
-      )
-        .mul(prices[1])
-        .div(prices[0]);
-      userInputInEur = Number(formatEther(converted));
+      userInputInEur = userInputInWei * prices[1] / prices[0];
     }
 
-    // return (debt / (collateral - Number(userInputForGreyBarOperation))) * 100;
     if (operationType === 1) {
       //deposit
-      operation = (debt / (collateral + userInputInEur)) * 100;
+      operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue + userInputInEur));
     } else if (operationType === 2) {
       //withdraw
-      operation = (debt / (collateral - userInputInEur)) * 100;
+      operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue - userInputInEur));
     } else if (operationType === 4) {
       //borrow
-      operation =
-        ((debt + Number(userInputForGreyBarOperation)) / collateral) * 100;
+      operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt + userInputInWei) / totalCollateralValue);
     } else if (operationType === 5) {
       //repay
-      operation =
-        ((debt - Number(userInputForGreyBarOperation)) / collateral) * 100;
+      operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt - userInputInWei) / totalCollateralValue);
     }
 
-    //not sure about this line, test it
-    // If 'operation' is greater than or equal to 100, set it to 100
-    // If 'operation' is less than or equal to 0, set it to 1
-    // Otherwise, keep the 'operation' value unchanged
-    if (operationType === 2) {
-      operation = operation >= 100 ? 100 : operation < 0 ? 551 : operation;
-    } else {
-      operation = operation >= 100 ? 100 : operation <= 0 ? 0.1 : operation;
-    }
-
-    return userInputForGreyBarOperation === 0 ? 0 : operation;
+    return operation < 0 ? 0 : operation > 100 ? 100 : operation;
   };
 
-  const computeProgressBar = (totalDebt: any, totalCollateralValue: any) => {
-    const ratio =
-      Number(formatEther(totalDebt)) /
-      Number(formatEther(totalCollateralValue));
-    const returnVal = (ratio * 100).toFixed(2);
-    if (isNaN(Number(returnVal))) {
-      return "0.00";
-    } else {
-      return Math.abs(Number(returnVal));
-    }
+  const computeProgressBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
+    const safeBigIntWithNoDec = 10000n * totalDebt / totalCollateralValue;
+    return parseFloat((Number(safeBigIntWithNoDec) / 100).toFixed(2));
   };
 
   return (
@@ -290,16 +267,12 @@ const Index = () => {
         </Typography>
         <ProgressBar
           progressValue={computeProgressBar(
-            Number(ethers.BigNumber.from(chosenVault.status.minted)),
-            Number(
-              ethers.BigNumber.from(chosenVault.status.totalCollateralValue)
-            )
+            chosenVault.status.minted,
+            chosenVault.status.totalCollateralValue
           )}
-          greyBarValue={computeGreyBar(
-            Number(ethers.BigNumber.from(chosenVault.status.minted)),
-            Number(
-              ethers.BigNumber.from(chosenVault.status.totalCollateralValue)
-            )
+          greyBarValue={computeGreyBar2(
+            chosenVault.status.minted,
+            chosenVault.status.totalCollateralValue
           )}
         />
         <Typography
