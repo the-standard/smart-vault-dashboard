@@ -68,17 +68,17 @@ const Debt = () => {
     contracts: [{
       ... eurosContract,
       functionName: "allowance",
-      args: [address, vaultAddress]
+      args: [address as any, vaultAddress]
   },{
       ... eurosContract,
       functionName: "balanceOf",
-      args: [address]
+      args: [address as any]
   }],
     watch: true
   });
 
-  const allowance = eurosData[0].result;
-  const eurosWalletBalance = eurosData[1].result;
+  const allowance: any = eurosData && eurosData[0].result;
+  const eurosWalletBalance: any = eurosData && eurosData[1].result;
 
   const handleClick = (element: any) => {
     setActiveElement(element);
@@ -94,10 +94,10 @@ const Debt = () => {
     }
   };
 
-  const handleInputMax = (e: any) => {
-    const maxRepayWei = eurosWalletBalance >= (vaultStore.status.minted + calculateRateAmount(vaultStore.status.minted, vaultStore.burnFeeRate)) ?
-      vaultStore.status.minted :
-      eurosWalletBalance * HUNDRED_PC / (HUNDRED_PC + vaultStore.burnFeeRate);
+  const handleInputMax = () => {
+    const maxRepayWei = eurosWalletBalance < (vaultStore.status.minted + calculateRateAmount(vaultStore.status.minted, vaultStore.burnFeeRate)) ?
+      eurosWalletBalance * HUNDRED_PC / (HUNDRED_PC + vaultStore.burnFeeRate) :
+      vaultStore.status.minted;
     const maxRepay = formatEther(maxRepayWei);
     inputRef.current.value = maxRepay;
     handleAmount({target: {value: maxRepay}});
