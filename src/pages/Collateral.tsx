@@ -383,7 +383,6 @@ const Collateral = () => {
                   letterSpacing: "1px",
                 }}
                 key={index}
-                isActive={activeElement === 2}
                 clickFunction={() => {
                   handleButtonActions(item.id);
                 }}

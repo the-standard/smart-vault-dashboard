@@ -22,6 +22,7 @@ const StyledButton = styled(Box)({
   borderRadius: "10px",
   transition: "0.5s",
   position: "relative",
+  overflow: "hidden",
   "&:after": {
     content: '""',
     position: "absolute",
