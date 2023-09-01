@@ -23,7 +23,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
-import { useContractWrite, useContractRead } from "wagmi";
+import { useContractWrite, useContractReads } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 
 import Card from "../../components/Card";
@@ -55,6 +55,31 @@ const Debt = () => {
 
   const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
 
+  const eurosAddress = chain?.id === arbitrumGoerli.id ?
+    arbitrumGoerlisEuroAddress :
+    arbitrumsEuroAddress;
+  
+  const eurosContract = {
+    address: eurosAddress,
+    abi: erc20Abi,
+  }
+    
+  const { data: eurosData } = useContractReads({
+    contracts: [{
+      ... eurosContract,
+      functionName: "allowance",
+      args: [address as any, vaultAddress]
+  },{
+      ... eurosContract,
+      functionName: "balanceOf",
+      args: [address as any]
+  }],
+    watch: true
+  });
+
+  const allowance: any = eurosData && eurosData[0].result;
+  const eurosWalletBalance: any = eurosData && eurosData[1].result;
+
   const handleClick = (element: any) => {
     setActiveElement(element);
     handleInputFocus();
@@ -69,17 +94,14 @@ const Debt = () => {
     }
   };
 
-  const eurosAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerlisEuroAddress :
-    arbitrumsEuroAddress;
-    
-  const { data: allowance } = useContractRead({
-    address: eurosAddress,
-    abi: erc20Abi,
-    functionName: "allowance",
-    args: [address, vaultAddress],
-    watch: true
-  });
+  const handleInputMax = () => {
+    const maxRepayWei = eurosWalletBalance < (vaultStore.status.minted + calculateRateAmount(vaultStore.status.minted, vaultStore.burnFeeRate)) ?
+      eurosWalletBalance * HUNDRED_PC / (HUNDRED_PC + vaultStore.burnFeeRate) :
+      vaultStore.status.minted;
+    const maxRepay = formatEther(maxRepayWei);
+    inputRef.current.value = maxRepay;
+    handleAmount({target: {value: maxRepay}});
+  }
 
   useEffect(() => {
     setAmount(0);
@@ -233,14 +255,32 @@ const Debt = () => {
     repayMoney.isError,
   ]);
 
-  const handleWithdraw = () => {
+  const toPercentage = (rate: bigint) => {
+    return Number(rate) * 100 / Number(HUNDRED_PC);
+  };
+
+  const calculateRateAmount = (fullAmount: bigint, rate: bigint) => {
+    return fullAmount * rate / HUNDRED_PC;
+  };
+
+  const calculateRepaymentWithFee = () => {
+    return amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate);
+  }
+
+  const handleDebtAction = () => {
     if (activeElement === 4) {
       getCircularProgress(true);
       handleBorrowMoney();
     } else {
-      getCircularProgress(true);
-      getProgressType(5);
-      handleApprovePayment();
+      if (amountInWei > vaultStore.status.minted) {
+        alert('Repayment amount exceeds debt in vault');
+      } else if (eurosWalletBalance < calculateRepaymentWithFee()) {
+        alert('Repayment amount exceeds your EUROs balance');
+      } else {
+        getCircularProgress(true);
+        getProgressType(5);
+        handleApprovePayment();
+      }
     }
   };
 
@@ -263,14 +303,6 @@ const Debt = () => {
   };
 
   const shortenedAddress = shortenAddress(address);
-
-  const toPercentage = (rate: bigint) => {
-    return Number(rate) * 100 / Number(HUNDRED_PC);
-  };
-
-  const calculateRateAmount = (fullAmount: bigint, rate: bigint) => {
-    return fullAmount * rate / HUNDRED_PC;
-  };
 
   const borrowValues = [
     {
@@ -526,26 +558,76 @@ const Debt = () => {
             ref={inputRef}
           />
         ) : (
-          <input
-            style={{
-              background: " rgba(18, 18, 18, 0.5)",
-              border: "1px solid #8E9BAE",
-              color: "white",
-              fontSize: "1rem",
-              fontWeight: "normal",
-              fontFamily: "Poppins",
-              height: "2rem",
-              margin: "0.5rem",
-              width: "100%",
-              borderRadius: "10px",
-              paddingLeft: "0.5rem",
-            }}
-            placeholder="Amount of EUROs you want to repay "
-            type="number"
-            onChange={handleAmount}
-            autoFocus
-            ref={inputRef}
-          />
+          <>
+            <input
+              style={{
+                background: " rgba(18, 18, 18, 0.5)",
+                border: "1px solid #8E9BAE",
+                color: "white",
+                fontSize: "1rem",
+                fontWeight: "normal",
+                fontFamily: "Poppins",
+                height: "2rem",
+                margin: "0.5rem",
+                width: "100%",
+                borderRadius: "10px",
+                paddingLeft: "0.5rem",
+              }}
+              placeholder="Amount of EUROs you want to repay "
+              type="number"
+              onChange={handleAmount}
+              autoFocus
+              ref={inputRef}
+            />
+            <Box
+              sx={{
+                margin: "0.5rem",
+                padding: "5px",
+                minWidth: "3rem",
+                height: "1.5rem",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+                textAlign: "center",
+                borderRadius: "10px",
+                marginLeft: "10px",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                boxShadow:
+                  "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+                fontFamily: '"Poppins", sans-serif',
+                color: "#ffffff",
+                fontSize: "1rem",
+                letterSpacing: "1px",
+                backdropFilter: "blur(8px)",
+                transition: "0.5s",
+                position: "relative",
+                "&:after": {
+                  content: '""',
+                  position: "absolute",
+                  height: "100%",
+                  width: "100%",
+                  top: "0",
+                  left: "0",
+                  background:
+                    "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+                  backgroundSize: "200% 100%",
+                  backgroundPosition: "165% 0",
+                  transition: "0.7s",
+                },
+                "&:hover:after": {
+                  backgroundPosition: "-20% 0",
+                },
+                "&:hover": {
+                  boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+                  transform: "translateY(-5px)",
+                },
+              }}
+              onClick={() => handleInputMax()}
+            >
+              Max
+            </Box>
+          </>
         )}
       </Box>
 
@@ -682,7 +764,7 @@ const Debt = () => {
               boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
             },
           }}
-          onClick={handleWithdraw}
+          onClick={handleDebtAction}
         >
           {activeElement === 4 ? "Withdraw" : "Repay"}
         </Box>
