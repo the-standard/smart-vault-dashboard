@@ -14,6 +14,8 @@ import { getNetwork } from "@wagmi/core";
 import { useAccount, useContractEvent, useContractWrite } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 
+import Card from "../Card";
+
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -128,29 +130,9 @@ const VaultCard: React.FC<VaultCardProps> = ({
   });
 
   return (
-    <Box
+    <Card
       sx={{
-        // width: "30%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        borderRadius: "10px",
         padding: "0",
-        borderCollapse: "separate",
-        borderSpacing: "0 15px",
-        color: "white",
-        backgroundImage: `
-          linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-          url('https://uploads-ssl.webflow.com/6422757f5e8ba638bea66086/64df8dab018df1e246202334_Home_blurred%20(1).png')
-        `,
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundAttachment: "fixed",
-        boxShadow: `
-  inset 1px 1px 1px 0px grey,
-  5px 5px 25px 0px rgba(0, 0, 0, 0.6)
-`,
       }}
     >
       <Box
@@ -269,7 +251,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
           </Alert>
         </Snackbar>
       </Box>
-    </Box>
+    </Card>
   );
 };
 

@@ -23,6 +23,9 @@ import { useAccount, useBlockNumber, useContractRead } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 import vaultLiauidatedImg from "../assets/vault-liquidated.png";
 import { useNavigate } from "react-router-dom";
+
+import Card from "../components/Card";
+
 type RouteParams = {
   vaultId: string;
 };
@@ -241,12 +244,6 @@ const Collateral = () => {
       sx={{
         color: "#8E9BAE",
         margin: { xs: "0% 2%", sm: "3% 12%" },
-        // marginTop: "50px",
-        // background:
-        //   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-        // border: "1px solid rgba(52, 52, 52, 0.3)",
-        // boxShadow: "0px 30px 40px rgba(0, 0, 0, 0.3)",
-        // borderRadius: "10px",
         minHeight: "100vh",
         height: "100%",
       }}
@@ -478,21 +475,8 @@ const Collateral = () => {
           }}
         >
           {/* full chart container */}
-          <Box
+          <Card
             sx={{
-              background:
-                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-              boxShadow: `
-                inset 1px 1px 1px 0px grey,
-                5px 5px 25px 0px rgba(0, 0, 0, 0.6)
-              `,
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
-
-              borderRadius: "10px ",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
               alignItems: "center",
               padding: "1.5rem",
             }}
@@ -508,7 +492,7 @@ const Collateral = () => {
             ) : (
               <ChartComponent />
             )}
-          </Box>
+          </Card>
           <Box
             sx={{
               display: "flex",
@@ -592,28 +576,15 @@ const Collateral = () => {
             ))}
           </Box>
           {/* camelot content comes here */}
-          <Box
+          <Card
             sx={{
-              background:
-                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-              boxShadow: `
-                inset 1px 1px 1px 0px grey,
-                5px 5px 25px 0px rgba(0, 0, 0, 0.6)
-              `,
-              backdropFilter: "blur(13.9px)",
-              WebkitBackdropFilter: "blur(13.9px)",
-
-              borderRadius: "10px ",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
               alignItems: "center",
               padding: "1.5rem",
               marginTop: "1rem",
             }}
           >
             <LiquidityPool />
-          </Box>
+          </Card>
         </Box>
       </Box>
       {/* Scan QR code modal */}
@@ -671,7 +642,7 @@ const Collateral = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box
+        <Card
           sx={{
             position: { xs: "absolute" as const, md: "" },
             top: "50%",
@@ -682,25 +653,18 @@ const Collateral = () => {
               sm: "50%",
               md: "40%",
             },
-            background:
-              "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-            borderRadius: "10px",
-            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(13.9px)",
-            WebkitBackdropFilter: "blur(13.9px)",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
-
             p: 4,
             maxHeight: {
               xs: "80vh",
               sm: "80vh",
             },
             overflowY: "auto",
+            outline: "none",
           }}
           className="modal-content" // add class name to modal content box
         >
           <AddEuros />
-        </Box>
+        </Card>
       </Modal>
     </Box>
   );

@@ -108,7 +108,7 @@ const Index = () => {
       currency: "EUROs",
     });
 
-  const computeGreyBar2 = (totalDebt: bigint, totalCollateralValue: bigint) => {
+  const computeGreyBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
     let operation: any;
     let userInputInEur = 0n;
     const userInputInWei = parseEther(userInputForGreyBarOperation.toString());
@@ -120,7 +120,9 @@ const Index = () => {
       userInputInEur = userInputInWei * prices[1] / prices[0];
     }
 
-    if (operationType === 1) {
+    if (totalCollateralValue === 0n) {
+      operation = 0;
+    } else if (operationType === 1) {
       //deposit
       operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue + userInputInEur));
     } else if (operationType === 2) {
@@ -138,6 +140,7 @@ const Index = () => {
   };
 
   const computeProgressBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
+    if (totalCollateralValue === 0n) return 0;
     const safeBigIntWithNoDec = 10000n * totalDebt / totalCollateralValue;
     return parseFloat((Number(safeBigIntWithNoDec) / 100).toFixed(2));
   };
@@ -270,7 +273,7 @@ const Index = () => {
             chosenVault.status.minted,
             chosenVault.status.totalCollateralValue
           )}
-          greyBarValue={computeGreyBar2(
+          greyBarValue={computeGreyBar(
             chosenVault.status.minted,
             chosenVault.status.totalCollateralValue
           )}
