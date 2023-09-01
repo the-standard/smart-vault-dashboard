@@ -410,13 +410,8 @@ const Debt = () => {
             padding: "5px",
             width: "50%",
             height: "1.5rem",
-            display: "flex",
-            justifyContent: "center",
             marginTop: "1rem",
             marginLeft: "10px",
-            alignItems: "center",
-            cursor: "pointer",
-            textAlign: "center",
           }}
           isActive={activeElement === 4}
           clickFunction={() => handleClick(4)}
@@ -429,13 +424,8 @@ const Debt = () => {
             padding: "5px",
             width: "50%",
             height: "1.5rem",
-            display: "flex",
-            justifyContent: "center",
             marginTop: "1rem",
             marginLeft: "10px",
-            alignItems: "center",
-            cursor: "pointer",
-            textAlign: "center",
           }}
           isActive={activeElement === 5}
           clickFunction={() => handleClick(5)}
@@ -500,9 +490,6 @@ const Debt = () => {
                 padding: "5px",
                 minWidth: "3rem",
                 height: "1.5rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
                 fontSize: "1rem",
                 top: "-2px",
               }}
@@ -596,12 +583,8 @@ const Debt = () => {
             padding: "5px",
             height: "1.5rem",
             width: "100%",
-            display: "flex",
-            justifyContent: "center",
             marginTop: "1rem",
             marginLeft: "10px",
-            alignItems: "center",
-            textAlign: "center",
           }}
           clickFunction={handleDebtAction}
         >

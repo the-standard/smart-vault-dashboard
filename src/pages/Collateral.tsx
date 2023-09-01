@@ -272,9 +272,6 @@ const Collateral = () => {
           <Button
             sx={{
               marginRight: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
               "&:after": {
                 backgroundSize: "300% 100%",
               }
@@ -371,16 +368,12 @@ const Collateral = () => {
                   padding: "5px 20px",
                   width: "auto",
                   height: "3rem",
-                  display: "flex",
-                  justifyContent: "center",
                   marginTop: "1rem",
-                  textAlign: "center",
                   fontSize: {
                     xs: "0.7rem",
                     sm: "0.8rem",
                     md: "0.88rem",
                   },
-                  letterSpacing: "1px",
                 }}
                 key={index}
                 clickFunction={() => {

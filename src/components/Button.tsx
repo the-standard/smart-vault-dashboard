@@ -3,6 +3,10 @@ import { styled } from "@mui/material/styles";
 
 const StyledButton = styled(Box)({
   padding: "10px 10px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  textAlign: "center",
   border: "2px solid rgba(255, 255, 255, 0.2)",
   background: `linear-gradient(
     110.28deg,
@@ -66,21 +70,51 @@ const StyledButton = styled(Box)({
   },
 });
 
+const lighterStyle = {
+  backgroundColor: "rgba(0,0,0,0)",
+  background: `linear-gradient(
+    119.96deg,
+    rgba(255, 255, 255, 0.1) 26.6%,
+    rgba(255, 255, 255, 0.0) 64.62%
+  )`,
+  backdropFilter: "blur(0px)",
+}
+
+const disabledStyle = {
+  opacity: "0.3",
+  pointerEvents: "none",
+}
+
 interface ButtonProps {
   sx?: object;
   isActive?: boolean;
+  lighter?: boolean;
   clickFunction?: () => void;
   isDisabled?: boolean;
   children?: React.ReactNode;
   ref?:React.Ref<HTMLDivElement>;
 }
 
-export function Button(props: ButtonProps) {
+export function Button(props: ButtonProps) {  
+
+  let useSx = props.sx;
+
+  if (props.lighter) {
+    useSx = {
+      ...props.sx,
+      ...lighterStyle,
+    }
+  }
+
   if (props.isDisabled) {
+
+    const disabledSx = {
+      ...useSx,
+      ...disabledStyle,
+    }
     return (
       <StyledButton
-        sx={props.sx}
-        className={props.isActive ? "activeBtn" : ""}
+        sx={disabledSx}
       >
         {props.children}
       </StyledButton>
@@ -88,7 +122,7 @@ export function Button(props: ButtonProps) {
   }
   return (
     <StyledButton
-      sx={props.sx}
+      sx={useSx}
       className={props.isActive ? "activeBtn" : ""}
       onClick={props.clickFunction}
       ref={props.ref}
