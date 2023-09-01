@@ -275,6 +275,9 @@ const Collateral = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              "&:after": {
+                backgroundSize: "300% 100%",
+              }
             }}
             clickFunction={() => navigate('/')}
           >
@@ -362,8 +365,7 @@ const Collateral = () => {
           >
             {/* the new buttons will come here */}
             {buttonDetails.map((item, index) => (
-              <Box
-                key={index}
+              <Button
                 sx={{
                   margin: "2px",
                   padding: "5px 20px",
@@ -372,68 +374,22 @@ const Collateral = () => {
                   display: "flex",
                   justifyContent: "center",
                   marginTop: "1rem",
-                  background:
-                    "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-
-                  borderRadius: "10px",
-                  WebkitBackdropFilter: "blur(13.9px)",
-
-                  alignItems: "center",
-                  cursor: "pointer",
                   textAlign: "center",
-                  // borderRadius: "6.24932px",
-                  border: "2px solid rgba(255, 255, 255, 0.2)",
-                  boxShadow:
-                    "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-                  fontFamily: '"Poppins", sans-serif',
-                  color: "#ffffff",
                   fontSize: {
                     xs: "0.7rem",
                     sm: "0.8rem",
                     md: "0.88rem",
                   },
                   letterSpacing: "1px",
-                  backdropFilter: "blur(8px)",
-                  transition: "0.5s",
-                  position: "relative",
-                  "&:after": {
-                    content: '""',
-                    position: "absolute",
-                    height: "100%",
-                    width: "100%",
-                    top: "0",
-                    left: "0",
-                    background:
-                      "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-                    backgroundSize: "200% 100%",
-                    backgroundPosition: "165% 0",
-                    transition: "0.7s",
-                  },
-                  "&:hover:after": {
-                    backgroundPosition: "-20% 0",
-                  },
-                  "&:hover": {
-                    boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-                    transform: "translateY(-5px)",
-                  },
-                  "&:active": {
-                    transform: "translateY(0)",
-                    border: "2px solid rgba(152, 250, 250, 0.5)",
-                    boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
-                  },
-                  "&.activeBtn": {
-                    background:
-                      "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-                    border: "2px solid white",
-                    boxShadow: "0 0 5px 5px rgba(255, 255, 255, 0.5)",
-                  },
                 }}
-                onClick={() => {
+                key={index}
+                isActive={activeElement === 2}
+                clickFunction={() => {
                   handleButtonActions(item.id);
                 }}
               >
                 {item.title}
-              </Box>
+              </Button>            
             ))}
           </Box>
           {/* camelot content comes here */}

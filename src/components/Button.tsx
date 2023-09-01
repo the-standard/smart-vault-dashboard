@@ -37,7 +37,7 @@ const StyledButton = styled(Box)({
         rgba(255, 255, 255, 0.16) 67%,
         transparent 68%
       )`,
-    backgroundSize: "300% 100%",
+    backgroundSize: "200% 100%",
     backgroundPosition: "165% 0",
     transition: "0.7s",
   },
@@ -71,6 +71,7 @@ interface ButtonProps {
   clickFunction?: () => void;
   isDisabled?: boolean;
   children?: React.ReactNode;
+  ref?:React.Ref<HTMLDivElement>;
 }
 
 export function Button(props: ButtonProps) {
@@ -89,6 +90,7 @@ export function Button(props: ButtonProps) {
       sx={props.sx}
       className={props.isActive ? "activeBtn" : ""}
       onClick={props.clickFunction}
+      ref={props.ref}
     >
       {props.children}
     </StyledButton>
