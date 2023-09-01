@@ -95,6 +95,12 @@ const Debt = () => {
   };
 
   const handleInputMax = (e: any) => {
+    const maxRepayWei = eurosWalletBalance >= (vaultStore.status.minted + calculateRateAmount(vaultStore.status.minted, vaultStore.burnFeeRate)) ?
+      vaultStore.status.minted :
+      eurosWalletBalance * HUNDRED_PC / (HUNDRED_PC + vaultStore.burnFeeRate);
+    const maxRepay = formatEther(maxRepayWei);
+    inputRef.current.value = maxRepay;
+    handleAmount({target: {value: maxRepay}});
   }
 
   useEffect(() => {
@@ -586,7 +592,7 @@ const Debt = () => {
                 textAlign: "center",
                 borderRadius: "10px",
                 marginLeft: "10px",
-                border: "2px solid rgba(255, 255, 255, 0.2)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
                 boxShadow:
                   "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
                 fontFamily: '"Poppins", sans-serif',
