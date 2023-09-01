@@ -11,7 +11,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
   const [chartHeight, setChartHeight] = useState(220);
   const [lineColor, setLineColor] = useState("green");
 
-  const convertedData = data.map(({ ts, price }) => [ts, price]);
+  const convertedData = data.map(({ ts, price }) => [ts * 1000, price]);
   const series = [
     {
       //symbol should come here
@@ -156,17 +156,18 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
             shared: false,
             x: {
               show: false,
-              format: "dd MMM",
-              formatter: undefined,
+              formatter: (value:number) => {
+                const lang = navigator?.language || 'en-US';
+                return new Date(value).toLocaleString(lang, {dateStyle: 'short', timeStyle: 'short'});
+              }
             },
             y: {
-              formatter: function (val) {
+              formatter: function (val:number) {
                 const dollarSign = new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "USD",
                 }).format(0)[0];
                 return dollarSign + formatNumber((val / 1000000).toFixed(0));
-                //   return (val / 1000000).toFixed(0);
               },
             },
           },
