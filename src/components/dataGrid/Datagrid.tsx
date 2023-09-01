@@ -19,14 +19,12 @@ import {
   Pagination,
   Tooltip,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import "../../styles/progressBarStyle.css";
 import "../../styles/datagridStyles.css";
 
 import ProgressBar from "../ProgressBar.tsx";
-import { formatEther, formatUnits } from "viem";
-// import { getNetwork } from "@wagmi/core";
+import { formatEther } from "viem";
 import { useContractReads, useNetwork } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 import parse from "html-react-parser";
@@ -251,7 +249,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     );
   };
 
-  // const [currentPage, getCurrentPage] = useState<any>(1);
   const itemsPerPage = 5;
 
   const totalPages = Math.ceil(vaults.length / itemsPerPage);
@@ -276,31 +273,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     }
   }, []);
 
-  const isMobile = useMediaQuery("(max-width:600px)");
-
-  const computeProgressBar = (totalDebt: any, totalCollateralValue: any) => {
-    // return ((totalDebt / (totalDebt * 1.1)) * 100).toFixed(2);
-    const ratio =
-      Number(formatUnits(totalDebt, 18)) /
-      Number(formatUnits(totalCollateralValue, 18));
-    const returnVal = (ratio * 100).toFixed(2);
-    if (isNaN(Number(returnVal))) {
-      return "0.00";
-    } else {
-      return (ratio * 100).toFixed(2);
-    }
+  const computeProgressBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
+    return totalCollateralValue === 0n ? '0.0' : (Number(10000n * totalDebt / totalCollateralValue) / 100).toFixed(2);
   };
 
   function truncateToTwoDecimals(num: any) {
     const withTwoDecimals = num.toString().match(/^-?\d+(?:\.\d{0,2})?/);
     return withTwoDecimals ? withTwoDecimals[0] : num;
   }
-
-  useEffect(() => {
-    if (isMobile) {
-      // returnNewDataGrid();
-    }
-  }, [isMobile]);
 
   const sanitizedNFTs = sortedVaults.map((vault) => {
     const nft = tokenToNFTMap.current.get(
@@ -419,20 +399,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) : (
                         <ProgressBar
                           progressValue={computeProgressBar(
-                            Number(ethers.BigNumber.from(vault.status.minted)),
-                            Number(
-                              ethers.BigNumber.from(
-                                vault.status.totalCollateralValue
-                              )
-                            )
+                            vault.status.minted,
+                            vault.status.totalCollateralValue
                           )}
                         />
                       )}
                     </td>
                     <td
                       style={{
-                        // border: "5px solid white",
-
                         width: "50px",
                         height: "auto",
                       }}
