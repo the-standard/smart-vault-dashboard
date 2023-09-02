@@ -322,7 +322,21 @@ const Yield = () => {
             cut of all fees generated on TheStandard Protocol.{" "}
           </Typography>{" "}
           <Typography variant="h6" sx={{ color: "#fff", marginBottom: "1rem" }}>
-            Join us, and let's make crypto magic together on Camelot! 🏰✨{" "}
+            Join us, and let's make crypto magic together on{" "}
+            <a
+              style={{
+                textDecoration: "none",
+                paddingBottom: "1px",
+                borderBottom: "1px solid #fff",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+              href="https://app.camelot.exchange/liquidity/"
+              target="_blank"
+            >
+              Camelot!
+            </a>{" "}
+            🏰✨{" "}
           </Typography>{" "}
         </Box>
         <Box
