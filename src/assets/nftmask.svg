@@ -1,0 +1,12 @@
+<svg width="2600" height="1540" viewBox="0 0 2600 1540" xmlns="http://www.w3.org/2000/svg">
+  <mask id="myMask">
+    <rect
+      rx="80"
+      height="1540"
+      width="2600"
+      fill="white"
+    >
+    </rect>
+  </mask>
+  <rect height="100%" width="100%" fill="black" mask="url(#myMask)"></rect>
+</svg>
