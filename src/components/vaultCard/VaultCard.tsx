@@ -15,7 +15,7 @@ import { useAccount, useContractEvent, useContractWrite } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 
 import Card from "../Card";
-import Button from "../../components/Button";
+import Button from "../Button";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
