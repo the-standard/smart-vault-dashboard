@@ -8,6 +8,7 @@ const HomePub = () => {
         sx={{
           padding: "0 12%",
           margin: "1.5rem 0",
+          minHeight: "50vh",
         }}
         container
         spacing={2}
