@@ -27,6 +27,7 @@ import { useContractWrite, useContractReads } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 
 import Card from "../../components/Card";
+import Button from "../../components/Button";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
@@ -403,130 +404,34 @@ const Debt = () => {
           alignItems: "center",
         }}
       >
-        <Box
+        <Button
           sx={{
             margin: "2px",
             padding: "5px",
             width: "50%",
             height: "1.5rem",
-            display: "flex",
-            justifyContent: "center",
             marginTop: "1rem",
-
-            alignItems: "center",
-            cursor: "pointer",
-            textAlign: "center",
-            borderRadius: "10px",
             marginLeft: "10px",
-            border: "2px solid rgba(255, 255, 255, 0.2)",
-            boxShadow:
-              "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-            fontFamily: '"Poppins", sans-serif',
-            color: "#ffffff",
-            fontSize: "1rem",
-            letterSpacing: "1px",
-            backdropFilter: "blur(8px)",
-            transition: "0.5s",
-            position: "relative",
-            "&:after": {
-              content: '""',
-              position: "absolute",
-              height: "100%",
-              width: "100%",
-              top: "0",
-              left: "0",
-              background:
-                "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-              backgroundSize: "200% 100%",
-              backgroundPosition: "165% 0",
-              transition: "0.7s",
-            },
-            "&:hover:after": {
-              backgroundPosition: "-20% 0",
-            },
-            "&:hover": {
-              boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-              transform: "translateY(-5px)",
-            },
-            "&:active": {
-              transform: "translateY(0)",
-              border: "2px solid rgba(152, 250, 250, 0.5)",
-              boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
-            },
-            "&.activeBtn": {
-              background:
-                "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-              border: "1px solid white",
-              boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
-            },
           }}
-          className={activeElement === 4 ? "activeBtn" : ""}
-          onClick={() => handleClick(4)}
+          isActive={activeElement === 4}
+          clickFunction={() => handleClick(4)}
         >
           Borrow
-        </Box>
-        <Box
+        </Button>
+        <Button
           sx={{
             margin: "2px",
             padding: "5px",
             width: "50%",
             height: "1.5rem",
-            display: "flex",
-            justifyContent: "center",
             marginTop: "1rem",
-
-            alignItems: "center",
-            cursor: "pointer",
-            textAlign: "center",
-            borderRadius: "10px",
             marginLeft: "10px",
-            border: "2px solid rgba(255, 255, 255, 0.2)",
-            boxShadow:
-              "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-            fontFamily: '"Poppins", sans-serif',
-            color: "#ffffff",
-            fontSize: "1rem",
-            letterSpacing: "1px",
-            backdropFilter: "blur(8px)",
-            transition: "0.5s",
-            position: "relative",
-            "&:after": {
-              content: '""',
-              position: "absolute",
-              height: "100%",
-              width: "100%",
-              top: "0",
-              left: "0",
-              background:
-                "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-              backgroundSize: "200% 100%",
-              backgroundPosition: "165% 0",
-              transition: "0.7s",
-            },
-            "&:hover:after": {
-              backgroundPosition: "-20% 0",
-            },
-            "&:hover": {
-              boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-              transform: "translateY(-5px)",
-            },
-            "&:active": {
-              transform: "translateY(0)",
-              border: "2px solid rgba(152, 250, 250, 0.5)",
-              boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
-            },
-            "&.activeBtn": {
-              background:
-                "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-              border: "1px solid white",
-              boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
-            },
           }}
-          className={activeElement === 5 ? "activeBtn" : ""}
-          onClick={() => handleClick(5)}
+          isActive={activeElement === 5}
+          clickFunction={() => handleClick(5)}
         >
           Repay
-        </Box>
+        </Button>
       </Box>
       <Box
         sx={{
@@ -579,54 +484,19 @@ const Debt = () => {
               autoFocus
               ref={inputRef}
             />
-            <Box
+            <Button
               sx={{
                 margin: "0.5rem",
                 padding: "5px",
                 minWidth: "3rem",
                 height: "1.5rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-                textAlign: "center",
-                borderRadius: "10px",
-                marginLeft: "10px",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                boxShadow:
-                  "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-                fontFamily: '"Poppins", sans-serif',
-                color: "#ffffff",
                 fontSize: "1rem",
-                letterSpacing: "1px",
-                backdropFilter: "blur(8px)",
-                transition: "0.5s",
-                position: "relative",
-                "&:after": {
-                  content: '""',
-                  position: "absolute",
-                  height: "100%",
-                  width: "100%",
-                  top: "0",
-                  left: "0",
-                  background:
-                    "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-                  backgroundSize: "200% 100%",
-                  backgroundPosition: "165% 0",
-                  transition: "0.7s",
-                },
-                "&:hover:after": {
-                  backgroundPosition: "-20% 0",
-                },
-                "&:hover": {
-                  boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-                  transform: "translateY(-5px)",
-                },
+                top: "-2px",
               }}
-              onClick={() => handleInputMax()}
+              clickFunction={() => handleInputMax()}
             >
               Max
-            </Box>
+            </Button>
           </>
         )}
       </Box>
@@ -707,67 +577,19 @@ const Debt = () => {
           borderRadius: "10px"
         }}
       >
-        <Box
+        <Button
           sx={{
             margin: "2px",
             padding: "5px",
-            width: "100%",
             height: "1.5rem",
-            display: "flex",
-            justifyContent: "center",
+            width: "100%",
             marginTop: "1rem",
-
-            alignItems: "center",
-            cursor: "pointer",
-            textAlign: "center",
-            borderRadius: "10px",
             marginLeft: "10px",
-            border: "2px solid rgba(255, 255, 255, 0.2)",
-            boxShadow:
-              "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-            fontFamily: '"Poppins", sans-serif',
-            color: "#ffffff",
-            fontSize: "1rem",
-            letterSpacing: "1px",
-            backdropFilter: "blur(8px)",
-            transition: "0.5s",
-            position: "relative",
-            "&:after": {
-              content: '""',
-              position: "absolute",
-              height: "100%",
-              width: "100%",
-              top: "0",
-              left: "0",
-              background:
-                "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-              backgroundSize: "200% 100%",
-              backgroundPosition: "165% 0",
-              transition: "0.7s",
-            },
-            "&:hover:after": {
-              backgroundPosition: "-20% 0",
-            },
-            "&:hover": {
-              boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-              transform: "translateY(-5px)",
-            },
-            "&:active": {
-              transform: "translateY(0)",
-              border: "2px solid rgba(152, 250, 250, 0.5)",
-              boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
-            },
-            "&.activeBtn": {
-              background:
-                "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-              border: "1px solid white",
-              boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
-            },
           }}
-          onClick={handleDebtAction}
+          clickFunction={handleDebtAction}
         >
           {activeElement === 4 ? "Withdraw" : "Repay"}
-        </Box>
+        </Button>
       </Box>
       <div>
         <Modal

@@ -18,6 +18,8 @@ import { sendTransaction } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
 import { useWaitForTransaction } from "wagmi";
 
+import Button from "../../../components/Button";
+
 interface DepositProps {
   symbol: string;
   tokenAddress: string;
@@ -225,19 +227,13 @@ const Deposit: React.FC<DepositProps> = ({
           padding: "0",
         }}
       >
-        <Box
+        <Button
           sx={{
             padding: "5px 0",
-            cursor: "pointer",
             height: "2rem",
             minWidth: `33%`,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
           }}
-          className="myBtn"
-          onClick={handleOpen}
+          clickFunction={handleOpen}
         >
           {" "}
           <img
@@ -258,7 +254,7 @@ const Deposit: React.FC<DepositProps> = ({
             {" "}
             With QR Code{" "}
           </Typography>
-        </Box>
+        </Button>
         <Typography
           variant="body2"
           sx={{
@@ -296,7 +292,27 @@ const Deposit: React.FC<DepositProps> = ({
             placeholder="Enter amount"
             autoFocus
           />
-          <Box
+          <Button
+            sx={{
+              margin: "2px",
+              padding: "10px",
+              width: "2rem",
+              height: "1.3rem",
+              "&:after": {
+                backgroundSize: "300% 100%",
+              }
+            }}
+            clickFunction={depositViaMetamask}
+          >
+            {" "}
+            <img
+              style={{ width: "2rem", height: "auto" }}
+              src={MetamaskIcon}
+              alt="metamaskicon"
+            />
+            {" "}
+          </Button>
+          {/* <Box
             sx={{
               margin: "2px",
               padding: "10px",
@@ -316,7 +332,7 @@ const Deposit: React.FC<DepositProps> = ({
               src={MetamaskIcon}
               alt="metamaskicon"
             />{" "}
-          </Box>
+          </Box> */}
         </Box>
       </Box>
       <Modal
