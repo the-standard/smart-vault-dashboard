@@ -14,12 +14,7 @@ import {
   useVaultAddressStore,
   useCurrentPageStore,
 } from "../../store/Store.ts";
-import {
-  Button,
-  Pagination,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Button, Pagination, Tooltip, Typography } from "@mui/material";
 import "../../styles/progressBarStyle.css";
 import "../../styles/datagridStyles.css";
 
@@ -29,6 +24,8 @@ import { useContractReads, useNetwork } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
+
+import nftmask from "../../assets/nftmask.svg";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -273,8 +270,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     }
   }, []);
 
-  const computeProgressBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
-    return totalCollateralValue === 0n ? '0.0' : (Number(10000n * totalDebt / totalCollateralValue) / 100).toFixed(2);
+  const computeProgressBar = (
+    totalDebt: bigint,
+    totalCollateralValue: bigint
+  ) => {
+    return totalCollateralValue === 0n
+      ? "0.0"
+      : (Number((10000n * totalDebt) / totalCollateralValue) / 100).toFixed(2);
   };
 
   function truncateToTwoDecimals(num: any) {
@@ -352,7 +354,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) ? (
                         <div
                           style={{
-                            borderRadius: "5px",
+                            // borderRadius: "5px",
                             overflow: "hidden",
                             objectFit: "contain",
                             // border: "1px solid red",
@@ -360,7 +362,16 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
+                            maskImage: `url(${nftmask})`,
+                            maskRepeat: "no-repeat",
+                            maskSize: "contain",
+                            maskPosition: "center",
+                            WebkitMaskImage: `url(${nftmask})`,
+                            WebkitMaskRepeat: "no-repeat",
+                            WebkitMaskSize: "contain",
+                            WebkitMaskPosition: "center",
                           }}
+                          className="hello"
                           onClick={() => {
                             handleOpen();
                             handleNFTClick({
@@ -464,7 +475,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 md: "40%",
               },
               background:
-                "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                "linear-gradient(110.28deg, rgba(10, 10, 10, 0.8) 0.8%, rgba(0, 0, 0, 0.9) 101.11%)",
               borderRadius: "10px",
               boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
 

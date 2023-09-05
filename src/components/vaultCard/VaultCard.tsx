@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { useEffect, useState } from "react";
@@ -12,9 +12,10 @@ import "../../styles/buttonStyle.css";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useContractEvent, useContractWrite } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
+import { arbitrumGoerli, arbitrum } from "wagmi/chains";
 
 import Card from "../Card";
+import Button from "../Button";
 
 //for snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -74,6 +75,11 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   // Define your function using async/await
   const handleMintVault = async () => {
+    if (chain?.id !== arbitrumGoerli.id && chain?.id !== arbitrum.id) {
+      getSnackBar(2);
+      return;
+    }
+
     const { write } = mintVault;
     try {
       // Execute the contract method by calling the 'write' function
@@ -211,22 +217,13 @@ const VaultCard: React.FC<VaultCardProps> = ({
         }}
       >
         <Button
-          disabled={!isActive}
-          sx={
-            !isActive
-              ? {}
-              : {
-                  background:
-                    "linear-gradient(119.96deg, rgba(255, 255, 255, 0.1) 26.6%, rgba(255, 255, 255, 0) 64.62%)",
-                  border: "1px solid rgba(70, 205, 235, 0.3)",
-                  borderRadius: "3.88576px",
-                  // margin: "4rem 0 0.8rem 0",
-                  width: "100%",
-                }
-          }
-          className={isActive ? "myBtn" : ""}
-          // onClick={() => write?.()}
-          onClick={() => handleMintVault()}
+          sx={{
+            width: "100%",
+            textTransform: "uppercase",
+          }}
+          isDisabled={!isActive}
+          clickFunction={() => handleMintVault()}
+          lighter
         >
           <Typography
             sx={{
