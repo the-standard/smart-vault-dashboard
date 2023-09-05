@@ -23,19 +23,6 @@ td {
   vertical-align: middle;
 }
 
-/* body:before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("./assets/standardtrybg.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  z-index: -1;
-} */
-
 /* Add any additional styles for your app */
 
 /* Chrome, Safari, Edge, Opera */
