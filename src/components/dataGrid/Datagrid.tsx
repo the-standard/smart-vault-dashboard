@@ -14,12 +14,7 @@ import {
   useVaultAddressStore,
   useCurrentPageStore,
 } from "../../store/Store.ts";
-import {
-  Button,
-  Pagination,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Button, Pagination, Tooltip, Typography } from "@mui/material";
 import "../../styles/progressBarStyle.css";
 import "../../styles/datagridStyles.css";
 
@@ -275,8 +270,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     }
   }, []);
 
-  const computeProgressBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
-    return totalCollateralValue === 0n ? '0.0' : (Number(10000n * totalDebt / totalCollateralValue) / 100).toFixed(2);
+  const computeProgressBar = (
+    totalDebt: bigint,
+    totalCollateralValue: bigint
+  ) => {
+    return totalCollateralValue === 0n
+      ? "0.0"
+      : (Number((10000n * totalDebt) / totalCollateralValue) / 100).toFixed(2);
   };
 
   function truncateToTwoDecimals(num: any) {
@@ -479,7 +479,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               borderRadius: "10px",
               boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
 
-              borderRadius: "10px",
               border: "1px solid rgba(255, 255, 255, 0.3)",
 
               p: 4,
