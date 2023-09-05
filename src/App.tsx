@@ -87,7 +87,8 @@ function App() {
           "--w3m-font-family": "Poppins, sans-serif",
           "--w3m-container-border-radius": "10px",
           "--w3m-text-medium-regular-size": "10px",
-          "--w3m-accent-color": "transparent",
+          // "--w3m-accent-color": "transparent",
+          "--w3m-accent-color": "rgba(0,0,0,0.2)",
         }}
         // mobileWallets={[
         //   {

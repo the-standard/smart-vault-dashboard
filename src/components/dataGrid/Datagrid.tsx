@@ -30,6 +30,8 @@ import { arbitrumGoerli } from "wagmi/chains";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 
+import nftmask from "../../assets/nftmask.svg";
+
 interface DataGridComponentProps {
   vaults: any[];
 }
@@ -352,7 +354,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) ? (
                         <div
                           style={{
-                            borderRadius: "5px",
+                            // borderRadius: "5px",
                             overflow: "hidden",
                             objectFit: "contain",
                             // border: "1px solid red",
@@ -360,7 +362,16 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
+                            maskImage: `url(${nftmask})`,
+                            maskRepeat: "no-repeat",
+                            maskSize: "contain",
+                            maskPosition: "center",
+                            WebkitMaskImage: `url(${nftmask})`,
+                            WebkitMaskRepeat: "no-repeat",
+                            WebkitMaskSize: "contain",
+                            WebkitMaskPosition: "center",
                           }}
+                          className="hello"
                           onClick={() => {
                             handleOpen();
                             handleNFTClick({
