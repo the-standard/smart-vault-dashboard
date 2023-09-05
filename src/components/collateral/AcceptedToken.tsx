@@ -77,7 +77,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const getChartData = async () => {
     try {
       const response = await axios.get(
-        "https://smart-vault-api.thestandard.io/"
+        "https://smart-vault-api.thestandard.io/asset_prices"
       );
       const chainData =
         chain?.id === arbitrumGoerli.id
