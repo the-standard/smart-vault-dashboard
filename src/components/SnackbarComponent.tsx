@@ -65,6 +65,14 @@ const SnackbarComponent = () => {
           >
             <Box>There was an error!</Box>
           </Alert>
+        ) : snackBar === 2 ? (
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            <Box>Please change to Arbitrum network!</Box>
+          </Alert>
         ) : (
           <Box></Box>
         )}
