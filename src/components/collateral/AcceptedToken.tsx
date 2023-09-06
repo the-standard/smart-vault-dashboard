@@ -94,9 +94,10 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   }, []);
 
   const renderLineChartForArbitrum = () => {
-    if (chartData) {
+    if (chartData && chartData[symbol] && chartData[symbol].prices) {
       return <LineChart data={chartData[symbol].prices} symbol={symbol} />;
     }
+    return <p>Asset price data currently unavailable</p>
   };
 
   const handleClick = (element: number) => {
