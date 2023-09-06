@@ -25,14 +25,17 @@ interface DepositProps {
   tokenAddress: string;
   decimals: number;
   token: any;
+  walletBalance: any;
 }
 
 const Deposit: React.FC<DepositProps> = ({
   symbol,
   tokenAddress,
   decimals,
+  walletBalance,
 }) => {
   //modal states
+  const [tokenBalance, setTokenBalance] = useState(0);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -56,6 +59,14 @@ const Deposit: React.FC<DepositProps> = ({
       getGreyBarUserInput(Number(e.target.value));
     }
   };
+
+  useEffect(() => {
+    if (symbol === "ETH") {
+      setTokenBalance(0);
+    } else {
+      setTokenBalance(walletBalance);
+    }
+  }, []);
 
   //clipboard logic
   const textRef = useRef<HTMLSpanElement>(null);
@@ -94,6 +105,24 @@ const Deposit: React.FC<DepositProps> = ({
       write();
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const depositMaxBalance = useContractWrite({
+    address: tokenAddress as any,
+    abi: erc20Abi,
+    functionName: "transfer",
+    args: [vaultAddress, tokenBalance.toString() as any],
+  });
+
+  const handleDepositMaxBalance = async () => {
+    if (symbol !== "ETH" && symbol !== "AGOR") {
+      try {
+        const { write } = depositMaxBalance;
+        write();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -214,7 +243,6 @@ const Deposit: React.FC<DepositProps> = ({
       setTruncatedAddress(vaultAddress);
     }
   }, [width, vaultAddress]);
-
   return (
     <Box>
       <Box
@@ -300,7 +328,7 @@ const Deposit: React.FC<DepositProps> = ({
               height: "1.3rem",
               "&:after": {
                 backgroundSize: "300% 100%",
-              }
+              },
             }}
             clickFunction={depositViaMetamask}
           >
@@ -309,8 +337,7 @@ const Deposit: React.FC<DepositProps> = ({
               style={{ width: "2rem", height: "auto" }}
               src={MetamaskIcon}
               alt="metamaskicon"
-            />
-            {" "}
+            />{" "}
           </Button>
           {/* <Box
             sx={{
@@ -335,6 +362,25 @@ const Deposit: React.FC<DepositProps> = ({
           </Box> */}
         </Box>
       </Box>
+      <Button
+        sx={{
+          padding: "5px 0",
+          height: "2rem",
+          minWidth: `33%`,
+        }}
+        clickFunction={handleDepositMaxBalance}
+      >
+        {" "}
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "0.8rem",
+          }}
+        >
+          {" "}
+          Deposit Max
+        </Typography>
+      </Button>{" "}
       <Modal
         open={open}
         onClose={() => {
