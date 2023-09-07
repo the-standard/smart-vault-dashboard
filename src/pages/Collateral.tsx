@@ -7,25 +7,27 @@ import {
   useVaultManagerAbiStore,
   usePositionStore,
 } from "../store/Store";
+
 import { Box, Modal, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
+import { Link, useParams } from "react-router-dom";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { getNetwork } from "@wagmi/core";
+import { useAccount, useBlockNumber, useContractRead } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
+import { useNavigate } from "react-router-dom";
+
+import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
+import vaultLiauidatedImg from "../assets/vault-liquidated.png";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
 import "../styles/buttonStyle.css";
 import ChartComponent from "../components/chart/index.tsx";
-import { Link, useParams } from "react-router-dom";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { getNetwork } from "@wagmi/core";
-import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
-import { useAccount, useBlockNumber, useContractRead } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
-import vaultLiauidatedImg from "../assets/vault-liquidated.png";
-import { useNavigate } from "react-router-dom";
-
 import Card from "../components/Card";
 import Button from "../components/Button";
+import HistoryTable from "../components/vaultHistory/HistoryTable";
 
 type RouteParams = {
   vaultId: string;
@@ -293,6 +295,13 @@ const Collateral = () => {
           >
             Borrow/Repay
           </Button>
+          <Button
+            sx={{marginLeft: "10px"}}
+            isActive={activeElement === 3}
+            clickFunction={() => handleClick(3)}
+          >
+            History
+          </Button>
         </Box>
         {/* right side of the upper column */}
         <Box
@@ -302,100 +311,108 @@ const Collateral = () => {
           }}
         ></Box>
       </Box>
-      {/*  column 2, container */}
-      <Box
-        sx={{
-          height: "100%",
-          width: "100%",
-          display: { xs: "flex", lg: "grid" },
-          gridTemplateColumns:
-            " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
-          gap: "20px" /* Gap between the columns */,
-          gridAutoColumns: "1fr" /* Equal width for child components */,
-          // now flexbox
-          flexDirection: "column",
-        }}
-      >
-        {/* left side of the container */}
-        <Box>
-          {" "}
-          <Box
-            sx={{
-              width: "auto",
-            }}
-          >
-            {/* list available tokens here */}
-            {collateralOrDebt === 1 ? displayTokens() : displayDebt()}
-            {/* {displayTokens()}{" "} */}
-          </Box>
-        </Box>{" "}
-        {/* right side of the container */}
+      {collateralOrDebt === 3 ? (
+        <Card
+          sx={{
+            padding: "1rem",
+          }}
+        >      
+          <HistoryTable historyData={[]} />
+        </Card>
+      ) : (
         <Box
           sx={{
-            marginTop: "8px",
+            height: "100%",
+            width: "100%",
+            display: { xs: "flex", lg: "grid" },
+            gridTemplateColumns:
+              " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
+            gap: "20px" /* Gap between the columns */,
+            gridAutoColumns: "1fr" /* Equal width for child components */,
+            // now flexbox
+            flexDirection: "column",
           }}
         >
-          {/* full chart container */}
-          <Card
-            sx={{
-              alignItems: "center",
-              padding: "1.5rem",
-            }}
-          >
-            {vaultStore.status.liquidated ? (
-              <Box>
-                <img
-                  src={vaultLiauidatedImg}
-                  alt="vault-liquidated"
-                  style={{ width: "100%" }}
-                />
-              </Box>
-            ) : (
-              <ChartComponent />
-            )}
-          </Card>
+          {/* left side of the container */}
+          <Box>
+            {" "}
+            <Box
+              sx={{
+                width: "auto",
+              }}
+            >
+              {/* list available tokens here */}
+              {collateralOrDebt === 2 ? displayDebt() : displayTokens()}
+            </Box>
+          </Box>{" "}
+          {/* right side of the container */}
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
+              marginTop: "8px",
             }}
           >
-            {/* the new buttons will come here */}
-            {buttonDetails.map((item, index) => (
-              <Button
-                sx={{
-                  margin: "2px",
-                  padding: "5px 20px",
-                  width: "auto",
-                  height: "3rem",
-                  marginTop: "1rem",
-                  fontSize: {
-                    xs: "0.7rem",
-                    sm: "0.8rem",
-                    md: "0.88rem",
-                  },
-                }}
-                key={index}
-                clickFunction={() => {
-                  handleButtonActions(item.id);
-                }}
-              >
-                {item.title}
-              </Button>            
-            ))}
+            {/* full chart container */}
+            <Card
+              sx={{
+                alignItems: "center",
+                padding: "1.5rem",
+              }}
+            >
+              {vaultStore.status.liquidated ? (
+                <Box>
+                  <img
+                    src={vaultLiauidatedImg}
+                    alt="vault-liquidated"
+                    style={{ width: "100%" }}
+                  />
+                </Box>
+              ) : (
+                <ChartComponent />
+              )}
+            </Card>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              {/* the new buttons will come here */}
+              {buttonDetails.map((item, index) => (
+                <Button
+                  sx={{
+                    margin: "2px",
+                    padding: "5px 20px",
+                    width: "auto",
+                    height: "3rem",
+                    marginTop: "1rem",
+                    fontSize: {
+                      xs: "0.7rem",
+                      sm: "0.8rem",
+                      md: "0.88rem",
+                    },
+                  }}
+                  key={index}
+                  clickFunction={() => {
+                    handleButtonActions(item.id);
+                  }}
+                >
+                  {item.title}
+                </Button>            
+              ))}
+            </Box>
+            {/* camelot content comes here */}
+            <Card
+              sx={{
+                alignItems: "center",
+                padding: "1.5rem",
+                marginTop: "1rem",
+              }}
+            >
+              <LiquidityPool />
+            </Card>
           </Box>
-          {/* camelot content comes here */}
-          <Card
-            sx={{
-              alignItems: "center",
-              padding: "1.5rem",
-              marginTop: "1rem",
-            }}
-          >
-            <LiquidityPool />
-          </Card>
         </Box>
-      </Box>
+      )}
       {/* Scan QR code modal */}
       <Modal
         open={open}

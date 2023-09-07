@@ -12,7 +12,7 @@ body {
   background-attachment: fixed;
 }
 
-table {
+table.data-grid {
   width: 80%;
   margin: 50px auto;
   border-collapse: separate;
@@ -30,12 +30,12 @@ table {
       rgba(0, 0, 0, 0.6); /* Outside shadow for bottom and right */
 }
 
-tr {
+table.data-grid tr {
   background-color: transparent; /* Fully transparent row background */
   border-bottom: 15px solid transparent; /* Space between rows */
 }
 
-tr:not(:last-child) {
+table.data-grid tr:not(:last-child) {
   background-image: linear-gradient(
     to right,
     transparent,
@@ -47,23 +47,23 @@ tr:not(:last-child) {
   background-size: 100% 1px;
   background-position: center bottom;
 }
-tr:not(:last-child) td,
-tr:not(:last-child) th {
+table.data-grid tr:not(:last-child) td,
+table.data-grid tr:not(:last-child) th {
   padding-bottom: 40px; /* Adjust this value as needed */
 }
 
-th,
-td {
+table.data-grid th,
+table.data-grid td {
   padding: 10px;
   text-align: center;
   padding-top: 0px; /* Adjust this value as needed */
 }
 
-th {
+table.data-grid th {
   font-weight: bold;
 }
 
-table img {
+table.data-grid  img {
   width: 80px;
   height: auto;
 }
@@ -88,14 +88,14 @@ table img {
 /* Tablet breakpoint: Hide Debt and Collateral columns */
 @media (max-width: 1024px) {
   /* Hide the Debt and Collateral headers */
-  th:nth-child(3),
-  th:nth-child(5) {
+  table.data-grid th:nth-child(3),
+  table.data-grid th:nth-child(5) {
     display: none;
   }
 
   /* Hide the Debt and Collateral data */
-  td:nth-child(3),
-  td:nth-child(5) {
+  table.data-grid td:nth-child(3),
+  table.data-grid td:nth-child(5) {
     display: none;
   }
 }
@@ -103,11 +103,11 @@ table img {
 /* Mobile breakpoint: Hide NFT column */
 @media (max-width: 767px) {
   /* Hide the NFT header */
-  th:nth-child(1) {
+  table.data-grid th:nth-child(1) {
     display: none;
   }
   /* Hide the NFT data */
-  td:nth-child(1) {
+  table.data-grid td:nth-child(1) {
     display: none;
   }
 }

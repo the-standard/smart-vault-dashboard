@@ -323,6 +323,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               overflow: "hidden",
               paddingLeft: "1rem",
             }}
+            className="data-grid"
           >
             <thead>
               <tr>
