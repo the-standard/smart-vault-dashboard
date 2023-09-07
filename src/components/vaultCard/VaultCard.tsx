@@ -12,7 +12,7 @@ import "../../styles/buttonStyle.css";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useContractEvent, useContractWrite } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
+import { arbitrumGoerli, arbitrum } from "wagmi/chains";
 
 import Card from "../Card";
 import Button from "../Button";
@@ -75,6 +75,11 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   // Define your function using async/await
   const handleMintVault = async () => {
+    if (chain?.id !== arbitrumGoerli.id && chain?.id !== arbitrum.id) {
+      getSnackBar(2);
+      return;
+    }
+
     const { write } = mintVault;
     try {
       // Execute the contract method by calling the 'write' function

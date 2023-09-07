@@ -41,7 +41,7 @@ import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
 import {
   // useCircularProgressStore,
-  useRenderAppCounterStore
+  useRenderAppCounterStore,
 } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";

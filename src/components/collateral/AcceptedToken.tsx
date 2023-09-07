@@ -77,7 +77,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const getChartData = async () => {
     try {
       const response = await axios.get(
-        "https://smart-vault-api.thestandard.io/"
+        "https://smart-vault-api.thestandard.io/asset_prices"
       );
       const chainData =
         chain?.id === arbitrumGoerli.id
@@ -94,8 +94,10 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   }, []);
 
   const renderLineChartForArbitrum = () => {
-    if (chartData) {
+    try {
       return <LineChart data={chartData[symbol].prices} symbol={symbol} />;
+    } catch(e) {
+      return <p>Asset price data currently unavailable</p>
     }
   };
 
