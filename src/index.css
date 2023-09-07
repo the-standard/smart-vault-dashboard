@@ -39,3 +39,7 @@ input[type="number"] {
 html {
   scroll-behavior: smooth !important;
 }
+
+.apexcharts-tooltip {
+  color: #000000;
+}
