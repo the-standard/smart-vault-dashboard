@@ -49,6 +49,7 @@ import Stats from "./pages/Stats.tsx";
 import Yield from "./pages/Yield.tsx";
 import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
+import VaultHistory from "./pages/VaultHistory.tsx";
 
 function App() {
   // const { circularProgress } = useCircularProgressStore();
@@ -73,6 +74,7 @@ function App() {
         <Routes key={renderAppCounter}>
           <Route path="/" element={<HomePage />} />
           <Route path="collateral/:vaultId" element={<Collateral />} />
+          <Route path="collateral/:vaultId/history" element={<VaultHistory />} />
           <Route path="stats" element={<Stats />} />
           <Route path="yield/*" element={<Yield />} />
           <Route path="dex/*" element={<Dex />} />

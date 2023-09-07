@@ -11,7 +11,8 @@ import {
 import { Box, Modal, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
-import { Link, useParams } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useParams, useLocation } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useBlockNumber, useContractRead } from "wagmi";
@@ -27,11 +28,15 @@ import "../styles/buttonStyle.css";
 import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
 import Button from "../components/Button";
-import HistoryTable from "../components/vaultHistory/HistoryTable";
 
 type RouteParams = {
   vaultId: string;
 };
+
+function useQuery() {
+  const { search } = useLocation();
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
 
 const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
@@ -60,6 +65,7 @@ const Collateral = () => {
 
   const { address } = useAccount();
   const { chain } = getNetwork();
+  const query = useQuery();
 
   useEffect(() => {
     getVaultID(vaultId);
@@ -87,8 +93,12 @@ const Collateral = () => {
   //scroll to the top of the page on page load
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
-  }, []);
 
+    if (query.get("view") && (query.get("view") === '2')) {
+      handleClick(2)
+    }
+  }, []);
+  
   const vaultManagerAddress =
     chain?.id === arbitrumGoerli.id
       ? arbitrumGoerliContractAddress
@@ -298,7 +308,7 @@ const Collateral = () => {
           <Button
             sx={{marginLeft: "10px"}}
             isActive={activeElement === 3}
-            clickFunction={() => handleClick(3)}
+            clickFunction={() => navigate('history')}
           >
             History
           </Button>
@@ -311,108 +321,98 @@ const Collateral = () => {
           }}
         ></Box>
       </Box>
-      {collateralOrDebt === 3 ? (
-        <Card
-          sx={{
-            padding: "1rem",
-          }}
-        >      
-          <HistoryTable historyData={[]} />
-        </Card>
-      ) : (
-        <Box
-          sx={{
-            height: "100%",
-            width: "100%",
-            display: { xs: "flex", lg: "grid" },
-            gridTemplateColumns:
-              " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
-            gap: "20px" /* Gap between the columns */,
-            gridAutoColumns: "1fr" /* Equal width for child components */,
-            // now flexbox
-            flexDirection: "column",
-          }}
-        >
-          {/* left side of the container */}
-          <Box>
-            {" "}
-            <Box
-              sx={{
-                width: "auto",
-              }}
-            >
-              {/* list available tokens here */}
-              {collateralOrDebt === 2 ? displayDebt() : displayTokens()}
-            </Box>
-          </Box>{" "}
-          {/* right side of the container */}
+      <Box
+        sx={{
+          height: "100%",
+          width: "100%",
+          display: { xs: "flex", lg: "grid" },
+          gridTemplateColumns:
+            " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
+          gap: "20px" /* Gap between the columns */,
+          gridAutoColumns: "1fr" /* Equal width for child components */,
+          // now flexbox
+          flexDirection: "column",
+        }}
+      >
+        {/* left side of the container */}
+        <Box>
+          {" "}
           <Box
             sx={{
-              marginTop: "8px",
+              width: "auto",
             }}
           >
-            {/* full chart container */}
-            <Card
-              sx={{
-                alignItems: "center",
-                padding: "1.5rem",
-              }}
-            >
-              {vaultStore.status.liquidated ? (
-                <Box>
-                  <img
-                    src={vaultLiauidatedImg}
-                    alt="vault-liquidated"
-                    style={{ width: "100%" }}
-                  />
-                </Box>
-              ) : (
-                <ChartComponent />
-              )}
-            </Card>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              {/* the new buttons will come here */}
-              {buttonDetails.map((item, index) => (
-                <Button
-                  sx={{
-                    margin: "2px",
-                    padding: "5px 20px",
-                    width: "auto",
-                    height: "3rem",
-                    marginTop: "1rem",
-                    fontSize: {
-                      xs: "0.7rem",
-                      sm: "0.8rem",
-                      md: "0.88rem",
-                    },
-                  }}
-                  key={index}
-                  clickFunction={() => {
-                    handleButtonActions(item.id);
-                  }}
-                >
-                  {item.title}
-                </Button>            
-              ))}
-            </Box>
-            {/* camelot content comes here */}
-            <Card
-              sx={{
-                alignItems: "center",
-                padding: "1.5rem",
-                marginTop: "1rem",
-              }}
-            >
-              <LiquidityPool />
-            </Card>
+            {/* list available tokens here */}
+            {collateralOrDebt === 2 ? displayDebt() : displayTokens()}
           </Box>
+        </Box>{" "}
+        {/* right side of the container */}
+        <Box
+          sx={{
+            marginTop: "8px",
+          }}
+        >
+          {/* full chart container */}
+          <Card
+            sx={{
+              alignItems: "center",
+              padding: "1.5rem",
+            }}
+          >
+            {vaultStore.status.liquidated ? (
+              <Box>
+                <img
+                  src={vaultLiauidatedImg}
+                  alt="vault-liquidated"
+                  style={{ width: "100%" }}
+                />
+              </Box>
+            ) : (
+              <ChartComponent />
+            )}
+          </Card>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            {/* the new buttons will come here */}
+            {buttonDetails.map((item, index) => (
+              <Button
+                sx={{
+                  margin: "2px",
+                  padding: "5px 20px",
+                  width: "auto",
+                  height: "3rem",
+                  marginTop: "1rem",
+                  fontSize: {
+                    xs: "0.7rem",
+                    sm: "0.8rem",
+                    md: "0.88rem",
+                  },
+                }}
+                key={index}
+                clickFunction={() => {
+                  handleButtonActions(item.id);
+                }}
+              >
+                {item.title}
+              </Button>            
+            ))}
+          </Box>
+          {/* camelot content comes here */}
+          <Card
+            sx={{
+              alignItems: "center",
+              padding: "1.5rem",
+              marginTop: "1rem",
+            }}
+          >
+            <LiquidityPool />
+          </Card>
         </Box>
-      )}
+      </Box>
       {/* Scan QR code modal */}
       <Modal
         open={open}
