@@ -61,7 +61,7 @@ const Deposit: React.FC<DepositProps> = ({
   };
 
   useEffect(() => {
-    if (symbol === "ETH") {
+    if (symbol === "ETH" || symbol === "AGOR") {
       setTokenBalance(0);
     } else {
       setTokenBalance(walletBalance);
@@ -362,25 +362,26 @@ const Deposit: React.FC<DepositProps> = ({
           </Box> */}
         </Box>
       </Box>
-      <Button
-        sx={{
-          padding: "5px 0",
-          height: "2rem",
-          minWidth: `33%`,
-        }}
-        clickFunction={handleDepositMaxBalance}
-      >
-        {" "}
-        <Typography
-          variant="body2"
+      {symbol !== "ETH" && symbol !== "AGOR" && (
+        <Button
           sx={{
-            fontSize: "0.8rem",
+            padding: "5px 0",
+            height: "2rem",
+            minWidth: `33%`,
           }}
+          clickFunction={handleDepositMaxBalance}
         >
-          {" "}
-          Deposit Max
-        </Typography>
-      </Button>{" "}
+          <Typography
+            variant="body2"
+            sx={{
+              fontSize: "0.8rem",
+            }}
+          >
+            Deposit Max
+          </Typography>
+        </Button>
+      )}
+
       <Modal
         open={open}
         onClose={() => {
