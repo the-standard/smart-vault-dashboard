@@ -16,9 +16,11 @@ import { parseEther, parseUnits } from "viem";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransaction, useBalance } from "wagmi";
+import { constants } from "ethers";
 
 import Button from "../../../components/Button";
+import { formatUnits } from "ethers/lib/utils";
 
 interface DepositProps {
   symbol: string;
@@ -46,6 +48,20 @@ const Deposit: React.FC<DepositProps> = ({
     useGreyProgressBarValuesStore();
   const { incrementRenderAppCounter } = useRenderAppCounterStore();
   const [txdata, setTxdata] = useState<any>(null);
+
+  const { address } = getAccount();
+
+  //get the balance of the current wallet address
+  const balanceReqData: any = {
+    address: address,
+    watch: true,
+  };
+  if (tokenAddress !== constants.AddressZero) {
+    balanceReqData.token = tokenAddress;
+  }
+  const { data: balanceData } = useBalance(balanceReqData);
+
+  const walletBalance = balanceData?.value;
 
   const inputRef: any = useRef<HTMLInputElement>(null);
 
@@ -95,6 +111,12 @@ const Deposit: React.FC<DepositProps> = ({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleMaxBalance = async () => {
+    const formatted = formatUnits((walletBalance || 0).toString(), decimals);
+    inputRef.current.value = formatted;
+    handleAmount({ target: { value: formatted } });
   };
 
   const depositEther = async () => {
@@ -214,7 +236,6 @@ const Deposit: React.FC<DepositProps> = ({
       setTruncatedAddress(vaultAddress);
     }
   }, [width, vaultAddress]);
-
   return (
     <Box>
       <Box
@@ -300,7 +321,7 @@ const Deposit: React.FC<DepositProps> = ({
               height: "1.3rem",
               "&:after": {
                 backgroundSize: "300% 100%",
-              }
+              },
             }}
             clickFunction={depositViaMetamask}
           >
@@ -309,8 +330,7 @@ const Deposit: React.FC<DepositProps> = ({
               style={{ width: "2rem", height: "auto" }}
               src={MetamaskIcon}
               alt="metamaskicon"
-            />
-            {" "}
+            />{" "}
           </Button>
           {/* <Box
             sx={{
@@ -335,6 +355,26 @@ const Deposit: React.FC<DepositProps> = ({
           </Box> */}
         </Box>
       </Box>
+      {symbol !== "ETH" && symbol !== "AGOR" && (
+        <Button
+          sx={{
+            padding: "5px 0",
+            height: "2rem",
+            minWidth: `33%`,
+          }}
+          clickFunction={handleMaxBalance}
+        >
+          <Typography
+            variant="body2"
+            sx={{
+              fontSize: "0.8rem",
+            }}
+          >
+            Max
+          </Typography>
+        </Button>
+      )}
+
       <Modal
         open={open}
         onClose={() => {
