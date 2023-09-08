@@ -1,10 +1,8 @@
 import { Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Deposit from "./actions/Deposit";
 import Withdraw from "./actions/Withdraw";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { getAccount } from "wagmi/actions";
-import { useBalance } from "wagmi";
 
 interface ActionsProps {
   activeElement: number;
@@ -23,21 +21,6 @@ const Actions: React.FC<ActionsProps> = ({
   token,
 }) => {
   let content: JSX.Element;
-
-  const account = getAccount();
-
-  const [walletBalance, setWalletBalance] = useState<any>(0);
-
-  //get the balance of the current wallet address
-  const { data: balanceData } = useBalance({
-    address: account?.address,
-    token: tokenAddress as any,
-  });
-
-  useEffect(() => {
-    setWalletBalance(balanceData?.value);
-    console.log(balanceData);
-  }, [balanceData]);
 
   const createTwitterShareUrl = () => {
     const tweetText =
@@ -62,7 +45,6 @@ const Actions: React.FC<ActionsProps> = ({
             tokenAddress={tokenAddress}
             decimals={decimals}
             token={token}
-            walletBalance={walletBalance}
           />{" "}
         </Box>
       );
