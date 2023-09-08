@@ -388,7 +388,7 @@ const Debt = () => {
               <Typography
                 variant="body1"
               >
-                EUROs outstanding: €{formatEther(debtValue.toString())}
+                EUROs outstanding: {formatEther(debtValue.toString())}
               </Typography>
               <Typography variant="body1">
                 <span></span>

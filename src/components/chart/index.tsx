@@ -84,10 +84,10 @@ const Index = () => {
     },
     {
       title: "Collateral Value",
-      value: Number(
+      value: '€' + Number(
         formatEther(chosenVault.status.totalCollateralValue)
       ).toFixed(2),
-      currency: "EUROs",
+      currency: "",
     },
     {
       title: "Borrow up to:",
@@ -104,8 +104,8 @@ const Index = () => {
   if (Number(chosenVault.status.minted) > 0)
     chartValues.push({
       title: "Minimum Collateral Value Required",
-      value: Number(formatEther(liquidationTrigger)).toFixed(2),
-      currency: "EUROs",
+      value: "€" + Number(formatEther(liquidationTrigger)).toFixed(2),
+      currency: "",
     });
 
   const computeGreyBar = (totalDebt: bigint, totalCollateralValue: bigint) => {

@@ -328,8 +328,18 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               <tr>
                 <th>NFT</th>
                 <th>Vault ID</th>
-                <th>Collateral</th>
-                <th>Debt</th>
+                <th>
+                  Collateral
+                  <span style={{fontWeight: 'normal'}}>
+                    &nbsp;(€)
+                  </span>
+                </th>
+                <th>
+                  Debt
+                  <span style={{fontWeight: 'normal'}}>
+                    &nbsp;(EUROs)
+                  </span>
+                </th>
                 <th>Ratio</th>
                 <th>Actions</th>
               </tr>
