@@ -16,26 +16,25 @@ import { parseEther, parseUnits } from "viem";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransaction, useBalance } from "wagmi";
+import { constants } from "ethers";
 
 import Button from "../../../components/Button";
+import { formatUnits } from "ethers/lib/utils";
 
 interface DepositProps {
   symbol: string;
   tokenAddress: string;
   decimals: number;
   token: any;
-  walletBalance: any;
 }
 
 const Deposit: React.FC<DepositProps> = ({
   symbol,
   tokenAddress,
   decimals,
-  walletBalance,
 }) => {
   //modal states
-  const [tokenBalance, setTokenBalance] = useState(0);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -50,6 +49,20 @@ const Deposit: React.FC<DepositProps> = ({
   const { incrementRenderAppCounter } = useRenderAppCounterStore();
   const [txdata, setTxdata] = useState<any>(null);
 
+  const { address } = getAccount();
+
+  //get the balance of the current wallet address
+  const balanceReqData: any = {
+    address: address,
+    watch: true,
+  };
+  if (tokenAddress !== constants.AddressZero) {
+    balanceReqData.token = tokenAddress;
+  }
+  const { data: balanceData } = useBalance(balanceReqData);
+
+  const walletBalance = balanceData?.value;
+
   const inputRef: any = useRef<HTMLInputElement>(null);
 
   const handleAmount = (e: any) => {
@@ -59,14 +72,6 @@ const Deposit: React.FC<DepositProps> = ({
       getGreyBarUserInput(Number(e.target.value));
     }
   };
-
-  useEffect(() => {
-    if (symbol === "ETH" || symbol === "AGOR") {
-      setTokenBalance(0);
-    } else {
-      setTokenBalance(walletBalance);
-    }
-  }, []);
 
   //clipboard logic
   const textRef = useRef<HTMLSpanElement>(null);
@@ -108,22 +113,10 @@ const Deposit: React.FC<DepositProps> = ({
     }
   };
 
-  const depositMaxBalance = useContractWrite({
-    address: tokenAddress as any,
-    abi: erc20Abi,
-    functionName: "transfer",
-    args: [vaultAddress, tokenBalance.toString() as any],
-  });
-
-  const handleDepositMaxBalance = async () => {
-    if (symbol !== "ETH" && symbol !== "AGOR") {
-      try {
-        const { write } = depositMaxBalance;
-        write();
-      } catch (error) {
-        console.log(error);
-      }
-    }
+  const handleMaxBalance = async () => {
+    const formatted = formatUnits((walletBalance || 0).toString(), decimals);
+    inputRef.current.value = formatted;
+    handleAmount({ target: { value: formatted } });
   };
 
   const depositEther = async () => {
@@ -369,7 +362,7 @@ const Deposit: React.FC<DepositProps> = ({
             height: "2rem",
             minWidth: `33%`,
           }}
-          clickFunction={handleDepositMaxBalance}
+          clickFunction={handleMaxBalance}
         >
           <Typography
             variant="body2"
@@ -377,7 +370,7 @@ const Deposit: React.FC<DepositProps> = ({
               fontSize: "0.8rem",
             }}
           >
-            Deposit Max
+            Max
           </Typography>
         </Button>
       )}
