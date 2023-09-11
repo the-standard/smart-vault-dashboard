@@ -69,3 +69,10 @@ jobs:
           gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials cluster-1 --zone $CLOUDSDK_COMPUTE_ZONE --project $PROJECT_NAME
           kubectl set image deployment/$DEPLOYMENT-deployment-${GITHUB_REF##*/} $DEPLOYMENT-${GITHUB_REF##*/}=${IMAGE_TAG} -n ${NAMESPACE}
+
+    - name: Cleanup
+      run: |-
+          for digest in $(gcloud container images list-tags gcr.io/$PROJECT_NAME/$DEPLOYMENT --format="get(digest)" --limit=100 --filter="tags:${GITHUB_REF##*/}.* AND NOT tags:${GITHUB_REF##*/}.${GITHUB_SHA}")
+            do
+              gcloud container images delete "gcr.io/$PROJECT_NAME/$DEPLOYMENT@$digest" --force-delete-tags --quiet
+            done
