@@ -78,6 +78,6 @@ jobs:
               if [ $dont_run != true ]
               then
                 gcloud container images delete "gcr.io/$PROJECT_NAME/$DEPLOYMENT@$digest" --force-delete-tags --quiet
-                dont_run=false
               fi
+              dont_run=false
             done
