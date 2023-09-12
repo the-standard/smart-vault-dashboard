@@ -84,7 +84,7 @@ const StepOne: React.FC<StepProps> = ({
   };
 
   const handleWenmoon = useCallback(() => {
-    const url = `https://wenmoon.market/asset/arbitrum/${vaultManagerAddress}/7?tab=listings`;
+    const url = `https://wenmoon.market/asset/arbitrum/${vaultManagerAddress}/${modalChildState}?tab=listings`;
 
     window.open(url, "_blank");
   }, [vaultManagerAddress]);
