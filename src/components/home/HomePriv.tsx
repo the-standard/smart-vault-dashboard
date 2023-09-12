@@ -87,21 +87,25 @@ const HomePriv = () => {
     <Box>
       <Grid
         sx={{
-          padding: "0 12%",
-          margin: "1.5rem 0",
+          margin: {
+            xs: "0% 4%",
+            sm: "3% 6%",
+            md: "3% 12%",
+          },      
         }}
-        container
-        spacing={2}
       >
         {address ? (
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr " },
+              gridTemplateColumns: {
+                xs: "1fr",
+                md: "1fr 1fr "
+              },
               width: "100%",
               gap: "2rem",
-              marginRight: "1rem",
-              marginTop: "1.5rem",
+              // marginRight: "1rem",
+              // marginTop: "1.5rem",
             }}
             ref={rectangleRef}
           >
@@ -124,7 +128,6 @@ const HomePriv = () => {
             variant="body1"
             sx={{
               textAlign: "left",
-    
               padding: "0 12%",
             }}
           >

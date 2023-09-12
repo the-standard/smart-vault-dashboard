@@ -149,7 +149,8 @@ const Navbar = () => {
       sx={{
         padding: {
           xs: "0 4%",
-          sm: "0 12%",
+          sm: "0 6%",
+          md: "0 12%",
         },
         height: {
           xs: "100px",
