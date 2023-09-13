@@ -215,6 +215,14 @@ const Navbar = () => {
                 xs: "40px",
                 md: "unset",
               },
+              marginTop: {
+                xs: "40px",
+                md: "60px",
+              },
+              marginBottom: {
+                xs: "40px",
+                md: "60px",
+              },
             }}
             alt="Standard.io Logo"
           />

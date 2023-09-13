@@ -104,8 +104,6 @@ const HomePriv = () => {
               },
               width: "100%",
               gap: "2rem",
-              // marginRight: "1rem",
-              // marginTop: "1.5rem",
             }}
             ref={rectangleRef}
           >
