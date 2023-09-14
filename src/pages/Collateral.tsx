@@ -244,7 +244,11 @@ const Collateral = () => {
     <Box
       sx={{
         color: "#8E9BAE",
-        margin: { xs: "0% 2%", sm: "3% 12%" },
+        margin: {
+          xs: "0% 4%",
+          sm: "3% 6%",
+          md: "3% 12%",
+        },
         minHeight: "100vh",
         height: "100%",
       }}
@@ -267,6 +271,7 @@ const Collateral = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
+            width: "100%"
           }}
         >
           <Button
@@ -299,6 +304,7 @@ const Collateral = () => {
           sx={{
             display: "flex",
             alignItems: "flex-start",
+            width: "100%",
           }}
         ></Box>
       </Box>
