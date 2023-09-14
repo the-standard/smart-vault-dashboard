@@ -1,6 +1,4 @@
 import { Box, Grid, Typography } from "@mui/material";
-import VaultCard from "../vaultCard/VaultCard.tsx";
-import Datagrid from "../dataGrid/Datagrid";
 
 import { useLayoutEffect, useRef } from "react";
 import seurologo from "../../assets/EUROs.svg";
@@ -14,6 +12,10 @@ import {
   usePositionStore,
 } from "../../store/Store.ts";
 import { arbitrumGoerli } from "wagmi/chains";
+
+import VaultCard from "../vaultCard/VaultCard.tsx";
+import Datagrid from "../dataGrid/Datagrid";
+import Card from "../Card";
 
 const items = [
   {
@@ -122,17 +124,21 @@ const HomePriv = () => {
       </Grid>
       {address ? (
         <>
-          <Typography
-            variant="body1"
-            sx={{
-              textAlign: "left",
-              padding: "0 12%",
-            }}
-          >
-            My Smart Vaults
-          </Typography>
           {myVaults && myVaults.length > 0 ? ( // Update this line
-            <Datagrid vaults={myVaults} />
+
+            <Card
+              sx={{
+                margin: {
+                  xs: "3% 4%",
+                  sm: "3% 6%",
+                  md: "3% 12%",
+                },      
+                padding: "1.5rem",
+                overflow: "scroll",
+              }}
+            >
+              <Datagrid vaults={myVaults} />
+            </Card>
           ) : (
             <Box></Box>
           )}
