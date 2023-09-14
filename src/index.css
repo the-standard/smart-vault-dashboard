@@ -51,4 +51,6 @@ div[id^="widget-app-expanded-container-"] {
 div[id^="widget-relative-container-"] {
   max-height: unset;
   height: 100%;
+  min-width: unset;
+  width: 100%;
 }
