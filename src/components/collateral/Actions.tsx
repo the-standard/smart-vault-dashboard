@@ -11,6 +11,8 @@ interface ActionsProps {
   tokenAddress: string;
   decimals: number;
   token: any;
+  collateralValue: any;
+  collateralSymbol: string;
 }
 
 const Actions: React.FC<ActionsProps> = ({
@@ -19,6 +21,8 @@ const Actions: React.FC<ActionsProps> = ({
   tokenAddress,
   decimals,
   token,
+  collateralValue,
+  collateralSymbol,
 }) => {
   let content: JSX.Element;
 
@@ -58,6 +62,8 @@ const Actions: React.FC<ActionsProps> = ({
             tokenAddress={tokenAddress}
             decimals={decimals}
             token={token}
+            collateralValue={collateralValue}
+            collateralSymbol={collateralSymbol}
           />{" "}
         </Box>
       );

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  useCollateralSymbolStore,
   useVaultAddressStore,
   useCircularProgressStore,
   useSnackBarStore,
@@ -12,16 +11,24 @@ import { Box } from "@mui/material";
 import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
 import { ethers } from "ethers";
 import { parseUnits } from "viem";
+import Button from "../../../components/Button";
+import MetamaskIcon from "../../../assets/metamasklogo.svg";
 
 interface WithdrawProps {
   symbol: string;
   tokenAddress: string;
   decimals: number;
   token: any;
+  collateralValue: any;
+  collateralSymbol: string;
 }
 
-const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
-  const { collateralSymbol } = useCollateralSymbolStore();
+const Withdraw: React.FC<WithdrawProps> = ({
+  symbol,
+  decimals,
+  collateralValue,
+  collateralSymbol,
+}) => {
   const [amount, setAmount] = useState<any>(0);
   const { address } = useAccount();
   const { vaultAddress } = useVaultAddressStore();
@@ -136,6 +143,11 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
     hash: txdata,
   });
 
+  const handleMaxBalance = async () => {
+    inputRef.current.value = collateralValue.toString();
+    handleAmount({ target: { value: collateralValue } });
+  };
+
   useEffect(() => {
     if (data) {
       incrementRenderAppCounter();
@@ -187,6 +199,20 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
             placeholder="Amount"
             autoFocus
           />
+          <Button
+            sx={{
+              height: "2rem",
+              padding: "5px 12px",
+              minWidth: `fit-content`,
+              marginLeft: "0.5rem",
+              "&:after": {
+                backgroundSize: "300% 100%",
+              },
+            }}
+            clickFunction={handleMaxBalance}
+          >
+            Max
+          </Button>
           <Box
             sx={{
               width: "50%",
@@ -212,66 +238,21 @@ const Withdraw: React.FC<WithdrawProps> = ({ symbol, decimals }) => {
           }
         }
       >
-        <Box
-          sx={{
-            margin: "10px",
-            padding: "5px",
-            width: "auto",
-            cursor: "pointer",
-            textAlign: "center",
-            borderRadius: "6.24932px",
-            marginLeft: "10px",
-            border: "2px solid rgba(255, 255, 255, 0.2)",
-            boxShadow:
-              "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-            fontFamily: '"Poppins", sans-serif',
-            color: "#ffffff",
-            fontSize: "1rem",
-            letterSpacing: "1px",
-            backdropFilter: "blur(8px)",
-            transition: "0.5s",
-            position: "relative",
-            "&:after": {
-              content: '""',
-              position: "absolute",
-              height: "100%",
-              width: "100%",
-              top: "0",
-              left: "0",
-              background:
-                "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-              backgroundSize: "200% 100%",
-              backgroundPosition: "165% 0",
-              transition: "0.7s",
-            },
-            "&:hover:after": {
-              backgroundPosition: "-20% 0",
-            },
-            "&:hover": {
-              boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-              transform: "translateY(-5px)",
-            },
-            "&:active": {
-              transform: "translateY(0)",
-              border: "2px solid rgba(152, 250, 250, 0.5)",
-              boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
-            },
-            "&.activeBtn": {
-              background:
-                "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-            },
-          }}
-          className={`glowingCard ${
-            symbol === "ETH" || symbol === "AGOR" ? "activeBtn" : ""
-          }`}
-          onClick={
+        <Button
+          clickFunction={
             symbol === "ETH" || symbol === "AGOR"
               ? handlewithdrawCollateralNative
               : handlewithdrawCollateral
           }
+          isDisabled={!amount}
         >
-          Withdraw
-        </Box>
+          Confirm
+          <img
+            style={{ marginLeft: "1rem", width: "2rem", height: "auto" }}
+            src={MetamaskIcon}
+            alt="metamaskicon"
+          />{" "}
+        </Button>
       </Box>
     </Box>
   );

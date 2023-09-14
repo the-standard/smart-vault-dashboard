@@ -96,8 +96,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const renderLineChartForArbitrum = () => {
     try {
       return <LineChart data={chartData[symbol].prices} symbol={symbol} />;
-    } catch(e) {
-      return <p>Asset price data currently unavailable</p>
+    } catch (e) {
+      return <p>Asset price data currently unavailable</p>;
     }
   };
 
@@ -265,6 +265,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         tokenAddress={token.addr}
         decimals={token.dec}
         token={token}
+        collateralValue={formatUnits(amount, token.dec)}
+        collateralSymbol={symbol}
       />
     </Card>
   );

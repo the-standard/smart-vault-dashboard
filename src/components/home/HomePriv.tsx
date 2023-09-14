@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 
 import { useLayoutEffect, useRef } from "react";
 import seurologo from "../../assets/EUROs.svg";
@@ -65,7 +65,7 @@ const HomePriv = () => {
     abi: vaultManagerAbi,
     functionName: "vaults",
     account: address,
-    watch: true
+    watch: true,
   });
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
@@ -93,7 +93,7 @@ const HomePriv = () => {
             xs: "0% 4%",
             sm: "3% 6%",
             md: "3% 12%",
-          },      
+          },
         }}
       >
         {address ? (
@@ -102,7 +102,7 @@ const HomePriv = () => {
               display: "grid",
               gridTemplateColumns: {
                 xs: "1fr",
-                md: "1fr 1fr "
+                md: "1fr 1fr ",
               },
               width: "100%",
               gap: "2rem",
@@ -120,19 +120,18 @@ const HomePriv = () => {
               />
             ))}
           </Box>
-        ) : (null)}
+        ) : null}
       </Grid>
       {address ? (
         <>
           {myVaults && myVaults.length > 0 ? ( // Update this line
-
             <Card
               sx={{
                 margin: {
                   xs: "3% 4%",
                   sm: "3% 6%",
                   md: "3% 12%",
-                },      
+                },
                 padding: "1.5rem",
                 overflow: "scroll",
               }}
@@ -143,7 +142,7 @@ const HomePriv = () => {
             <Box></Box>
           )}
         </>
-      ) : (null)}
+      ) : null}
     </Box>
   );
 };
