@@ -43,3 +43,12 @@ html {
 .apexcharts-tooltip {
   color: #000000;
 }
+
+div[id^="widget-app-expanded-container-"] {
+  height: unset;
+}
+
+div[id^="widget-relative-container-"] {
+  max-height: unset;
+  height: 100%;
+}
