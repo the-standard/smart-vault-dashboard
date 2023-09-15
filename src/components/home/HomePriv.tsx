@@ -1,6 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
-import VaultCard from "../vaultCard/VaultCard.tsx";
-import Datagrid from "../dataGrid/Datagrid";
+import { Box, Grid } from "@mui/material";
 
 import { useLayoutEffect, useRef } from "react";
 import seurologo from "../../assets/EUROs.svg";
@@ -14,6 +12,10 @@ import {
   usePositionStore,
 } from "../../store/Store.ts";
 import { arbitrumGoerli } from "wagmi/chains";
+
+import VaultCard from "../vaultCard/VaultCard.tsx";
+import Datagrid from "../dataGrid/Datagrid";
+import Card from "../Card";
 
 const items = [
   {
@@ -63,7 +65,7 @@ const HomePriv = () => {
     abi: vaultManagerAbi,
     functionName: "vaults",
     account: address,
-    watch: true
+    watch: true,
   });
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
@@ -87,21 +89,23 @@ const HomePriv = () => {
     <Box>
       <Grid
         sx={{
-          padding: "0 12%",
-          margin: "1.5rem 0",
+          margin: {
+            xs: "0% 4%",
+            sm: "3% 6%",
+            md: "3% 12%",
+          },
         }}
-        container
-        spacing={2}
       >
         {address ? (
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr " },
+              gridTemplateColumns: {
+                xs: "1fr",
+                md: "1fr 1fr ",
+              },
               width: "100%",
               gap: "2rem",
-              marginRight: "1rem",
-              marginTop: "1.5rem",
             }}
             ref={rectangleRef}
           >
@@ -116,27 +120,29 @@ const HomePriv = () => {
               />
             ))}
           </Box>
-        ) : (null)}
+        ) : null}
       </Grid>
       {address ? (
         <>
-          <Typography
-            variant="body1"
-            sx={{
-              textAlign: "left",
-    
-              padding: "0 12%",
-            }}
-          >
-            My Smart Vaults
-          </Typography>
           {myVaults && myVaults.length > 0 ? ( // Update this line
-            <Datagrid vaults={myVaults} />
+            <Card
+              sx={{
+                margin: {
+                  xs: "3% 4%",
+                  sm: "3% 6%",
+                  md: "3% 12%",
+                },
+                padding: "1.5rem",
+                overflow: "scroll",
+              }}
+            >
+              <Datagrid vaults={myVaults} />
+            </Card>
           ) : (
             <Box></Box>
           )}
         </>
-      ) : (null)}
+      ) : null}
     </Box>
   );
 };

@@ -9,7 +9,7 @@ const Dex = () => {
       sx={{
         margin: { xs: "3% 3%", sm: "3% 12%" },
         padding: "5%",
-        minHeight: "100vh",
+        minHeight: "300px",
         height: "100%",
       }}
     >

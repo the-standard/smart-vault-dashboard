@@ -72,7 +72,12 @@ jobs:
 
     - name: Cleanup
       run: |-
+          dont_run=true
           for digest in $(gcloud container images list-tags gcr.io/$PROJECT_NAME/$DEPLOYMENT --format="get(digest)" --limit=100 --filter="tags:${GITHUB_REF##*/}.* AND NOT tags:${GITHUB_REF##*/}.${GITHUB_SHA}")
             do
-              gcloud container images delete "gcr.io/$PROJECT_NAME/$DEPLOYMENT@$digest" --force-delete-tags --quiet
+              if [ $dont_run != true ]
+              then
+                gcloud container images delete "gcr.io/$PROJECT_NAME/$DEPLOYMENT@$digest" --force-delete-tags --quiet
+              fi
+              dont_run=false
             done
