@@ -89,11 +89,16 @@ const Actions: React.FC<ActionsProps> = ({
               marginTop: "1rem",
             }}
           >
-            {" "}
-            <Typography variant="body1">
+            <Typography
+              variant="body1"
+              style={{textAlign: 'center'}}
+            >
               Trading of locked collateral coming very soon.
-            </Typography>{" "}
-            <Typography variant="body1">
+            </Typography>
+            <Typography
+              variant="body1"
+              style={{textAlign: 'center'}}
+            >
               Until then tweet about TheStandard.io to spread the word.
             </Typography>
           </Box>
