@@ -176,20 +176,18 @@ const Withdraw: React.FC<WithdrawProps> = ({
             justifyContent: "flex-start",
             width: "100%",
             alignItems: "center",
-            marginLeft: "10px",
           }}
         >
           <input
             style={{
               background: " rgba(18, 18, 18, 0.5)",
-              border: "none",
+              border: "1px solid #8E9BAE",
               color: "white",
               fontSize: "1rem",
               fontWeight: "normal",
               fontFamily: "Poppins",
-              height: "2rem",
-              //   marginRight: "0.5rem",
-              width: "50%",
+              height: "2.5rem",
+              width: "100%",
               borderRadius: "10px",
               paddingLeft: "0.5rem",
             }}
@@ -213,16 +211,16 @@ const Withdraw: React.FC<WithdrawProps> = ({
           >
             Max
           </Button>
-          <Box
-            sx={{
-              width: "50%",
-              marginLeft: "3rem",
-              fontSize: "0.8rem",
-            }}
-          >
-            {collateralSymbol} to address "{shortenedAddress}"
-          </Box>
         </Box>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          margin: "1rem 0rem",
+          // fontSize: "0.8rem",
+        }}
+      >
+        {collateralSymbol} to address "{shortenedAddress}"
       </Box>
       <Box
         sx={

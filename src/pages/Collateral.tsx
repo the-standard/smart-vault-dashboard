@@ -133,6 +133,7 @@ const Collateral = () => {
                 fontSize: "1rem",
                 letterSpacing: "1px",
                 backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
                 cursor: "pointer",
                 borderRadius: "10px",
                 transition: "0.5s",

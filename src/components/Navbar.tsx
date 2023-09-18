@@ -127,6 +127,7 @@ const Navbar = () => {
       borderRadius: "10px",
       boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
       backdropFilter: "blur(13.9px)",
+      WebkitBackdropFilter: "blur(13.9px)",
       height: "100%",
     },
     bmMorphShape: {

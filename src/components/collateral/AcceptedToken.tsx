@@ -222,6 +222,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
           <Button
             sx={{
               margin: "2px",
+              marginLeft: "0px",
               padding: "5px",
               width: "33%",
               textAlign: "center",
@@ -247,6 +248,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
           <Button
             sx={{
               margin: "2px",
+              marginRight: "0px",
               padding: "5px",
               width: "33%",
               textAlign: "center",

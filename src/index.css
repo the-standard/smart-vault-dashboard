@@ -10,7 +10,12 @@
   background-position: center;
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  height: 100%;
   font-family: "Poppins", sans-serif;
   overflow-y: scroll;
   color: white;
