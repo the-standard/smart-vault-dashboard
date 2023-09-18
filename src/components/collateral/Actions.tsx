@@ -120,6 +120,7 @@ const Actions: React.FC<ActionsProps> = ({
               fontSize: "1rem",
               letterSpacing: "1px",
               backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
               transition: "0.5s",
               position: "relative",
               "&:after": {
