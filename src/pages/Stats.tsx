@@ -33,6 +33,7 @@ const Stats = () => {
         padding: "1%",
         minHeight: "100vh",
         height: "100%",
+        position: "relative",
       }}
       ref={rectangleRef}
     >

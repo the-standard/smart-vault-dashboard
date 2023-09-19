@@ -583,7 +583,7 @@ const Yield = () => {
               }}
               variant="h4"
             >
-              Step Four: Let&apos;s up the reward by 5% ✨
+              Step Four: Let&apos;s Up The Reward By 5% ✨
             </Typography>
           </Box>
         </Box>

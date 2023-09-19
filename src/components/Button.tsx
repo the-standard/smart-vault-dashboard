@@ -22,6 +22,7 @@ const StyledButton = styled(Box)({
   fontSize: "1rem",
   letterSpacing: "1px",
   backdropFilter: "blur(8px)",
+  WebkitBackdropFilter: "blur(8px)",
   cursor: "pointer",
   borderRadius: "10px",
   transition: "0.5s",
@@ -78,6 +79,7 @@ const lighterStyle = {
     rgba(255, 255, 255, 0.0) 64.62%
   )`,
   backdropFilter: "blur(0px)",
+  WebkitBackdropFilter: "blur(0px)",
 }
 
 const disabledStyle = {
