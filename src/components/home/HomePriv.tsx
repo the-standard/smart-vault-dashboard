@@ -1,6 +1,8 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
+import { ethers } from "ethers";
+
 import seurologo from "../../assets/EUROs.svg";
 import swonlogo from "../../assets/KRWs.svg";
 import sgbplogo from "../../assets/GBPs.svg";
@@ -16,6 +18,7 @@ import { arbitrumGoerli } from "wagmi/chains";
 import VaultCard from "../vaultCard/VaultCard.tsx";
 import Datagrid from "../dataGrid/Datagrid";
 import Card from "../Card";
+import Button from "../Button";
 
 const items = [
   {
@@ -49,6 +52,7 @@ const items = [
 ];
 
 const HomePriv = () => {
+  const [showHiddenVaults, setShowHiddenVaults] = useState(false);
   const { address } = useAccount();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
@@ -84,6 +88,13 @@ const HomePriv = () => {
 
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
+
+  const hiddenVaults = JSON.parse(localStorage.getItem("hiddenVaults") || '[]');
+  const myHiddenVaults = myVaults?.filter((vault: any) => hiddenVaults.includes(ethers.BigNumber.from(vault.tokenId).toString())) || [];
+
+  const myVisibleVaults = myVaults?.filter((vault: any) => !hiddenVaults.includes(ethers.BigNumber.from(vault.tokenId).toString())) || [];
+  
+  const hasHiddenVaults = myHiddenVaults && myHiddenVaults.length > 0;
 
   return (
     <Box>
@@ -125,19 +136,82 @@ const HomePriv = () => {
       {address ? (
         <>
           {myVaults && myVaults.length > 0 ? ( // Update this line
-            <Card
-              sx={{
-                margin: {
-                  xs: "3% 4%",
-                  sm: "3% 6%",
-                  md: "3% 12%",
-                },
-                padding: "1.5rem",
-                overflow: "scroll",
-              }}
-            >
-              <Datagrid vaults={myVaults} />
-            </Card>
+            <>
+              <Card
+                sx={{
+                  margin: {
+                    xs: "3% 4%",
+                    sm: "3% 6%",
+                    md: "3% 12%",
+                  },
+                  padding: "1.5rem",
+                  overflow: "scroll",
+                }}
+              >
+                <Datagrid vaults={myVisibleVaults || []} />
+              </Card>
+              {hasHiddenVaults ? (
+                <>
+                  {showHiddenVaults ? (
+                    <Card
+                      sx={{
+                        margin: {
+                          xs: "3% 4%",
+                          sm: "3% 6%",
+                          md: "3% 12%",
+                        },
+                        padding: "1.5rem",
+                        overflow: "scroll",
+                      }}
+                    >
+                      <Datagrid vaults={myHiddenVaults || []} />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "end",
+                        }}
+                      >
+                        <Button
+                          sx={{
+                            padding: "5px",
+                            textAlign: "center",
+                            marginTop: "1rem",
+                            width: "200px",
+                          }}
+                          clickFunction={() => setShowHiddenVaults(false)}
+                          lighter
+                        >
+                          Hide Hidden Vaults
+                        </Button>
+                      </Box>
+                    </Card>
+                  ) : (
+                    <Box
+                      sx={{
+                        margin: {
+                          xs: "3% 4%",
+                          sm: "3% 6%",
+                          md: "3% 12%",
+                        },
+                        display: "flex",
+                        justifyContent: "end",
+                      }}
+                    >
+                      <Button
+                        sx={{
+                          padding: "5px",
+                          textAlign: "center",
+                          width: "200px",
+                        }}
+                        clickFunction={() => setShowHiddenVaults(true)}
+                      >
+                        Show Hidden Vaults
+                      </Button>
+                    </Box>
+                  )}
+                </>
+              ) : (null)}
+            </>
           ) : (
             <Box></Box>
           )}
