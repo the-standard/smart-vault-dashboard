@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
