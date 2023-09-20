@@ -11,6 +11,8 @@ interface ActionsProps {
   tokenAddress: string;
   decimals: number;
   token: any;
+  collateralValue: any;
+  collateralSymbol: string;
 }
 
 const Actions: React.FC<ActionsProps> = ({
@@ -19,6 +21,8 @@ const Actions: React.FC<ActionsProps> = ({
   tokenAddress,
   decimals,
   token,
+  collateralValue,
+  collateralSymbol,
 }) => {
   let content: JSX.Element;
 
@@ -58,6 +62,8 @@ const Actions: React.FC<ActionsProps> = ({
             tokenAddress={tokenAddress}
             decimals={decimals}
             token={token}
+            collateralValue={collateralValue}
+            collateralSymbol={collateralSymbol}
           />{" "}
         </Box>
       );
@@ -83,11 +89,16 @@ const Actions: React.FC<ActionsProps> = ({
               marginTop: "1rem",
             }}
           >
-            {" "}
-            <Typography variant="body1">
+            <Typography
+              variant="body1"
+              style={{textAlign: 'center'}}
+            >
               Trading of locked collateral coming very soon.
-            </Typography>{" "}
-            <Typography variant="body1">
+            </Typography>
+            <Typography
+              variant="body1"
+              style={{textAlign: 'center'}}
+            >
               Until then tweet about TheStandard.io to spread the word.
             </Typography>
           </Box>
@@ -114,6 +125,7 @@ const Actions: React.FC<ActionsProps> = ({
               fontSize: "1rem",
               letterSpacing: "1px",
               backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
               transition: "0.5s",
               position: "relative",
               "&:after": {

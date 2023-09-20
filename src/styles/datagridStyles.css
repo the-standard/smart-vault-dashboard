@@ -12,22 +12,21 @@ body {
   background-attachment: fixed;
 }
 
-table.data-grid {
-  width: 80%;
-  margin: 50px auto;
+table {
+  width: 100%;
+  /* width: 80%; */
+  /* margin: 50px auto; */
   border-collapse: separate;
-  border-spacing: 0 15px; /* Space between rows */
+  border-spacing: 0 15px;
   color: white;
-  border-radius: 10px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://uploads-ssl.webflow.com/6422757f5e8ba638bea66086/64df8dab018df1e246202334_Home_blurred%20(1).png");
-  background-position: center;
+  /* border-radius: 10px; */
+  /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://uploads-ssl.webflow.com/6422757f5e8ba638bea66086/64df8dab018df1e246202334_Home_blurred%20(1).png"); */
+  /* background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
-  box-shadow: inset 1px 1px 1px 0px grey,
-    /* Inset shadow for top and left white line */ 5px 5px 25px 0px
-      rgba(0, 0, 0, 0.6); /* Outside shadow for bottom and right */
+  background-attachment: fixed; */
+  /* box-shadow: inset 1px 1px 1px 0px grey, 5px 5px 25px 0px rgba(0, 0, 0, 0.6); */
 }
 
 table.data-grid tr {

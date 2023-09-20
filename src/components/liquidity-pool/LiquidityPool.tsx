@@ -26,7 +26,7 @@ const LiquidityPool = () => {
             fontFamily: "Poppins",
           }}
         >
-          Easy yield farming
+          Easy Yield Farming
         </Typography>
         <Box
           sx={{

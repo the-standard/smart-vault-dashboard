@@ -16,9 +16,11 @@ import { parseEther, parseUnits } from "viem";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { useContractWrite } from "wagmi";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransaction, useBalance } from "wagmi";
+import { constants } from "ethers";
 
 import Button from "../../../components/Button";
+import { formatUnits } from "ethers/lib/utils";
 
 interface DepositProps {
   symbol: string;
@@ -46,6 +48,20 @@ const Deposit: React.FC<DepositProps> = ({
     useGreyProgressBarValuesStore();
   const { incrementRenderAppCounter } = useRenderAppCounterStore();
   const [txdata, setTxdata] = useState<any>(null);
+
+  const { address } = getAccount();
+
+  //get the balance of the current wallet address
+  const balanceReqData: any = {
+    address: address,
+    watch: true,
+  };
+  if (tokenAddress !== constants.AddressZero) {
+    balanceReqData.token = tokenAddress;
+  }
+  const { data: balanceData } = useBalance(balanceReqData);
+
+  const walletBalance = balanceData?.value;
 
   const inputRef: any = useRef<HTMLInputElement>(null);
 
@@ -95,6 +111,12 @@ const Deposit: React.FC<DepositProps> = ({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleMaxBalance = async () => {
+    const formatted = formatUnits((walletBalance || 0).toString(), decimals);
+    inputRef.current.value = formatted;
+    handleAmount({ target: { value: formatted } });
   };
 
   const depositEther = async () => {
@@ -214,7 +236,6 @@ const Deposit: React.FC<DepositProps> = ({
       setTruncatedAddress(vaultAddress);
     }
   }, [width, vaultAddress]);
-
   return (
     <Box>
       <Box
@@ -229,9 +250,9 @@ const Deposit: React.FC<DepositProps> = ({
       >
         <Button
           sx={{
-            padding: "5px 0",
+            padding: "5px 12px",
             height: "2rem",
-            minWidth: `33%`,
+            minWidth: `fit-content`,
           }}
           clickFunction={handleOpen}
         >
@@ -240,7 +261,7 @@ const Deposit: React.FC<DepositProps> = ({
             style={{
               height: "23px",
 
-              marginRight: "1rem",
+              marginRight: "0.5rem",
             }}
             src={QRicon}
             alt="qricon"
@@ -270,6 +291,7 @@ const Deposit: React.FC<DepositProps> = ({
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
+            width: "100%",
           }}
         >
           <input
@@ -281,7 +303,6 @@ const Deposit: React.FC<DepositProps> = ({
               fontWeight: "normal",
               fontFamily: "Poppins",
               height: "2.5rem",
-              margin: "0.5rem",
               width: "100%",
               borderRadius: "10px",
               paddingLeft: "0.5rem",
@@ -289,52 +310,55 @@ const Deposit: React.FC<DepositProps> = ({
             ref={inputRef}
             type="number"
             onChange={handleAmount}
-            placeholder="Enter amount"
+            placeholder="Amount"
             autoFocus
           />
-          <Button
-            sx={{
-              margin: "2px",
-              padding: "10px",
-              width: "2rem",
-              height: "1.3rem",
-              "&:after": {
-                backgroundSize: "300% 100%",
-              }
-            }}
-            clickFunction={depositViaMetamask}
-          >
-            {" "}
-            <img
-              style={{ width: "2rem", height: "auto" }}
-              src={MetamaskIcon}
-              alt="metamaskicon"
-            />
-            {" "}
-          </Button>
-          {/* <Box
-            sx={{
-              margin: "2px",
-              padding: "10px",
-              cursor: "pointer",
-              width: "2rem",
-              height: "1.3rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            className="myBtn"
-            onClick={depositViaMetamask}
-          >
-            {" "}
-            <img
-              style={{ width: "2rem", height: "auto" }}
-              src={MetamaskIcon}
-              alt="metamaskicon"
-            />{" "}
-          </Box> */}
+          {symbol !== "ETH" && symbol !== "AGOR" && (
+            <Button
+              sx={{
+                height: "2rem",
+                padding: "5px 12px",
+                minWidth: `fit-content`,
+                marginLeft: "0.5rem",
+                "&:after": {
+                  backgroundSize: "300% 100%",
+                }
+              }}
+              clickFunction={handleMaxBalance}
+            >
+              Max
+            </Button>
+          )}
         </Box>
       </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <Button
+          sx={{
+            marginTop: "1rem",
+            padding: "10px",
+            width: "100%",
+            height: "1.3rem",
+          }}
+          clickFunction={depositViaMetamask}
+          isDisabled={!amount}
+        >
+          Confirm
+          <img
+            style={{ marginLeft: "1rem", width: "2rem", height: "auto" }}
+            src={MetamaskIcon}
+            alt="metamaskicon"
+          />
+        </Button>
+      </Box>
+
       <Modal
         open={open}
         onClose={() => {

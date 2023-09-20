@@ -25,10 +25,15 @@ const Stats = () => {
   return (
     <Card
       sx={{
-        margin: { xs: "3% 3%", sm: "3% 12%" },
+        margin: {
+          xs: "0% 4%",
+          sm: "3% 6%",
+          md: "3% 12%",
+        },      
         padding: "1%",
         minHeight: "100vh",
         height: "100%",
+        position: "relative",
       }}
       ref={rectangleRef}
     >

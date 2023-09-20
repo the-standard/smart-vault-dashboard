@@ -10,7 +10,12 @@
   background-position: center;
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  height: 100%;
   font-family: "Poppins", sans-serif;
   overflow-y: scroll;
   color: white;
@@ -38,4 +43,19 @@ input[type="number"] {
 }
 html {
   scroll-behavior: smooth !important;
+}
+
+.apexcharts-tooltip {
+  color: #000000;
+}
+
+div[id^="widget-app-expanded-container-"] {
+  height: unset;
+}
+
+div[id^="widget-relative-container-"] {
+  max-height: unset;
+  height: 100%;
+  min-width: unset;
+  width: 100%;
 }

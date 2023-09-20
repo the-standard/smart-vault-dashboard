@@ -296,14 +296,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   });
 
   return (
-    <Box
-      sx={{
-        color: "#f1fbfa",
-        fontFamily: "Poppins",
-        fontWeight: 300,
-        fontSize: "1rem",
-      }}
-    >
+    <Box>
       {/* responsive table container */}
       <Box
         sx={
@@ -316,21 +309,30 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         {" "}
         <Box>
           <table
-            style={{
-              width: "76%",
-              margin: "40px auto",
-              alignItems: "center",
-              overflow: "hidden",
-              paddingLeft: "1rem",
-            }}
-            className="data-grid"
+            // style={{
+            //   width: "76%",
+            //   margin: "40px auto",
+            //   alignItems: "center",
+            //   overflow: "hidden",
+            //   paddingLeft: "1rem",
+            // }}
           >
             <thead>
               <tr>
                 <th>NFT</th>
                 <th>Vault ID</th>
-                <th>Collateral</th>
-                <th>Debt</th>
+                <th style={{lineBreak: 'anywhere'}}>
+                  Collateral
+                  <span style={{fontWeight: 'normal', lineBreak: 'normal'}}>
+                    &nbsp;(€)
+                  </span>
+                </th>
+                <th style={{lineBreak: 'anywhere'}}>
+                  Debt
+                  <span style={{fontWeight: 'normal', lineBreak: 'normal'}}>
+                    &nbsp;(EUROs)
+                  </span>
+                </th>
                 <th>Ratio</th>
                 <th>Actions</th>
               </tr>
@@ -371,6 +373,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                             WebkitMaskRepeat: "no-repeat",
                             WebkitMaskSize: "contain",
                             WebkitMaskPosition: "center",
+                            cursor: "pointer",
                           }}
                           className="hello"
                           onClick={() => {
@@ -479,15 +482,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 "linear-gradient(110.28deg, rgba(10, 10, 10, 0.8) 0.8%, rgba(0, 0, 0, 0.9) 101.11%)",
               borderRadius: "10px",
               boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-
               border: "1px solid rgba(255, 255, 255, 0.3)",
-
               p: 4,
               maxHeight: {
                 xs: "80vh",
                 sm: "80vh",
               },
               overflowY: "auto",
+              outline: "none",
             }}
             className="modal-content" // add class name to modal content box
           >
