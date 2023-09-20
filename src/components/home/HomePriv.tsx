@@ -89,11 +89,18 @@ const HomePriv = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
-  const hiddenVaults = JSON.parse(localStorage.getItem("hiddenVaults") || '[]');
-  const myHiddenVaults = myVaults?.filter((vault: any) => hiddenVaults.includes(ethers.BigNumber.from(vault.tokenId).toString())) || [];
+  const hiddenVaults = JSON.parse(localStorage.getItem("hiddenVaults") || "[]");
+  const myHiddenVaults =
+    myVaults?.filter((vault: any) =>
+      hiddenVaults.includes(ethers.BigNumber.from(vault.tokenId).toString())
+    ) || [];
 
-  const myVisibleVaults = myVaults?.filter((vault: any) => !hiddenVaults.includes(ethers.BigNumber.from(vault.tokenId).toString())) || [];
-  
+  const myVisibleVaults =
+    myVaults?.filter(
+      (vault: any) =>
+        !hiddenVaults.includes(ethers.BigNumber.from(vault.tokenId).toString())
+    ) || [];
+
   const hasHiddenVaults = myHiddenVaults && myHiddenVaults.length > 0;
 
   return (
@@ -144,7 +151,10 @@ const HomePriv = () => {
                     sm: "3% 6%",
                     md: "3% 12%",
                   },
-                  padding: "1.5rem",
+                  padding: {
+                    xs: "5px",
+                    sm: "1.5rem",
+                  },
                   overflow: "scroll",
                 }}
               >
@@ -210,7 +220,7 @@ const HomePriv = () => {
                     </Box>
                   )}
                 </>
-              ) : (null)}
+              ) : null}
             </>
           ) : (
             <Box></Box>
