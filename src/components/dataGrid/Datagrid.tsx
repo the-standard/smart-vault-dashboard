@@ -186,7 +186,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               cursor: "pointer",
               marginRight: "0.7rem",
               height: "2.4rem",
-              width: { xs: "5.2rem", md: "7rem" },
+              width: { xs: "3.2rem", md: "7rem" },
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -200,7 +200,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               sx={{
                 textAlign: "center",
                 width: "100%",
-                fontSize: { xs: "0.8rem", md: "1rem" },
+                fontSize: { xs: "0.7rem", md: "1rem" },
                 color: "#f1fbfa",
                 fontFamily: "Poppins",
                 fontWeight: 300,
@@ -214,12 +214,15 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           sx={{
             cursor: "pointer",
             height: "2.4rem",
-            width: { xs: "5.2rem", md: "7rem" },
+            width: { xs: "3.2rem", md: "7rem" },
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             padding: 0,
-            marginRight: "1rem",
+            marginRight: {
+              xs: 0,
+              md: "1rem",
+            },
             backgroundColor: "rgba(0, 0, 0, 0.2)",
           }}
           className="myBtn"
@@ -233,7 +236,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             sx={{
               textAlign: "center",
               width: "100%",
-              fontSize: { xs: "0.8rem", md: "1rem" },
+              fontSize: { xs: "0.7rem", md: "1rem" },
               color: "#f1fbfa",
               fontFamily: "Poppins",
               fontWeight: 300,
@@ -309,27 +312,27 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
         {" "}
         <Box>
           <table
-            // style={{
-            //   width: "76%",
-            //   margin: "40px auto",
-            //   alignItems: "center",
-            //   overflow: "hidden",
-            //   paddingLeft: "1rem",
-            // }}
+          // style={{
+          //   width: "76%",
+          //   margin: "40px auto",
+          //   alignItems: "center",
+          //   overflow: "hidden",
+          //   paddingLeft: "1rem",
+          // }}
           >
             <thead>
               <tr>
                 <th>NFT</th>
                 <th>Vault ID</th>
-                <th style={{lineBreak: 'anywhere'}}>
+                <th style={{ lineBreak: "anywhere" }}>
                   Collateral
-                  <span style={{fontWeight: 'normal', lineBreak: 'normal'}}>
+                  <span style={{ fontWeight: "normal", lineBreak: "normal" }}>
                     &nbsp;(€)
                   </span>
                 </th>
-                <th style={{lineBreak: 'anywhere'}}>
+                <th style={{ lineBreak: "anywhere" }}>
                   Debt
-                  <span style={{fontWeight: 'normal', lineBreak: 'normal'}}>
+                  <span style={{ fontWeight: "normal", lineBreak: "normal" }}>
                     &nbsp;(EUROs)
                   </span>
                 </th>
@@ -439,7 +442,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             </tbody>
           </table>
         </Box>
-        {/* big screen table ends */}
+        {/* table ends */}
         <Box
           sx={{
             display: "flex",
