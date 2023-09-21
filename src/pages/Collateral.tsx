@@ -274,7 +274,6 @@ const Collateral = () => {
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
-          alignItems: "center",
           marginBottom: "1rem",
           marginTop: { xs: "1rem", sm: "0px" },
         }}
@@ -284,12 +283,12 @@ const Collateral = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
-            width: "100%"
+            flexWrap: "wrap",
+            gap: "1rem",
           }}
         >
           <Button
             sx={{
-              marginRight: "10px",
               "&:after": {
                 backgroundSize: "300% 100%",
               }
@@ -305,14 +304,12 @@ const Collateral = () => {
             Collateral
           </Button>
           <Button
-            sx={{marginLeft: "10px"}}
             isActive={activeElement === 2}
             clickFunction={() => handleClick(2)}
           >
             Borrow/Repay
           </Button>
           <Button
-            sx={{marginLeft: "10px"}}
             isActive={activeElement === 3}
             clickFunction={() => navigate('history')}
           >
