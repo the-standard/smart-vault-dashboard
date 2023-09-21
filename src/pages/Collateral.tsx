@@ -321,7 +321,6 @@ const Collateral = () => {
           sx={{
             display: "flex",
             alignItems: "flex-start",
-            width: "100%",
           }}
         ></Box>
       </Box>
