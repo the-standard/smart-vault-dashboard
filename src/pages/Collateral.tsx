@@ -7,29 +7,36 @@ import {
   useVaultManagerAbiStore,
   usePositionStore,
 } from "../store/Store";
+
 import { Box, Modal, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
+import { useMemo } from "react";
+import { Link, useParams, useLocation } from "react-router-dom";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { getNetwork } from "@wagmi/core";
+import { useAccount, useBlockNumber, useContractRead } from "wagmi";
+import { arbitrumGoerli } from "wagmi/chains";
+import { useNavigate } from "react-router-dom";
+
+import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
+import vaultLiauidatedImg from "../assets/vault-liquidated.png";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
 import "../styles/buttonStyle.css";
 import ChartComponent from "../components/chart/index.tsx";
-import { Link, useParams } from "react-router-dom";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { getNetwork } from "@wagmi/core";
-import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
-import { useAccount, useBlockNumber, useContractRead } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
-import vaultLiauidatedImg from "../assets/vault-liquidated.png";
-import { useNavigate } from "react-router-dom";
-
 import Card from "../components/Card";
 import Button from "../components/Button";
 
 type RouteParams = {
   vaultId: string;
 };
+
+function useQuery() {
+  const { search } = useLocation();
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
 
 const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
@@ -63,6 +70,7 @@ const Collateral = () => {
 
   const { address } = useAccount();
   const { chain } = getNetwork();
+  const query = useQuery();
 
   useEffect(() => {
     getVaultID(vaultId);
@@ -107,8 +115,12 @@ const Collateral = () => {
   //scroll to the top of the page on page load
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
-  }, []);
 
+    if (query.get("view") && (query.get("view") === '2')) {
+      handleClick(2)
+    }
+  }, []);
+  
   const vaultManagerAddress =
     chain?.id === arbitrumGoerli.id
       ? arbitrumGoerliContractAddress
@@ -320,7 +332,6 @@ const Collateral = () => {
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
-          alignItems: "center",
           marginBottom: "1rem",
           marginTop: { xs: "1rem", sm: "0px" },
         }}
@@ -330,12 +341,12 @@ const Collateral = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
-            width: "100%"
+            flexWrap: "wrap",
+            gap: "1rem",
           }}
         >
           <Button
             sx={{
-              marginRight: "10px",
               "&:after": {
                 backgroundSize: "300% 100%",
               }
@@ -351,11 +362,16 @@ const Collateral = () => {
             Collateral
           </Button>
           <Button
-            sx={{marginLeft: "10px"}}
             isActive={activeElement === 2}
             clickFunction={() => handleClick(2)}
           >
             Borrow/Repay
+          </Button>
+          <Button
+            isActive={activeElement === 3}
+            clickFunction={() => navigate('history')}
+          >
+            History
           </Button>
         </Box>
         {/* right side of the upper column */}
@@ -367,7 +383,6 @@ const Collateral = () => {
           }}
         ></Box>
       </Box>
-      {/*  column 2, container */}
       <Box
         sx={{
           height: "100%",
@@ -390,8 +405,7 @@ const Collateral = () => {
             }}
           >
             {/* list available tokens here */}
-            {collateralOrDebt === 1 ? displayTokens() : displayDebt()}
-            {/* {displayTokens()}{" "} */}
+            {collateralOrDebt === 2 ? displayDebt() : displayTokens()}
           </Box>
         </Box>{" "}
         {/* right side of the container */}

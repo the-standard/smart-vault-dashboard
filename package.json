@@ -28,6 +28,7 @@
     "ethers": "^5.7.2",
     "html-react-parser": "^4.2.1",
     "lottie-react": "^2.4.0",
+    "moment": "^2.29.4",
     "opensea-js": "^6.0.5",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
