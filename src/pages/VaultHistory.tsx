@@ -197,7 +197,7 @@ const VaultHistory: React.FC<DataGridComponentProps> = () => {
       field: 'totalCollateralValue',
       sortable: false,
       disableColumnMenu: true,
-      renderHeader: (params: any) => (
+      renderHeader: () => (
         <span style={{
           fontWeight: 500,
           lineHeight: "1.3rem",
