@@ -322,26 +322,23 @@ const VaultHistory = () => {
     "& .Mui-disabled": {
       opacity: 0.4,
     },
-    '.MuiDataGrid-menuList': {
+    '& .MuiDataGrid-menuList': {
       backgroundColor: 'pink',
 
       '& .MuiMenuItem-root': {
         fontSize: 26,
       },
     },
-    ".css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon": {
+    "& .MuiSelect-select, & .MuiSelect-icon, & .MuiSvgIcon-root-MuiSelect-icon": {
       fill: "white",
     },
-    ".css-1mf6u8l-MuiSvgIcon-root-MuiSelect-icon": {
-      fill: "white",
-    },
-    ".css-16c50h-MuiInputBase-root-MuiTablePagination-select": {
+    "& .MuiTablePagination-select, & .MuiInputBase-root-MuiTablePagination-select": {
       color: "white",
     },
-    ".css-1w53k9d-MuiDataGrid-overlay": {
+    "& .MuiDataGrid-overlay": {
       background: "rgba(0, 0, 0, 0.38)",
     },
-    ".MuiDataGrid-virtualScroller": {
+    "& .MuiDataGrid-virtualScroller": {
       minHeight: "350px",
     },
   }));
