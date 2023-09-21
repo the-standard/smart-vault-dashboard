@@ -1,18 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getNetwork } from "@wagmi/core";
+import { useAccount, useContractRead } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
-import moment from 'moment';
 import { formatUnits, formatEther } from "viem";
+import moment from 'moment';
+import axios from "axios";
 
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 import {
   useVaultIdStore,
-  useCurrentPageStore,
+  useContractAddressStore,
+  useVaultManagerAbiStore,
 } from "../store/Store.ts";
 
 import Card from "../components/Card";
@@ -28,6 +32,43 @@ type RouteParams = {
 };
 
 const VaultHistory: React.FC<DataGridComponentProps> = () => {
+  const { chain } = getNetwork();
+  const { address } = useAccount();
+  const { arbitrumGoerliContractAddress, arbitrumContractAddress } = useContractAddressStore();
+  const { vaultManagerAbi } = useVaultManagerAbiStore();
+  const { vaultId } = useParams<RouteParams>();
+  const navigate = useNavigate();
+  const { getVaultID } = useVaultIdStore();
+
+  const [historyLoading, setHistoryLoading] = useState<any>(true);
+  const [historyData, setHistoryData] = useState<any>(undefined);
+  const [totalRows, setTotalRows] = useState<any>(undefined);
+
+  const vaultManagerAddress =
+    chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliContractAddress
+      : arbitrumContractAddress;
+  const { data: vaults } = useContractRead({
+    address: vaultManagerAddress,
+    abi: vaultManagerAbi,
+    functionName: "vaults",
+    account: address,
+    watch: false
+  });
+  const currentVault: any = vaults?.filter(
+    (vault: any) => vault.tokenId.toString() === vaultId
+  )[0];
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+
+  useEffect(() => {
+    getVaultID(vaultId);
+  }, []);
+
+  const { vaultAddress } = currentVault.status;
 
   const colData = [
     {
@@ -47,7 +88,7 @@ const VaultHistory: React.FC<DataGridComponentProps> = () => {
       },
     },
     {
-      minWidth: 100,
+      minWidth: 180,
       flex: 1,
       field: 'timestamp',
       headerName: 'Time',
@@ -177,100 +218,30 @@ const VaultHistory: React.FC<DataGridComponentProps> = () => {
     },
   ];
 
-  const rowData = [{
-  	"timestamp": 1692090304,
-  	"type": "liquidation",
-  	"txHash": "0x601a27d4b6742211f3a1ae27d399c515869c9b90fe5f1921b54ad2776351922c",
-  	"blockNo": "121582763",
-  	"asset": "n/a",
-  	"amount": "0",
-  	"assetDec": "0",
-  	"minted": "0",
-  	"totalCollateralValue": "0"
-  }, {
-  	"timestamp": 1692090303,
-  	"type": "pre-liquidation",
-  	"txHash": "0x",
-  	"blockNo": "121582762",
-  	"asset": "n/a",
-  	"amount": "0",
-  	"assetDec": "0",
-  	"minted": "15316000000000000000",
-  	"totalCollateralValue": "16845516275588173391"
-  }, {
-  	"timestamp": 1692047284,
-  	"type": "borrow",
-  	"txHash": "0xd6199b8b86c5c0383ca3e7c070be06f854393282dc2504bd9a2c016dcdfa075e",
-  	"blockNo": "121427204",
-  	"asset": "EUROs",
-  	"amount": "900000000000000000",
-  	"assetDec": "18",
-  	"minted": "15316000000000000000",
-  	"totalCollateralValue": "16900929217861727489"
-  }, {
-  	"timestamp": 1692047258,
-  	"type": "borrow",
-  	"txHash": "0xcb9392c141d71917974c3201ce01394c11a4169e8850f1e1086a475e0eb88baf",
-  	"blockNo": "121427135",
-  	"asset": "EUROs",
-  	"amount": "7000000000000000000",
-  	"assetDec": "18",
-  	"minted": "14411500000000000000",
-  	"totalCollateralValue": "16900929217861727489"
-  }, {
-  	"timestamp": 1692043318,
-  	"type": "repay",
-  	"txHash": "0xd96962d07132e1306b09ed70211279a0a19bdd2b0a73887ffcdc62d35c01fda9",
-  	"blockNo": "121413291",
-  	"asset": "EUROs",
-  	"amount": "8000000000000000000",
-  	"assetDec": "18",
-  	"minted": "7376500000000000000",
-  	"totalCollateralValue": "16930459856375075664"
-  }, {
-  	"timestamp": 1691680546,
-  	"type": "repay",
-  	"txHash": "0x327f3889b4c16c8a4d553fa6ddd824ead4a90f9c11e9794df77a86cdd9a68acd",
-  	"blockNo": "120070658",
-  	"asset": "EUROs",
-  	"amount": "5025000000000000000",
-  	"assetDec": "18",
-  	"minted": "0",
-  	"totalCollateralValue": "16835649538231156691"
-  }, {
-  	"timestamp": 1691680465,
-  	"type": "borrow",
-  	"txHash": "0x835632f5c81896babc60eb477f86a4d1c411dd1619020cee2f03ab62e84586c8",
-  	"blockNo": "120070340",
-  	"asset": "EUROs",
-  	"amount": "5000000000000000000",
-  	"assetDec": "18",
-  	"minted": "5025000000000000000",
-  	"totalCollateralValue": "16835649538231156691"
-  }, {
-  	"timestamp": 1691599715,
-  	"type": "creation",
-  	"txHash": "0xbc328aa53e35d6d194788fa6261fc831f586cce6b3cb8e03d2399ddebc66edf0",
-  	"blockNo": "119762960",
-  	"asset": "n/a",
-  	"amount": "0",
-  	"assetDec": "0",
-  	"minted": "0",
-  	"totalCollateralValue": "0"
-  }]
-
-// const History: React.FC<DataGridComponentProps> = ({colData, rowData}) => {
-  const { vaultId } = useParams<RouteParams>();
-  const navigate = useNavigate();
-  const { chain } = getNetwork();
-  const { getVaultID } = useVaultIdStore();
+  const getHistoryData = async () => {
+    try {
+      setHistoryLoading(true);
+      const limit = paginationModel.pageSize;
+      const page = paginationModel.page + 1;
+      const response = await axios.get(
+        `https://smart-vault-api.thestandard.io/transactions/${vaultAddress}?page=${page}&limit=${limit}`
+      );
+      const data = response.data.data;
+      const rows = response.data.pagination.totalRows;
+      setHistoryData(data);
+      setTotalRows(rows);
+      setHistoryLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    getVaultID(vaultId);
-  }, []);
+    getHistoryData();
+  }, [paginationModel]);
 
   const columns: GridColDef[] = colData;
-  const rows = rowData;
+  const rows = historyData || [];
 
   const handleEtherscanLink = (txRef: string) => {
     const arbiscanUrl =
@@ -328,6 +299,18 @@ const VaultHistory: React.FC<DataGridComponentProps> = () => {
       '& .MuiMenuItem-root': {
         fontSize: 26,
       },
+    },
+    ".css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon": {
+      fill: "white",
+    },
+    ".css-1mf6u8l-MuiSvgIcon-root-MuiSelect-icon": {
+      fill: "white",
+    },
+    ".css-16c50h-MuiInputBase-root-MuiTablePagination-select": {
+      color: "white",
+    },
+    ".css-1w53k9d-MuiDataGrid-overlay": {
+      background: "rgba(0, 0, 0, 0.38)",
     },
   }));
 
@@ -401,19 +384,16 @@ const VaultHistory: React.FC<DataGridComponentProps> = () => {
         }}
       >      
         <StyledDataGrid
-          getRowId={(row) => `${row?.txRef}${row?.timestamp}`}
-          rows={rows}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
+          rowCount={totalRows || 0}
+          rows={rows || []}
+          getRowId={(row) => `${row?.txRef}${row?.timestamp}`}
           disableRowSelectionOnClick
-          // columnVisibilityModel={{
-          //   updatedAt: false,
-          // }}
-          // pageSizeOptions={[5, 10]}
+          pageSizeOptions={[5, 10, 15, 20]}
+          paginationMode="server"
+          loading={historyLoading}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
         />
       </Card>
     </Box>
