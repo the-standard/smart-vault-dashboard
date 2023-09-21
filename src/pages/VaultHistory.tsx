@@ -229,7 +229,7 @@ const VaultHistory = () => {
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const txRef = params.row.txRef;
+        const txHash = params.row.txHash;
         return (
           <Button
             sx={{
@@ -238,7 +238,7 @@ const VaultHistory = () => {
               fontSize: "0.8rem",
             }}
             lighter
-            clickFunction={() => handleEtherscanLink(txRef)}
+            clickFunction={() => handleEtherscanLink(txHash)}
           >
             View
           </Button>
@@ -273,10 +273,10 @@ const VaultHistory = () => {
   const rows = historyData || [];
 
   const handleEtherscanLink = (txRef: string) => {
-    const arbiscanUrl =
-      chain?.id === arbitrumGoerli.id
-        ? `https://goerli.arbiscan.io/tx/${txRef}`
-        : `https://arbiscan.io/tx/${txRef}`;
+    const arbiscanUrl = `https://arbiscan.io/tx/${txRef}`;
+      // chain?.id === arbitrumGoerli.id
+      //   ? `https://goerli.arbiscan.io/tx/${txRef}`
+      //   : `https://arbiscan.io/tx/${txRef}`;
       
     window.open(arbiscanUrl, "_blank");
   };
