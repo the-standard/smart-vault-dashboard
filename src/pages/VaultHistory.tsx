@@ -23,11 +23,6 @@ import {
 import Card from "../components/Card";
 import Button from "../components/Button";
 
-interface DataGridComponentProps {
-  rowData: any[];
-  colData: any[];
-}
-
 type RouteParams = {
   vaultId: string;
 };
@@ -48,7 +43,7 @@ function NoDataOverlay() {
   );
 }
 
-const VaultHistory: React.FC<DataGridComponentProps> = () => {
+const VaultHistory = () => {
   const { chain } = getNetwork();
   const { address } = useAccount();
   const { arbitrumGoerliContractAddress, arbitrumContractAddress } = useContractAddressStore();
@@ -197,7 +192,7 @@ const VaultHistory: React.FC<DataGridComponentProps> = () => {
       field: 'totalCollateralValue',
       sortable: false,
       disableColumnMenu: true,
-      renderHeader: (params: any) => (
+      renderHeader: () => (
         <span style={{
           fontWeight: 500,
           lineHeight: "1.3rem",
