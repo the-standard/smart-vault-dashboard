@@ -52,6 +52,11 @@ const Collateral = () => {
   const [openWalletModal, setOpenWalletModal] = useState(false);
   const handleWalletOpen = () => setOpenWalletModal(true);
   const handleWalletClose = () => setOpenWalletModal(false);
+  const [openHideModal, setOpenHideModal] = useState(false);
+  const handleHideOpen = () => setOpenHideModal(true);
+  const handleHideClose = () => setOpenHideModal(false);
+  const [vaultHidden, setVaultHidden] = useState(false);
+
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
@@ -61,7 +66,24 @@ const Collateral = () => {
 
   useEffect(() => {
     getVaultID(vaultId);
+    checkIfHidden(vaultId);
   }, []);
+
+  const checkIfHidden = (useVaultId: any) => {
+    const hiddenVaults = localStorage.getItem("hiddenVaults");
+    let parsedVaults = [];
+    if (hiddenVaults) {
+      parsedVaults = JSON.parse(hiddenVaults)
+    }
+    if (parsedVaults) {
+      const isHidden = parsedVaults.find((item: string) => item == useVaultId);
+      if (isHidden) {
+        setVaultHidden(true);
+      } else {
+        setVaultHidden(false);
+      }    
+    }
+  }
 
   useLayoutEffect(() => {
     function updatePosition() {
@@ -241,6 +263,42 @@ const Collateral = () => {
     }
   };
 
+  const handleToggleVaultHidden = () => {
+    const hiddenVaults = localStorage.getItem("hiddenVaults");
+    let parsedVaults = [];
+    if (hiddenVaults) {
+      parsedVaults = JSON.parse(hiddenVaults);
+    }
+    let newHiddenVaults = parsedVaults;
+    // If parsedVaults exists
+    if (parsedVaults) {
+      // Check if this Vault is hidden
+      const isHidden = parsedVaults
+        .find((item: string) => item == vaultId);
+      // If this vault is hidden
+      if (isHidden) {
+        // Remove this vault from the array
+        newHiddenVaults = parsedVaults
+          .filter((item: string) => item != vaultId);
+      }
+      // If vault is not hidden
+      else {
+        // Add vault to hidden list
+        newHiddenVaults = parsedVaults
+          .concat(vaultId);
+      }
+    }
+    // If hiddenVaults does not exist
+    else {
+      // Add this vault to the hidden vaults
+      newHiddenVaults = parsedVaults
+        .concat(vaultId);
+    }
+    localStorage.setItem("hiddenVaults", JSON.stringify(newHiddenVaults));
+    checkIfHidden(vaultId);
+    handleHideClose();
+  };
+
   return (
     <Box
       sx={{
@@ -401,8 +459,113 @@ const Collateral = () => {
           >
             <LiquidityPool />
           </Card>
+          <Box>
+            <Button
+              sx={{
+                padding: "5px 20px",
+                width: "auto",
+                height: "3rem",
+                marginTop: "1rem",
+                fontSize: {
+                  xs: "0.7rem",
+                  sm: "0.8rem",
+                  md: "0.88rem",
+                },
+              }}
+              clickFunction={() => {
+                handleHideOpen()
+              }}
+            >
+              {vaultHidden ? ('Unhide Vault') : ('Hide Vault')}
+            </Button>
+          </Box>
         </Box>
       </Box>
+      {/* Hide Vault modal */}
+      <Modal
+        open={openHideModal}
+        onClose={handleHideClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Card
+          sx={{
+            position: { xs: "absolute" as const, md: "" },
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: {
+              xs: "60%",
+              sm: "50%",
+              md: "40%",
+            },
+            // bgcolor: "#0C0C0C",
+            // border: "2px solid #000",
+            // boxShadow: 24,
+            p: 4,
+            maxHeight: {
+              xs: "80vh",
+              sm: "80vh",
+            },
+            overflowY: "auto",
+          }}
+          className="modal-content" // add class name to modal content box
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="h4"
+            >
+              Hidden Vaults
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                marginTop: "1rem",
+              }}
+            >
+              Hidden Vaults are not deleted. They are simply hidden from your main Vaults list.
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                marginTop: "1rem",
+              }}
+            >
+              You can view all of your hidden Vaults by selecting "Show Hidden Vaults" under your Vaults list.
+            </Typography>
+            <Box
+              sx={{
+                width: "100%",
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                clickFunction={() => handleHideClose()}
+              >
+                Cancel
+              </Button>
+              <Button
+                clickFunction={() => handleToggleVaultHidden()}
+                sx={{
+                  marginLeft: "1rem"
+                }}
+              >
+                {vaultHidden ? ('Unhide This Vault') : ('Hide This Vault')}
+              </Button>
+            </Box>
+          </Box>
+        </Card>
+      </Modal>
       {/* Scan QR code modal */}
       <Modal
         open={open}

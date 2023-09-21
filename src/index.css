@@ -59,3 +59,27 @@ div[id^="widget-relative-container-"] {
   min-width: unset;
   width: 100%;
 }
+
+/* CSS for making scroll bars transparent */
+/* For Webkit browsers (e.g., Chrome, Safari) */
+/* Adjust as needed for other browser vendors */
+
+/* Transparent vertical scroll bar */
+::-webkit-scrollbar {
+  width: 0px; /* Adjust the width as needed */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Make the thumb (the draggable part) transparent */
+}
+
+/* Transparent horizontal scroll bar */
+::-webkit-scrollbar-horizontal {
+  height: 0px; /* Adjust the height as needed */
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: transparent; /* Make the thumb (the draggable part) transparent */
+}
+
+/* You can further style the scroll bars, such as changing their width, height, or color, as needed. */
