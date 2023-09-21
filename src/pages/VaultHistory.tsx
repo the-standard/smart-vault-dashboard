@@ -31,6 +31,22 @@ type RouteParams = {
   vaultId: string;
 };
 
+function NoDataOverlay() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+      }}
+    >
+      <Box sx={{ mt: 1, color: "white" }}>No Data</Box>
+    </Box>
+  );
+}
+
 const VaultHistory: React.FC<DataGridComponentProps> = () => {
   const { chain } = getNetwork();
   const { address } = useAccount();
@@ -312,6 +328,9 @@ const VaultHistory: React.FC<DataGridComponentProps> = () => {
     ".css-1w53k9d-MuiDataGrid-overlay": {
       background: "rgba(0, 0, 0, 0.38)",
     },
+    ".MuiDataGrid-virtualScroller": {
+      minHeight: "350px",
+    },
   }));
 
   return (
@@ -384,6 +403,9 @@ const VaultHistory: React.FC<DataGridComponentProps> = () => {
         }}
       >      
         <StyledDataGrid
+          slots={{
+            noRowsOverlay: NoDataOverlay,
+          }}
           columns={columns}
           rowCount={totalRows || 0}
           rows={rows || []}
