@@ -22,6 +22,7 @@ import {
 
 import Card from "../components/Card";
 import Button from "../components/Button";
+import VaultMenuSmall from "../components/VaultMenuSmall";
 
 type RouteParams = {
   vaultId: string;
@@ -354,7 +355,7 @@ const VaultHistory = () => {
     >
       <Box
         sx={{
-          display: "flex",
+          display: { xs: "none", sm: "flex" },
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
           marginBottom: "1rem",
@@ -397,7 +398,6 @@ const VaultHistory = () => {
             History
           </Button>
         </Box>
-        {/* right side of the upper column */}
         <Box
           sx={{
             display: "flex",
@@ -405,6 +405,10 @@ const VaultHistory = () => {
           }}
         ></Box>
       </Box>
+
+      <VaultMenuSmall
+        vaultId={vaultId}
+      />
 
       <Card
         sx={{

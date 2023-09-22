@@ -28,6 +28,7 @@ import "../styles/buttonStyle.css";
 import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import VaultMenuSmall from "../components/VaultMenuSmall";
 
 type RouteParams = {
   vaultId: string;
@@ -66,6 +67,7 @@ const Collateral = () => {
   const { address } = useAccount();
   const { chain } = getNetwork();
   const query = useQuery();
+  const vaultView = query.get("view");
 
   useEffect(() => {
     getVaultID(vaultId);
@@ -93,11 +95,15 @@ const Collateral = () => {
   //scroll to the top of the page on page load
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
-
-    if (query.get("view") && (query.get("view") === '2')) {
-      handleClick(2)
-    }
   }, []);
+
+  useEffect(() => {
+    if (vaultView && vaultView === '2') {
+      handleClick(2)
+    } else {
+      handleClick(1)
+    }
+  }, [vaultView]);
   
   const vaultManagerAddress =
     chain?.id === arbitrumGoerli.id
@@ -271,7 +277,7 @@ const Collateral = () => {
       {/*  column 1 */}
       <Box
         sx={{
-          display: "flex",
+          display: { xs: "none", sm: "flex" },
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
           marginBottom: "1rem",
@@ -299,13 +305,13 @@ const Collateral = () => {
           </Button>
           <Button
             isActive={activeElement === 1}
-            clickFunction={() => handleClick(1)}
+            clickFunction={() => navigate(`../Collateral/${vaultId}`)}
           >
             Collateral
           </Button>
           <Button
             isActive={activeElement === 2}
-            clickFunction={() => handleClick(2)}
+            clickFunction={() => navigate(`../Collateral/${vaultId}?view=2`)}
           >
             Borrow/Repay
           </Button>
@@ -324,6 +330,11 @@ const Collateral = () => {
           }}
         ></Box>
       </Box>
+
+      <VaultMenuSmall
+        vaultId={vaultId}
+      />
+
       <Box
         sx={{
           height: "100%",
