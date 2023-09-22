@@ -88,6 +88,7 @@ const disabledStyle = {
 }
 
 interface ButtonProps {
+  id?: string;
   sx?: object;
   isActive?: boolean;
   lighter?: boolean;
@@ -128,6 +129,7 @@ export function Button(props: ButtonProps) {
       className={props.isActive ? "activeBtn" : ""}
       onClick={props.clickFunction}
       ref={props.ref}
+      id={props.id || ''}
     >
       {props.children}
     </StyledButton>

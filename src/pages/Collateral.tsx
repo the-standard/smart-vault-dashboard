@@ -28,6 +28,7 @@ import "../styles/buttonStyle.css";
 import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import VaultMenuSmall from "../components/VaultMenuSmall";
 
 type RouteParams = {
   vaultId: string;
@@ -71,6 +72,7 @@ const Collateral = () => {
   const { address } = useAccount();
   const { chain } = getNetwork();
   const query = useQuery();
+  const vaultView = query.get("view");
 
   useEffect(() => {
     getVaultID(vaultId);
@@ -115,11 +117,15 @@ const Collateral = () => {
   //scroll to the top of the page on page load
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
-
-    if (query.get("view") && (query.get("view") === '2')) {
-      handleClick(2)
-    }
   }, []);
+
+  useEffect(() => {
+    if (vaultView && vaultView === '2') {
+      handleClick(2)
+    } else {
+      handleClick(1)
+    }
+  }, [vaultView]);
   
   const vaultManagerAddress =
     chain?.id === arbitrumGoerli.id
@@ -141,76 +147,78 @@ const Collateral = () => {
   if (!currentVault) {
     // vault not found
     return (
-      <>
-        <Box
-          sx={{
-            color: "#ffffff",
-            margin: { xs: "0% 2%", sm: "3% 12%" },
+      <Box
+        sx={{
+          color: "#ffffff",
+          margin: {
+            xs: "0% 4%",
+            sm: "3% 6%",
+            md: "3% 12%",
+          },
+        }}
+        ref={rectangleRef}
+      >
+        <Link
+          style={{
+            textDecoration: "none",
+            display: "flex",
           }}
-          ref={rectangleRef}
+          to="/"
         >
-          <Link
-            style={{
-              textDecoration: "none",
+          <Box
+            sx={{
+              padding: "10px 10px",
+              border: "2px solid rgba(255, 255, 255, 0.2)",
+              boxShadow:
+                "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
+              fontFamily: '"Poppins", sans-serif',
+              color: "#ffffff",
+              fontSize: "1rem",
+              letterSpacing: "1px",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              cursor: "pointer",
+              borderRadius: "10px",
+              transition: "0.5s",
+              position: "relative",
               display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+
+              "&:after": {
+                content: '""',
+                position: "absolute",
+                height: "100%",
+                width: "100%",
+                top: "0",
+                left: "0",
+                background:
+                  "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
+                backgroundSize: "300% 100%",
+                backgroundPosition: "165% 0",
+                transition: "0.7s",
+              },
+              "&:hover:after": {
+                backgroundPosition: "-20% 0",
+              },
+              "&:hover": {
+                boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
+                transform: "translateY(-5px)",
+              },
+
+              "&.activeBtn": {
+                background:
+                  "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
+                border: "1px solid white",
+                boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
+              },
             }}
-            to="/"
           >
-            <Box
-              sx={{
-                padding: "10px 10px",
-                border: "2px solid rgba(255, 255, 255, 0.2)",
-                boxShadow:
-                  "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-                fontFamily: '"Poppins", sans-serif',
-                color: "#ffffff",
-                fontSize: "1rem",
-                letterSpacing: "1px",
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
-                cursor: "pointer",
-                borderRadius: "10px",
-                transition: "0.5s",
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-
-                "&:after": {
-                  content: '""',
-                  position: "absolute",
-                  height: "100%",
-                  width: "100%",
-                  top: "0",
-                  left: "0",
-                  background:
-                    "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-                  backgroundSize: "300% 100%",
-                  backgroundPosition: "165% 0",
-                  transition: "0.7s",
-                },
-                "&:hover:after": {
-                  backgroundPosition: "-20% 0",
-                },
-                "&:hover": {
-                  boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-                  transform: "translateY(-5px)",
-                },
-
-                "&.activeBtn": {
-                  background:
-                    "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-                  border: "1px solid white",
-                  boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
-                },
-              }}
-            >
-              <ArrowBackIosNewIcon />
-            </Box>{" "}
-          </Link>
-          <p>Vault not found</p>
-        </Box>
-      </>
+            <ArrowBackIosNewIcon />
+          </Box>{" "}
+        </Link>
+        <p>Vault not found</p>
+      </Box>
     );
   }
 
@@ -329,7 +337,7 @@ const Collateral = () => {
       {/*  column 1 */}
       <Box
         sx={{
-          display: "flex",
+          display: { xs: "none", sm: "flex" },
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
           marginBottom: "1rem",
@@ -357,13 +365,13 @@ const Collateral = () => {
           </Button>
           <Button
             isActive={activeElement === 1}
-            clickFunction={() => handleClick(1)}
+            clickFunction={() => navigate(`../Collateral/${vaultId}`)}
           >
             Collateral
           </Button>
           <Button
             isActive={activeElement === 2}
-            clickFunction={() => handleClick(2)}
+            clickFunction={() => navigate(`../Collateral/${vaultId}?view=2`)}
           >
             Borrow/Repay
           </Button>
@@ -382,6 +390,11 @@ const Collateral = () => {
           }}
         ></Box>
       </Box>
+
+      <VaultMenuSmall
+        vaultId={vaultId}
+      />
+
       <Box
         sx={{
           height: "100%",
