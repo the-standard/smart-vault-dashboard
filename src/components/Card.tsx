@@ -23,6 +23,7 @@ const Card = styled(Box)({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
+  outline: "none",
 });
 
 export default Card;
