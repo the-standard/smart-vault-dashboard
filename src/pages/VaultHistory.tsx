@@ -347,7 +347,11 @@ const VaultHistory = () => {
   return (
     <Box
       sx={{
-        margin: { xs: "0% 2%", sm: "3% 12%" },
+        margin: {
+          xs: "0% 4%",
+          sm: "3% 6%",
+          md: "3% 12%",
+        },
         minHeight: "100vh",
         height: "100%",
       }}
