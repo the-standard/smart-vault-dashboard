@@ -206,7 +206,7 @@ const VaultHistory = () => {
       headerName: 'Total Collateral Value (€)',
       renderCell: (params: any) => {
         const totalCollateralValue = params.row.totalCollateralValue;
-        const useTotalCollateralValue = formatEther(totalCollateralValue.toString());
+        const useTotalCollateralValue = Number(formatEther(totalCollateralValue)).toFixed(2);
         return (
           <span style={{
             textOverflow: 'ellipsis',
