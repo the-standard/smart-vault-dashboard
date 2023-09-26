@@ -11,7 +11,7 @@ import tststakinglogo2 from "../assets/2ndtststakinglogo.svg";
 import liquidatorslogo2 from "../assets/2ndliquidatorslogo.svg";
 import historylogo2 from "../assets/2ndhistorylogo.svg";
 import borrowinglogo2 from "../assets/2ndborrowinglogo.svg";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useBurgerMenuStore } from "../store/Store";
 
 const menuItems = [
@@ -53,7 +53,6 @@ const menuItems = [
 
 const NavbarMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { pathname } = useLocation();
 
   const { getBurgerMenu } = useBurgerMenuStore();
 
