@@ -11,7 +11,7 @@ import tststakinglogo2 from "../assets/2ndtststakinglogo.svg";
 import liquidatorslogo2 from "../assets/2ndliquidatorslogo.svg";
 import historylogo2 from "../assets/2ndhistorylogo.svg";
 import borrowinglogo2 from "../assets/2ndborrowinglogo.svg";
-import { Link } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useBurgerMenuStore } from "../store/Store";
 
 const menuItems = [
@@ -53,6 +53,7 @@ const menuItems = [
 
 const NavbarMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const { pathname } = useLocation();
 
   const { getBurgerMenu } = useBurgerMenuStore();
 
@@ -78,28 +79,37 @@ const NavbarMenu = () => {
       }}
       className="navbar"
     >
-      {menuItems.map((item, index) => (
-        <Link
-          style={{
-            textDecoration: "none",
-            color: "white",
-            width: "100%",
-            overflow: "hidden",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "10px",
-          }}
-          key={index}
-          to={item.route ? `/${item.route}` : "/"}
-        >
-          <MenuItem
-            text={item.text}
-            isActive={activeIndex === index}
-            handleClick={() => handleItemClick(index)}
-          />
-        </Link>
-      ))}
+      {menuItems.map((item, index) => {
+        const collateralActive = window.location.pathname.includes('/Collateral') && !item.route;
+
+        return (
+          <NavLink
+            style={({ isActive }) => {
+              return {
+                textDecoration: "none",
+                color: "white",
+                width: "100%",
+                overflow: "hidden",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "10px",
+                border: isActive || collateralActive ? "1px solid white" : "",
+                boxShadow: isActive || collateralActive ? "0 0 2px 2px rgba(255, 255, 255, 0.5)" : "",
+              };
+            }}
+            key={index}
+            to={item.route ? `/${item.route}` : "/"}
+          >
+            <MenuItem
+              text={item.text}
+              isActive={activeIndex === index}
+              handleClick={() => handleItemClick(index)}
+            />
+          </NavLink>
+        );
+      })}
+
     </Box>
   );
 };
