@@ -86,6 +86,10 @@ export function useBackgroundImage() {
       background-size: cover;
       background-position: center;
       background-attachment: fixed; 
+      -webkit-transition: background 0.5s ease-in-out;
+      -moz-transition: background 0.5s ease-in-out;
+      -o-transition: background 0.5s ease-in-out;
+      transition: background 0.5s ease-in-out;
     }
     body:before {
       content: "";
@@ -103,32 +107,7 @@ export function useBackgroundImage() {
       -webkit-backdrop-filter: brightness(100%);
     }
   `;
-    // styleElement.innerHTML = `
-    //   body:before {
-    //     content: "";
-    //     position: fixed;
-    //     top: 0;
-    //     left: 0;
-    //     width: 100vw;
-    //     height: 100vh;
-    //     background-image: url(${bgImage});
-    //     background-repeat: no-repeat;
-    //     background-size: cover;
-    //     background-position: center;
-    //     background-attachment: fixed; 
-    //     z-index: -1;
-    //     opacity: 0;
-    //     /* The initial state, completely transparent */
-    //     transition: background-color 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    //     /* Add transitions to both the background color and opacity */
-    //   }
 
-    //   body.loaded:before {
-    //     /* Adjusted selector to include loaded class */
-    //     opacity: 1;
-    //     /* Transition to opacity 1 when loaded class is added */
-    //   }
-    // `;
     document.head.appendChild(styleElement);
 
     const image = new Image();
