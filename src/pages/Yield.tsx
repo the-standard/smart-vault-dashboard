@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import yields from "../assets/yields.png";
 import step2 from "../assets/yield-step-2.png";
@@ -29,6 +30,11 @@ const Yield = () => {
 
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top of the page
+  }, []);
+
   return (
     <Box
     >
