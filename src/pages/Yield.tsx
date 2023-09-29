@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import yields from "../assets/yields.png";
 import step2 from "../assets/yield-step-2.png";
 import step2Mode from "../assets/select-mode.png";
 import step4Staking from "../assets/auto-staking.png";
 import nitroPools from "../assets/nitro-pools.png";
+import camelotLogo from "../assets/camelotLogo.svg";
 import { usePositionStore } from "../store/Store.ts";
 import { useLayoutEffect, useRef } from "react";
 import Exchange from "./Exchange.tsx";
@@ -28,6 +30,11 @@ const Yield = () => {
 
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top of the page
+  }, []);
+
   return (
     <Box
     >
@@ -317,7 +324,34 @@ const Yield = () => {
                 fontWeight: "300",
               }}
             >
-              V3 awaits you (already set for your convenience).
+              Head over to
+              {" "}
+              <a
+                style={{
+                  textDecoration: "none",
+                  paddingBottom: "1px",
+                  borderBottom: "1px solid #fff",
+                  color: "#fff",
+                  cursor: "pointer",
+                  whiteSpace: 'nowrap',
+                }}
+                href="https://app.camelot.exchange/liquidity/"
+                target="_blank"
+              >
+                <img
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    
+                  }}
+                  src={camelotLogo}
+                  alt="camelot logo"
+                />
+                {" "}
+                Camelot
+              </a>
+              {" "}
+              where V3 awaits you (already set for your convenience).
             </Typography>
             <Typography
               sx={{
@@ -645,13 +679,22 @@ const Yield = () => {
                   borderBottom: "1px solid #fff",
                   color: "#fff",
                   cursor: "pointer",
+                  whiteSpace: 'nowrap',
                 }}
                 href="https://app.camelot.exchange/liquidity/"
                 target="_blank"
               >
-                Camelot!
-              </a>{" "}
-              🏰✨{" "}
+                <img
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                  }}
+                  src={camelotLogo}
+                  alt="camelot logo"
+                />
+                {" "}
+                Camelot
+              </a>
             </Typography>
           </Box>
           <Box

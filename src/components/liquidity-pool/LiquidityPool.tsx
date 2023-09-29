@@ -1,13 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import coins from "../../assets/coins.png";
 import { useNavigate } from "react-router-dom";
+import Button from "../Button";
 
 const LiquidityPool = () => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate("/yield");
-  };
   return (
     <Box>
       <Box
@@ -71,14 +69,17 @@ const LiquidityPool = () => {
           GRAIL tokens earn you a share of all fees collected by the biggest DEX
           on Arbitrum!
         </Typography>{" "}
-        <Box onClick={handleClick}>
-          <Typography
-            variant="body1"
-            sx={{ color: "#fff", marginBottom: "10px", cursor: "pointer" }}
-          >
-            Let's go
-          </Typography>
-        </Box>
+        <Button
+          sx={{
+            padding: "5px",
+            textAlign: "center",
+            marginTop: "1rem",
+            width: "150px",
+          }}
+          clickFunction={() => navigate('/yield')}
+        >
+          Learn More
+        </Button>
       </Box>
     </Box>
   );
