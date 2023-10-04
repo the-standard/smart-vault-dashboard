@@ -59,8 +59,7 @@ const LiquidityPool = () => {
           variant="body1"
           sx={{ color: "#fff", marginBottom: "10px" }}
         >
-          Add your EUROs together with USDC as liquidity on Camelot DEX to earn
-          10% APR rewarded in GRAIL
+          Add your EUROs together with USDC as liquidity on Camelot DEX to earn an APR rewarded in GRAIL
         </Typography>
         <Typography
           variant="body1"

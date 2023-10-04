@@ -83,3 +83,8 @@ div[id^="widget-relative-container-"] {
 }
 
 /* You can further style the scroll bars, such as changing their width, height, or color, as needed. */
+
+
+.MuiBox-root {
+  outline: none;
+}

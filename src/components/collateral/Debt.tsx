@@ -1,9 +1,11 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-
+import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/EUROs.svg";
+import coins from "../../assets/coins.png";
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
@@ -26,6 +28,8 @@ import { getNetwork } from "@wagmi/core";
 import { useContractWrite, useContractReads } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
 
+import axios from "axios";
+
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 
@@ -47,6 +51,8 @@ const Debt = () => {
   const { getCounter } = useCounterStore();
   const { chain } = getNetwork();
   const HUNDRED_PC = 100_000n;
+
+  const navigate = useNavigate();
 
   const incrementCounter = () => {
     getCounter(1);
@@ -105,6 +111,7 @@ const Debt = () => {
   }
 
   useEffect(() => {
+    handleYieldEstimate();
     setAmount(0);
     setActiveElement(4);
     handleInputFocus();
@@ -141,6 +148,7 @@ const Debt = () => {
       getCircularProgress(false);
       incrementCounter();
       getSnackBar(0);
+      handleOpenYield();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -163,6 +171,10 @@ const Debt = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [modalStep, setModalStep] = useState(1);
+
+  const [yieldModalOpen, setYieldModalOpen] = useState(false);
+  const handleOpenYield = () => setYieldModalOpen(true);
+  const handleCloseYield = () => setYieldModalOpen(false);
 
   const burnFeeRate: bigint = vaultStore.burnFeeRate;
   const repayFee = amountInWei * burnFeeRate / HUNDRED_PC;
@@ -345,6 +357,29 @@ const Debt = () => {
       value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
     },
   ];
+
+  const [camelotPool, setCamelotPool] = useState<any>(undefined);
+  const [camelotPoolLoading, setCamelotPoolLoading] = useState(true);
+
+  const handleYieldEstimate = async () => {
+    try {
+      setCamelotPoolLoading(true);
+      const response = await axios.get(
+        `https://api.camelot.exchange/v2/liquidity-v3-data`
+      );
+      const pools = response.data.data.pools;
+      const stPool = pools['0xc9AA2fEB84F0134a38d5D1c56b1E787191327Cb0'];
+      setCamelotPool(stPool);
+      setCamelotPoolLoading(false);
+    } catch (error) {
+      setCamelotPoolLoading(false);
+      console.log(error);
+    }
+  }
+
+  // const activeTvlUSD = camelotPool?.activeTvlUSD;
+  const activeTvlAverageAPR = camelotPool?.activeTvlAverageAPR;
+  const totalAPR = Number(activeTvlAverageAPR + 5).toFixed(2);
 
   return (
     <Card
@@ -893,6 +928,155 @@ const Debt = () => {
               </Box>
             )}
           </Box>
+        </Modal>
+        <Modal
+          open={yieldModalOpen}
+          onClose={handleCloseYield}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {camelotPoolLoading ? (
+            <Box
+              sx={{
+                background:
+                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                backdropFilter: "blur(13.9px)",
+                WebkitBackdropFilter: "blur(13.9px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                borderRadius: "10px ",
+                padding: "2rem",
+                minWidth: "800px",
+                marginLeft: "1rem",
+                marginRight: "1rem",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  minHeight: "200px",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                background:
+                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                backdropFilter: "blur(13.9px)",
+                WebkitBackdropFilter: "blur(13.9px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                borderRadius: "10px ",
+                padding: "2rem",
+                maxWidth: "800px",
+                marginLeft: "1rem",
+                marginRight: "1rem",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  sx={{
+                    color: "#fff",
+                    marginRight: "20px",
+                    fontFamily: "Poppins",
+                  }}
+                >
+                  Earn More With Your New EUROs
+                </Typography>
+                <Box
+                  sx={{
+                    width: "auto",
+                    height: "100px",
+                  }}
+                >
+                  <img
+                    style={{
+                      width: "230px",
+                      height: "100%",
+                    }}
+                    src={coins}
+                    alt=""
+                  />
+                </Box>
+              </Box>
+              <Box sx={{
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
+                <Typography
+                  sx={{
+                    // fontWeight: "bold",
+                    color: "#fff",
+                    fontFamily: "Poppins",
+                    fontSize: "1.5rem",
+                    marginBottom: "1rem",
+                    marginTop: "1rem",
+                    textAlign: "center",
+                  }}
+                  variant="h3"
+                >
+                  Boost your EUROs by <b style={{fontSize: "1.7rem"}}>{totalAPR}% APR</b> with Grail & TST
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ color: "#fff", marginBottom: "10px" }}
+                >                
+                  Own a slice of the biggest decentralized exchange on Arbitrum, where every trade funnels rewards straight into your crypto wallet using the GRAIL token.
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ color: "#fff", marginBottom: "10px" }}
+                >                
+                  Then supercharge your yield even higher with the NITRO pool, granting you even more APR in TST tokens.
+                </Typography>
+                <Button
+                  sx={{
+                    padding: "12px",
+                    textAlign: "center",
+                    marginTop: "1rem",
+                    width: "150px",
+                  }}
+                  clickFunction={() => navigate('/yield')}
+                  lighter
+                >
+                  Learn More
+                </Button>
+                <Button
+                  sx={{
+                    padding: "12px",
+                    textAlign: "center",
+                    marginTop: "1rem",
+                    width: "150px",
+                  }}
+                  clickFunction={() => handleCloseYield}
+                >
+                  Close
+                </Button>
+              </Box>
+            </Box>
+          )}
         </Modal>
       </div>
     </Card>
