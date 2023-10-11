@@ -271,18 +271,6 @@ const Index = () => {
         >
           How close you are to liquidation
         </Typography>
-      </Box>
-      <Box>
-        <Typography
-          sx={{
-            marginLeft: "5px",
-            fontWeight: "200",
-            marginBottom: "7px",
-          }}
-          variant="body1"
-        >
-          How close you are to liquidation
-        </Typography>
         <ProgressBar
           progressValue={computeProgressBar(
             chosenVault.status.minted,
