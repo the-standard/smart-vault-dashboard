@@ -51,7 +51,7 @@ export function StyledSelect(props: SelectProps) {
     '.MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input.Mui-disabled': {
       color: "#757575",
       fontFamily: "Poppins",
-      "-webkit-text-fill-color": "#757575",
+      WebkitTextFillColor: "#757575",
     },
     '.MuiInputLabel-root.MuiInputLabel-shrink' : {
       color: "rgba(255,255,255,0)",

@@ -8,7 +8,7 @@ import {
   useCircularProgressStore,
 } from "../../../store/Store";
 import { Box, Typography, CircularProgress } from "@mui/material";
-import { formatUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 import { useContractWrite } from "wagmi";
 
 import Select from "../../../components/Select";
@@ -29,17 +29,17 @@ const Swap: React.FC<SwapProps> = ({
   collateralSymbol,
   assets,
   symbol,
-  // decimals,
+  decimals,
 }) => {
   const [swapLoading, setSwapLoading] = useState<any>(false);
   const [swapAssets, setSwapAssets] = useState<any>();
   const [amount, setAmount] = useState<any>(0);
-  const [recieveAmount, setRecieveAmount] = useState<any>(0);
-  const [recieveAsset, setRecieveAsset] = useState<any>('');
-  const [recieveDecimals, setRecieveDecimals] = useState<any>();
+  const [receiveAmount, setReceiveAmount] = useState<any>(0);
+  const [receiveAsset, setReceiveAsset] = useState<any>('');
+  const [receiveDecimals, setReceiveDecimals] = useState<any>();
   const { vaultStore } = useVaultStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
-  const inputRecieveRef: any = useRef<HTMLInputElement>(null);
+  const inputReceiveRef: any = useRef<HTMLInputElement>(null);
   const { vaultAddress } = useVaultAddressStore();
   const { smartVaultABI } = useSmartVaultABIStore();
 
@@ -47,10 +47,10 @@ const Swap: React.FC<SwapProps> = ({
 
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   
-  const handleRecieveAsset = (e: any) => {
-    setRecieveAsset(e.target.value as string);
+  const handlereceiveAsset = (e: any) => {
+    setReceiveAsset(e.target.value as string);
     const useToken = swapAssets?.find((item: any) => item.symbol === e.target.value);
-    setRecieveDecimals(useToken?.dec)
+    setReceiveDecimals(useToken?.dec)
   };
 
   const handleAmount = (e: any) => {
@@ -61,15 +61,13 @@ const Swap: React.FC<SwapProps> = ({
     try {
       setSwapLoading(true);
       const swapIn = symbol;
-      const swapOut = recieveAsset;
-      // const swapAmount = formatUnits(amount.toString(), decimals);
-      const swapAmount = amount;
-
+      const swapOut = receiveAsset;
+      const swapAmount = parseUnits(amount.toString(), decimals);
       const response = await axios.get(
         `https://smart-vault-api.thestandard.io/estimate_swap?in=${swapIn}&out=${swapOut}&amount=${swapAmount}`
       );
       const data = response.data;
-      setRecieveAmount(formatUnits(data.toString(), recieveDecimals));
+      setReceiveAmount(formatUnits(data.toString(), receiveDecimals));
       setSwapLoading(false);
     } catch (error) {
       console.log(error);
@@ -77,18 +75,16 @@ const Swap: React.FC<SwapProps> = ({
   };
 
   useEffect(() => {
-    if (amount && recieveAsset && symbol) {
+    if (amount && receiveAsset && symbol) {
       getSwapConversion();
     }
-  }, [amount, recieveAsset]);
+  }, [amount, receiveAsset]);
 
   useEffect(() => {
     const useAssets: Array<any> = [];
-  
-    assets.map((asset: any, index: number) => {
+    assets.map((asset: any) => {
       const token = asset.token;
       const symbol = ethers.utils.parseBytes32String(token?.symbol);
-  
       const obj = {
         addr: token?.addr,
         clAddr: token?.clAddr,
@@ -96,15 +92,12 @@ const Swap: React.FC<SwapProps> = ({
         dec: token?.dec,
         symbol: symbol,
       }
-  
       return (
         useAssets.push(obj)
       );
     });
-
     setSwapAssets(useAssets)
   }, []);
-
 
   const availableAssets = swapAssets?.filter((item: any) => item.symbol !== symbol);
 
@@ -114,8 +107,8 @@ const Swap: React.FC<SwapProps> = ({
     functionName: "swap",
     args: [
       ethers.utils.formatBytes32String(symbol),
-      ethers.utils.formatBytes32String(recieveAsset),
-      amount,
+      ethers.utils.formatBytes32String(receiveAsset),
+      parseUnits(amount.toString(), decimals),
     ],
   });
 
@@ -126,21 +119,26 @@ const Swap: React.FC<SwapProps> = ({
 
   useEffect(() => {
     const { isLoading, isSuccess, isError } = swapTokens;
-
     if (isLoading) {
-      getProgressType(1);
+      getProgressType('SWAP');
       getCircularProgress(true);
+      setSwapLoading(true);
     } else if (isSuccess) {
       getCircularProgress(false);
+      setSwapLoading(false);
       getSnackBar(0);
       inputRef.current.value = "";
-      // getGreyBarUserInput(0);
-      // setTxdata(data);
+      setAmount(0);
+      setReceiveAmount(0);
+      setReceiveAsset('');
     } else if (isError) {
-      inputRef.current.value = "";
       getCircularProgress(false);
+      setSwapLoading(false);
       getSnackBar(1);
-      // getGreyBarUserInput(0);
+      inputRef.current.value = "";
+      setAmount(0);
+      setReceiveAmount(0);
+      setReceiveAsset('');
     }
   }, [
     swapTokens.isLoading,
@@ -148,8 +146,6 @@ const Swap: React.FC<SwapProps> = ({
     swapTokens.isError,
   ]);
 
-  // TODO Change for V2 Vaults
-  // if (vaultStore.status.version === 1) {
   if (vaultStore.status.version !== 1) {
     return (
       <Box>
@@ -238,9 +234,9 @@ const Swap: React.FC<SwapProps> = ({
             </Typography>
             <Select
               id="swap-asset-select"
-              value={recieveAsset}
+              value={receiveAsset}
               label="Asset"
-              handleChange={handleRecieveAsset}
+              handleChange={handlereceiveAsset}
               optName="symbol"
               optValue="symbol"
               options={availableAssets || []}
@@ -249,7 +245,7 @@ const Swap: React.FC<SwapProps> = ({
             </Select>
           </Box>
           <Box
-            sx={!amount || !recieveAsset || !recieveAmount ? (
+            sx={!amount || !receiveAsset || !receiveAmount ? (
               {
                 display: "flex",
                 flexDirection: "row",
@@ -297,9 +293,9 @@ const Swap: React.FC<SwapProps> = ({
               value={swapLoading ? (
                 ''
               ) : (
-                recieveAmount || ''
+                receiveAmount || ''
               )}
-              ref={inputRecieveRef}
+              ref={inputReceiveRef}
               type="number"
               placeholder="Amount"
               readOnly
@@ -315,7 +311,7 @@ const Swap: React.FC<SwapProps> = ({
             }}
           >
             <Button
-              // isDisabled={!amount || !recieveAsset || !(recieveAmount > 0) || swapLoading}
+              isDisabled={!amount || !receiveAsset || !(receiveAmount > 0) || swapLoading}
               sx={{
                 width: "100%"
               }}

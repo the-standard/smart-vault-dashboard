@@ -181,9 +181,9 @@ export const useWidthStore = create<WidthState>((set) => ({
 
 interface CirccularProgressState {
   circularProgress: boolean;
-  progressType: number;
+  progressType: any;
   getCircularProgress: (circularProgress: boolean) => void;
-  getProgressType: (progressType: number) => void;
+  getProgressType: (progressType: any) => void;
 }
 
 export const useCircularProgressStore = create<CirccularProgressState>(
@@ -192,7 +192,7 @@ export const useCircularProgressStore = create<CirccularProgressState>(
     //1 for withdraw, 2 for deposit, 3 for new vault, 5 for repay with flex-end
     progressType: 1,
     getCircularProgress: (circularProgress) => set({ circularProgress }),
-    getProgressType: (progressType: number) => set({ progressType }),
+    getProgressType: (progressType: any) => set({ progressType }),
   })
 );
 
