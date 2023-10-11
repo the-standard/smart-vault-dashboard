@@ -83,3 +83,9 @@ div[id^="widget-relative-container-"] {
 }
 
 /* You can further style the scroll bars, such as changing their width, height, or color, as needed. */
+
+input:read-only {
+  outline: none;
+  cursor: default;
+  border-color: rgba(255,255,255,0.1)!important;
+}

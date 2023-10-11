@@ -245,6 +245,7 @@ const Collateral = () => {
           amount={ethers.BigNumber.from(asset.amount).toString()}
           token={asset.token}
           collateralValue={asset.collateralValue}
+          assets={assets}
         />
       );
     });

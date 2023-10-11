@@ -54,7 +54,8 @@ const CircularProgressComponent = () => {
                 {" "}
                 <Typography
                   sx={{
-                    width: "450px",
+                    width: "100%",
+                    textAlign: "center",
                   }}
                   variant="body2"
                 >
@@ -97,7 +98,8 @@ const CircularProgressComponent = () => {
               >
                 <Typography
                   sx={{
-                    width: "450px",
+                    width: "100%",
+                    textAlign: "center",
                   }}
                   variant="body2"
                 >
@@ -140,7 +142,8 @@ const CircularProgressComponent = () => {
                 {" "}
                 <Typography
                   sx={{
-                    width: "450px",
+                    width: "100%",
+                    textAlign: "center",
                   }}
                   variant="body2"
                 >
@@ -164,6 +167,50 @@ const CircularProgressComponent = () => {
                 <Lottie animationData={depositLottie} />{" "}
               </Box> */}
             </Box>
+          </Box>
+        ) : progressType === 'SWAP' ? (
+          <Box
+            sx={{
+              position: "fixed",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+              background: "transparent",
+              zIndex: 9999,
+              //  marginTop: "500px",
+            }}
+          >
+            {" "}
+            <Card
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "0px",
+                width: "450px",
+                height: "300px",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "250px",
+                  height: "250px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                  variant="body2"
+                >
+                  Swapping Your Asset
+                </Typography>
+                <Lottie animationData={depositLottie} />{" "}
+              </Box>
+            </Card>
           </Box>
         ) : (
           <Box
