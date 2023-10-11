@@ -26,6 +26,7 @@ interface AcceptedTokenProps {
   amount: any;
   token: any;
   collateralValue: any;
+  assets: any;
 }
 
 const useSyncWidth = (ref: React.RefObject<HTMLElement>) => {
@@ -51,6 +52,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   amount,
   token,
   collateralValue,
+  assets,
 }) => {
   const [activeElement, setActiveElement] = useState(0);
   const { getCollateralSymbol } = useCollateralSymbolStore();
@@ -269,6 +271,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         token={token}
         collateralValue={formatUnits(amount, token.dec)}
         collateralSymbol={symbol}
+        assets={assets}
       />
     </Card>
   );
