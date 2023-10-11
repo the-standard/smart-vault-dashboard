@@ -19,7 +19,7 @@ const Index = () => {
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
-
+  const vaultVersion = vaultStore?.status.version || '';
   const chosenVault: any = vaultStore;
   const { chain } = useNetwork();
   const { chainlinkAbi } = useChainlinkAbiStore();
@@ -252,10 +252,25 @@ const Index = () => {
                 textAlign: "center",
               }}
             >
-              #{vaultID}
+              {vaultVersion ? (
+                `V${vaultVersion}-`
+              ) : ('')}
+              {vaultID}
             </Box>
           </Typography>
         </Box>
+      </Box>
+      <Box>
+        <Typography
+          sx={{
+            marginLeft: "5px",
+            fontWeight: "200",
+            marginBottom: "7px",
+          }}
+          variant="body1"
+        >
+          How close you are to liquidation
+        </Typography>
       </Box>
       <Box>
         <Typography

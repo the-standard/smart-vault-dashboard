@@ -30,6 +30,7 @@ const Swap: React.FC<SwapProps> = ({
   assets,
   symbol,
   decimals,
+  collateralValue,
 }) => {
   const [swapLoading, setSwapLoading] = useState<any>(false);
   const [swapAssets, setSwapAssets] = useState<any>();
@@ -146,6 +147,11 @@ const Swap: React.FC<SwapProps> = ({
     swapTokens.isError,
   ]);
 
+  const handleMaxBalance = async () => {
+    inputRef.current.value = collateralValue.toString();
+    handleAmount({ target: { value: collateralValue } });
+  };
+
   if (vaultStore.status.version !== 1) {
     return (
       <Box>
@@ -201,6 +207,21 @@ const Swap: React.FC<SwapProps> = ({
                 `Amount to Swap`
               )}
             />
+            <Button
+              sx={{
+                height: "2.5rem",
+                boxSizing: "border-box",
+                padding: "5px 12px",
+                minWidth: `fit-content`,
+                marginLeft: "0.5rem",
+                "&:after": {
+                  backgroundSize: "300% 100%",
+                },
+              }}
+              clickFunction={handleMaxBalance}
+            >
+              Max
+            </Button>
           </Box>
           <Box
             sx={!amount ? (
@@ -359,7 +380,7 @@ const Swap: React.FC<SwapProps> = ({
           variant="body1"
           style={{textAlign: 'center'}}
         >
-          To get access to asset swapping, create yourself a new vault and consolodate your assets there first.
+          To get access to asset swapping, create yourself a new vault and consolidate your assets there first.
         </Typography>
       </Box>
     </Box>

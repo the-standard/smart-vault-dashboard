@@ -393,7 +393,12 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                         </div>
                       ) : null}
                     </td>
-                    <td>{ethers.BigNumber.from(vault.tokenId).toString()}</td>{" "}
+                    <td>
+                      {vault.status.version ? (
+                        `V${vault.status.version}-`
+                      ) : ('')}
+                      {ethers.BigNumber.from(vault.tokenId).toString()}
+                    </td>{" "}
                     <TruncatedTableCell
                       value={truncateToTwoDecimals(
                         ethers.utils.formatEther(
