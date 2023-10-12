@@ -166,18 +166,19 @@ const Swap: React.FC<SwapProps> = ({
         >
           <Box
             sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                width: "100%",
-                alignItems: "center",
-                marginBottom: "1rem",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              width: "100%",
+              alignItems: "center",
+              marginBottom: "1rem",
             }}
           >
             <Typography
               sx={{
                 whiteSpace: "nowrap",
-                marginRight: "0.5rem"
+                marginRight: "0.5rem",
+                minWidth: "112px",
               }}
             >
               Swap Amount:
@@ -248,7 +249,8 @@ const Swap: React.FC<SwapProps> = ({
             <Typography
               sx={{
                 whiteSpace: "nowrap",
-                marginRight: "0.5rem"
+                marginRight: "0.5rem",
+                minWidth: "112px",
               }}
             >
               Swap For:
@@ -290,7 +292,8 @@ const Swap: React.FC<SwapProps> = ({
             <Typography
               sx={{
                 whiteSpace: "nowrap",
-                marginRight: "0.5rem"
+                marginRight: "0.5rem",
+                minWidth: "112px",
               }}
             >
               Approx Return:
