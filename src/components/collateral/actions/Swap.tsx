@@ -325,6 +325,39 @@ const Swap: React.FC<SwapProps> = ({
               readOnly
             />
           </Box>
+          {receiveAsset === 'PAXG' ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                width: "100%",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  marginBottom: "1rem"
+                }}
+              >
+                Due to low PAXG liquidity on Arbitrum this swap is currently not recommended.
+                <br/>
+                <a
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    fontWeight: "bold",
+                    display: "block",
+                    marginTop: "1rem",
+                  }}
+                  href="https://paxos.com/contact/"
+                  target="_blank"
+                >
+                  Contact Paxos to request they put more liquidity on Arbitrum.
+                </a>
+              </Typography>
+            </Box>
+          ) : (null)}
           <Box
             sx={{
               display: "flex",
