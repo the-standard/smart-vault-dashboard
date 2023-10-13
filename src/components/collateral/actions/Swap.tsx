@@ -325,7 +325,7 @@ const Swap: React.FC<SwapProps> = ({
               readOnly
             />
           </Box>
-          {receiveAsset === 'PAXG' ? (
+          {receiveAsset === 'PAXG' || symbol === 'PAXG' ? (
             <Box
               sx={{
                 display: "flex",
