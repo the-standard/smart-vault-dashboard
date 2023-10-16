@@ -19,7 +19,7 @@ const Index = () => {
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
-
+  const vaultVersion = vaultStore?.status.version || '';
   const chosenVault: any = vaultStore;
   const { chain } = useNetwork();
   const { chainlinkAbi } = useChainlinkAbiStore();
@@ -252,7 +252,10 @@ const Index = () => {
                 textAlign: "center",
               }}
             >
-              #{vaultID}
+              {vaultVersion ? (
+                `V${vaultVersion}-`
+              ) : ('')}
+              {vaultID}
             </Box>
           </Typography>
         </Box>
