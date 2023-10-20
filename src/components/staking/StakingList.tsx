@@ -1,21 +1,27 @@
-import { useEffect, useState, useLayoutEffect, useRef } from "react";
-
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { useContractWrite } from "wagmi";
 import { getNetwork } from "@wagmi/core";
+import { arbitrumGoerli } from "wagmi/chains";
 import moment from 'moment';
-
+import {
+  useTstAddressStore,
+  useErc20AbiStore,
+} from "../../store/Store";
 import Button from "../../components/Button";
+import StakingModal from "./StakingModal";
 
 type RouteParams = {
   vaultId: string;
 };
 
-interface StakingListTableProps {
+interface StakingListProps {
   stakingData: Array<any>;
   stakingLoading: boolean;
+  vaultManagerAddress: any;
 }
 
 function NoDataOverlay() {
@@ -34,19 +40,32 @@ function NoDataOverlay() {
   );
 }
 
-const StakingListTable: React.FC<StakingListTableProps> = ({
+const StakingList: React.FC<StakingListProps> = ({
   stakingData,
   stakingLoading
-}) => {  const { chain } = getNetwork();
+}) => {
+  const { chain } = getNetwork();
   const { vaultId } = useParams<RouteParams>();
   const navigate = useNavigate();
 
   const [totalRows, setTotalRows] = useState<any>(undefined);
-
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
+
+  const [selectedStakingAddress, setSelectedStakingAddress] = useState<any>(undefined);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenModal = (contractAddress: any) => {
+    setSelectedStakingAddress(contractAddress);
+    setOpen(true)
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false)
+    setSelectedStakingAddress(undefined);
+  };
 
   const colData = [
     {
@@ -147,9 +166,9 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
                 fontSize: "0.8rem",
               }}
               lighter
-              clickFunction={() => console.log(123123123)}
+              clickFunction={() => handleOpenModal(params.row.address)}
             >
-              Start
+              Stake TST
             </Button>
           )
         }
@@ -227,23 +246,31 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
   }));
 
   return (
-    <StyledDataGrid
-      slots={{
-        noRowsOverlay: NoDataOverlay,
-      }}
-      columns={columns}
-      rowCount={totalRows || 0}
-      rows={rows || []}
-      getRowId={(row) => `${row?.address}${row?.maturity}`}
-      disableRowSelectionOnClick
-      pageSizeOptions={[5, 10, 15, 20]}
-      paginationMode="server"
-      loading={stakingLoading}
-      paginationModel={paginationModel}
-      onPaginationModelChange={setPaginationModel}
-      hideFooter={true}
-    />
+    <>
+      <StyledDataGrid
+        slots={{
+          noRowsOverlay: NoDataOverlay,
+        }}
+        columns={columns}
+        rowCount={totalRows || 0}
+        rows={rows || []}
+        getRowId={(row) => `${row?.address}${row?.maturity}`}
+        disableRowSelectionOnClick
+        pageSizeOptions={[5, 10, 15, 20]}
+        paginationMode="server"
+        loading={stakingLoading}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        hideFooter={true}
+      />
+
+      <StakingModal
+        stakingAddress={selectedStakingAddress}
+        handleCloseModal={handleCloseModal}
+        isOpen={open}
+      />
+    </>
   )
 };
 
-export default StakingListTable;
+export default StakingList;
