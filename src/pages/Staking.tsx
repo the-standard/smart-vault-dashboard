@@ -13,7 +13,7 @@ import {
 import Card from "../components/Card";
 import Button from "../components/Button";
 import StakingListTable from "../components/staking/StakingListTable";
-import StakingHistory from "../components/staking/StakingHistory";
+import StakingPositions from "../components/staking/StakingPositions";
 
 const Staking = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
@@ -52,6 +52,7 @@ const Staking = () => {
     ? arbitrumGoerliContractAddress
     : arbitrumContractAddress;
   
+  //////////////////////////
   // Handling Directory List
   const { data: stakingAddresses } = useContractRead({
     address: "0xda81118Ad13a2f83158333D7B7783b33e388E183",
@@ -101,28 +102,19 @@ const Staking = () => {
   const nestedStakingData = stakingData && stakingAddresses?.map((address, i) => {
     return {
       address: address,
-      active: stakingData[i * 6],
-      windowStart: stakingData[i * 6 + 1],
-      windowEnd: stakingData[i * 6 + 2],
-      maturity: stakingData[i * 6 + 3],
-      SI_RATE: stakingData[i * 6 + 4],
-      tstEUROsPrice: stakingData[i * 6 + 5]
+      active: stakingData[i * 6].result,
+      windowStart: stakingData[i * 6 + 1].result,
+      windowEnd: stakingData[i * 6 + 2].result,
+      maturity: stakingData[i * 6 + 3].result,
+      SI_RATE: stakingData[i * 6 + 4].result,
+      tstEUROsPrice: stakingData[i * 6 + 5].result
     }
   });
   // 
 
-
+  /////////////////////
   // Handling Positions
-
-  interface declarePositions {
-    address: string;
-    abi: any;
-    functionName: string;
-    args: Array<any>;
-  }
-
-  // setting this to `positions: any =` resolves the error here, but `positions` in the useContractReads still throws an error about resolving undefinds. But didn't have the same issue in line 66 for `contracts`
-  const positions: declarePositions[] = stakingAddresses?.map(address => {
+  const positions: any = stakingAddresses?.map(address => {
     return [
       {
         address: address,
@@ -133,11 +125,25 @@ const Staking = () => {
     ]
   }).flat();
 
-  const { data: positionData } = useContractReads({positions});
+  const { data: positionData } = useContractReads({contracts: positions});
 
+  const nestedPositionData = positionData && nestedStakingData && stakingAddresses?.map((address, i) => {
+    const positionItem: any = positionData[i].result;
+    const stakingItem: any = nestedStakingData[i];
+    return {
+      address: address,
+      burned: positionItem.burned,
+      nonce: positionItem.nonce,
+      open: positionItem.open,
+      reward: positionItem.reward,
+      stake: positionItem.stake,
+      tokenId: positionItem.tokenId,
+      maturity: stakingItem.maturity,
+      windowStart: stakingItem.windowStart,
+      windowEnd: stakingItem.windowEnd,
+    }
+  });
   // 
-
-  console.log(123123, positionData)
 
   const addToken = async () => {
     if (window.ethereum) {
@@ -171,47 +177,6 @@ const Staking = () => {
       console.log("MetaMask is not installed!");
     }
   };
-  
-  // TODO GET STAKES
-  const sortedStakes = [
-      {
-          "address": "0x989F12d84769bd759407c0c095434bEfA9E64568",
-          "maturity": "1681459200",
-          "start": "1677661200",
-          "end": "1680300000",
-          "interestRate": "909",
-          "isActive": true
-      },
-      {
-          "address": "0x3430c8439D6af71c794f0a3D7FD3C90234077415",
-          "maturity": "1697462975",
-          "start": "1670198400",
-          "end": "1729081775",
-          "interestRate": "1000",
-          "isActive": true
-      }
-  ]
-
-  const sortedStakeHistory = [
-    {
-        "address": "0x989F12d84769bd759407c0c095434bEfA9E64568",
-        "maturity": "1681459200",
-        "stake": "123123",
-        "symbol": "FOO",
-        "reward": "147",
-        "rewardSymbol": "WIP",
-        "burned": true,
-    },
-    {
-        "address": "0x3430c8439D6af71c794f0a3D7FD3C90234077415",
-        "maturity": "1697462975",
-        "stake": "47813",
-        "symbol": "BAR",
-        "reward": "298",
-        "rewardSymbol": "WIP",
-        "burned": true,
-    }
-  ]
 
   return (
     <Box>
@@ -378,11 +343,11 @@ const Staking = () => {
           }}
           variant="h4"
         >
-          Staking History
+          Staking Positions
         </Typography>
-        <StakingHistory
-          stakingHistoryData={sortedStakeHistory}
-          stakingHistoryLoading={false}
+        <StakingPositions
+          stakingPositionsData={nestedPositionData || []}
+          stakingPositionsLoading={false}
         />
       </Card>
     </Box>

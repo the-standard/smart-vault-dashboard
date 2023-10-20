@@ -13,9 +13,9 @@ type RouteParams = {
   vaultId: string;
 };
 
-interface StakingHistoryProps {
-  stakingHistoryData: Array<any>;
-  stakingHistoryLoading: boolean;
+interface StakingPositionsProps {
+  stakingPositionsData: Array<any>;
+  stakingPositionsLoading: boolean;
 }
 
 function NoDataOverlay() {
@@ -34,9 +34,9 @@ function NoDataOverlay() {
   );
 }
 
-const StakingHistory: React.FC<StakingHistoryProps> = ({
-  stakingHistoryData,
-  stakingHistoryLoading
+const StakingPositions: React.FC<StakingPositionsProps> = ({
+  stakingPositionsData,
+  stakingPositionsLoading,
 }) => {  const { chain } = getNetwork();
   const { vaultId } = useParams<RouteParams>();
   const navigate = useNavigate();
@@ -52,14 +52,15 @@ const StakingHistory: React.FC<StakingHistoryProps> = ({
     {
       minWidth: 90,
       flex: 1,
-      field: 'staking_position',
-      headerName: 'Staking Positions',
+      field: 'stake',
+      headerName: 'Staked Amount',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
+        const stakeAmount = Number(params.row.stake);
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {params.row.stake || ''} {params.row.symbol || ''}
+            {stakeAmount || ''} TST
           </span>
         );
       },
@@ -72,9 +73,10 @@ const StakingHistory: React.FC<StakingHistoryProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
+        const stakeReward = Number(params.row.reward);
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {params.row.reward || ''} {params.row.rewardSymbol || ''}
+            {stakeReward || ''} EUROs
           </span>
         );
       },
@@ -87,7 +89,8 @@ const StakingHistory: React.FC<StakingHistoryProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const maturity = moment(parseInt(params.row.maturity)*1000);
+        const unixDate = Number(params.row.maturity);
+        const maturity = moment.unix(unixDate);
         return (
           <span style={{textTransform: 'capitalize'}}>
             {maturity.format('ll') || ''}
@@ -103,24 +106,38 @@ const StakingHistory: React.FC<StakingHistoryProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        return (
-          <Button
-            sx={{
-              padding: "5px 10px",
-              fontSize: "0.8rem",
-            }}
-            lighter
-            clickFunction={() => console.log(123123123)}
-          >
-            WIP
-          </Button>
-        )
+        const unixDate = Number(params.row.maturity);
+        const maturity = moment.unix(unixDate);
+        if (moment().isAfter(maturity)) {
+          return (
+            <Button
+              sx={{
+                padding: "5px 10px",
+                fontSize: "0.8rem",
+              }}
+              lighter
+              clickFunction={() => console.log(123123123)}
+            >
+              Claim
+            </Button>
+          )
+        } else {
+          return (
+            <span style={{opacity: 0.5}}>
+              Maturing
+            </span>
+          )
+        }
       },
     },
   ];
 
+  const activeData = stakingPositionsData?.filter((position: any) =>
+    Number(position.nonce) > 0
+  ) || [];
+
   const columns: GridColDef[] = colData;
-  const rows = stakingHistoryData || [];
+  const rows = stakingPositionsData || [];
 
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
@@ -196,11 +213,12 @@ const StakingHistory: React.FC<StakingHistoryProps> = ({
       disableRowSelectionOnClick
       pageSizeOptions={[5, 10, 15, 20]}
       paginationMode="server"
-      loading={stakingHistoryLoading}
+      loading={stakingPositionsLoading}
       paginationModel={paginationModel}
       onPaginationModelChange={setPaginationModel}
+      hideFooter={true}
     />
   )
 };
 
-export default StakingHistory;
+export default StakingPositions;

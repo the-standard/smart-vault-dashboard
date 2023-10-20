@@ -57,7 +57,7 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixDate = Number(params.row.windowStart.result)
+        const unixDate = Number(params.row.windowStart);
         const useDate = moment.unix(unixDate).format('ll');
         return (
           <span style={{textTransform: 'capitalize'}}>
@@ -74,8 +74,8 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixStart = Number(params.row.windowStart.result)
-        const unixEnd = Number(params.row.windowEnd.result)
+        const unixStart = Number(params.row.windowStart);
+        const unixEnd = Number(params.row.windowEnd);
         const startPeriod = moment.unix(unixStart);
         const endPeriod = moment.unix(unixEnd);
         const hasOpened = moment().isSameOrBefore(endPeriod) && moment().isSameOrAfter(startPeriod);
@@ -105,7 +105,7 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixDate = Number(params.row.windowStart.result)
+        const unixDate = Number(params.row.maturity);
         const maturity = moment.unix(unixDate);
         return (
           <span style={{textTransform: 'capitalize'}}>
@@ -122,8 +122,8 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixStart = Number(params.row.windowStart.result)
-        const unixEnd = Number(params.row.windowEnd.result)
+        const unixStart = Number(params.row.windowStart);
+        const unixEnd = Number(params.row.windowEnd);
         const startPeriod = moment.unix(unixStart);
         const endPeriod = moment.unix(unixEnd);
         const hasOpened = moment().isSameOrBefore(endPeriod) && moment().isSameOrAfter(startPeriod);
@@ -135,7 +135,7 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
           } else {
             return (
               <span style={{opacity: 0.5}}>
-                {`${startPeriod.format('ll')} - ${startPeriod.format('LT')}`}
+                Opening Soon
               </span>
             )
           }
@@ -158,7 +158,7 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
   ];
 
   const activeData = stakingData?.filter((contract: any) =>
-    contract.active.result === true
+    contract.active === true
   ) || [];
 
   const columns: GridColDef[] = colData;
@@ -241,6 +241,7 @@ const StakingListTable: React.FC<StakingListTableProps> = ({
       loading={stakingLoading}
       paginationModel={paginationModel}
       onPaginationModelChange={setPaginationModel}
+      hideFooter={true}
     />
   )
 };
