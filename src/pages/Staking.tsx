@@ -225,6 +225,9 @@ const Staking = () => {
             width: "100%",
             alignItems: "center",
             marginBottom: "1rem",
+            flexWrap: {
+              xs: 'wrap'
+            },
           }}
         >
           <Typography
@@ -250,6 +253,7 @@ const Staking = () => {
               boxSizing: "border-box",
               MozBoxSizing: "border-box",
               WebkitBoxSizing: "border-box",
+              flex: "1",
             }}
             value={tokenAddress}
             ref={tstAddressRef}
@@ -262,8 +266,23 @@ const Staking = () => {
               height: "2.5rem",
               boxSizing: "border-box",
               padding: "5px 12px",
-              minWidth: `fit-content`,
-              marginLeft: "0.5rem",
+              flex: "1",
+              marginLeft: {
+                xs: "0px",
+                sm: "0.5rem"
+              },
+              minWidth: {
+                xs: "100%",
+                sm: "fit-content",
+              },
+              maxWidth: {
+                xs: "unset",
+                sm: "200px"
+              },
+              marginTop: {
+                xs: "1rem",
+                sm: "0px",
+              },
               "&:after": {
                 backgroundSize: "300% 100%",
               },

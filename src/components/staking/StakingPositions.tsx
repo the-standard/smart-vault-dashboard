@@ -137,7 +137,7 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
   ) || [];
 
   const columns: GridColDef[] = colData;
-  const rows = stakingPositionsData || [];
+  const rows = activeData || [];
 
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
