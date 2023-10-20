@@ -3,6 +3,7 @@ import vaultManagerAbi from "../abis/vaultManager.ts";
 import erc20Abi from "../abis/erc20.ts";
 import chainlinkAbi from "../abis/priceFeeds/chainlink.ts";
 import smartVaultABI from "../abis/smartVault.ts";
+import stakingAbi from "../abis/staking.ts";
 import { Address } from "viem";
 
 interface EthToUsdAddressState {
@@ -101,6 +102,19 @@ export const useVaultManagerAbiStore = create<VaultManagerAbiState>()(
     vaultManagerAbi: vaultManagerAbi,
     getVaultManagerAbi: (vaultManagerAbi) =>
       set(() => ({ vaultManagerAbi: vaultManagerAbi })),
+  })
+);
+
+interface StakingAbiState {
+  stakingAbi: Array<any>;
+  getStakingAbi: (stakingAbi: Array<any>) => void;
+}
+
+export const useStakingAbiStore = create<StakingAbiState>()(
+  (set) => ({
+    stakingAbi: stakingAbi,
+    getStakingAbi: (stakingAbi) =>
+      set(() => ({ stakingAbi: stakingAbi })),
   })
 );
 
