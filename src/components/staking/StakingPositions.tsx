@@ -1,13 +1,13 @@
-import { useEffect, useState, useLayoutEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getNetwork } from "@wagmi/core";
+import { formatEther } from "viem";
 import moment from 'moment';
 
 import Button from "../../components/Button";
+import ClaimingModal from "./ClaimingModal";
 
 type RouteParams = {
   vaultId: string;
@@ -37,11 +37,21 @@ function NoDataOverlay() {
 const StakingPositions: React.FC<StakingPositionsProps> = ({
   stakingPositionsData,
   stakingPositionsLoading,
-}) => {  const { chain } = getNetwork();
-  const { vaultId } = useParams<RouteParams>();
-  const navigate = useNavigate();
-
+}) => {
   const [totalRows, setTotalRows] = useState<any>(undefined);
+
+  const [selectedPosition, setSelectedPosition] = useState<any>(undefined);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenModal = (position: any) => {
+    setSelectedPosition(position);
+    setOpen(true)
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false)
+    setSelectedPosition(undefined);
+  };
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -57,10 +67,13 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const stakeAmount = Number(params.row.stake);
+        let useAmount: any = 0;
+        if (params.row.stake) {
+          useAmount = formatEther(params.row.stake.toString());
+        }
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {stakeAmount || ''} TST
+            {useAmount || ''} TST
           </span>
         );
       },
@@ -73,10 +86,13 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const stakeReward = Number(params.row.reward);
+        let useReward: any = 0;
+        if (params.row.stake) {
+          useReward = formatEther(params.row.reward.toString());
+        }
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {stakeReward || ''} EUROs
+            {useReward || ''} TST
           </span>
         );
       },
@@ -108,7 +124,13 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
       renderCell: (params: any) => {
         const unixDate = Number(params.row.maturity);
         const maturity = moment.unix(unixDate);
-        if (moment().isAfter(maturity)) {
+        if (params.row.burned) {
+          return (
+            <span style={{opacity: 0.5}}>
+              Claimed
+            </span>
+          )
+        } else if (moment().isAfter(maturity)) {
           return (
             <Button
               sx={{
@@ -116,7 +138,7 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
                 fontSize: "0.8rem",
               }}
               lighter
-              clickFunction={() => console.log(123123123)}
+              clickFunction={() => handleOpenModal(params.row)}
             >
               Claim
             </Button>
@@ -138,15 +160,6 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
 
   const columns: GridColDef[] = colData;
   const rows = activeData || [];
-
-  // const repayMoney = useContractWrite({
-  //   address: stakingAddress as any,
-  //   abi: stakingAbi,
-  //   functionName: "burn",
-  //   account: address,
-  // });
-
-  // console.log(404004, address)
 
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
@@ -211,22 +224,29 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
   }));
 
   return (
-    <StyledDataGrid
-      slots={{
-        noRowsOverlay: NoDataOverlay,
-      }}
-      columns={columns}
-      rowCount={totalRows || 0}
-      rows={rows || []}
-      getRowId={(row) => `${row?.address}${row?.maturity}`}
-      disableRowSelectionOnClick
-      pageSizeOptions={[5, 10, 15, 20]}
-      paginationMode="server"
-      loading={stakingPositionsLoading}
-      paginationModel={paginationModel}
-      onPaginationModelChange={setPaginationModel}
-      hideFooter={true}
-    />
+    <>
+      <StyledDataGrid
+        slots={{
+          noRowsOverlay: NoDataOverlay,
+        }}
+        columns={columns}
+        rowCount={totalRows || 0}
+        rows={rows || []}
+        getRowId={(row) => `${row?.address}${row?.maturity}`}
+        disableRowSelectionOnClick
+        pageSizeOptions={[5, 10, 15, 20]}
+        paginationMode="server"
+        loading={stakingPositionsLoading}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        hideFooter={true}
+      />
+      <ClaimingModal
+        stakingPosition={selectedPosition}
+        handleCloseModal={handleCloseModal}
+        isOpen={open}
+      />
+    </>
   )
 };
 

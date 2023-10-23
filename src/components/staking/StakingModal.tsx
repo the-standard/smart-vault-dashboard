@@ -38,7 +38,6 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const [mintLoading, setMintLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const tstAddress = chain?.id === arbitrumGoerli.id ?
   arbitrumGoerliTstAddress :
@@ -75,7 +74,6 @@ const StakingModal: React.FC<StakingModalProps> = ({
   if (stakingContract && stakingContract.SI_RATE) {
     rewardRate = Number(stakingContract.SI_RATE) / 1000;
   }
-  console.log(123123, stakingContract)
 
   useEffect(() => {
     const { isLoading, isSuccess, isError } = approvePayment;

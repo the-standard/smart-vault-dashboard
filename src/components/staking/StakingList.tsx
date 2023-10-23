@@ -42,8 +42,8 @@ const StakingList: React.FC<StakingListProps> = ({
   const [selectedStakingContract, setSelectedStakingContract] = useState<any>(undefined);
   const [open, setOpen] = useState(false);
 
-  const handleOpenModal = (selectedContract: any) => {
-    setSelectedStakingContract(selectedContract);
+  const handleOpenModal = (contract: any) => {
+    setSelectedStakingContract(contract);
     setOpen(true)
   };
 
