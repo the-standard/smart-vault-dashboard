@@ -8,7 +8,6 @@ import StakingModal from "./StakingModal";
 
 interface StakingListProps {
   stakingData: Array<any>;
-  stakingLoading: boolean;
   vaultManagerAddress: any;
 }
 
@@ -30,7 +29,6 @@ function NoDataOverlay() {
 
 const StakingList: React.FC<StakingListProps> = ({
   stakingData,
-  stakingLoading
 }) => {
 
   const [totalRows, setTotalRows] = useState<any>(undefined);
@@ -228,7 +226,6 @@ const StakingList: React.FC<StakingListProps> = ({
         disableRowSelectionOnClick
         pageSizeOptions={[5, 10, 15, 20]}
         paginationMode="server"
-        loading={stakingLoading}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         hideFooter={true}

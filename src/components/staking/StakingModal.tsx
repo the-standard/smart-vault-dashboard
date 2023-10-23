@@ -39,6 +39,11 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const [mintLoading, setMintLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  useEffect(() => {
+    setStakeAmount(0);
+    setSuccess(false);
+  }, [isOpen]);
+
   const tstAddress = chain?.id === arbitrumGoerli.id ?
   arbitrumGoerliTstAddress :
   arbitrumTstAddress ;
@@ -49,7 +54,6 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const stakingMaturity = stakingContract?.maturity;
   const maturityUnix = Number(stakingMaturity);
   const maturity = moment.unix(maturityUnix);
-
 
   const approvePayment = useContractWrite({
     address: tstAddress as any,
@@ -77,28 +81,16 @@ const StakingModal: React.FC<StakingModalProps> = ({
 
   useEffect(() => {
     const { isLoading, isSuccess, isError } = approvePayment;
-
     if (isLoading) {
       setApproveLoading(true);
-      // handleOpen();
-      // getCircularProgress(true);
     } else if (isSuccess) {
       setApproveLoading(false);
       handleMintPosition();
-      // getCircularProgress(false);
-      // incrementCounter();
       getSnackBar(0);
-      // inputRef.current.value = "";
-      // inputRef.current.focus();
-      // getGreyBarUserInput(0);
     } else if (isError) {
       setApproveLoading(false);
       handleCloseModal();
-      // getCircularProgress(false);
       getSnackBar(1);
-      // inputRef.current.value = "";
-      // inputRef.current.focus();
-      // getGreyBarUserInput(0);
     }
   }, [
     approvePayment.isLoading,
@@ -123,29 +115,15 @@ const StakingModal: React.FC<StakingModalProps> = ({
     const { isLoading, isSuccess, isError } = mintPosition;
     if (isLoading) {
       setMintLoading(true);
-      // setModalStep(2);
-      // getCircularProgress(true);
+      setSuccess(false);
     } else if (isSuccess) {
       setMintLoading(false);
       setSuccess(true);
-      // handleClose();
-      // setModalStep(1);
-      // getProgressType(2);
-      // getCircularProgress(false);
-      // incrementCounter();
       getSnackBar(0);
-      // inputRef.current.value = "";
-      // inputRef.current.focus();
-      // getGreyBarUserInput(0);
     } else if (isError) {
       setMintLoading(false);
-      // setModalStep(1);
-      // getCircularProgress(false);
+      setSuccess(false);
       getSnackBar(1);
-      // inputRef.current.value = "";
-      // inputRef.current.focus();
-      // getGreyBarUserInput(0);
-      // console.log(isError);
     }
   }, [
     mintPosition.isLoading,

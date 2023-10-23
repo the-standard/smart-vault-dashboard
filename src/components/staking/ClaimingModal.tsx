@@ -2,12 +2,8 @@ import { useState, useEffect } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAccount, useContractWrite } from "wagmi";
-import { getNetwork } from "@wagmi/core";
-import { arbitrumGoerli } from "wagmi/chains";
 import { formatEther } from "viem";
 import {
-  useTstAddressStore,
-  useErc20AbiStore,
   useStakingAbiStore,
   useSnackBarStore,
 } from "../../store/Store";
@@ -24,18 +20,16 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
   isOpen,
   handleCloseModal,
 }) => {
-  const { chain } = getNetwork();
-  const {
-    arbitrumTstAddress,
-    arbitrumGoerliTstAddress
-  } = useTstAddressStore();
-  const { erc20Abi } = useErc20AbiStore();
   const { stakingAbi } = useStakingAbiStore();
   const { getSnackBar } = useSnackBarStore();
   const { address } = useAccount();
 
   const [claimLoading, setClaimLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    setSuccess(false);
+  }, [isOpen]);
 
   let stakeAmount: any = 0;
   if (stakingPosition && stakingPosition.stake) {
@@ -66,12 +60,14 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
     const { isLoading, isSuccess, isError } = claimPosition;
     if (isLoading) {
       setClaimLoading(true);
+      setSuccess(false);
     } else if (isSuccess) {
       setClaimLoading(false);
       setSuccess(true);
       getSnackBar(0);
     } else if (isError) {
       setClaimLoading(false);
+      setSuccess(false);
       getSnackBar(1);
     }
   }, [
@@ -80,7 +76,6 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
     claimPosition.data,
     claimPosition.isError,
   ]);
-
 
   const handleApproveClaim = async () => {
     const { write } = claimPosition;

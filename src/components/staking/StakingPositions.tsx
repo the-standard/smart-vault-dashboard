@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
@@ -9,13 +9,8 @@ import moment from 'moment';
 import Button from "../../components/Button";
 import ClaimingModal from "./ClaimingModal";
 
-type RouteParams = {
-  vaultId: string;
-};
-
 interface StakingPositionsProps {
   stakingPositionsData: Array<any>;
-  stakingPositionsLoading: boolean;
 }
 
 function NoDataOverlay() {
@@ -36,7 +31,6 @@ function NoDataOverlay() {
 
 const StakingPositions: React.FC<StakingPositionsProps> = ({
   stakingPositionsData,
-  stakingPositionsLoading,
 }) => {
   const [totalRows, setTotalRows] = useState<any>(undefined);
 
@@ -236,7 +230,6 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
         disableRowSelectionOnClick
         pageSizeOptions={[5, 10, 15, 20]}
         paginationMode="server"
-        loading={stakingPositionsLoading}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         hideFooter={true}

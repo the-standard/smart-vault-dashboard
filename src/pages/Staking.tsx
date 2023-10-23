@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 import { getNetwork } from "@wagmi/core";
 import { useContractRead, useContractReads, useAccount } from "wagmi";
@@ -11,19 +11,13 @@ import {
 } from "../store/Store.ts";
 
 import Card from "../components/Card";
-import Button from "../components/Button";
 import StakingList from "../components/staking/StakingList";
 import StakingPositions from "../components/staking/StakingPositions";
 
 const Staking = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
-  // const [stakingDirectory, setStakingDirectory] = useState<string[]>([]);
 
-  const [tokenAddress, setTokenAddress] = useState('');
-  const [currentPrice, setCurrentPrice] = useState(0);
-  const tstAddressRef: any = useRef<HTMLInputElement>(null);
-  const currentPriceRef: any = useRef<HTMLInputElement>(null);
   const { stakingAbi } = useStakingAbiStore();
 
   const {
@@ -58,10 +52,6 @@ const Staking = () => {
     address: "0xda81118Ad13a2f83158333D7B7783b33e388E183",
     abi: stakingAbi,
     functionName: "list",
-    // onSuccess() {
-    //   const useDirectory: any = stakingAddresses;
-    //   setStakingDirectory(useDirectory);
-    // },
   });
 
   const contracts: any = stakingAddresses?.map(address => {
@@ -187,7 +177,6 @@ const Staking = () => {
         <Box>
           <StakingList
             stakingData={nestedStakingData || []}
-            stakingLoading={false}
             vaultManagerAddress={vaultManagerAddress}
           />
         </Box>
@@ -218,7 +207,6 @@ const Staking = () => {
         </Typography>
         <StakingPositions
           stakingPositionsData={nestedPositionData || []}
-          stakingPositionsLoading={false}
         />
       </Card>
     </Box>
