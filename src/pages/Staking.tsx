@@ -121,12 +121,11 @@ const Staking = () => {
         abi: stakingAbi,
         functionName: "position",
         args: [address],
-        watch: true,
       }
     ]
   }).flat();
 
-  const { data: positionData } = useContractReads({contracts: positions});
+  const { data: positionData } = useContractReads({contracts: positions, watch: true});
 
   const nestedPositionData = positionData && nestedStakingData && stakingAddresses?.map((address, i) => {
     const positionItem: any = positionData[i].result;
