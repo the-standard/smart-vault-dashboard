@@ -1,22 +1,10 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Box, Modal, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useContractWrite } from "wagmi";
-import { getNetwork } from "@wagmi/core";
-import { arbitrumGoerli } from "wagmi/chains";
 import moment from 'moment';
-import {
-  useTstAddressStore,
-  useErc20AbiStore,
-} from "../../store/Store";
 import Button from "../../components/Button";
 import StakingModal from "./StakingModal";
-
-type RouteParams = {
-  vaultId: string;
-};
 
 interface StakingListProps {
   stakingData: Array<any>;
@@ -44,9 +32,6 @@ const StakingList: React.FC<StakingListProps> = ({
   stakingData,
   stakingLoading
 }) => {
-  const { chain } = getNetwork();
-  const { vaultId } = useParams<RouteParams>();
-  const navigate = useNavigate();
 
   const [totalRows, setTotalRows] = useState<any>(undefined);
   const [paginationModel, setPaginationModel] = useState({
@@ -54,17 +39,17 @@ const StakingList: React.FC<StakingListProps> = ({
     pageSize: 10,
   });
 
-  const [selectedStakingAddress, setSelectedStakingAddress] = useState<any>(undefined);
+  const [selectedStakingContract, setSelectedStakingContract] = useState<any>(undefined);
   const [open, setOpen] = useState(false);
 
-  const handleOpenModal = (contractAddress: any) => {
-    setSelectedStakingAddress(contractAddress);
+  const handleOpenModal = (selectedContract: any) => {
+    setSelectedStakingContract(selectedContract);
     setOpen(true)
   };
 
   const handleCloseModal = () => {
     setOpen(false)
-    setSelectedStakingAddress(undefined);
+    setSelectedStakingContract(undefined);
   };
 
   const colData = [
@@ -88,33 +73,18 @@ const StakingList: React.FC<StakingListProps> = ({
     {
       minWidth: 90,
       flex: 1,
-      field: 'status',
-      headerName: 'Status',
+      field: 'SI_Rate',
+      headerName: 'Reward',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixStart = Number(params.row.windowStart);
-        const unixEnd = Number(params.row.windowEnd);
-        const startPeriod = moment.unix(unixStart);
-        const endPeriod = moment.unix(unixEnd);
-        const hasOpened = moment().isSameOrBefore(endPeriod) && moment().isSameOrAfter(startPeriod);
+        const si_rate = Number(params.row.SI_RATE)
+        const reward = Number(si_rate / 1000);
 
-        if (!hasOpened) {
-          if (moment().isAfter(endPeriod)) {
-            return (
-              <span style={{opacity: 0.5}}>Closed</span>
-            )  
-          } else {
-            return (
-              <span style={{opacity: 0.5}}>Opening Soon</span>
-            )  
-          }
-        } else {
-          return (
-            <span>Open Now</span>
-          )
-        }
-      },
+        return (
+          <span>{reward}%</span>
+        )
+    },
     },
     {
       minWidth: 90,
@@ -137,7 +107,7 @@ const StakingList: React.FC<StakingListProps> = ({
       minWidth: 90,
       flex: 1,
       field: 'action',
-      headerName: '',
+      headerName: 'Status',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
@@ -166,7 +136,7 @@ const StakingList: React.FC<StakingListProps> = ({
                 fontSize: "0.8rem",
               }}
               lighter
-              clickFunction={() => handleOpenModal(params.row.address)}
+              clickFunction={() => handleOpenModal(params.row)}
             >
               Stake TST
             </Button>
@@ -265,7 +235,7 @@ const StakingList: React.FC<StakingListProps> = ({
       />
 
       <StakingModal
-        stakingAddress={selectedStakingAddress}
+        stakingContract={selectedStakingContract}
         handleCloseModal={handleCloseModal}
         isOpen={open}
       />

@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { Box, Modal, Typography } from "@mui/material";
-import { useContractWrite } from "wagmi";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useContractRead, useContractWrite } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { arbitrumGoerli } from "wagmi/chains";
+import { formatEther, parseEther } from "viem";
+import moment from 'moment';
 import {
   useTstAddressStore,
   useErc20AbiStore,
@@ -12,13 +15,13 @@ import {
 import Button from "../../components/Button";
 
 interface StakingModalProps {
-  stakingAddress: any;
+  stakingContract: any;
   isOpen: boolean;
   handleCloseModal: any;
 }
 
 const StakingModal: React.FC<StakingModalProps> = ({
-  stakingAddress,
+  stakingContract,
   isOpen,
   handleCloseModal,
 }) => {
@@ -32,29 +35,57 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const { stakingAbi } = useStakingAbiStore();
   const { getSnackBar } = useSnackBarStore();
 
-  const [loading, setLoading] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
+  const [mintLoading, setMintLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const tstAddress = chain?.id === arbitrumGoerli.id ?
-  arbitrumTstAddress :
-  arbitrumGoerliTstAddress;
+  arbitrumGoerliTstAddress :
+  arbitrumTstAddress ;
+
+  const amountInWei = parseEther(stakeAmount.toString());
+
+  const stakingAddress = stakingContract?.address;
+  const stakingMaturity = stakingContract?.maturity;
+  const maturityUnix = Number(stakingMaturity);
+  const maturity = moment.unix(maturityUnix);
+
 
   const approvePayment = useContractWrite({
     address: tstAddress as any,
     abi: erc20Abi,
     functionName: "approve",
-    args: [stakingAddress as any, stakeAmount],
+    args: [stakingAddress as any, amountInWei],
   });
+
+  const {data: rewardAmount}: any = useContractRead({
+    address: stakingAddress,
+    abi: stakingAbi,
+    functionName: "calculateReward",
+    args: [amountInWei]
+  });
+
+  let useRewardAmount: any = 0;
+  if (rewardAmount) {
+    useRewardAmount = formatEther(rewardAmount.toString());
+  }
+
+  let rewardRate;
+  if (stakingContract && stakingContract.SI_RATE) {
+    rewardRate = Number(stakingContract.SI_RATE) / 1000;
+  }
+  console.log(123123, stakingContract)
 
   useEffect(() => {
     const { isLoading, isSuccess, isError } = approvePayment;
 
     if (isLoading) {
-      setLoading(true);
+      setApproveLoading(true);
       // handleOpen();
       // getCircularProgress(true);
     } else if (isSuccess) {
-      setLoading(false);
+      setApproveLoading(false);
       handleMintPosition();
       // getCircularProgress(false);
       // incrementCounter();
@@ -63,7 +94,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
       // inputRef.current.focus();
       // getGreyBarUserInput(0);
     } else if (isError) {
-      setLoading(false);
+      setApproveLoading(false);
       handleCloseModal();
       // getCircularProgress(false);
       getSnackBar(1);
@@ -84,20 +115,20 @@ const StakingModal: React.FC<StakingModalProps> = ({
   };
 
   const mintPosition = useContractWrite({
-    address: "0xda81118Ad13a2f83158333D7B7783b33e388E183",
+    address: stakingAddress,
     abi: stakingAbi,
     functionName: "mint",
-    args: [stakeAmount],
+    args: [amountInWei],
   });
 
   useEffect(() => {
     const { isLoading, isSuccess, isError } = mintPosition;
     if (isLoading) {
-      setLoading(true);
+      setMintLoading(true);
       // setModalStep(2);
       // getCircularProgress(true);
     } else if (isSuccess) {
-      setLoading(false);
+      setMintLoading(false);
       setSuccess(true);
       // handleClose();
       // setModalStep(1);
@@ -109,7 +140,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
       // inputRef.current.focus();
       // getGreyBarUserInput(0);
     } else if (isError) {
-      setLoading(false);
+      setMintLoading(false);
       // setModalStep(1);
       // getCircularProgress(false);
       getSnackBar(1);
@@ -154,8 +185,8 @@ const StakingModal: React.FC<StakingModalProps> = ({
             transform: "translate(-50%, -50%)",
             width: {
               xs: "70%",
-              sm: "60%",
-              md: "50%",
+              sm: "50%",
+              md: "40%",
             },
             background:
               "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
@@ -180,55 +211,238 @@ const StakingModal: React.FC<StakingModalProps> = ({
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              // alignItems: "center",
             }}
           >
-            {loading ? (
+            {approveLoading || mintLoading ? (
               <>
-                <Typography>
-                  TEMP LOADER...
+                <Typography
+                  sx={{
+                    fontSize: "1rem",
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                >
+                  {approveLoading ? ('Setting Spending Cap') : null}
+                  {mintLoading ? ('Approving Minting') : null}
                 </Typography>
+                <Box
+                sx={{
+                  minHeight: "250px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+                >
+                  <CircularProgress size="8rem" />
+                </Box>
               </>
             ) : (
               <>
-                <Typography>
-                  Stake TST
-                </Typography>
-                <input
-                  style={{
-                    background: " rgba(18, 18, 18, 0.5)",
-                    border: "1px solid #8E9BAE",
-                    color: "white",
-                    fontSize: "1rem",
-                    fontWeight: "normal",
-                    fontFamily: "Poppins",
-                    height: "2rem",
-                    borderRadius: "10px",
-                    paddingLeft: "0.5rem",
-                    marginTop: "1rem",
-                  }}
-                  placeholder="Amount of TST to stake"
-                  type="number"
-                  onChange={handleAmount}
-                  autoFocus
-                />
-                <Button
+                <Box
                   sx={{
-                    padding: "5px",
-                    height: "1.5rem",
-                    marginTop: "1rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    marginBottom: "1rem",
                   }}
-                  clickFunction={handleApprovePayment}
                 >
-                  Stake
-                </Button>
+                  <Typography
+                    sx={{
+                      fontSize: "1.5rem",
+                      width: "100%",
+                      marginBottom: "0.5rem",
+                    }}                
+                  >
+                    {success ? (
+                      'TST Staked Successfully 🎉'
+                      ) : (
+                      'Stake TST'
+                    )}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "1rem",
+                      width: "100%",
+                      opacity: "0.8"
+                    }}
+                  >
+                    {success ? (
+                      <>
+                        Congratulations on securing your {rewardRate}% TST reward!
+                      </>
+                    ) : (
+                      <>
+                        Input the amount you wish to stake below and find out how much TST you&apos;ll be rewarded with at the end of the maturity period.
+                      </>
+                    )}
+                  </Typography>
+                  <Box sx={{
+                    marginTop: "1rem",
+                    width: "100%",
+                    height: "2px",
+                    backgroundImage: "linear-gradient( to right, transparent, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.5) 85%, transparent )",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "100% 1px",
+                    backgroundPosition: "center bottom",                    
+                  }}/>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    alignItems: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      marginRight: "0.5rem",
+                      minWidth: "120px",
+                    }}
+                  >
+                    Maturity Date:
+                  </Typography>
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      width: "100%",
+                    }}
+                  >
+                    {maturity.format('ll') || ''}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    alignItems: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      marginRight: "0.5rem",
+                      minWidth: "120px",
+                    }}
+                  >
+                    Stake Amount:
+                  </Typography>
+                  {success ? (
+                    <>
+                      <Typography
+                        sx={{
+                          whiteSpace: "nowrap",
+                          width: "100%",
+                        }}
+                      >
+                        {stakeAmount} TST
+                      </Typography>
+                    </>
+                  ) : (
+                    <>
+                      <input
+                        style={{
+                          background: " rgba(18, 18, 18, 0.5)",
+                          border: "1px solid #8E9BAE",
+                          color: "white",
+                          fontSize: "1rem",
+                          fontWeight: "normal",
+                          fontFamily: "Poppins",
+                          height: "2rem",
+                          borderRadius: "10px",
+                          paddingLeft: "0.5rem",
+                          width: "100%",
+                        }}
+                        placeholder="TST Stake Amount"
+                        type="number"
+                        onChange={handleAmount}
+                        autoFocus
+                      />
+                    </>
+                  )}
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    alignItems: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      marginRight: "0.5rem",
+                      minWidth: "120px",
+                    }}
+                  >
+                    Reward:
+                  </Typography>
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      width: "100%",
+                    }}
+                  >
+                    {useRewardAmount} TST
+                  </Typography>
+                </Box>
+                {success ? (
+                  <>
+                    <Box sx={{
+                      marginBottom: "1rem",
+                      width: "100%",
+                      height: "2px",
+                      backgroundImage: "linear-gradient( to right, transparent, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.5) 85%, transparent )",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "100% 1px",
+                      backgroundPosition: "center bottom",                    
+                    }}/>
+                    <Typography
+                      sx={{
+                        fontSize: "1rem",
+                        width: "100%",
+                        opacity: "0.8",
+                        marginBottom: "1rem",
+                      }}                
+                    >
+                      If you have more TST and would like to earn even more, you can still increase your stake while the window is open!
+                    </Typography>
+                  </>
+                ) : null}
+                {success ? (
+                  <Button
+                    sx={{
+                      padding: "5px",
+                      height: "1.5rem",
+                    }}
+                    clickFunction={handleCloseModal}
+                  >
+                    Close
+                  </Button>
+                ) : (
+                  <Button
+                    sx={{
+                      padding: "5px",
+                      height: "1.5rem",
+                    }}
+                    clickFunction={handleApprovePayment}
+                    isDisabled={!stakeAmount || !rewardAmount}
+                  >
+                    Stake
+                  </Button>
+                )}
               </>
             )}
-            {success ? (
-              <Typography>
-                GREAT SUCCESS
-              </Typography>
-            ) : (null)}
           </Box>
         </Box>
       </Modal>

@@ -114,13 +114,14 @@ const Staking = () => {
 
   /////////////////////
   // Handling Positions
-  const positions: any = stakingAddresses?.map(address => {
+  const positions: any = stakingAddresses?.map(stakeAddress => {
     return [
       {
-        address: address,
+        address: stakeAddress,
         abi: stakingAbi,
         functionName: "position",
-        args: [vaultManagerAddress],
+        args: [address],
+        watch: true,
       }
     ]
   }).flat();
@@ -144,39 +145,6 @@ const Staking = () => {
     }
   });
   // 
-
-  const addToken = async () => {
-    if (window.ethereum) {
-      try {
-        window.ethereum
-          .request({
-            method: "wallet_watchAsset",
-            params: {
-              type: "ERC20",
-              options: {
-                address: tokenAddress,
-                symbol: "TST", // A string of 2-6 characters.
-                decimals: 18, // A number between 1-36.
-                image:
-                  "https://storage.googleapis.com/the-standard-assets/TST.png", // A string url of the token logo
-              },
-            },
-          })
-          .then((success: any) => {
-            if (success) {
-              // console.log("Successfully added asset.");
-            } else {
-              throw new Error("Something went wrong.");
-            }
-          })
-          .catch(console.error);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      console.log("MetaMask is not installed!");
-    }
-  };
 
   return (
     <Box>
@@ -217,122 +185,6 @@ const Staking = () => {
         >
           The yields of this pooled fund will initially be rewarded to TST stakers and later also help the protocol's treasury for R&D, marketing, and expansion. All yields paid out will be paid out in sEURO. Your TST will be locked in until the maturity date.
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            width: "100%",
-            alignItems: "center",
-            marginBottom: "1rem",
-            flexWrap: {
-              xs: 'wrap'
-            },
-          }}
-        >
-          <Typography
-            sx={{
-              whiteSpace: "nowrap",
-              marginRight: "0.5rem",
-            }}
-          >
-            TST Address:
-          </Typography>
-          <input
-            style={{
-              background: "rgba(18, 18, 18, 0.5)",
-              border: "1px solid #8E9BAE",
-              color: "white",
-              fontSize: "1rem",
-              fontWeight: "normal",
-              fontFamily: "Poppins",
-              height: "2.5rem",
-              width: "100%",
-              borderRadius: "10px",
-              paddingLeft: "0.5rem",
-              boxSizing: "border-box",
-              MozBoxSizing: "border-box",
-              WebkitBoxSizing: "border-box",
-              flex: "1",
-            }}
-            value={tokenAddress}
-            ref={tstAddressRef}
-            type="number"
-            placeholder="TST Address"
-            readOnly
-          />
-          <Button
-            sx={{
-              height: "2.5rem",
-              boxSizing: "border-box",
-              padding: "5px 12px",
-              flex: "1",
-              marginLeft: {
-                xs: "0px",
-                sm: "0.5rem"
-              },
-              minWidth: {
-                xs: "100%",
-                sm: "fit-content",
-              },
-              maxWidth: {
-                xs: "unset",
-                sm: "200px"
-              },
-              marginTop: {
-                xs: "1rem",
-                sm: "0px",
-              },
-              "&:after": {
-                backgroundSize: "300% 100%",
-              },
-            }}
-            clickFunction={addToken}
-          >
-            Add to MetaMask
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            width: "100%",
-            alignItems: "center",
-            marginBottom: "1rem",
-          }}
-        >
-          <Typography
-            sx={{
-              whiteSpace: "nowrap",
-              marginRight: "0.5rem",
-            }}
-          >
-            Current Price (EUROs):
-          </Typography>
-          <input
-            style={{
-              background: "rgba(18, 18, 18, 0.5)",
-              border: "1px solid #8E9BAE",
-              color: "white",
-              fontSize: "1rem",
-              fontWeight: "normal",
-              fontFamily: "Poppins",
-              height: "2.5rem",
-              width: "100%",
-              borderRadius: "10px",
-              paddingLeft: "0.5rem",
-              boxSizing: "border-box",
-              MozBoxSizing: "border-box",
-              WebkitBoxSizing: "border-box",
-            }}
-            value={currentPrice}
-            ref={currentPriceRef}
-            type="number"
-            placeholder="Current Price (EUROs)"
-            readOnly
-          />
-        </Box>
         <Box>
           <StakingList
             stakingData={nestedStakingData || []}

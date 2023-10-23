@@ -139,6 +139,15 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
   const columns: GridColDef[] = colData;
   const rows = activeData || [];
 
+  // const repayMoney = useContractWrite({
+  //   address: stakingAddress as any,
+  //   abi: stakingAbi,
+  //   functionName: "burn",
+  //   account: address,
+  // });
+
+  // console.log(404004, address)
+
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
     fontFamily: [
