@@ -43,12 +43,6 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
 
   const stakingAddress = stakingPosition?.address;
 
-
-  let rewardRate;
-  if (stakingPosition && stakingPosition.SI_RATE) {
-    rewardRate = Number(stakingPosition.SI_RATE) / 1000;
-  }
-
   const claimPosition = useContractWrite({
     address: stakingAddress as any,
     abi: stakingAbi,

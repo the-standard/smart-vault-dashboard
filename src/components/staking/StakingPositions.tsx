@@ -32,7 +32,6 @@ function NoDataOverlay() {
 const StakingPositions: React.FC<StakingPositionsProps> = ({
   stakingPositionsData,
 }) => {
-  const [totalRows, setTotalRows] = useState<any>(undefined);
 
   const [selectedPosition, setSelectedPosition] = useState<any>(undefined);
   const [open, setOpen] = useState(false);
@@ -224,7 +223,7 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
           noRowsOverlay: NoDataOverlay,
         }}
         columns={columns}
-        rowCount={totalRows || 0}
+        // rowCount={totalRows || 0}
         rows={rows || []}
         getRowId={(row) => `${row?.address}${row?.maturity}`}
         disableRowSelectionOnClick

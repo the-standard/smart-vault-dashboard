@@ -31,7 +31,6 @@ const StakingList: React.FC<StakingListProps> = ({
   stakingData,
 }) => {
 
-  const [totalRows, setTotalRows] = useState<any>(undefined);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -220,7 +219,7 @@ const StakingList: React.FC<StakingListProps> = ({
           noRowsOverlay: NoDataOverlay,
         }}
         columns={columns}
-        rowCount={totalRows || 0}
+        // rowCount={totalRows || 0}
         rows={rows || []}
         getRowId={(row) => `${row?.address}${row?.maturity}`}
         disableRowSelectionOnClick
