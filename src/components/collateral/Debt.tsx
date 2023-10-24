@@ -158,7 +158,7 @@ const Debt = () => {
     borrowMoney.isError,
   ]);
 
-  //modal
+  // modal
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
