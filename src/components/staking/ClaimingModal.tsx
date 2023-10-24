@@ -131,7 +131,7 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
                     textAlign: "center",
                   }}
                 >
-                  Claiming TST Stake & Reward
+                  Claiming TST Stake & EUROs Reward
                 </Typography>
                 <Box
                 sx={{
@@ -177,11 +177,11 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
                   >
                     {success ? (
                       <>
-                        Congratulations on claiming your staked TST & reward!
+                        Congratulations on claiming your staked TST & EUROs reward!
                       </>
                     ) : (
                       <>
-                        Congratulations, your position has matured! Your staked TST and your reward is available for you to claim by clicking below.
+                        Congratulations, your position has matured! Your staked TST and your EUROs reward is available for you to claim by clicking below.
                       </>
                     )}
                   </Typography>
@@ -248,7 +248,7 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
                       width: "100%",
                     }}
                   >
-                    {stakeReward} TST
+                    {stakeReward} EUROs
                   </Typography>
                 </Box>
                 {success ? (

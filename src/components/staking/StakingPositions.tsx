@@ -85,7 +85,7 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
         }
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {useReward || ''} TST
+            {useReward || ''} EUROs
           </span>
         );
       },

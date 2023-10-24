@@ -249,7 +249,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
                       </>
                     ) : (
                       <>
-                        Input the amount you wish to stake below and find out how much TST you&apos;ll be rewarded with at the end of the maturity period.
+                        Input the amount of TST you wish to stake below and find out how much EUROs you&apos;ll be rewarded with at the end of the maturity period.
                       </>
                     )}
                   </Typography>
@@ -369,7 +369,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
                       width: "100%",
                     }}
                   >
-                    {useRewardAmount} TST
+                    {useRewardAmount} EUROs
                   </Typography>
                 </Box>
                 {success ? (
@@ -391,7 +391,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
                         marginBottom: "1rem",
                       }}                
                     >
-                      If you have more TST and would like to earn even more, you can still increase your stake while the window is open!
+                      If you have more TST and would like to earn even more EUROs, you can still increase your stake while the window is open!
                     </Typography>
                   </>
                 ) : null}
