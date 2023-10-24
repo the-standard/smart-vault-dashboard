@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { arbitrumGoerli } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
@@ -34,6 +34,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const { erc20Abi } = useErc20AbiStore();
   const { stakingAbi } = useStakingAbiStore();
   const { getSnackBar } = useSnackBarStore();
+  const { address: accountAddress } = useAccount();
 
   const [approveLoading, setApproveLoading] = useState(false);
   const [mintLoading, setMintLoading] = useState(false);
@@ -68,6 +69,13 @@ const StakingModal: React.FC<StakingModalProps> = ({
     functionName: "calculateReward",
     args: [amountInWei]
   });
+
+  const {data: existingAllowance}: any = useContractRead({
+    address: tstAddress as any,
+    abi: erc20Abi,
+    functionName: "allowance",
+    args: [accountAddress, stakingAddress]
+  })
 
   let useRewardAmount: any = 0;
   if (rewardAmount) {
@@ -138,8 +146,9 @@ const StakingModal: React.FC<StakingModalProps> = ({
     }
   };
 
-  const handleApprovePayment = async () => {
-    const { write } = approvePayment;
+  const handleStaking = async () => {
+    const { write } = existingAllowance >= amountInWei ?
+    mintPosition : approvePayment;
     write();
   };
 
@@ -411,7 +420,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
                       padding: "5px",
                       height: "1.5rem",
                     }}
-                    clickFunction={handleApprovePayment}
+                    clickFunction={handleStaking}
                     isDisabled={!stakeAmount || !rewardAmount}
                   >
                     Stake
