@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractRead, useContractReads, useContractWrite } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { arbitrumGoerli } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
@@ -40,6 +40,8 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const [mintLoading, setMintLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const inputRef: any = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     setStakeAmount(0);
     setSuccess(false);
@@ -70,12 +72,33 @@ const StakingModal: React.FC<StakingModalProps> = ({
     args: [amountInWei]
   });
 
-  const {data: existingAllowance}: any = useContractRead({
-    address: tstAddress as any,
+  // const {data: existingAllowance}: any = useContractRead({
+  //   address: tstAddress as any,
+  //   abi: erc20Abi,
+  //   functionName: "allowance",
+  //   args: [accountAddress, stakingAddress]
+  // })
+
+  const tstContract = {
+    address: tstAddress,
     abi: erc20Abi,
-    functionName: "allowance",
-    args: [accountAddress, stakingAddress]
-  })
+  }
+
+  const { data: tstData } = useContractReads({
+    contracts: [{
+      ... tstContract,
+      functionName: "allowance",
+      args: [accountAddress as any, stakingAddress]
+  },{
+      ... tstContract,
+      functionName: "balanceOf",
+      args: [accountAddress as any]
+  }],
+    watch: true
+  });
+
+  const existingAllowance: any = tstData && tstData[0].result;
+  const tstBalance: any = tstData && tstData[1].result;
 
   let useRewardAmount: any = 0;
   if (rewardAmount) {
@@ -145,6 +168,12 @@ const StakingModal: React.FC<StakingModalProps> = ({
       setStakeAmount(Number(e.target.value));
     }
   };
+
+  const handleInputMax = () => {
+    const formatBalance = formatEther(tstBalance);
+    inputRef.current.value = formatBalance;
+    handleAmount({target: {value: formatBalance}});
+  }
 
   const handleStaking = async () => {
     const { write } = existingAllowance >= amountInWei ?
@@ -349,7 +378,20 @@ const StakingModal: React.FC<StakingModalProps> = ({
                         type="number"
                         onChange={handleAmount}
                         autoFocus
+                        ref={inputRef}
                       />
+                      <Button
+                        sx={{
+                          margin: "0.5rem",
+                          padding: "5px",
+                          minWidth: "3rem",
+                          height: "1.5rem",
+                          fontSize: "1rem",
+                        }}
+                        clickFunction={() => handleInputMax()}
+                      >
+                        Max
+                      </Button>
                     </>
                   )}
                 </Box>

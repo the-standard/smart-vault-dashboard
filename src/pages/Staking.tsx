@@ -172,7 +172,7 @@ const Staking = () => {
             fontWeight: "300",
           }}
         >
-          The yields of this pooled fund will initially be rewarded to TST stakers and later also help the protocol's treasury for R&D, marketing, and expansion. All yields paid out will be paid out in sEURO. Your TST will be locked in until the maturity date.
+          The yields of this pooled fund come from fees paid by borrowers. By staking TST you help stabilize the price of TST while also being rewarded. Yield is paid out in EUROs.
         </Typography>
         <Box>
           <StakingList
