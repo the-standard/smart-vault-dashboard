@@ -3,6 +3,7 @@ import vaultManagerAbi from "../abis/vaultManager.ts";
 import erc20Abi from "../abis/erc20.ts";
 import chainlinkAbi from "../abis/priceFeeds/chainlink.ts";
 import smartVaultABI from "../abis/smartVault.ts";
+import stakingAbi from "../abis/staking.ts";
 import { Address } from "viem";
 
 interface EthToUsdAddressState {
@@ -55,6 +56,20 @@ export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
     set(() => ({ sEuroAddress: sEuroAddress })),
 }));
 
+interface tstAddressState {
+  tstAddress?: Address;
+  arbitrumGoerliTstAddress: Address;
+  arbitrumTstAddress: Address;
+  getTstAddress: (tstAddress: Address) => void;
+}
+
+export const useTstAddressStore = create<tstAddressState>()((set) => ({
+  arbitrumGoerliTstAddress: "0xa42b5cF31BD2b817aa16D515DAFDe79cccE6CD0B",
+  arbitrumTstAddress: "0xf5A27E55C748bCDdBfeA5477CB9Ae924f0f7fd2e",
+  getTstAddress: (arbitrumTstAddress) =>
+    set(() => ({ tstAddress: arbitrumTstAddress })),
+}));
+
 interface ChainlinkAbiState {
   chainlinkAbi: Array<any>;
   getChainlinkAbi: (chainlinkAbi: Array<any>) => void;
@@ -101,6 +116,19 @@ export const useVaultManagerAbiStore = create<VaultManagerAbiState>()(
     vaultManagerAbi: vaultManagerAbi,
     getVaultManagerAbi: (vaultManagerAbi) =>
       set(() => ({ vaultManagerAbi: vaultManagerAbi })),
+  })
+);
+
+interface StakingAbiState {
+  stakingAbi: Array<any>;
+  getStakingAbi: (stakingAbi: Array<any>) => void;
+}
+
+export const useStakingAbiStore = create<StakingAbiState>()(
+  (set) => ({
+    stakingAbi: stakingAbi,
+    getStakingAbi: (stakingAbi) =>
+      set(() => ({ stakingAbi: stakingAbi })),
   })
 );
 
