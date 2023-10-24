@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/EUROs.svg";
 import Confetti from 'react-confetti';
@@ -26,8 +25,6 @@ import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
 import { useContractWrite, useContractReads } from "wagmi";
 import { arbitrumGoerli } from "wagmi/chains";
-
-import axios from "axios";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -111,7 +108,6 @@ const Debt = () => {
   }
 
   useEffect(() => {
-    handleYieldEstimate();
     setAmount(0);
     setActiveElement(4);
     handleInputFocus();
