@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/EUROs.svg";
-import coins from "../../assets/coins.png";
+// import useWindowSize from 'react-use/lib/useWindowSize';
+import Confetti from 'react-confetti';
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
@@ -35,6 +36,7 @@ import Button from "../../components/Button";
 
 const Debt = () => {
   const [activeElement, setActiveElement] = useState(1);
+  // const { windowWidth, windowHeight } = useWindowSize();
   const { address } = useAccount();
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore();
@@ -172,7 +174,7 @@ const Debt = () => {
   const handleClose = () => setOpen(false);
   const [modalStep, setModalStep] = useState(1);
 
-  const [yieldModalOpen, setYieldModalOpen] = useState(false);
+  const [yieldModalOpen, setYieldModalOpen] = useState(true);
   const handleOpenYield = () => setYieldModalOpen(true);
   const handleCloseYield = () => setYieldModalOpen(false);
 
@@ -378,8 +380,8 @@ const Debt = () => {
   }
 
   // const activeTvlUSD = camelotPool?.activeTvlUSD;
-  const activeTvlAverageAPR = camelotPool?.activeTvlAverageAPR;
-  const totalAPR = Number(activeTvlAverageAPR + 5).toFixed(2);
+  // const activeTvlAverageAPR = camelotPool?.activeTvlAverageAPR;
+  // const totalAPR = Number(activeTvlAverageAPR + 5).toFixed(2);
 
   return (
     <Card
@@ -934,11 +936,7 @@ const Debt = () => {
           onClose={handleCloseYield}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          className={camelotPoolLoading ? ('') : ('modal-success')}
         >
           {camelotPoolLoading ? (
             <Box
@@ -969,113 +967,157 @@ const Debt = () => {
               </Box>
             </Box>
           ) : (
-            <Box
-              sx={{
-                background:
-                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                backdropFilter: "blur(13.9px)",
-                WebkitBackdropFilter: "blur(13.9px)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                borderRadius: "10px ",
-                padding: "2rem",
-                maxWidth: "800px",
-                marginLeft: "1rem",
-                marginRight: "1rem",
-              }}
-            >
+            <>
+              <Box sx={{
+                zIndex: 0,
+                '& > canvas': {
+                  zIndex: "0!important",
+                }
+              }}>
+                <Confetti
+                  width={window.innerWidth}
+                  height={window.innerHeight}
+                />
+              </Box>
               <Box
                 sx={{
+                  position: { xs: "absolute", md: "" },
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: {
+                    xs: "80%",
+                    sm: "70%",
+                    md: "60%",
+                  },
+                  background:
+                    "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                  borderRadius: "10px",
+                  padding: "0",
+                  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                  backdropFilter: "blur(13.9px)",
+                  WebkitBackdropFilter: "blur(13.9px)",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  p: 4,
+                  maxHeight: {
+                    xs: "80vh",
+                    sm: "80vh",
+                  },
+                  maxWidth: {
+                    xs: "640px"
+                  },
+                  overflowY: "auto",
+                  lineHeight: "unset",
+                }}
+                className="modal-content"
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      color: "#fff",
+                      fontFamily: "Poppins",
+                      marginBottom: "1rem",
+                      fontWeight: "600",
+                      fontSize: {
+                        xs: "1.8rem",
+                        sm: "2.5rem"
+                      }
+                    }}
+                  >
+                    CONGRATULATIONS!
+                  </Typography>
+                  {/* <Box
+                    sx={{
+                      width: "auto",
+                      height: "100px",
+                    }}
+                  >
+                    <img
+                      style={{
+                        width: "230px",
+                        height: "100%",
+                      }}
+                      src={coins}
+                      alt=""
+                    />
+                  </Box> */}
+                </Box>
+                <Box sx={{
+                  textAlign: "center",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  sx={{
-                    color: "#fff",
-                    marginRight: "20px",
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  Earn More With Your New EUROs
-                </Typography>
-                <Box
-                  sx={{
-                    width: "auto",
-                    height: "100px",
-                  }}
-                >
-                  <img
-                    style={{
-                      width: "230px",
-                      height: "100%",
+                }}>
+                  <Typography
+                    sx={{
+                      // fontWeight: "bold",
+                      color: "#fff",
+                      fontFamily: "Poppins",
+                      fontSize: {
+                        xs: "1.3rem",
+                        sm: "1.8rem"
+                      },
+                      marginBottom: "1rem",
+                      marginTop: "1rem",
+                      textAlign: "center",
+                      fontWeight: "300",
                     }}
-                    src={coins}
-                    alt=""
-                  />
+                    variant="h3"
+                  >
+                    You just borrowed {amount} EUROs for 0% Interest!
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#fff",
+                      fontFamily: "Poppins",
+                      fontSize: {
+                        xs: "1.3rem",
+                        sm: "1.8rem"
+                      },
+                      marginBottom: "1rem",
+                      marginTop: "1rem",
+                      textAlign: "center",
+                      fontWeight: "300",
+                    }}
+                    variant="h3"
+                  >
+                    Now don&apos;t miss your oppourtunity to earn between <b>10.3% and 91.03% APR</b> by placing your EUROs and USDC.e into a Camelot liquidity pool!
+                  </Typography>
+                  <Button
+                    sx={{
+                      padding: "12px",
+                      textAlign: "center",
+                      marginTop: "1rem",
+                      width: "250px",
+                    }}
+                    clickFunction={() => navigate('/yield')}
+                    lighter
+                  >
+                    Take me to the pool!
+                  </Button>
+                  <Button
+                    sx={{
+                      padding: "12px",
+                      textAlign: "center",
+                      marginTop: "1rem",
+                      width: "250px",
+                    }}
+                    clickFunction={() => handleCloseYield}
+                  >
+                    Close
+                  </Button>
                 </Box>
               </Box>
-              <Box sx={{
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}>
-                <Typography
-                  sx={{
-                    // fontWeight: "bold",
-                    color: "#fff",
-                    fontFamily: "Poppins",
-                    fontSize: "1.5rem",
-                    marginBottom: "1rem",
-                    marginTop: "1rem",
-                    textAlign: "center",
-                  }}
-                  variant="h3"
-                >
-                  Boost your EUROs by <b style={{fontSize: "1.7rem"}}>{totalAPR}% APR</b> with Grail & TST
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ color: "#fff", marginBottom: "10px" }}
-                >                
-                  Own a slice of the biggest decentralized exchange on Arbitrum, where every trade funnels rewards straight into your crypto wallet using the GRAIL token.
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ color: "#fff", marginBottom: "10px" }}
-                >                
-                  Then supercharge your yield even higher with the NITRO pool, granting you even more APR in TST tokens.
-                </Typography>
-                <Button
-                  sx={{
-                    padding: "12px",
-                    textAlign: "center",
-                    marginTop: "1rem",
-                    width: "150px",
-                  }}
-                  clickFunction={() => navigate('/yield')}
-                  lighter
-                >
-                  Learn More
-                </Button>
-                <Button
-                  sx={{
-                    padding: "12px",
-                    textAlign: "center",
-                    marginTop: "1rem",
-                    width: "150px",
-                  }}
-                  clickFunction={() => handleCloseYield}
-                >
-                  Close
-                </Button>
-              </Box>
-            </Box>
+            </>
           )}
         </Modal>
       </div>
