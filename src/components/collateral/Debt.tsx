@@ -1090,7 +1090,7 @@ const Debt = () => {
                     }}
                     variant="h3"
                   >
-                    Now don&apos;t miss your oppourtunity to earn between <b>10.3% and 91.03% APR</b> by placing your EUROs and USDC.e into a Camelot liquidity pool!
+                    Now don&apos;t miss your opportunity to earn between <b>10.3% and 91.03% APR</b> by placing your EUROs and USDC.e into a Camelot liquidity pool!
                   </Typography>
                   <Button
                     sx={{
@@ -1111,7 +1111,7 @@ const Debt = () => {
                       marginTop: "1rem",
                       width: "250px",
                     }}
-                    clickFunction={() => handleCloseYield}
+                    clickFunction={handleCloseYield}
                   >
                     Close
                   </Button>
