@@ -54,7 +54,7 @@ const Debt = () => {
   const { chain } = getNetwork();
   const HUNDRED_PC = 100_000n;
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const incrementCounter = () => {
     getCounter(1);
@@ -174,7 +174,7 @@ const Debt = () => {
   const handleClose = () => setOpen(false);
   const [modalStep, setModalStep] = useState(1);
 
-  const [yieldModalOpen, setYieldModalOpen] = useState(true);
+  const [yieldModalOpen, setYieldModalOpen] = useState(false);
   const handleOpenYield = () => setYieldModalOpen(true);
   const handleCloseYield = () => setYieldModalOpen(false);
 
@@ -1099,7 +1099,7 @@ const Debt = () => {
                       marginTop: "1rem",
                       width: "250px",
                     }}
-                    clickFunction={() => navigate('/yield')}
+                    clickFunction={() => window.open('https://app.camelot.exchange/liquidity', '_blank')?.focus()}
                     lighter
                   >
                     Take me to the pool!
