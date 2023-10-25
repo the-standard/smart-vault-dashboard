@@ -999,21 +999,6 @@ const Debt = () => {
                 >
                   CONGRATULATIONS!
                 </Typography>
-                {/* <Box
-                  sx={{
-                    width: "auto",
-                    height: "100px",
-                  }}
-                >
-                  <img
-                    style={{
-                      width: "230px",
-                      height: "100%",
-                    }}
-                    src={coins}
-                    alt=""
-                  />
-                </Box> */}
               </Box>
               <Box sx={{
                 textAlign: "center",
@@ -1024,7 +1009,6 @@ const Debt = () => {
               }}>
                 <Typography
                   sx={{
-                    // fontWeight: "bold",
                     color: "#fff",
                     fontFamily: "Poppins",
                     fontSize: {
@@ -1055,7 +1039,10 @@ const Debt = () => {
                   }}
                   variant="h3"
                 >
-                  Now don&apos;t miss your opportunity to earn between <b>10.3% and 91.03% APR</b> by placing your EUROs and USDC.e into a Camelot liquidity pool!
+                  Now earn between<br/>
+                  <b>10.3% and 91.03% APR</b><br/>
+                  by placing your EUROs<br/>
+                  into a Camelot liquidity pool!
                 </Typography>
                 <Button
                   sx={{
