@@ -70,6 +70,20 @@ export const useTstAddressStore = create<tstAddressState>()((set) => ({
     set(() => ({ tstAddress: arbitrumTstAddress })),
 }));
 
+interface stakingContractsAddressState {
+  stakingContractsAddress?: Address;
+  arbitrumGoerliStakingContractsAddress: Address;
+  arbitrumStakingContractsAddress: Address;
+  getStakingContractsAddress: (stakingContractsAddress: Address) => void;
+}
+
+export const useStakingContractsStore = create<stakingContractsAddressState>()((set) => ({
+  arbitrumGoerliStakingContractsAddress: "0xda81118Ad13a2f83158333D7B7783b33e388E183",
+  arbitrumStakingContractsAddress: "0xBe57E0d3126a1F28a2E840ECbB842cb357e56866",
+  getStakingContractsAddress: (arbitrumStakingContractsAddress) =>
+    set(() => ({ stakingContractsAddress: arbitrumStakingContractsAddress })),
+}));
+
 interface ChainlinkAbiState {
   chainlinkAbi: Array<any>;
   getChainlinkAbi: (chainlinkAbi: Array<any>) => void;

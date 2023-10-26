@@ -8,6 +8,7 @@ import {
   usePositionStore,
   useStakingAbiStore,
   useContractAddressStore,
+  useStakingContractsStore,
 } from "../store/Store.ts";
 
 import Card from "../components/Card";
@@ -24,6 +25,12 @@ const Staking = () => {
     arbitrumGoerliContractAddress,
     arbitrumContractAddress
   } = useContractAddressStore();
+
+  const {
+    arbitrumGoerliStakingContractsAddress,
+    arbitrumStakingContractsAddress
+  } = useStakingContractsStore();
+
   const { address } = useAccount();
   const { chain } = getNetwork();
 
@@ -46,10 +53,15 @@ const Staking = () => {
     ? arbitrumGoerliContractAddress
     : arbitrumContractAddress;
   
+  const stakingContractsAddress = 
+  chain?.id === arbitrumGoerli.id
+    ? arbitrumGoerliStakingContractsAddress
+    : arbitrumStakingContractsAddress;
+
   //////////////////////////
   // Handling Directory List
   const { data: stakingAddresses } = useContractRead({
-    address: "0xda81118Ad13a2f83158333D7B7783b33e388E183",
+    address: stakingContractsAddress,
     abi: stakingAbi,
     functionName: "list",
   });
