@@ -29,7 +29,7 @@ const menuItems = [
     route: "yield",
   },
   {
-    text: "Buy TST",
+    text: "Cross Chain Dex",
     icon: borrowinglogo,
     icon2: borrowinglogo2,
     isWorking: true,
