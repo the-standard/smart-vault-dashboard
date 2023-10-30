@@ -53,7 +53,8 @@ const bgImages = [
   "/backgrounds/abstract48.png",
 ];
 
-const homeBgImage = "/backgrounds/Home.png";
+// const homeBgImage = "/backgrounds/Home.png";
+const homeBgImage = "/backgrounds/abstract1.png";
 
 function getVaultBgImage(vaultId: number) {
   let index;
