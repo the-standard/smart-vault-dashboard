@@ -76,7 +76,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   // Define your function using async/await
   const handleMintVault = async () => {
     if (chain?.id !== arbitrumGoerli.id && chain?.id !== arbitrum.id) {
-      getSnackBar(2);
+      getSnackBar('ERROR', 'Please change to Arbitrum network!');
       return;
     }
 

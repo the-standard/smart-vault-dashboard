@@ -128,6 +128,16 @@ const Debt = () => {
     abi: smartVaultAbi,
     functionName: "mint",
     args: [address as any, amountInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const handleBorrowMoney = async () => {
@@ -143,14 +153,12 @@ const Debt = () => {
     } else if (isSuccess) {
       getCircularProgress(false);
       incrementCounter();
-      getSnackBar(0);
       handleOpenYield();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
     } else if (isError) {
       getCircularProgress(false);
-      getSnackBar(1);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -199,7 +207,7 @@ const Debt = () => {
     } else if (isError) {
       handleClose();
       getCircularProgress(false);
-      getSnackBar(1);
+      getSnackBar(1, 'ERROR', 'this approve sucks');
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -251,7 +259,7 @@ const Debt = () => {
     } else if (isError) {
       setModalStep(1);
       getCircularProgress(false);
-      getSnackBar(1);
+      getSnackBar(1, 'ERROR', 'this repay sucks');
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
