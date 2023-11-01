@@ -63,6 +63,16 @@ const StakingModal: React.FC<StakingModalProps> = ({
     abi: erc20Abi,
     functionName: "approve",
     args: [stakingAddress as any, amountInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const {data: rewardAmount}: any = useContractRead({
@@ -117,11 +127,9 @@ const StakingModal: React.FC<StakingModalProps> = ({
     } else if (isSuccess) {
       setApproveLoading(false);
       handleMintPosition();
-      getSnackBar(0);
     } else if (isError) {
       setApproveLoading(false);
       handleCloseModal();
-      getSnackBar(1);
     }
   }, [
     approvePayment.isLoading,
@@ -140,6 +148,16 @@ const StakingModal: React.FC<StakingModalProps> = ({
     abi: stakingAbi,
     functionName: "mint",
     args: [amountInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   useEffect(() => {
@@ -150,11 +168,9 @@ const StakingModal: React.FC<StakingModalProps> = ({
     } else if (isSuccess) {
       setMintLoading(false);
       setSuccess(true);
-      getSnackBar(0);
     } else if (isError) {
       setMintLoading(false);
       setSuccess(false);
-      getSnackBar(1);
     }
   }, [
     mintPosition.isLoading,

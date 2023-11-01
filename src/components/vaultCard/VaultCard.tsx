@@ -51,6 +51,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const navigate = useNavigate();
   const { address } = useAccount();
 
+  const { getCircularProgress, getProgressType } = useCircularProgressStore();
+  const { getSnackBar } = useSnackBarStore();
+  const [tokenId, setTokenId] = useState<any>();
+
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
     reason?: string
@@ -71,6 +75,16 @@ const VaultCard: React.FC<VaultCardProps> = ({
         : arbitrumContractAddress, // Set a default value or handle this case as per your requirement
     abi: vaultManagerAbi, // Make sure you have vaultManagerAbi defined
     functionName: "mint", // Assuming the function name is 'mint'
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   // Define your function using async/await
@@ -90,10 +104,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
     }
   };
 
-  const { getCircularProgress, getProgressType } = useCircularProgressStore();
-  const { getSnackBar } = useSnackBarStore();
-  const [tokenId, setTokenId] = useState<any>();
-
   useEffect(() => {
     const { isLoading, isSuccess, isError } = mintVault;
     if (isLoading) {
@@ -101,11 +111,9 @@ const VaultCard: React.FC<VaultCardProps> = ({
       getCircularProgress(true);
     } else if (isSuccess && tokenId) {
       getCircularProgress(false);
-      getSnackBar(0);
       navigate(`Collateral/${tokenId.toString()}`);
     } else if (isError) {
       getCircularProgress(false);
-      getSnackBar(1);
     }
   }, [
     mintVault.data,

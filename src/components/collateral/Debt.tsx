@@ -188,6 +188,16 @@ const Debt = () => {
     abi: erc20Abi,
     functionName: "approve",
     args: [vaultAddress as any, repayFee],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   useEffect(() => {
@@ -200,14 +210,12 @@ const Debt = () => {
       handleRepayMoney();
       getCircularProgress(false);
       incrementCounter();
-      getSnackBar(0);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
     } else if (isError) {
       handleClose();
       getCircularProgress(false);
-      getSnackBar(1, 'ERROR', 'this approve sucks');
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -238,6 +246,16 @@ const Debt = () => {
     abi: smartVaultAbi,
     functionName: "burn",
     args: [amountInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   useEffect(() => {
@@ -252,14 +270,12 @@ const Debt = () => {
       getProgressType(2);
       getCircularProgress(false);
       incrementCounter();
-      getSnackBar(0);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
     } else if (isError) {
       setModalStep(1);
       getCircularProgress(false);
-      getSnackBar(1, 'ERROR', 'this repay sucks');
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -361,29 +377,6 @@ const Debt = () => {
       value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
     },
   ];
-
-  // const [camelotPool, setCamelotPool] = useState<any>(undefined);
-  // const [camelotPoolLoading, setCamelotPoolLoading] = useState(true);
-
-  // const handleYieldEstimate = async () => {
-  //   try {
-  //     setCamelotPoolLoading(true);
-  //     const response = await axios.get(
-  //       `https://api.camelot.exchange/v2/liquidity-v3-data`
-  //     );
-  //     const pools = response.data.data.pools;
-  //     const stPool = pools['0xc9AA2fEB84F0134a38d5D1c56b1E787191327Cb0'];
-  //     setCamelotPool(stPool);
-  //     setCamelotPoolLoading(false);
-  //   } catch (error) {
-  //     setCamelotPoolLoading(false);
-  //     console.log(error);
-  //   }
-  // }
-
-  // const activeTvlUSD = camelotPool?.activeTvlUSD;
-  // const activeTvlAverageAPR = camelotPool?.activeTvlAverageAPR;
-  // const totalAPR = Number(activeTvlAverageAPR + 5).toFixed(2);
 
   return (
     <Card
