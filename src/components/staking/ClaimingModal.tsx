@@ -49,6 +49,16 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
     abi: stakingAbi,
     functionName: "burn",
     account: address,
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   useEffect(() => {
@@ -59,11 +69,9 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
     } else if (isSuccess) {
       setClaimLoading(false);
       setSuccess(true);
-      getSnackBar(0);
     } else if (isError) {
       setClaimLoading(false);
       setSuccess(false);
-      getSnackBar(1);
     }
   }, [
     claimPosition.isLoading,

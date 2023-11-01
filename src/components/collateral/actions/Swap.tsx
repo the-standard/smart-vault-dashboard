@@ -111,6 +111,16 @@ const Swap: React.FC<SwapProps> = ({
       ethers.utils.formatBytes32String(receiveAsset),
       parseUnits(amount.toString(), decimals),
     ],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const handleSwapTokens = async () => {
@@ -127,7 +137,6 @@ const Swap: React.FC<SwapProps> = ({
     } else if (isSuccess) {
       getCircularProgress(false);
       setSwapLoading(false);
-      getSnackBar(0);
       inputRef.current.value = "";
       setAmount(0);
       setReceiveAmount(0);
@@ -135,7 +144,6 @@ const Swap: React.FC<SwapProps> = ({
     } else if (isError) {
       getCircularProgress(false);
       setSwapLoading(false);
-      getSnackBar(1);
       inputRef.current.value = "";
       setAmount(0);
       setReceiveAmount(0);

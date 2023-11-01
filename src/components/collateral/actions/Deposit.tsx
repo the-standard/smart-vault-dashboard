@@ -88,7 +88,7 @@ const Deposit: React.FC<DepositProps> = ({
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          getSnackBar(0);
+          getSnackBar('SUCCESS', 'Copied!');
         })
 
         .catch((error) => {
@@ -102,6 +102,16 @@ const Deposit: React.FC<DepositProps> = ({
     abi: erc20Abi,
     functionName: "transfer",
     args: [vaultAddress, parseUnits(amount.toString(), decimals)],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const handleDepositToken = async () => {
@@ -137,14 +147,18 @@ const Deposit: React.FC<DepositProps> = ({
       setTxdata(hash);
 
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(0);
+      getSnackBar('SUCCESS', 'Success!');
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(1);
     }
   };
 
@@ -158,12 +172,16 @@ const Deposit: React.FC<DepositProps> = ({
     } else {
       try {
         handleDepositToken();
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
+        let errorMessage: any = '';
+        if (error && error.shortMessage) {
+          errorMessage = error.shortMessage;
+        }
+        getSnackBar('ERROR', errorMessage);  
         inputRef.current.value = "";
         inputRef.current.focus();
         getCircularProgress(false); // Set getCircularProgress to false if there's an error
-        getSnackBar(1);
         getGreyBarUserInput(0);
       }
     }
@@ -176,7 +194,6 @@ const Deposit: React.FC<DepositProps> = ({
       getCircularProgress(true);
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(0);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -185,7 +202,6 @@ const Deposit: React.FC<DepositProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getCircularProgress(false); // Set getCircularProgress to false if there's an error
-      getSnackBar(1);
       getGreyBarUserInput(0);
     }
   }, [
