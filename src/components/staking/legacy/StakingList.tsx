@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import moment from 'moment';
-import Button from "../../components/Button";
+import Button from "../../Button";
 import StakingModal from "./StakingModal";
 
 interface StakingListProps {

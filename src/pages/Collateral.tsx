@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useRef, useMemo } from "react";
 import {
   useVaultAddressStore,
   useVaultStore,
@@ -11,7 +11,6 @@ import {
 import { Box, Modal, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
-import { useMemo } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";

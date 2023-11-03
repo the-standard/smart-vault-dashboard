@@ -6,7 +6,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { formatEther } from "viem";
 import moment from 'moment';
 
-import Button from "../../components/Button";
+import Button from "../../../components/Button";
 import ClaimingModal from "./ClaimingModal";
 
 interface StakingPositionsProps {
