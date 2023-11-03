@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Box } from "@mui/material";
 import StakingMenuSmall from "../components/staking/StakingMenuSmall";
 import StakingMenuLarge from "../components/staking/StakingMenuLarge";
+import StakingAbout from "../components/staking/StakingAbout";
 import StakingTST from "../components/staking/legacy/StakingTST";
 
 function useQuery() {
@@ -14,7 +15,7 @@ const Staking = () => {
   const query = useQuery();
   const queryView = query.get("view") || '';
 
-  const [activeView, setActiveView] = useState('LEARN');
+  const [activeView, setActiveView] = useState('ABOUT');
 
   const handleActive = (element: any) => {
     setActiveView(element);
@@ -38,8 +39,8 @@ const Staking = () => {
       <StakingMenuLarge activeView={activeView} />
       <StakingMenuSmall activeView={activeView} />
 
-      {activeView === 'LEARN' || !activeView ? (
-        <></>
+      {activeView === 'ABOUT' || !activeView ? (
+        <StakingAbout />
       ) : null}
 
       {activeView === 'STAKE' ? (
