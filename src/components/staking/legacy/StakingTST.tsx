@@ -14,8 +14,6 @@ import {
 import Card from "../../Card.tsx";
 import StakingList from "./StakingList.tsx";
 import StakingPositions from "./StakingPositions.tsx";
-import StakingMenuSmall from "../StakingMenuSmall.tsx";
-import StakingMenuLarge from "../StakingMenuLarge.tsx";
 
 const StakingTST = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);

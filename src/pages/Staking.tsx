@@ -4,6 +4,8 @@ import { Box } from "@mui/material";
 import StakingMenuSmall from "../components/staking/StakingMenuSmall";
 import StakingMenuLarge from "../components/staking/StakingMenuLarge";
 import StakingAbout from "../components/staking/StakingAbout";
+import StakingStake from "../components/staking/StakingStake";
+import StakingEarn from "../components/staking/StakingEarn";
 import StakingTST from "../components/staking/legacy/StakingTST";
 
 function useQuery() {
@@ -39,16 +41,16 @@ const Staking = () => {
       <StakingMenuLarge activeView={activeView} />
       <StakingMenuSmall activeView={activeView} />
 
-      {activeView === 'ABOUT' || !activeView ? (
+      {activeView === 'ABOUT' ? (
         <StakingAbout />
       ) : null}
 
-      {activeView === 'STAKE' ? (
-        <></>
+      {activeView === 'STAKE' || !activeView ? (
+        <StakingStake />
       ) : null}
 
       {activeView === 'EARN' ? (
-        <></>
+        <StakingEarn />
       ) : null}
 
       {activeView === 'TST' ? (

@@ -42,7 +42,7 @@ const StakingAbout = () => {
             margin: "1rem 0",
             marginTop: "0",
             fontSize: {
-              xs: "1.5rem",
+              xs: "1.8rem",
               md: "2.125rem"
             }
           }}

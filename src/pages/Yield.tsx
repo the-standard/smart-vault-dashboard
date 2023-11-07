@@ -8,7 +8,7 @@ import nitroPools from "../assets/nitro-pools.png";
 import camelotLogo from "../assets/camelotLogo.svg";
 import { usePositionStore } from "../store/Store.ts";
 import { useLayoutEffect, useRef } from "react";
-import Exchange from "./Exchange.tsx";
+import Exchange from "../components/Exchange.tsx";
 import { arbitrum } from "wagmi/chains";
 
 import Card from "../components/Card";

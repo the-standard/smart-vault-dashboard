@@ -40,7 +40,7 @@ export function StakingMenuSmall(props: any) {
 
   const handleLinkClick = (link: any) => {
     if (link === 'ABOUT') {
-      navigate(`../Staking`);
+      navigate(`../Staking?view=ABOUT`);
     }
     if (link === 'STAKE') {
       navigate(`../Staking?view=STAKE`);
@@ -61,7 +61,7 @@ export function StakingMenuSmall(props: any) {
         flexDirection: { xs: "column", md: "row" },
         justifyContent: "space-between",
         marginBottom: { xs: "2rem", sm: "1rem" },
-        marginTop: { xs: "1rem", sm: "0px" },
+        marginTop: { xs: "0px", sm: "0px" },
       }}
     >
       <Box

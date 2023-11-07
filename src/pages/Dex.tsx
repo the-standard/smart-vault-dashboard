@@ -3,7 +3,7 @@ import {
   usePositionStore,
 } from "../store/Store.ts";
 
-import Exchange from "./Exchange";
+import Exchange from "../components/Exchange.tsx";
 import { arbitrum } from "wagmi/chains";
 
 import Card from "../components/Card";
