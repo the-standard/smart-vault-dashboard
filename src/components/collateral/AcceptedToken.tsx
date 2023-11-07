@@ -219,6 +219,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
             display: "flex",
             alignItems: "center",
             marginTop: "2rem",
+            marginBottom: "1rem",
           }}
         >
           <Button
@@ -260,20 +261,32 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
           >
             Swap
           </Button> */}
-          <Button
-            sx={{
-              margin: "2px",
-              marginRight: "0px",
-              padding: "5px",
-              width: "33%",
+          <Box sx={{
+            position: 'relative',
+            width: "33%",
+          }}>
+            <Button
+              sx={{
+                margin: "2px",
+                marginRight: "0px",
+                padding: "5px",
+                textAlign: "center",
+              }}
+              // isActive={activeElement === 3}
+              // clickFunction={() => handleClick(3)}
+              isDisabled
+            >
+              Swap
+            </Button>
+            <Typography sx={{
+              position: "absolute",
+              fontSize: "12px",
+              opacity: "0.3",
               textAlign: "center",
-            }}
-            // isActive={activeElement === 3}
-            // clickFunction={() => handleClick(3)}
-            isDisabled
-          >
-            Swap
-          </Button>
+              width: "100%",
+              bottom: "-20px",
+            }}>Temp. Unavailable</Typography>
+          </Box>
         </Box>
       )}
 
