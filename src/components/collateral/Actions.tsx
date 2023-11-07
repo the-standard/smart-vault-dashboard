@@ -61,7 +61,7 @@ const Actions: React.FC<ActionsProps> = ({
       content = (
         <Box>
           {" "}
-          <Swap
+          {/* <Swap
             symbol={symbol}
             tokenAddress={tokenAddress}
             decimals={decimals}
@@ -69,7 +69,7 @@ const Actions: React.FC<ActionsProps> = ({
             collateralValue={collateralValue}
             collateralSymbol={collateralSymbol}
             assets={assets}
-          />{" "}
+          />{" "} */}
         </Box>
       );
       break;

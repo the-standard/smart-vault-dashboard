@@ -247,7 +247,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
           >
             Withdraw
           </Button>
-          <Button
+          {/* <Button
             sx={{
               margin: "2px",
               marginRight: "0px",
@@ -257,6 +257,20 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
             }}
             isActive={activeElement === 3}
             clickFunction={() => handleClick(3)}
+          >
+            Swap
+          </Button> */}
+          <Button
+            sx={{
+              margin: "2px",
+              marginRight: "0px",
+              padding: "5px",
+              width: "33%",
+              textAlign: "center",
+            }}
+            // isActive={activeElement === 3}
+            // clickFunction={() => handleClick(3)}
+            isDisabled
           >
             Swap
           </Button>
