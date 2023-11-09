@@ -32,20 +32,18 @@ const Actions: React.FC<ActionsProps> = ({
     case 1:
       content = (
         <Box>
-          {" "}
           <Deposit
             symbol={symbol}
             tokenAddress={tokenAddress}
             decimals={decimals}
             token={token}
-          />{" "}
+          />
         </Box>
       );
       break;
     case 2:
       content = (
         <Box>
-          {" "}
           <Withdraw
             symbol={symbol}
             tokenAddress={tokenAddress}
@@ -53,14 +51,13 @@ const Actions: React.FC<ActionsProps> = ({
             token={token}
             collateralValue={collateralValue}
             collateralSymbol={collateralSymbol}
-          />{" "}
+          />
         </Box>
       );
       break;
     case 3:
       content = (
         <Box>
-          {" "}
           <Swap
             symbol={symbol}
             tokenAddress={tokenAddress}
@@ -69,7 +66,7 @@ const Actions: React.FC<ActionsProps> = ({
             collateralValue={collateralValue}
             collateralSymbol={collateralSymbol}
             assets={assets}
-          />{" "}
+          />
         </Box>
       );
       break;
