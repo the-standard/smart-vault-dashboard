@@ -7,21 +7,109 @@ import {
   Checkbox,
 } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import {
+  useAccount,
+  useContractRead,
+  useContractReads,
+  useContractWrite
+} from "wagmi";
+import { getNetwork } from "@wagmi/core";
+import { arbitrum, arbitrumGoerli } from "wagmi/chains";
+import { formatEther, parseEther } from "viem";
+import moment from 'moment';
 import {
   usePositionStore,
+  useTstAddressStore,
+  useErc20AbiStore,
+  usesEuroAddressStore,
+  useStakingAbiStore,
+  useSnackBarStore,
 } from "../../store/Store.ts";
-
-import { arbitrum } from "wagmi/chains";
-
 import Card from "../Card.tsx";
 import Button from "../Button.tsx";
 import Exchange from "../Exchange.tsx";
 
 const StakingStake = () => {
+  const { chain } = getNetwork();
+  const {
+    arbitrumTstAddress,
+    arbitrumGoerliTstAddress,
+  } = useTstAddressStore();
+  const {
+    arbitrumsEuroAddress,
+    arbitrumGoerlisEuroAddress,
+  } = usesEuroAddressStore();
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
   const [learnMore, setLearnMore] = useState(false);
+  const [tstStakeAmount, setTstStakeAmount] = useState(0);
+  const [eurosStakeAmount, setEurosStakeAmount] = useState(0);
+  const [autoTrade, setAutoTrade] = useState(false);
+  const { erc20Abi } = useErc20AbiStore();
+  const { address: accountAddress } = useAccount();
+
+  const tstInputRef: any = useRef<HTMLInputElement>(null);
+  const eurosInputRef: any = useRef<HTMLInputElement>(null);
+
+  const tstAddress = chain?.id === arbitrumGoerli.id ?
+  arbitrumGoerliTstAddress :
+  arbitrumTstAddress ;
+
+  const tstContract = {
+    address: tstAddress,
+    abi: erc20Abi,
+  }
+
+  // TEMP TODO
+  const tstStakingAddress = '123123';
+
+  const { data: tstData } = useContractReads({
+    contracts: [
+      {
+          ... tstContract,
+          functionName: "allowance",
+          args: [accountAddress as any, tstStakingAddress]
+      },
+      {
+          ... tstContract,
+          functionName: "balanceOf",
+          args: [accountAddress as any]
+      }
+    ],
+    watch: true
+  });
+
+  const existingTstAllowance: any = tstData && tstData[0] && tstData[0].result;
+  const tstBalance: any = tstData && tstData[1] && tstData[1].result;
+
+
+  // TEMP TODO
+  const eurosVaultAddress = '123123';
+
+  const eurosAddress = chain?.id === arbitrumGoerli.id ?
+  arbitrumGoerlisEuroAddress :
+  arbitrumsEuroAddress;
+
+  const eurosContract = {
+    address: eurosAddress,
+    abi: erc20Abi,
+  }
+    
+  const { data: eurosData } = useContractReads({
+    contracts: [{
+      ... eurosContract,
+      functionName: "allowance",
+      args: [accountAddress as any, eurosVaultAddress]
+  },{
+      ... eurosContract,
+      functionName: "balanceOf",
+      args: [accountAddress as any]
+  }],
+    watch: true
+  });
+
+  const eurosAllowance: any = eurosData && eurosData[0].result;
+  const eurosBalance: any = eurosData && eurosData[1].result;
 
   useLayoutEffect(() => {
     function updatePosition() {
@@ -35,6 +123,29 @@ const StakingStake = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
+  const handleTstAmount = (e: any) => {
+    if (Number(e.target.value) < 10n ** 21n) {
+      setTstStakeAmount(Number(e.target.value));
+    }
+  };
+
+  const handleTstInputMax = () => {
+    const formatBalance = formatEther(tstBalance);
+    tstInputRef.current.value = formatBalance;
+    handleTstAmount({target: {value: formatBalance}});
+  }
+
+  const handleEurosAmount = (e: any) => {
+    if (Number(e.target.value) < 10n ** 21n) {
+      setEurosStakeAmount(Number(e.target.value));
+    }
+  };
+
+  const handleEurosInputMax = () => {
+    const formatBalance = formatEther(eurosBalance);
+    eurosInputRef.current.value = formatBalance;
+    handleEurosAmount({target: {value: formatBalance}});
+  }
 
   return (
     <Box
@@ -115,9 +226,8 @@ const StakingStake = () => {
                   }}
                   placeholder="TST Amount"
                   type="number"
-                  onChange={() => console.log(123123)}
-                  // autoFocus
-                  // ref={inputRef}
+                  onChange={handleTstAmount}
+                  ref={tstInputRef}
                 />
                 <Button
                   sx={{
@@ -130,8 +240,8 @@ const StakingStake = () => {
                     MozBoxSizing: "border-box",
                     WebkitBoxSizing: "border-box",
                   }}
-                  clickFunction={() => console.log(123123)}
-                >
+                  clickFunction={() => handleTstInputMax()}
+                  >
                   Max
                 </Button>
               </Box>
@@ -161,9 +271,8 @@ const StakingStake = () => {
                   }}
                   placeholder="EUROs Amount"
                   type="number"
-                  // onChange={handleAmount}
-                  // autoFocus
-                  // ref={inputRef}
+                  onChange={handleEurosAmount}
+                  ref={eurosInputRef}
                 />
                 <Button
                   sx={{
@@ -176,7 +285,7 @@ const StakingStake = () => {
                     MozBoxSizing: "border-box",
                     WebkitBoxSizing: "border-box",
                   }}
-                  // clickFunction={() => handleInputMax()}
+                  clickFunction={() => handleEurosInputMax()}
                 >
                   Max
                 </Button>
@@ -185,8 +294,8 @@ const StakingStake = () => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={true}
-                      onChange={() => console.log(123123)}
+                      checked={autoTrade}
+                      onChange={() => setAutoTrade(!autoTrade)}
                       sx={{
                         color: 'rgba(255,255,255,0.5)',
                         '&.Mui-checked': {
@@ -210,6 +319,7 @@ const StakingStake = () => {
                 sx={{
                   marginTop: "1rem",
                 }}
+                isDisabled={tstStakeAmount <= 0 && eurosStakeAmount <= 0}
               >
                 Let&apos;s Stake
               </Button>
