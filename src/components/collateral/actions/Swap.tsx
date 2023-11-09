@@ -152,7 +152,7 @@ const Swap: React.FC<SwapProps> = ({
     handleAmount({ target: { value: collateralValue } });
   };
 
-  if (vaultStore.status.version !== 1) {
+  if (vaultStore.status.version !== 1 && vaultStore.status.version !== 2) {
     return (
       <Box>
         <Box
@@ -410,13 +410,36 @@ const Swap: React.FC<SwapProps> = ({
           variant="h6"
           style={{textAlign: 'center', marginBottom: "1rem"}}
         >
-          Asset Swapping Is Not Available in V1 Vaults.
+          {vaultStore.status.version ? (
+            <>
+              {vaultStore.status.version == 2 ? (
+                <>
+                  Asset Swapping Is No Longer Available in V2 Vaults
+                </>
+              ) : (
+                <>
+                  Asset Swapping Is Not Available in V{vaultStore.status.version} Vaults
+                </>
+              )}
+            </>
+          ) : (
+            'Asset Swapping Is Not Available'
+          )}
         </Typography>
         <Typography
           variant="body1"
           style={{textAlign: 'center'}}
         >
-          To get access to asset swapping, create yourself a new vault and consolidate your assets there first.
+          {/* To get access to asset swapping, create yourself a new vault and consolidate your assets there first. */}
+          {vaultStore.status.version == 2 ? (
+            <>
+              Asset swapping will return soon with the upcoming introduction of V3 vaults.
+            </>
+          ) : (
+            <>
+              Asset swapping is coming soon with the upcoming introduction of V3 vaults.
+            </>
+          )}
         </Typography>
       </Box>
     </Box>
