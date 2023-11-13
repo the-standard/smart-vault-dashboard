@@ -6,6 +6,7 @@ import {
   useContractAddressStore,
   useVaultManagerAbiStore,
   usePositionStore,
+  useSnackBarStore,
 } from "../store/Store";
 
 import { Box, Modal, Typography } from "@mui/material";
@@ -47,6 +48,8 @@ const Collateral = () => {
     useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getVaultID } = useVaultIdStore();
+  const { getSnackBar } = useSnackBarStore();
+
   //local states
   const [activeElement, setActiveElement] = useState(1);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
@@ -301,12 +304,16 @@ const Collateral = () => {
         // Remove this vault from the array
         newHiddenVaults = parsedVaults
           .filter((item: string) => item != vaultId);
+
+        getSnackBar('SUCCESS', 'Vault Unhidden');
       }
       // If vault is not hidden
       else {
         // Add vault to hidden list
         newHiddenVaults = parsedVaults
           .concat(vaultId);
+
+        getSnackBar('SUCCESS', 'Vault Hidden');
       }
     }
     // If hiddenVaults does not exist

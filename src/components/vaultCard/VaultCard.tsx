@@ -109,9 +109,9 @@ const VaultCard: React.FC<VaultCardProps> = ({
     if (isLoading) {
       getProgressType(3);
       getCircularProgress(true);
-    } else if (isSuccess && tokenId) {
+    } else if (isSuccess) {
       getCircularProgress(false);
-      navigate(`Collateral/${tokenId.toString()}`);
+      getSnackBar('SUCCESS', 'Success! It may take a moment for the vault to appear in your list');
     } else if (isError) {
       getCircularProgress(false);
     }
@@ -125,17 +125,22 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const unwatchDeployEvent = useContractEvent({
     address:
-      chain?.id === 421613
-        ? arbitrumGoerliContractAddress
-        : chain?.id === 11155111
-        ? contractAddress
-        : chain?.id === 42161
-        ? arbitrumContractAddress
-        : null,
+      chain?.id === arbitrumGoerli.id
+      ? arbitrumGoerliContractAddress
+      : arbitrumContractAddress,
+    // address:
+    //   chain?.id === 421613
+    //     ? arbitrumGoerliContractAddress
+    //     : chain?.id === 11155111
+    //     ? contractAddress
+    //     : chain?.id === 42161
+    //     ? arbitrumContractAddress
+    //     : null,
     abi: vaultManagerAbi,
     eventName: "VaultDeployed",
     listener(log: any) {
       const { owner, tokenId: newTokenId } = log[0].args;
+      console.log({owner}, {address}, {newTokenId})
       if (owner === address) {
         unwatchDeployEvent?.();
         setTokenId(newTokenId);
