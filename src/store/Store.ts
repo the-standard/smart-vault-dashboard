@@ -239,13 +239,15 @@ export const useCircularProgressStore = create<CirccularProgressState>(
 );
 
 interface SnackBarState {
-  snackBar: number;
-  getSnackBar: (snackBar: number) => void;
+  type: string;
+  message: string;
+  getSnackBar: (type: string, message: string) => void;
 }
 
 export const useSnackBarStore = create<SnackBarState>((set) => ({
-  snackBar: 55,
-  getSnackBar: (snackBar) => set({ snackBar }),
+  type: '',
+  message: '',
+  getSnackBar: (type, message) => set({type, message }),
 }));
 
 interface VaultForListingState {

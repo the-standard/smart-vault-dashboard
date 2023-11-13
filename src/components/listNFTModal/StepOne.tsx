@@ -73,7 +73,7 @@ const StepOne: React.FC<StepProps> = ({
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          getSnackBar(0);
+          getSnackBar('SUCCESS', 'Copied!');
           //handleSnackbarClick();
         })
 

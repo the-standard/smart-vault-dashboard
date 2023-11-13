@@ -133,11 +133,15 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
       });
 
       //  alert("Your NFT is now listed on OpenSea!"); // Removed the comma at the end
-      getSnackBar(0);
-    } catch (error) {
+      getSnackBar('SUCCESS', 'NFT listed Successfully!');
+    } catch (error: any) {
       console.log(error);
       //  alert("Something went wrong, please try again");
-      getSnackBar(1);
+      let errorMessage: any = 'Something went wrong, please try again';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
     }
   };
 

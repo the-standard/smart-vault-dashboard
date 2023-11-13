@@ -248,19 +248,6 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
           >
             Withdraw
           </Button>
-          {/* <Button
-            sx={{
-              margin: "2px",
-              marginRight: "0px",
-              padding: "5px",
-              width: "33%",
-              textAlign: "center",
-            }}
-            isActive={activeElement === 3}
-            clickFunction={() => handleClick(3)}
-          >
-            Swap
-          </Button> */}
           <Box sx={{
             position: 'relative',
             width: "33%",
@@ -272,20 +259,19 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
                 padding: "5px",
                 textAlign: "center",
               }}
-              // isActive={activeElement === 3}
-              // clickFunction={() => handleClick(3)}
-              isDisabled
+              isActive={activeElement === 3}
+              clickFunction={() => handleClick(3)}
             >
               Swap
             </Button>
-            <Typography sx={{
+            {/* <Typography sx={{
               position: "absolute",
               fontSize: "12px",
               opacity: "0.3",
               textAlign: "center",
               width: "100%",
               bottom: "-20px",
-            }}>Temp. Unavailable</Typography>
+            }}>Temp. Unavailable</Typography> */}
           </Box>
         </Box>
       )}
