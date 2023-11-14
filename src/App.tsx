@@ -11,6 +11,7 @@ import {
 
 const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";
 
+
 const { chains, publicClient } = configureChains(
   [arbitrum, arbitrumGoerli],
   [alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY })],
