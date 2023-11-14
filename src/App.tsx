@@ -44,7 +44,6 @@ import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
 
 import { alchemyProvider } from '@wagmi/core/providers/alchemy'
-import { InjectedConnector } from "wagmi/connectors/injected";
 
 function App() {
   // const { circularProgress } = useCircularProgressStore();
