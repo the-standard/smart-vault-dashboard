@@ -2,7 +2,9 @@ FROM node:18-alpine3.17 as build
 WORKDIR /app
 COPY . /app
 ARG opensea_key
+ARG alchemy_key
 ENV VITE_OPENSEA_API_KEY $opensea_key
+ENV VITE_ALCHEMY_API_KEY $alchemy_key
 RUN apk --no-cache --virtual build-dependencies add \
   g++ gcc libgcc libstdc++ linux-headers make python3
 RUN yarn install
