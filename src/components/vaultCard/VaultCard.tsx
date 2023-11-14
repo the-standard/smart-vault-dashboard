@@ -128,19 +128,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
       chain?.id === arbitrumGoerli.id
       ? arbitrumGoerliContractAddress
       : arbitrumContractAddress,
-    // address:
-    //   chain?.id === 421613
-    //     ? arbitrumGoerliContractAddress
-    //     : chain?.id === 11155111
-    //     ? contractAddress
-    //     : chain?.id === 42161
-    //     ? arbitrumContractAddress
-    //     : null,
     abi: vaultManagerAbi,
     eventName: "VaultDeployed",
     listener(log: any) {
       const { owner, tokenId: newTokenId } = log[0].args;
-      console.log({owner}, {address}, {newTokenId})
       if (owner === address) {
         unwatchDeployEvent?.();
         setTokenId(newTokenId);
