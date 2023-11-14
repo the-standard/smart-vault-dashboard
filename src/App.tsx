@@ -1,35 +1,27 @@
 import {
   EthereumClient,
-  w3mConnectors,
-  w3mProvider,
+  w3mConnectors
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
-import { configureChains, createConfig, sepolia, WagmiConfig } from "wagmi";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
-  goerli,
-  mainnet,
-  polygonMumbai,
   arbitrum,
   arbitrumGoerli,
 } from "wagmi/chains";
 
-const chains = [
-  mainnet,
-  goerli,
-  sepolia,
-  polygonMumbai,
-  arbitrum,
-  arbitrumGoerli,
-];
 const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";
 
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
-const wagmiConfig = createConfig({
+const { chains, publicClient } = configureChains(
+  [arbitrum, arbitrumGoerli],
+  [alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY })],
+)
+
+const config = createConfig({
   autoConnect: true,
   connectors: w3mConnectors({ projectId, chains }),
   publicClient,
-});
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
+})
+const ethereumClient = new EthereumClient(config, chains);
 
 import HomePage from "./pages/HomePage.tsx";
 //import navbar
@@ -51,6 +43,9 @@ import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
 
+import { alchemyProvider } from '@wagmi/core/providers/alchemy'
+import { InjectedConnector } from "wagmi/connectors/injected";
+
 function App() {
   // const { circularProgress } = useCircularProgressStore();
   useBackgroundImage();
@@ -69,7 +64,7 @@ function App() {
       {/* <button onClick={handleRemountClick}>Remount</button>{" "} */}
       <CircularProgressComponent />
       <SnackbarComponent />
-      <WagmiConfig config={wagmiConfig}>
+      <WagmiConfig config={config}>
         <Navbar />
         <Routes key={renderAppCounter}>
           <Route path="/" element={<HomePage />} />
