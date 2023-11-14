@@ -109,9 +109,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
     if (isLoading) {
       getProgressType(3);
       getCircularProgress(true);
-    } else if (isSuccess) {
+    } else if (isSuccess && tokenId) {
       getCircularProgress(false);
-      getSnackBar('SUCCESS', 'Success! It may take a moment for the vault to appear in your list');
+      navigate(`Collateral/${tokenId.toString()}`);
+      getSnackBar('SUCCESS', 'Vault created successfully');
     } else if (isError) {
       getCircularProgress(false);
     }
