@@ -85,6 +85,8 @@ const Collateral = () => {
   }, []);
 
   useEffect(() => {
+    // loader to allow currentVault filter to resolve
+    // fixes flashing "no vault found" on first load
     setVaultsLoading(true);
     setTimeout(() => {
       setVaultsLoading(false);
@@ -241,12 +243,14 @@ const Collateral = () => {
         <Box
           sx={{
             display: { xs: "flex", lg: "grid" },
+            width: "100%",
           }}
         >
           <Card
             sx={{
               alignItems: "center",
               padding: "1.5rem",
+              width: {xs: "100%", sm: "auto"},
               minHeight: "50vh",
               marginTop: "0.5rem",
             }}
@@ -351,12 +355,14 @@ const Collateral = () => {
         <Box
           sx={{
             display: { xs: "flex", lg: "grid" },
+            width: "100%",
           }}
         >
           <Card
             sx={{
               alignItems: "center",
               padding: "1.5rem",
+              width: {xs: "100%", sm: "auto"},
               minHeight: "50vh",
               marginTop: "0.5rem",
             }}
