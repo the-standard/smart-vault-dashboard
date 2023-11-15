@@ -43,7 +43,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //snackbar config
   const [open, setOpen] = React.useState(false);
   const {
-    contractAddress,
+    // contractAddress,
     arbitrumGoerliContractAddress,
     arbitrumContractAddress,
   } = useContractAddressStore();

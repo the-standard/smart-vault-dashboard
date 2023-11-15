@@ -14,7 +14,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
 import { useMemo } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useBlockNumber, useContractRead } from "wagmi";
