@@ -10,6 +10,7 @@ import {
 } from "../store/Store";
 
 import { Box, Modal, Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
 import { useMemo } from "react";
@@ -51,6 +52,7 @@ const Collateral = () => {
   const { getSnackBar } = useSnackBarStore();
 
   //local states
+  const [vaultsLoading, setVaultsLoading] = useState(true);
   const [activeElement, setActiveElement] = useState(1);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
   const { data: blockNumber } = useBlockNumber();
@@ -80,6 +82,13 @@ const Collateral = () => {
   useEffect(() => {
     getVaultID(vaultId);
     checkIfHidden(vaultId);
+  }, []);
+
+  useEffect(() => {
+    setVaultsLoading(true);
+    setTimeout(() => {
+      setVaultsLoading(false);
+    }, 1000);
   }, []);
 
   const checkIfHidden = (useVaultId: any) => {
@@ -134,7 +143,7 @@ const Collateral = () => {
     chain?.id === arbitrumGoerli.id
       ? arbitrumGoerliContractAddress
       : arbitrumContractAddress;
-  const { data: vaults } = useContractRead({
+  const vaults = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaults",
@@ -143,9 +152,123 @@ const Collateral = () => {
   });
 
   //this log is just for build command
-  const currentVault: any = vaults?.filter(
+  const currentVault: any = vaults?.data?.filter(
     (vault: any) => vault.tokenId.toString() === vaultId
   )[0];
+
+  if (vaultsLoading) {
+    return (
+      <Box
+        sx={{
+          color: "#8E9BAE",
+          margin: {
+            xs: "0% 4%",
+            sm: "3% 6%",
+            md: "3% 12%",
+          },
+          minHeight: "100vh",
+          height: "100%",
+        }}
+        ref={rectangleRef}
+      >
+        {/* divide into 2 columns */}
+        {/*  column 1 */}
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-between",
+            marginBottom: "1rem",
+            marginTop: { xs: "1rem", sm: "0px" },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
+          >
+            <Button
+              sx={{
+                "&:after": {
+                  backgroundSize: "300% 100%",
+                }
+              }}
+              clickFunction={() => navigate('/')}
+              isDisabled
+            >
+              <ArrowBackIosNewIcon />
+            </Button>
+            <Button
+              isActive={activeElement === 1}
+              clickFunction={() => navigate(`../Collateral/${vaultId}`)}
+              isDisabled
+            >
+              Collateral
+            </Button>
+            <Button
+              isActive={activeElement === 2}
+              clickFunction={() => navigate(`../Collateral/${vaultId}?view=2`)}
+              isDisabled
+            >
+              Borrow/Repay
+            </Button>
+            <Button
+              isActive={activeElement === 3}
+              clickFunction={() => navigate('history')}
+              isDisabled
+            >
+              History
+            </Button>
+          </Box>
+          {/* right side of the upper column */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          ></Box>
+        </Box>
+
+        <VaultMenuSmall
+          vaultId={vaultId}
+          isDisabled
+        />
+
+        <Box
+          sx={{
+            display: { xs: "flex", lg: "grid" },
+          }}
+        >
+          <Card
+            sx={{
+              alignItems: "center",
+              padding: "1.5rem",
+              minHeight: "50vh",
+              marginTop: "0.5rem",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+                background: "transparent",
+                zIndex: 9999,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          </Card>
+        </Box>
+      </Box>
+    )
+  }
 
   if (!currentVault) {
     // vault not found
@@ -161,66 +284,86 @@ const Collateral = () => {
         }}
         ref={rectangleRef}
       >
-        <Link
-          style={{
-            textDecoration: "none",
-            display: "flex",
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-between",
+            marginBottom: "1rem",
+            marginTop: { xs: "1rem", sm: "0px" },
           }}
-          to="/"
         >
           <Box
             sx={{
-              padding: "10px 10px",
-              border: "2px solid rgba(255, 255, 255, 0.2)",
-              boxShadow:
-                "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-              fontFamily: '"Poppins", sans-serif',
-              color: "#ffffff",
-              fontSize: "1rem",
-              letterSpacing: "1px",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              cursor: "pointer",
-              borderRadius: "10px",
-              transition: "0.5s",
-              position: "relative",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-
-              "&:after": {
-                content: '""',
-                position: "absolute",
-                height: "100%",
-                width: "100%",
-                top: "0",
-                left: "0",
-                background:
-                  "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-                backgroundSize: "300% 100%",
-                backgroundPosition: "165% 0",
-                transition: "0.7s",
-              },
-              "&:hover:after": {
-                backgroundPosition: "-20% 0",
-              },
-              "&:hover": {
-                boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-                transform: "translateY(-5px)",
-              },
-
-              "&.activeBtn": {
-                background:
-                  "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-                border: "1px solid white",
-                boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
-              },
+              justifyContent: "flex-start",
+              flexWrap: "wrap",
+              gap: "1rem",
             }}
           >
-            <ArrowBackIosNewIcon />
-          </Box>{" "}
-        </Link>
-        <p>Vault not found</p>
+            <Button
+              sx={{
+                "&:after": {
+                  backgroundSize: "300% 100%",
+                }
+              }}
+              clickFunction={() => navigate('/')}
+            >
+              <ArrowBackIosNewIcon />
+            </Button>
+            <Button
+              isActive={activeElement === 1}
+              clickFunction={() => navigate(`../Collateral/${vaultId}`)}
+              isDisabled
+            >
+              Collateral
+            </Button>
+            <Button
+              isActive={activeElement === 2}
+              clickFunction={() => navigate(`../Collateral/${vaultId}?view=2`)}
+              isDisabled
+            >
+              Borrow/Repay
+            </Button>
+            <Button
+              isActive={activeElement === 3}
+              clickFunction={() => navigate('history')}
+              isDisabled
+            >
+              History
+            </Button>
+          </Box>
+          {/* right side of the upper column */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          ></Box>
+        </Box>
+
+        <VaultMenuSmall
+          vaultId={vaultId}
+          isDisabled
+        />
+
+        <Box
+          sx={{
+            display: { xs: "flex", lg: "grid" },
+          }}
+        >
+          <Card
+            sx={{
+              alignItems: "center",
+              padding: "1.5rem",
+              minHeight: "50vh",
+              marginTop: "0.5rem",
+            }}
+          >
+            Vault Not Found
+          </Card>
+        </Box>
       </Box>
     );
   }
