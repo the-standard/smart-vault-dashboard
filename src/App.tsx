@@ -3,18 +3,35 @@ import {
   w3mConnectors
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { Chain, configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
-  arbitrum,
-  arbitrumGoerli,
+  arbitrum
 } from "wagmi/chains";
+
+export const arbitrumSepolia = {
+  id: 421614,
+  name: 'Arbitrum Sepolia',
+  network: 'arbitrumSepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Ether',
+    symbol: 'ETH',
+  },
+  rpcUrls: {
+    public: { http: ['https://sepolia-rollup.arbitrum.io/rpc'] },
+    default: { http: ['https://sepolia-rollup.arbitrum.io/rpc'] },
+  },
+  blockExplorers: {
+    etherscan: { name: 'Arbiscan', url: 'https://sepolia.arbiscan.io/' },
+    default: { name: 'Arbiscan', url: 'https://sepolia.arbiscan.io/' },
+  }
+} as const satisfies Chain
 
 const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";
 
-
 const { chains, publicClient } = configureChains(
-  [arbitrum, arbitrumGoerli],
-  [alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY })],
+  [arbitrum, arbitrumSepolia],
+  [alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY }), publicProvider()],
 )
 
 const config = createConfig({
@@ -45,6 +62,7 @@ import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
 
 import { alchemyProvider } from '@wagmi/core/providers/alchemy'
+import { publicProvider } from "wagmi/providers/public";
 
 function App() {
   // const { circularProgress } = useCircularProgressStore();
