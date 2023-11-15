@@ -80,6 +80,7 @@ export function VaultMenuSmall(props: any) {
           <ArrowBackIosNewIcon />
         </Button>
         <MuiButton
+          disabled={props?.isDisabled}
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
