@@ -43,7 +43,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //snackbar config
   const [open, setOpen] = React.useState(false);
   const {
-    contractAddress,
+    // contractAddress,
     arbitrumSepoliaContractAddress,
     arbitrumContractAddress,
   } = useContractAddressStore();
@@ -112,6 +112,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
     } else if (isSuccess && tokenId) {
       getCircularProgress(false);
       navigate(`Collateral/${tokenId.toString()}`);
+      getSnackBar('SUCCESS', 'Vault created successfully');
     } else if (isError) {
       getCircularProgress(false);
     }
@@ -125,13 +126,9 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const unwatchDeployEvent = useContractEvent({
     address:
-      chain?.id === 421614
-        ? arbitrumSepoliaContractAddress
-        : chain?.id === 11155111
-        ? contractAddress
-        : chain?.id === 42161
-        ? arbitrumContractAddress
-        : null,
+    chain?.id === 421614
+    ? arbitrumSepoliaContractAddress
+    : arbitrumContractAddress,
     abi: vaultManagerAbi,
     eventName: "VaultDeployed",
     listener(log: any) {
