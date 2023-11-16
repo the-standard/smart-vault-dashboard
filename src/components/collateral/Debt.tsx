@@ -24,7 +24,6 @@ import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
 import { useContractWrite, useContractReads } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -36,7 +35,7 @@ const Debt = () => {
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore();
   const { vaultStore }: any = useVaultStore();
-  const { arbitrumsEuroAddress, arbitrumGoerlisEuroAddress } =
+  const { arbitrumsEuroAddress, arbitrumSepoliasEuroAddress } =
     usesEuroAddressStore();
   const { erc20Abi } = useErc20AbiStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
@@ -59,8 +58,8 @@ const Debt = () => {
 
   const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
 
-  const eurosAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerlisEuroAddress :
+  const eurosAddress = chain?.id === 421614 ?
+    arbitrumSepoliasEuroAddress :
     arbitrumsEuroAddress;
   
   const eurosContract = {

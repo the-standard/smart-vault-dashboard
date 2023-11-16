@@ -17,7 +17,6 @@ import {
 } from "../../store/Store";
 import { fromHex } from "viem";
 import { useNetwork } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,14 +28,14 @@ interface StepProps {
 
 const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
   const { vaultForListing } = useVaultForListingStore();
-  const { arbitrumContractAddress, arbitrumGoerliContractAddress } =
+  const { arbitrumContractAddress, arbitrumSepoliaContractAddress } =
     useContractAddressStore();
   //this might be useless. where else do I u,se it?
   const { chainlinkAbi } = useChainlinkAbiStore();
   const { chain } = useNetwork();
-  const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } =
+  const { arbitrumOneUSDToEuroAddress, arbitrumSepoliaUSDToEuroAddress } =
     useUSDToEuroAddressStore();
-  const { arbitrumOneEthToUsdAddress, arbitrumGoerliethToUsdAddress } =
+  const { arbitrumOneEthToUsdAddress, arbitrumSepoliaEthToUsdAddress } =
     useEthToUsdAddressStore();
   const { getSnackBar } = useSnackBarStore();
 
@@ -45,12 +44,12 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
     functionName: "latestRoundData",
   };
   const eurUsdAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliUSDToEuroAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaUSDToEuroAddress
       : arbitrumOneUSDToEuroAddress;
   const ethUsdAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliethToUsdAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaEthToUsdAddress
       : arbitrumOneEthToUsdAddress;
 
   const { data: priceData } = useContractReads({
@@ -84,7 +83,7 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
     };
     provider = new providers.Web3Provider(transport, network);
 
-    openseaSDK = chain?.id === arbitrumGoerli.id ?
+    openseaSDK = chain?.id === 421614 ?
       new OpenSeaSDK(provider, {
         chain: Chain.ArbitrumGoerli,
       }) :
@@ -100,8 +99,8 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
   const tokenIdBeforeConversion: any = vaultForListing.tokenId;
   const tokenId: any = fromHex(tokenIdBeforeConversion, "number").toString();
 
-  const tokenAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerliContractAddress :
+  const tokenAddress = chain?.id === 421614 ?
+    arbitrumSepoliaContractAddress :
     arbitrumContractAddress;
 
   const convertEthToEur = (eth: string) => {

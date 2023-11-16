@@ -3,7 +3,6 @@ import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAccount, useContractRead, useContractReads, useContractWrite } from "wagmi";
 import { getNetwork } from "@wagmi/core";
-import { arbitrumGoerli } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
 import moment from 'moment';
 import {
@@ -29,7 +28,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const [stakeAmount, setStakeAmount] = useState(0);
   const {
     arbitrumTstAddress,
-    arbitrumGoerliTstAddress
+    arbitrumSepoliaTstAddress
   } = useTstAddressStore();
   const { erc20Abi } = useErc20AbiStore();
   const { stakingAbi } = useStakingAbiStore();
@@ -47,8 +46,8 @@ const StakingModal: React.FC<StakingModalProps> = ({
     setSuccess(false);
   }, [isOpen]);
 
-  const tstAddress = chain?.id === arbitrumGoerli.id ?
-  arbitrumGoerliTstAddress :
+  const tstAddress = chain?.id === 421614 ?
+  arbitrumSepoliaTstAddress :
   arbitrumTstAddress ;
 
   const amountInWei = parseEther(stakeAmount.toString());

@@ -17,7 +17,6 @@ import arblogo from "../../assets/arblogo.svg";
 import { formatUnits } from "viem";
 import axios from "axios";
 import { getNetwork } from "@wagmi/core";
-import { arbitrumGoerli } from "wagmi/chains";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -82,8 +81,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         "https://smart-vault-api.thestandard.io/asset_prices"
       );
       const chainData =
-        chain?.id === arbitrumGoerli.id
-          ? response.data.arbitrum_goerli
+        chain?.id === 421614
+          ? response.data.arbitrum_sepolia
           : response.data.arbitrum;
       setChartData(chainData);
     } catch (error) {
