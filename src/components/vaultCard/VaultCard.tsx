@@ -12,7 +12,7 @@ import "../../styles/buttonStyle.css";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useContractEvent, useContractWrite } from "wagmi";
-import { arbitrumGoerli, arbitrum } from "wagmi/chains";
+import { arbitrum } from "wagmi/chains";
 
 import Card from "../Card";
 import Button from "../Button";
@@ -44,7 +44,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const [open, setOpen] = React.useState(false);
   const {
     contractAddress,
-    arbitrumGoerliContractAddress,
+    arbitrumSepoliaContractAddress,
     arbitrumContractAddress,
   } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
@@ -70,8 +70,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const mintVault = useContractWrite({
     address:
-      chain?.id === arbitrumGoerli.id
-        ? arbitrumGoerliContractAddress
+      chain?.id === 421614
+        ? arbitrumSepoliaContractAddress
         : arbitrumContractAddress, // Set a default value or handle this case as per your requirement
     abi: vaultManagerAbi, // Make sure you have vaultManagerAbi defined
     functionName: "mint", // Assuming the function name is 'mint'
@@ -89,7 +89,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   // Define your function using async/await
   const handleMintVault = async () => {
-    if (chain?.id !== arbitrumGoerli.id && chain?.id !== arbitrum.id) {
+    if (chain?.id !== 421614 && chain?.id !== arbitrum.id) {
       getSnackBar('ERROR', 'Please change to Arbitrum network!');
       return;
     }
@@ -125,8 +125,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const unwatchDeployEvent = useContractEvent({
     address:
-      chain?.id === 421613
-        ? arbitrumGoerliContractAddress
+      chain?.id === 421614
+        ? arbitrumSepoliaContractAddress
         : chain?.id === 11155111
         ? contractAddress
         : chain?.id === 42161

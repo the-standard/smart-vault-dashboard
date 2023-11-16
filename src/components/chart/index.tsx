@@ -10,7 +10,6 @@ import {
 } from "../../store/Store";
 import { BigNumber, ethers } from "ethers";
 import { formatEther, formatUnits, parseEther } from "viem";
-import { arbitrumGoerli } from "wagmi/chains";
 import { useContractReads, useNetwork } from "wagmi";
 import { parseBytes32String } from "ethers/lib/utils";
 
@@ -23,7 +22,7 @@ const Index = () => {
   const chosenVault: any = vaultStore;
   const { chain } = useNetwork();
   const { chainlinkAbi } = useChainlinkAbiStore();
-  const { arbitrumOneUSDToEuroAddress, arbitrumGoerliUSDToEuroAddress } =
+  const { arbitrumOneUSDToEuroAddress, arbitrumSepoliaUSDToEuroAddress } =
     useUSDToEuroAddressStore();
 
   const chainlinkContract = {
@@ -32,8 +31,8 @@ const Index = () => {
   };
 
   const eurUsdAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliUSDToEuroAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaUSDToEuroAddress
       : arbitrumOneUSDToEuroAddress;
 
   const contracts = [

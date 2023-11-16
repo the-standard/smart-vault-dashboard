@@ -6,8 +6,6 @@ import smartVaultABI from "../abis/smartVault.ts";
 import stakingAbi from "../abis/staking.ts";
 import { Address } from "viem";
 
-export const arbSepoliaId = '421614';
-
 interface EthToUsdAddressState {
   ethToUsdAddress?: Address;
   arbitrumOneEthToUsdAddress: Address;

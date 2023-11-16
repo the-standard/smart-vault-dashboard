@@ -2,7 +2,6 @@ import { useLayoutEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 import { getNetwork } from "@wagmi/core";
 import { useContractRead, useContractReads, useAccount } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 
 import {
   usePositionStore,
@@ -22,12 +21,12 @@ const Staking = () => {
   const { stakingAbi } = useStakingAbiStore();
 
   const {
-    arbitrumGoerliContractAddress,
+    arbitrumSepoliaContractAddress,
     arbitrumContractAddress
   } = useContractAddressStore();
 
   const {
-    arbitrumGoerliStakingContractsAddress,
+    arbitrumSepoliaStakingContractsAddress,
     arbitrumStakingContractsAddress
   } = useStakingContractsStore();
 
@@ -49,13 +48,13 @@ const Staking = () => {
   }, [setPosition]);
 
   const vaultManagerAddress =
-  chain?.id === arbitrumGoerli.id
-    ? arbitrumGoerliContractAddress
+  chain?.id === 421614
+    ? arbitrumSepoliaContractAddress
     : arbitrumContractAddress;
   
   const stakingContractsAddress = 
-  chain?.id === arbitrumGoerli.id
-    ? arbitrumGoerliStakingContractsAddress
+  chain?.id === 421614
+    ? arbitrumSepoliaStakingContractsAddress
     : arbitrumStakingContractsAddress;
 
   //////////////////////////

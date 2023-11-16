@@ -6,7 +6,6 @@ import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useContractRead } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 import { formatUnits, formatEther } from "viem";
 import moment from 'moment';
 import axios from "axios";
@@ -47,7 +46,7 @@ function NoDataOverlay() {
 const VaultHistory = () => {
   const { chain } = getNetwork();
   const { address } = useAccount();
-  const { arbitrumGoerliContractAddress, arbitrumContractAddress } = useContractAddressStore();
+  const { arbitrumSepoliaContractAddress, arbitrumContractAddress } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { vaultId } = useParams<RouteParams>();
   const navigate = useNavigate();
@@ -75,8 +74,8 @@ const VaultHistory = () => {
   }, [setPosition]);
 
   const vaultManagerAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliContractAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
   const { data: vaults } = useContractRead({
     address: vaultManagerAddress,
@@ -274,10 +273,10 @@ const VaultHistory = () => {
   const rows = historyData || [];
 
   const handleEtherscanLink = (txRef: string) => {
-    const arbiscanUrl = `https://arbiscan.io/tx/${txRef}`;
-      // chain?.id === arbitrumGoerli.id
-      //   ? `https://goerli.arbiscan.io/tx/${txRef}`
-      //   : `https://arbiscan.io/tx/${txRef}`;
+    // const arbiscanUrl = `https://arbiscan.io/tx/${txRef}`;
+    const arbiscanUrl = chain?.id === 421614
+      ? `https://sepolia.arbiscan.io/tx/${txRef}`
+      : `https://arbiscan.io/tx/${txRef}`;
       
     window.open(arbiscanUrl, "_blank");
   };

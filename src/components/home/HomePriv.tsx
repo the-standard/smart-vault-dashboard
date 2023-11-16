@@ -13,7 +13,6 @@ import {
   useContractAddressStore,
   usePositionStore,
 } from "../../store/Store.ts";
-import { arbitrumGoerli } from "wagmi/chains";
 
 import VaultCard from "../vaultCard/VaultCard.tsx";
 import Datagrid from "../dataGrid/Datagrid";
@@ -55,13 +54,13 @@ const HomePriv = () => {
   const [showHiddenVaults, setShowHiddenVaults] = useState(false);
   const { address } = useAccount();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+  const { arbitrumSepoliaContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
 
   const { chain } = useNetwork();
   const vaultManagerAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliContractAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
   const { data: myVaults } = useContractRead({
