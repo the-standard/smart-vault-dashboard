@@ -70,6 +70,23 @@ const StakingList: React.FC<StakingListProps> = ({
     {
       minWidth: 90,
       flex: 1,
+      field: 'windowEnd',
+      headerName: 'Closing',
+      sortable: false,
+      disableColumnMenu: true,
+      renderCell: (params: any) => {
+        const unixDate = Number(params.row.windowEnd);
+        const useDate = moment.unix(unixDate).format('ll');
+        return (
+          <span style={{textTransform: 'capitalize'}}>
+            {useDate || ''}
+          </span>
+        );
+      },
+    },
+    {
+      minWidth: 90,
+      flex: 1,
       field: 'SI_Rate',
       headerName: 'Reward',
       sortable: false,

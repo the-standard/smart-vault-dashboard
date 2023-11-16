@@ -55,8 +55,11 @@ const StakingModal: React.FC<StakingModalProps> = ({
 
   const stakingAddress = stakingContract?.address;
   const stakingMaturity = stakingContract?.maturity;
+  const stakingWindowEnd = stakingContract?.windowEnd;
   const maturityUnix = Number(stakingMaturity);
   const maturity = moment.unix(maturityUnix);
+  const windowEndUnix = Number(stakingWindowEnd);
+  const windowEnd = moment.unix(windowEndUnix);
 
   const approvePayment = useContractWrite({
     address: tstAddress as any,
@@ -316,6 +319,34 @@ const StakingModal: React.FC<StakingModalProps> = ({
                     backgroundSize: "100% 1px",
                     backgroundPosition: "center bottom",                    
                   }}/>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    alignItems: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      marginRight: "0.5rem",
+                      minWidth: "120px",
+                    }}
+                  >
+                    Closing Date:
+                  </Typography>
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      width: "100%",
+                    }}
+                  >
+                    {windowEnd.format('ll') || ''}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
