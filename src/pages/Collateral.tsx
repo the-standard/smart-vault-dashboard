@@ -18,7 +18,6 @@ import { useParams, useLocation } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useBlockNumber, useContractRead } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 import { useNavigate } from "react-router-dom";
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
@@ -45,7 +44,7 @@ const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
   const { getVaultAddress } = useVaultAddressStore();
   const { vaultStore, getVaultStore } = useVaultStore();
-  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+  const { arbitrumSepoliaContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getVaultID } = useVaultIdStore();
@@ -142,8 +141,8 @@ const Collateral = () => {
   }, [vaultView]);
   
   const vaultManagerAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliContractAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
   const vaults = useContractRead({
     address: vaultManagerAddress,
@@ -424,8 +423,8 @@ const Collateral = () => {
 
   const handleButtonActions = (id: number) => {
     const arbiscanUrl =
-      chain?.id === arbitrumGoerli.id
-        ? `https://goerli.arbiscan.io/address/${vaultAddress}`
+      chain?.id === 421614
+        ? `https://sepolia.arbiscan.io/address/${vaultAddress}`
         : `https://arbiscan.io/address/${vaultAddress}`;
     if (id === 1) {
       window.open(arbiscanUrl, "_blank");
