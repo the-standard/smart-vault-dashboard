@@ -59,7 +59,9 @@ const Index = () => {
 
   const prices: any = priceData?.map((data:any) => {
     const result: any = data.result;
-    return result[1];
+    if (result && result[1]) {
+      return result[1];
+    }
   });
 
   const chartData = chosenVault.status.collateral.map((asset: any) => {
