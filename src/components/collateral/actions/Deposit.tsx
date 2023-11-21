@@ -270,24 +270,6 @@ const Deposit: React.FC<DepositProps> = ({
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "0",
-        }}
-      >
-        <Typography
-          variant="body2"
-          sx={{
-            fontSize: "1rem",
-          }}
-        >
-          Available Balance: {maxBal || '0'} {symbol || ''}
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
           marginTop: "1rem",
           padding: "0",
         }}
@@ -375,6 +357,26 @@ const Deposit: React.FC<DepositProps> = ({
           )}
         </Box>
       </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0",
+          marginTop: "1rem",
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "1rem",
+          }}
+        >
+          Available Balance: {maxBal || '0'} {symbol || ''}
+        </Typography>
+      </Box>
+
       <Box
         sx={{
           display: "flex",
