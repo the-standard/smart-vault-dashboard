@@ -8,7 +8,6 @@ import swonlogo from "../../assets/KRWs.svg";
 import sgbplogo from "../../assets/GBPs.svg";
 import susdlogo from "../../assets/USDs.svg";
 import { useAccount, useContractRead, useNetwork } from "wagmi";
-import { formatEther } from "viem";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
@@ -102,8 +101,6 @@ const HomePriv = () => {
         Number(ethers.BigNumber.from(vault.status.totalCollateralValue)) > 0
     ) || [];
 
-  const hasInactiveVaults = myInactiveVaults && myInactiveVaults.length > 0;
-
   const inactiveVaults = localStorage.getItem("inactiveVaults");
   let splitInactiveVaults = false;
   if (inactiveVaults === 'HIDE') {
@@ -111,12 +108,12 @@ const HomePriv = () => {
   }
 
   const handleToggleSplitInactiveVaults = () => {
-    if (!inactiveVaults || inactiveVaults === 'SHOW') {
-      localStorage.setItem("inactiveVaults", 'HIDE');
-      getSnackBar('SUCCESS', 'Inactive Vaults Hidden');
-    } else {
+    if (inactiveVaults === 'HIDE') {
       localStorage.setItem("inactiveVaults", 'SHOW');
       getSnackBar('SUCCESS', 'Inactive Vaults Shown');
+    } else {
+      localStorage.setItem("inactiveVaults", 'HIDE');
+      getSnackBar('SUCCESS', 'Inactive Vaults Hidden');
     }
     setOpenHideModal(false)
   };
