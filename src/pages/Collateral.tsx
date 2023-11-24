@@ -24,6 +24,7 @@ import vaultLiauidatedImg from "../assets/vault-liquidated.png";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
+import EurosCompare from "../components/collateral/EurosCompare.tsx";
 import "../styles/buttonStyle.css";
 import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
@@ -509,7 +510,14 @@ const Collateral = () => {
             }}
           >
             {/* list available tokens here */}
-            {collateralOrDebt === 2 ? displayDebt() : displayTokens()}
+            {collateralOrDebt === 2 ? (
+              <>
+                {displayDebt()}
+                <EurosCompare />
+              </>
+            ) : (
+              displayTokens()
+            )}
           </Box>
         </Box>{" "}
         {/* right side of the container */}
