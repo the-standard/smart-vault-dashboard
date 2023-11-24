@@ -5,7 +5,7 @@ import {
   useUSDToEuroAddressStore,
 } from "../../store/Store";
 import Card from "../../components/Card";
-import { formatEther, formatUnits, parseEther } from "viem";
+import { formatUnits } from "viem";
 import { useContractReads, useNetwork } from "wagmi";
 import axios from "axios";
 
