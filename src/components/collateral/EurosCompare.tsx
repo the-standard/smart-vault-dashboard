@@ -44,7 +44,7 @@ const EurosCompare = () => {
     }
   });
 
-  let chainPrice;
+  let chainPrice = '0';
   if (chainPriceData && chainPriceData[0]) {
     chainPrice = formatUnits(chainPriceData[0].toString(), 8);
   }
@@ -70,16 +70,9 @@ const EurosCompare = () => {
 
   const poolEurosData = poolData?.find((item: any) => item.baseToken?.symbol === 'EUROs');
 
-  const poolPrice = poolEurosData?.priceUsd;
+  const poolPrice = poolEurosData?.priceUsd || '0';
   
-  const priceDifference = (Number(chainPrice) - Number(poolPrice) ) / Number(poolPrice) * 100;
-
   const priceComparison = Number(poolPrice) / Number(chainPrice) * 100;
-
-  // const priceDifference = (Number(poolPrice) - Number(chainPrice) ) / Number(chainPrice) * 100;
-
-  
-  // console.log(123123, priceDifference, priceDifference2)
   
   return (
     <Card
