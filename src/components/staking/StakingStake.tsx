@@ -33,11 +33,11 @@ const StakingStake = () => {
   const { chain } = getNetwork();
   const {
     arbitrumTstAddress,
-    arbitrumGoerliTstAddress,
+    arbitrumSepoliaTstAddress,
   } = useTstAddressStore();
   const {
     arbitrumsEuroAddress,
-    arbitrumGoerlisEuroAddress,
+    arbitrumSepoliasEuroAddress,
   } = usesEuroAddressStore();
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
@@ -52,7 +52,7 @@ const StakingStake = () => {
   const eurosInputRef: any = useRef<HTMLInputElement>(null);
 
   const tstAddress = chain?.id === arbitrumGoerli.id ?
-  arbitrumGoerliTstAddress :
+  arbitrumSepoliaTstAddress :
   arbitrumTstAddress ;
 
   const tstContract = {
@@ -87,7 +87,7 @@ const StakingStake = () => {
   const eurosVaultAddress = '123123';
 
   const eurosAddress = chain?.id === arbitrumGoerli.id ?
-  arbitrumGoerlisEuroAddress :
+  arbitrumSepoliasEuroAddress :
   arbitrumsEuroAddress;
 
   const eurosContract = {

@@ -21,7 +21,6 @@ import "../../styles/datagridStyles.css";
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther } from "viem";
 import { useContractReads, useNetwork } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 
@@ -36,7 +35,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   const tokenMap = useRef(new Map());
   //store values
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+  const { arbitrumSepoliaContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
   const { getVaultID } = useVaultIdStore();
   const { getVaultForListing } = useVaultForListingStore();
@@ -52,8 +51,8 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
 
   const { chain } = useNetwork();
   const vaultManagerAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliContractAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
   const truncateValue = (value: string, length: number) => {

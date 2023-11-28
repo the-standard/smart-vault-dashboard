@@ -1,35 +1,45 @@
 import {
   EthereumClient,
-  w3mConnectors,
-  w3mProvider,
+  w3mConnectors
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
-import { configureChains, createConfig, sepolia, WagmiConfig } from "wagmi";
+import { Chain, configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
-  goerli,
-  mainnet,
-  polygonMumbai,
-  arbitrum,
-  arbitrumGoerli,
+  arbitrum
 } from "wagmi/chains";
 
-const chains = [
-  mainnet,
-  goerli,
-  sepolia,
-  polygonMumbai,
-  arbitrum,
-  arbitrumGoerli,
-];
+export const arbitrumSepolia = {
+  id: 421614,
+  name: 'Arbitrum Sepolia',
+  network: 'arbitrumSepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Ether',
+    symbol: 'ETH',
+  },
+  rpcUrls: {
+    public: { http: ['https://sepolia-rollup.arbitrum.io/rpc'] },
+    default: { http: ['https://sepolia-rollup.arbitrum.io/rpc'] },
+  },
+  blockExplorers: {
+    etherscan: { name: 'Arbiscan', url: 'https://sepolia.arbiscan.io/' },
+    default: { name: 'Arbiscan', url: 'https://sepolia.arbiscan.io/' },
+  }
+} as const satisfies Chain
+
 const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";
 
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
-const wagmiConfig = createConfig({
+const { chains, publicClient } = configureChains(
+  [arbitrum, arbitrumSepolia],
+  [alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY }), publicProvider()],
+)
+
+const config = createConfig({
   autoConnect: true,
   connectors: w3mConnectors({ projectId, chains }),
   publicClient,
-});
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
+})
+const ethereumClient = new EthereumClient(config, chains);
 
 import HomePage from "./pages/HomePage.tsx";
 //import navbar
@@ -51,6 +61,9 @@ import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
 
+import { alchemyProvider } from '@wagmi/core/providers/alchemy'
+import { publicProvider } from "wagmi/providers/public";
+
 function App() {
   // const { circularProgress } = useCircularProgressStore();
   useBackgroundImage();
@@ -69,7 +82,7 @@ function App() {
       {/* <button onClick={handleRemountClick}>Remount</button>{" "} */}
       <CircularProgressComponent />
       <SnackbarComponent />
-      <WagmiConfig config={wagmiConfig}>
+      <WagmiConfig config={config}>
         <Navbar />
         <Routes key={renderAppCounter}>
           <Route path="/" element={<HomePage />} />

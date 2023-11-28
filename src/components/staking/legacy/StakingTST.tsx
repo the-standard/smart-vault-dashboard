@@ -1,11 +1,8 @@
-import { useLayoutEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 import { getNetwork } from "@wagmi/core";
 import { useContractRead, useContractReads, useAccount } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 
 import {
-  usePositionStore,
   useStakingAbiStore,
   useContractAddressStore,
   useStakingContractsStore,
@@ -16,46 +13,29 @@ import StakingList from "./StakingList.tsx";
 import StakingPositions from "./StakingPositions.tsx";
 
 const StakingTST = () => {
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
-
   const { stakingAbi } = useStakingAbiStore();
 
   const {
-    arbitrumGoerliContractAddress,
+    arbitrumSepoliaContractAddress,
     arbitrumContractAddress
   } = useContractAddressStore();
 
   const {
-    arbitrumGoerliStakingContractsAddress,
+    arbitrumSepoliaStakingContractsAddress,
     arbitrumStakingContractsAddress
   } = useStakingContractsStore();
 
   const { address } = useAccount();
   const { chain } = getNetwork();
 
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
-
   const vaultManagerAddress =
-  chain?.id === arbitrumGoerli.id
-    ? arbitrumGoerliContractAddress
+  chain?.id === 421614
+    ? arbitrumSepoliaContractAddress
     : arbitrumContractAddress;
   
   const stakingContractsAddress = 
-  chain?.id === arbitrumGoerli.id
-    ? arbitrumGoerliStakingContractsAddress
+  chain?.id === 421614
+    ? arbitrumSepoliaStakingContractsAddress
     : arbitrumStakingContractsAddress;
 
   //////////////////////////
@@ -153,7 +133,6 @@ const StakingTST = () => {
         margin: {
         },
       }}
-      ref={rectangleRef}
     >
       <Card
         sx={{

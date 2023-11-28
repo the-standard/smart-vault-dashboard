@@ -3,7 +3,6 @@ import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAccount, useContractRead, useContractReads, useContractWrite } from "wagmi";
 import { getNetwork } from "@wagmi/core";
-import { arbitrumGoerli } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
 import moment from 'moment';
 import {
@@ -29,7 +28,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const [stakeAmount, setStakeAmount] = useState(0);
   const {
     arbitrumTstAddress,
-    arbitrumGoerliTstAddress
+    arbitrumSepoliaTstAddress
   } = useTstAddressStore();
   const { erc20Abi } = useErc20AbiStore();
   const { stakingAbi } = useStakingAbiStore();
@@ -47,16 +46,19 @@ const StakingModal: React.FC<StakingModalProps> = ({
     setSuccess(false);
   }, [isOpen]);
 
-  const tstAddress = chain?.id === arbitrumGoerli.id ?
-  arbitrumGoerliTstAddress :
+  const tstAddress = chain?.id === 421614 ?
+  arbitrumSepoliaTstAddress :
   arbitrumTstAddress ;
 
   const amountInWei = parseEther(stakeAmount.toString());
 
   const stakingAddress = stakingContract?.address;
   const stakingMaturity = stakingContract?.maturity;
+  const stakingWindowEnd = stakingContract?.windowEnd;
   const maturityUnix = Number(stakingMaturity);
   const maturity = moment.unix(maturityUnix);
+  const windowEndUnix = Number(stakingWindowEnd);
+  const windowEnd = moment.unix(windowEndUnix);
 
   const approvePayment = useContractWrite({
     address: tstAddress as any,
@@ -316,6 +318,34 @@ const StakingModal: React.FC<StakingModalProps> = ({
                     backgroundSize: "100% 1px",
                     backgroundPosition: "center bottom",                    
                   }}/>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    alignItems: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      marginRight: "0.5rem",
+                      minWidth: "120px",
+                    }}
+                  >
+                    Closing Date:
+                  </Typography>
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      width: "100%",
+                    }}
+                  >
+                    {windowEnd.format('ll') || ''}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{

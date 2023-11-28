@@ -7,7 +7,7 @@ function useEthereumProvider() {
   useEffect(() => {
     async function createEthereumProvider() {
       const projectId: any = "67027f91c1db8751c6ea2ed13b9cdc55";
-      const chains: any = [42161, 421613, 1];
+      const chains: any = [42161, 421614, 1];
       const showQrModal: any = true;
       const methods: any = [
         "eth_sendTransaction",

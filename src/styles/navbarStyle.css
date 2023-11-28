@@ -35,18 +35,18 @@
 .nav-button::before {
   content: "";
   position: absolute;
-  background: rgba(255, 255, 255, 0.2);
-  width: 50%;
   height: 100%;
-  left: -100%;
+  width: 100%;
   top: 0;
-  transform: skewX(-45deg);
-  transition: left 0.6s ease;
-  pointer-events: none;
+  left: 0;
+  background: linear-gradient( 45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%,  rgba(255, 255, 255, 0.16) 67%, transparent 68%);
+  background-size: 200% 100%;
+  background-position: 165% 0;
+  transition: 0.7s;
 }
 
 .nav-button:hover::before {
-  left: 130%;
+  background-position: -20% 0;
 }
 
 .nav-button:active {
