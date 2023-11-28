@@ -99,7 +99,7 @@ const EurosCompare = () => {
         <Typography
           variant="body1"
         >
-          You can make big savings when repaying your EUROs debt by buying them up while the EUROs Pool Value is lower than the EUROs Chainlink Value.
+          You can make big savings when repaying your EUROs debt by buying them up while the EUROs Pool Value is lower than the EUR Chainlink Value.
         </Typography>
       </Box>
 
@@ -123,7 +123,7 @@ const EurosCompare = () => {
           }}
           variant="body2"
         >
-          EUROs Chainlink Value (USD):
+          EUR Chainlink Value (USD):
         </Typography>
         <Typography
           variant="body1"
