@@ -39,6 +39,7 @@ const Deposit: React.FC<DepositProps> = ({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [amount, setAmount] = useState(0);
+  const [maxBal, setMaxBal] = useState(0);
   ///store
   const { vaultAddress } = useVaultAddressStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
@@ -64,6 +65,10 @@ const Deposit: React.FC<DepositProps> = ({
   const walletBalance = balanceData?.value;
 
   const inputRef: any = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    getMaxBalance();
+  }, [walletBalance]);
 
   const handleAmount = (e: any) => {
     if (Number(e.target.value) < 10n ** 21n) {
@@ -121,6 +126,11 @@ const Deposit: React.FC<DepositProps> = ({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getMaxBalance = async () => {
+    const formatted = formatUnits((walletBalance || 0).toString(), decimals);
+    setMaxBal(Number(formatted));
   };
 
   const handleMaxBalance = async () => {
@@ -347,6 +357,26 @@ const Deposit: React.FC<DepositProps> = ({
           )}
         </Box>
       </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0",
+          marginTop: "1rem",
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "1rem",
+          }}
+        >
+          Available Balance: {maxBal || '0'} {symbol || ''}
+        </Typography>
+      </Box>
+
       <Box
         sx={{
           display: "flex",
