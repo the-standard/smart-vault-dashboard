@@ -85,6 +85,11 @@ export const abi = [
                         "internalType": "uint256",
                         "name": "amount",
                         "type": "uint256"
+                    },
+                    {
+                      "internalType": "uint8",
+                      "name": "dec",
+                      "type": "uint8"
                     }
                 ],
                 "internalType": "struct LiquidationPool.Reward[]",

@@ -16,6 +16,7 @@ import {
 } from "../../store/Store.ts";
 
 import Button from "../Button";
+import { formatUnits } from "ethers/lib/utils";
 
 function NoDataOverlay() {
   return (
@@ -125,7 +126,7 @@ const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
       renderCell: (params: any) => {
         let useAmount: any = 0;
         if (params.row.amount) {
-          useAmount = formatEther(params.row.amount.toString());
+          useAmount = formatUnits(params.row.amount.toString(), params.row.dec);
         }
         return (
           <span style={{textTransform: 'capitalize'}}>

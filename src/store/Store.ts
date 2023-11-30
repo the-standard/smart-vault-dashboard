@@ -90,8 +90,8 @@ interface liquidationPoolAddressState {
 
 export const useLiquidationPoolStore = create<liquidationPoolAddressState>()((set) => ({
   // TODO ADD REAL ARB ONE ADDRESS, currently same as testnet
-  arbitrumLiquidationPoolAddress: "0x8D5F24C133932c18b0a69a813D1D5c6D414eeB34",
-  arbitrumSepoliaLiquidationPoolAddress: "0x8D5F24C133932c18b0a69a813D1D5c6D414eeB34",
+  arbitrumLiquidationPoolAddress: "0x44901f0E6E515DDa7cbCA3908db6E1F66aBcE06E",
+  arbitrumSepoliaLiquidationPoolAddress: "0x44901f0E6E515DDa7cbCA3908db6E1F66aBcE06E",
   getLiquidationPoolAddress: (arbitrumLiquidationPoolAddress) =>
     set(() => ({ liquidationPoolAddress: arbitrumLiquidationPoolAddress })),
 }));

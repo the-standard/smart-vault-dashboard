@@ -14,7 +14,7 @@ import {
 } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { arbitrum } from "wagmi/chains";
-import { formatEther, parseUnits, parseEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import {
   usePositionStore,
   useTstAddressStore,
