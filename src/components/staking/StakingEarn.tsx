@@ -1,35 +1,51 @@
-import { useLayoutEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
+import { getNetwork } from "@wagmi/core";
+import { useContractRead, useAccount } from "wagmi";
 
 import {
-  usePositionStore,
+  useLiquidationPoolAbiStore,
+  useLiquidationPoolStore,
 } from "../../store/Store.ts";
 
 import Card from "../Card.tsx";
-import Button from "../Button.tsx";
+import StakingLiquidations from "./StakingLiquidations";
+import StakingStakedAssets from "./StakingStakedAssets";
 
 const StakingEarn = () => {
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
+  const { liquidationPoolAbi } = useLiquidationPoolAbiStore();
 
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
+  const {
+    arbitrumSepoliaLiquidationPoolAddress,
+    arbitrumLiquidationPoolAddress,
+  } = useLiquidationPoolStore();
 
+  const { address } = useAccount();
+  const { chain } = getNetwork();
+
+  const liquidationPoolAddress =
+  chain?.id === 421614
+    ? arbitrumSepoliaLiquidationPoolAddress
+    : arbitrumLiquidationPoolAddress;
+
+  const { data: liquidationPool } = useContractRead({
+    address: liquidationPoolAddress,
+    abi: liquidationPoolAbi,
+    functionName: "position",
+    args: [
+      address
+    ],
+  });
+
+  const positions: any = liquidationPool && liquidationPool[0];
+  const rewards: any = liquidationPool && liquidationPool[1];
 
   return (
     <Box
-      ref={rectangleRef}
+      sx={{
+        margin: {
+        },
+      }}
     >
-
       <Card
         sx={{
           marginBottom: "1rem",
@@ -48,173 +64,72 @@ const StakingEarn = () => {
           }}
           variant="h4"
         >
-          Earn From Fees and Liquidations
+          Earning
         </Typography>
-        <Box
+        <Typography
           sx={{
-            display: 'flex',
-            flexDirection: {
-              xs: "column",
-              sm: "row",
-            }
+            marginBottom: "1rem",
+            fontSize: {
+              xs: "1rem",
+              md: "1.2rem",
+            },
+            opacity: "0.9",
+            fontWeight: "300",
           }}
         >
-          <Box
-            sx={{
-              flex: "1",
-              display: 'flex',
-              flexDirection: {
-                xs: "column",
-              },
-            }}
-          >
-            <Box sx={{width: "100%", marginBottom: "2rem"}}>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  margin: "1rem 0",
-                  marginTop: "0",
-                  fontSize: {
-                    xs: "1.2rem",
-                    md: "1.8rem"
-                  }
-                }}
-                variant="h4"
-              >
-                Staking
-              </Typography>
-              <Typography
-                sx={{
-                  marginBottom: "1rem",
-                  fontSize: {
-                    xs: "1rem",
-                    md: "1.2rem",
-                  },
-                  opacity: "0.9",
-                  fontWeight: "300",
-                }}
-              >
-                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est.
-              </Typography>
-              <Button
-                sx={{
-                  width: "100%",
-                  maxWidth: "120px",
-                }}
-                lighter
-              >
-                <Typography
-                  sx={{
-                    color: "#f1fbfa",
-                    fontFamily: "Poppins",
-                    fontSize: { xs: "1rem", md: "0.8rem", lg: "1rem" },
-                  }}
-                >
-                  Learn More
-                </Typography>
-              </Button>
-            </Box>
-            <Box sx={{width: "100%", marginBottom: "2rem"}}>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  margin: "1rem 0",
-                  marginTop: "0",
-                  fontSize: {
-                    xs: "1.2rem",
-                    md: "1.8rem"
-                  }
-                }}
-                variant="h4"
-              >
-                Earning
-              </Typography>
-              <Typography
-                sx={{
-                  marginBottom: "1rem",
-                  fontSize: {
-                    xs: "1rem",
-                    md: "1.2rem",
-                  },
-                  opacity: "0.9",
-                  fontWeight: "300",
-                }}
-              >
-                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est.
-              </Typography>
-              <Button
-                sx={{
-                  width: "100%",
-                  maxWidth: "120px",
-                }}
-                lighter
-              >
-                <Typography
-                  sx={{
-                    color: "#f1fbfa",
-                    fontFamily: "Poppins",
-                    fontSize: { xs: "1rem", md: "0.8rem", lg: "1rem" },
-                  }}
-                >
-                  Learn More
-                </Typography>
-              </Button>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              flex: "1",
-              display: 'flex',
-              flexDirection: {
-                xs: "column",
-              },
-            }}
-          >
-            <Box sx={{width: "100%", marginBottom: "2rem"}}>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  margin: "1rem 0",
-                  marginTop: "0",
-                  fontSize: {
-                    xs: "1.2rem",
-                    md: "1.8rem"
-                  }
-                }}
-                variant="h4"
-              >
-                Claiming
-              </Typography>
-              <Typography
-                sx={{
-                  marginBottom: "1rem",
-                  fontSize: {
-                    xs: "1rem",
-                    md: "1.2rem",
-                  },
-                  opacity: "0.9",
-                  fontWeight: "300",
-                }}
-              >
-                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est.
-              </Typography>
-            </Box>
-            <Box sx={{width: "100%"}}>
-              {/* TODO Placeholder */}
-              <Box sx={{
-                height: "300px",
-                width: "100%",
-                background: "rgb(0,0,0)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                opacity: "0.5",
-              }}>
-                [VIDEO] How to earn from liquidation and fees
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+          Sit back and let the good times roll
+        </Typography>
+        <Box sx={{
+          width: "100%",
+          height: "2px",
+          backgroundImage: "linear-gradient( to right, transparent, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.5) 85%, transparent )",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100% 1px",
+          backgroundPosition: "center bottom",     
+          marginBottom: "1rem",               
+        }}/>
+        <Typography
+          sx={{
+            color: "#fff",
+            margin: "1rem 0",
+            marginTop: "0",
+            fontSize: {
+              xs: "1.2rem",
+              md: "1.5rem"
+            }
+          }}
+          variant="h4"
+        >
+          Staked Assets
+        </Typography>
+        <StakingStakedAssets
+          positions={positions || {}}
+          stakingPositionsData={[] || []}
+        />
+      </Card>
+      <Card
+        sx={{
+          marginBottom: "1rem",
+          padding: "1.5rem",
+        }}
+      >
+        <Typography
+          sx={{
+            color: "#fff",
+            margin: "1rem 0",
+            marginTop: "0",
+            fontSize: {
+              xs: "1.2rem",
+              md: "1.5rem"
+            }
+          }}
+          variant="h4"
+        >
+          Positions
+        </Typography>
+        <StakingLiquidations
+          rewards={rewards || []}
+        />
       </Card>
     </Box>
   );

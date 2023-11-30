@@ -1,29 +1,29 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import {
   Box,
   Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
+  // FormGroup,
+  // FormControlLabel,
+  // Checkbox,
 } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   useAccount,
-  useContractRead,
   useContractReads,
   useContractWrite
 } from "wagmi";
 import { getNetwork } from "@wagmi/core";
-import { arbitrum, arbitrumGoerli } from "wagmi/chains";
-import { formatEther, parseEther } from "viem";
-import moment from 'moment';
+import { arbitrum } from "wagmi/chains";
+import { formatEther, parseUnits, parseEther } from "viem";
 import {
   usePositionStore,
   useTstAddressStore,
   useErc20AbiStore,
   usesEuroAddressStore,
-  useStakingAbiStore,
   useSnackBarStore,
+  useCircularProgressStore,
+  useLiquidationPoolAbiStore,
+  useLiquidationPoolStore,
 } from "../../store/Store.ts";
 import Card from "../Card.tsx";
 import Button from "../Button.tsx";
@@ -39,77 +39,24 @@ const StakingStake = () => {
     arbitrumsEuroAddress,
     arbitrumSepoliasEuroAddress,
   } = usesEuroAddressStore();
+  const {
+    arbitrumSepoliaLiquidationPoolAddress,
+    arbitrumLiquidationPoolAddress,
+  } = useLiquidationPoolStore();
   const rectangleRef = useRef<HTMLDivElement | null>(null);
+  const { address } = useAccount();
   const setPosition = usePositionStore((state) => state.setPosition);
+  const { erc20Abi } = useErc20AbiStore();
+  const { liquidationPoolAbi } = useLiquidationPoolAbiStore();
+  const { getSnackBar } = useSnackBarStore();
+  const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const [learnMore, setLearnMore] = useState(false);
   const [tstStakeAmount, setTstStakeAmount] = useState(0);
   const [eurosStakeAmount, setEurosStakeAmount] = useState(0);
-  const [autoTrade, setAutoTrade] = useState(false);
-  const { erc20Abi } = useErc20AbiStore();
-  const { address: accountAddress } = useAccount();
+  // const [autoTrade, setAutoTrade] = useState(false);
 
   const tstInputRef: any = useRef<HTMLInputElement>(null);
   const eurosInputRef: any = useRef<HTMLInputElement>(null);
-
-  const tstAddress = chain?.id === arbitrumGoerli.id ?
-  arbitrumSepoliaTstAddress :
-  arbitrumTstAddress ;
-
-  const tstContract = {
-    address: tstAddress,
-    abi: erc20Abi,
-  }
-
-  // TEMP TODO
-  const tstStakingAddress = '123123';
-
-  const { data: tstData } = useContractReads({
-    contracts: [
-      {
-          ... tstContract,
-          functionName: "allowance",
-          args: [accountAddress as any, tstStakingAddress]
-      },
-      {
-          ... tstContract,
-          functionName: "balanceOf",
-          args: [accountAddress as any]
-      }
-    ],
-    watch: true
-  });
-
-  const existingTstAllowance: any = tstData && tstData[0] && tstData[0].result;
-  const tstBalance: any = tstData && tstData[1] && tstData[1].result;
-
-
-  // TEMP TODO
-  const eurosVaultAddress = '123123';
-
-  const eurosAddress = chain?.id === arbitrumGoerli.id ?
-  arbitrumSepoliasEuroAddress :
-  arbitrumsEuroAddress;
-
-  const eurosContract = {
-    address: eurosAddress,
-    abi: erc20Abi,
-  }
-    
-  const { data: eurosData } = useContractReads({
-    contracts: [{
-      ... eurosContract,
-      functionName: "allowance",
-      args: [accountAddress as any, eurosVaultAddress]
-  },{
-      ... eurosContract,
-      functionName: "balanceOf",
-      args: [accountAddress as any]
-  }],
-    watch: true
-  });
-
-  const eurosAllowance: any = eurosData && eurosData[0].result;
-  const eurosBalance: any = eurosData && eurosData[1].result;
 
   useLayoutEffect(() => {
     function updatePosition() {
@@ -122,6 +69,191 @@ const StakingStake = () => {
     updatePosition();
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
+
+  const tstAddress = chain?.id === 421614 ?
+  arbitrumSepoliaTstAddress :
+  arbitrumTstAddress;
+
+  const eurosAddress = chain?.id === 421614 ?
+  arbitrumSepoliasEuroAddress :
+  arbitrumsEuroAddress;
+
+  const liquidationPoolAddress = chain?.id === 421614 ? arbitrumSepoliaLiquidationPoolAddress :
+  arbitrumLiquidationPoolAddress;
+
+  const tstContract = {
+    address: tstAddress,
+    abi: erc20Abi,
+  }
+
+  const { data: tstData } = useContractReads({
+    contracts: [{
+      ... tstContract,
+      functionName: "allowance",
+      args: [address as any, liquidationPoolAddress]
+  },{
+      ... tstContract,
+      functionName: "balanceOf",
+      args: [address as any]
+  }],
+    watch: true
+  });
+
+  const eurosContract = {
+    address: eurosAddress,
+    abi: erc20Abi,
+  }
+
+  const { data: eurosData } = useContractReads({
+    contracts: [{
+      ... eurosContract,
+      functionName: "allowance",
+      args: [address as any, liquidationPoolAddress]
+  },{
+      ... eurosContract,
+      functionName: "balanceOf",
+      args: [address as any]
+  }],
+    watch: true
+  });
+
+  const existingTstAllowance: any = tstData && tstData[0].result;
+  const tstBalance: any = tstData && tstData[1].result;
+
+  const existingEurosAllowance: any = eurosData && eurosData[0].result;
+  const eurosBalance: any = eurosData && eurosData[1].result;
+
+  const tstInWei = parseEther(tstStakeAmount.toString());
+  const eurosInWei = parseEther(eurosStakeAmount.toString());
+
+  const approveTst = useContractWrite({
+    address: tstAddress as any,
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [liquidationPoolAddress as any, tstInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'TST Approved');
+    }
+  });
+
+  useEffect(() => {
+    const { isLoading, isSuccess, isError } = approveTst;
+    if (isLoading) {
+      getProgressType('STAKE_DEPOSIT');
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      handleApproveEuros();
+    } else if (isError) {
+      getCircularProgress(false);
+    }
+  }, [
+    approveTst.isLoading,
+    approveTst.isSuccess,
+    approveTst.data,
+    approveTst.isError,
+  ]);
+
+  const handleApproveEuros = async () => {
+    const { write } = approveEuros;
+    write();
+  };
+
+  const approveEuros = useContractWrite({
+    address: eurosAddress as any,
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [liquidationPoolAddress as any, eurosInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'EUROs Approved');
+    }
+  });
+
+  useEffect(() => {
+    const { isLoading, isSuccess, isError } = approveEuros;
+    if (isLoading) {
+      getProgressType('STAKE_DEPOSIT');
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      handleDepositToken();
+    } else if (isError) {
+      getCircularProgress(false);
+    }
+  }, [
+    approveEuros.isLoading,
+    approveEuros.isSuccess,
+    approveEuros.data,
+    approveEuros.isError,
+  ]);
+
+  const handleDepositToken = async () => {
+    const { write } = depositToken;
+    write();
+  };
+    
+  const depositToken = useContractWrite({
+    address: liquidationPoolAddress,
+    abi: liquidationPoolAbi,
+    functionName: "increasePosition",
+    args: [
+      parseUnits(tstStakeAmount.toString(), 8),
+      parseUnits(eurosStakeAmount.toString(), 8)
+    ],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
+  });
+
+  const handleDepositTokens = async () => {
+    const { write } = existingTstAllowance < tstInWei ?
+    approveTst : existingEurosAllowance < eurosInWei ?
+    approveEuros : depositToken;
+    write();
+  };
+
+  useEffect(() => {
+    const { isLoading, isSuccess, isError } = depositToken;
+    if (isLoading) {
+      getProgressType('STAKE_DEPOSIT');
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      getCircularProgress(false);
+      eurosInputRef.current.value = "";
+      tstInputRef.current.value = "";
+      setTstStakeAmount(0);
+      setEurosStakeAmount(0);
+    } else if (isError) {
+      getCircularProgress(false);
+      eurosInputRef.current.value = "";
+      tstInputRef.current.value = "";
+      setTstStakeAmount(0);
+      setEurosStakeAmount(0);
+    }
+  }, [
+    depositToken.isLoading,
+    depositToken.isSuccess,
+    depositToken.isError,
+  ]);
 
   const handleTstAmount = (e: any) => {
     if (Number(e.target.value) < 10n ** 21n) {
@@ -290,7 +422,7 @@ const StakingStake = () => {
                   Max
                 </Button>
               </Box>
-              <FormGroup>
+              {/* <FormGroup>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -314,12 +446,13 @@ const StakingStake = () => {
                     color: 'rgba(255,255,255,0.5',
                   }}
                 />
-              </FormGroup>
+              </FormGroup> */}
               <Button
                 sx={{
                   marginTop: "1rem",
                 }}
                 isDisabled={tstStakeAmount <= 0 && eurosStakeAmount <= 0}
+                clickFunction={handleDepositTokens}
               >
                 Let&apos;s Stake
               </Button>
@@ -394,7 +527,7 @@ const StakingStake = () => {
                     fontWeight: "300",
                   }}                  
                 >
-                  300 TST = 300 EUROs even if you have 500 EUROs staked. This means you should always try to have more QTST tokens in the pool as EUROs
+                  300 TST = 300 EUROs even if you have 500 EUROs staked. This means you should always try to have more TST tokens in the pool as EUROs
                 </Typography>
                 <Button
                   sx={{

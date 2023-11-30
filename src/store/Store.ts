@@ -4,6 +4,7 @@ import erc20Abi from "../abis/erc20.ts";
 import chainlinkAbi from "../abis/priceFeeds/chainlink.ts";
 import smartVaultABI from "../abis/smartVault.ts";
 import stakingAbi from "../abis/staking.ts";
+import liquidationPoolAbi from "../abis/liquidationPool.ts";
 import { Address } from "viem";
 
 interface EthToUsdAddressState {
@@ -80,6 +81,21 @@ export const useStakingContractsStore = create<stakingContractsAddressState>()((
     set(() => ({ stakingContractsAddress: arbitrumStakingContractsAddress })),
 }));
 
+interface liquidationPoolAddressState {
+  liquidationPoolAddress?: Address;
+  arbitrumLiquidationPoolAddress: Address;
+  arbitrumSepoliaLiquidationPoolAddress: Address;
+  getLiquidationPoolAddress: (liquidationPool: Address) => void;
+}
+
+export const useLiquidationPoolStore = create<liquidationPoolAddressState>()((set) => ({
+  // TODO ADD REAL ARB ONE ADDRESS, currently same as testnet
+  arbitrumLiquidationPoolAddress: "0x8D5F24C133932c18b0a69a813D1D5c6D414eeB34",
+  arbitrumSepoliaLiquidationPoolAddress: "0x8D5F24C133932c18b0a69a813D1D5c6D414eeB34",
+  getLiquidationPoolAddress: (arbitrumLiquidationPoolAddress) =>
+    set(() => ({ liquidationPoolAddress: arbitrumLiquidationPoolAddress })),
+}));
+
 interface ChainlinkAbiState {
   chainlinkAbi: Array<any>;
   getChainlinkAbi: (chainlinkAbi: Array<any>) => void;
@@ -138,6 +154,19 @@ export const useStakingAbiStore = create<StakingAbiState>()(
     stakingAbi: stakingAbi,
     getStakingAbi: (stakingAbi) =>
       set(() => ({ stakingAbi: stakingAbi })),
+  })
+);
+
+interface LiquidationPoolAbiState {
+  liquidationPoolAbi: Array<any>;
+  getLiquidationPoolAbi: (liquidationPoolAbi: Array<any>) => void;
+}
+
+export const useLiquidationPoolAbiStore = create<LiquidationPoolAbiState>()(
+  (set) => ({
+    liquidationPoolAbi: liquidationPoolAbi,
+    getLiquidationPoolAbi: (liquidationPoolAbi) =>
+      set(() => ({ liquidationPoolAbi: liquidationPoolAbi })),
   })
 );
 
