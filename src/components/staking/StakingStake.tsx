@@ -209,8 +209,8 @@ const StakingStake = () => {
     abi: liquidationPoolAbi,
     functionName: "increasePosition",
     args: [
-      parseUnits(tstStakeAmount.toString(), 8),
-      parseUnits(eurosStakeAmount.toString(), 8)
+      tstInWei,
+      eurosInWei
     ],
     onError(error: any) {
       let errorMessage: any = '';
