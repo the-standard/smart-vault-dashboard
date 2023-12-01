@@ -212,6 +212,132 @@ const CircularProgressComponent = () => {
               </Box>
             </Card>
           </Box>
+        ) : progressType === 'STAKE_DEPOSIT' ? (
+          <Box
+            sx={{
+              position: "fixed",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+              background: "transparent",
+              zIndex: 9999,
+            }}
+          >
+            <Card
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "0px",
+                width: "450px",
+                height: "300px",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "250px",
+                  height: "250px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                  variant="body2"
+                >
+                  Increasing Your Stake
+                </Typography>
+                <Lottie animationData={depositLottie} />
+              </Box>
+            </Card>
+          </Box>
+        ) : progressType === 'STAKE_CLAIM' ? (
+          <Box
+            sx={{
+              position: "fixed",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+              background: "transparent",
+              zIndex: 9999,
+            }}
+          >
+            <Card
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "0px",
+                width: "450px",
+                height: "300px",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "250px",
+                  height: "250px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                  variant="body2"
+                >
+                  Claiming Your Rewards
+                </Typography>
+                <Lottie animationData={withdrawLottie} />
+              </Box>
+            </Card>
+          </Box>
+        ) : progressType === 'STAKE_WITHDRAW' ? (
+          <Box
+            sx={{
+              position: "fixed",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+              background: "transparent",
+              zIndex: 9999,
+            }}
+          >
+            <Card
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "0px",
+                width: "450px",
+                height: "300px",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "250px",
+                  height: "250px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                  variant="body2"
+                >
+                  Decreasing Your Stake
+                </Typography>
+                <Lottie animationData={withdrawLottie} />
+              </Box>
+            </Card>
+          </Box>
         ) : (
           <Box
             sx={{

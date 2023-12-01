@@ -1,14 +1,16 @@
 import { useState } from "react";
+
 import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import moment from 'moment';
-import Button from "../../components/Button";
-import StakingModal from "./StakingModal";
+import { formatEther } from "viem";
 
-interface StakingListProps {
-  stakingData: Array<any>;
-  vaultManagerAddress: any;
+import Button from "../Button";
+import WithdrawModal from "./WithdrawModal";
+
+interface StakingStakedAssetsProps {
+  stakingPositionsData: Array<any>;
+  positions: any;
 }
 
 function NoDataOverlay() {
@@ -27,42 +29,54 @@ function NoDataOverlay() {
   );
 }
 
-const StakingList: React.FC<StakingListProps> = ({
-  stakingData,
+const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
+  positions,
 }) => {
+
+  const [selectedPosition, setSelectedPosition] = useState<any>(undefined);
+  const [open, setOpen] = useState(false);
+
+  const tstAmount = positions['TST'] || 0;
+  const eurosAmount = positions['EUROs'] || 0;
+
+  const useRows = [
+    {
+      asset: 'TST',
+      amount: tstAmount || 0
+    },
+    {
+      asset: 'EUROs',
+      amount: eurosAmount || 0
+    },
+  ]
+
+  const handleOpenModal = (position: any) => {
+    setSelectedPosition(position);
+    setOpen(true)
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false)
+    setSelectedPosition(undefined);
+  };
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
 
-  const [selectedStakingContract, setSelectedStakingContract] = useState<any>(undefined);
-  const [open, setOpen] = useState(false);
-
-  const handleOpenModal = (contract: any) => {
-    setSelectedStakingContract(contract);
-    setOpen(true)
-  };
-
-  const handleCloseModal = () => {
-    setOpen(false)
-    setSelectedStakingContract(undefined);
-  };
-
   const colData = [
     {
       minWidth: 90,
       flex: 1,
-      field: 'windowStart',
-      headerName: 'Opening',
+      field: 'asset',
+      headerName: 'Asset',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixDate = Number(params.row.windowStart);
-        const useDate = moment.unix(unixDate).format('ll');
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {useDate || ''}
+            {params.row.asset || ''}
           </span>
         );
       },
@@ -70,49 +84,18 @@ const StakingList: React.FC<StakingListProps> = ({
     {
       minWidth: 90,
       flex: 1,
-      field: 'windowEnd',
-      headerName: 'Closing',
+      field: 'amount',
+      headerName: 'Amount',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixDate = Number(params.row.windowEnd);
-        const useDate = moment.unix(unixDate).format('ll');
+        let useAmount: any = 0;
+        if (params.row.amount) {
+          useAmount = formatEther(params.row.amount.toString());
+        }
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {useDate || ''}
-          </span>
-        );
-      },
-    },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'SI_Rate',
-      headerName: 'Reward',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const si_rate = Number(params.row.SI_RATE)
-        const reward = Number(si_rate / 1000);
-
-        return (
-          <span>{reward}%</span>
-        )
-    },
-    },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'maturity',
-      headerName: 'Maturity',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const unixDate = Number(params.row.maturity);
-        const maturity = moment.unix(unixDate);
-        return (
-          <span style={{textTransform: 'capitalize'}}>
-            {maturity.format('ll') || ''}
+            {useAmount || '0'}
           </span>
         );
       },
@@ -121,51 +104,30 @@ const StakingList: React.FC<StakingListProps> = ({
       minWidth: 90,
       flex: 1,
       field: 'action',
-      headerName: 'Status',
+      headerName: '',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixStart = Number(params.row.windowStart);
-        const unixEnd = Number(params.row.windowEnd);
-        const startPeriod = moment.unix(unixStart);
-        const endPeriod = moment.unix(unixEnd);
-        const hasOpened = moment().isSameOrBefore(endPeriod) && moment().isSameOrAfter(startPeriod);
-        if (!hasOpened) {
-          if (moment().isAfter(endPeriod)) {
-            return (
-              <span style={{opacity: 0.5}}>Closed</span>
-            );
-          } else {
-            return (
-              <span style={{opacity: 0.5}}>
-                Opening Soon
-              </span>
-            )
-          }
-        } else {
-          return (
-            <Button
-              sx={{
-                padding: "5px 10px",
-                fontSize: "0.8rem",
-              }}
-              lighter
-              clickFunction={() => handleOpenModal(params.row)}
-            >
-              Stake TST
-            </Button>
-          )
-        }
+        const useAmount = Number(params.row.amount);
+        return (
+          <Button
+            sx={{
+              padding: "5px 10px",
+              fontSize: "0.8rem",
+            }}
+            lighter
+            clickFunction={() => handleOpenModal(params.row)}
+            isDisabled={!(useAmount > 0)}
+          >
+            Withdraw
+          </Button>
+        )
       },
     },
   ];
 
-  const activeData = stakingData?.filter((contract: any) =>
-    contract.active === true
-  ) || [];
-
   const columns: GridColDef[] = colData;
-  const rows = activeData || [];
+  const rows = useRows || [];
 
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
@@ -225,7 +187,7 @@ const StakingList: React.FC<StakingListProps> = ({
       background: "rgba(0, 0, 0, 0.38)",
     },
     "& .MuiDataGrid-virtualScroller": {
-      minHeight: "350px",
+      minHeight: "120px",
     },
   }));
 
@@ -238,7 +200,7 @@ const StakingList: React.FC<StakingListProps> = ({
         columns={columns}
         // rowCount={totalRows || 0}
         rows={rows || []}
-        getRowId={(row) => `${row?.address}${row?.maturity}`}
+        getRowId={(row) => `${row?.asset}${row?.amount}`}
         disableRowSelectionOnClick
         pageSizeOptions={[5, 10, 15, 20]}
         paginationMode="server"
@@ -246,9 +208,8 @@ const StakingList: React.FC<StakingListProps> = ({
         onPaginationModelChange={setPaginationModel}
         hideFooter={true}
       />
-
-      <StakingModal
-        stakingContract={selectedStakingContract}
+      <WithdrawModal
+        stakingPosition={selectedPosition}
         handleCloseModal={handleCloseModal}
         isOpen={open}
       />
@@ -256,4 +217,4 @@ const StakingList: React.FC<StakingListProps> = ({
   )
 };
 
-export default StakingList;
+export default StakingStakedAssets;

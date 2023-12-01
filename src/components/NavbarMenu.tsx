@@ -43,11 +43,11 @@ const menuItems = [
     route: "stats",
   },
   {
-    text: "TST Staking",
+    text: "Staking",
     icon: historylogo,
     icon2: historylogo2,
     isWorking: true,
-    route: "staking",
+    route: "staking?view=ABOUT",
   }
 ];
 

@@ -360,7 +360,7 @@ const VaultHistory = () => {
           display: { xs: "none", sm: "flex" },
           flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
-          marginBottom: "1rem",
+          marginBottom: "1.5rem",
           marginTop: { xs: "1rem", sm: "0px" },
         }}
       >

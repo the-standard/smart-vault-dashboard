@@ -7,8 +7,8 @@ import Confetti from 'react-confetti';
 import {
   useStakingAbiStore,
   useSnackBarStore,
-} from "../../store/Store";
-import Button from "../../components/Button";
+} from "../../../store/Store";
+import Button from "../../../components/Button";
 
 interface ClaimingModalProps {
   stakingPosition: any;
