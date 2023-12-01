@@ -3,7 +3,6 @@ import { ethers } from "ethers";
 import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { formatEther } from "viem";
 import {
   useContractWrite
 } from "wagmi";
