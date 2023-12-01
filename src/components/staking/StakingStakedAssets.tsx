@@ -32,8 +32,6 @@ function NoDataOverlay() {
 const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
   positions,
 }) => {
-
-  const [selectedPosition, setSelectedPosition] = useState<any>(undefined);
   const [open, setOpen] = useState(false);
 
   const tstAmount = positions['TST'] || 0;
@@ -50,14 +48,8 @@ const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
     },
   ]
 
-  const handleOpenModal = (position: any) => {
-    setSelectedPosition(position);
-    setOpen(true)
-  };
-
   const handleCloseModal = () => {
     setOpen(false)
-    setSelectedPosition(undefined);
   };
 
   const [paginationModel, setPaginationModel] = useState({

@@ -377,8 +377,6 @@ const Debt = () => {
     },
   ];
 
-  console.log(123123, {amount}, {amountInWei})
-
   return (
     <Card
       sx={{
