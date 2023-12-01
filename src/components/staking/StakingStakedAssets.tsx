@@ -100,34 +100,39 @@ const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
         );
       },
     },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'action',
-      headerName: '',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const useAmount = Number(params.row.amount);
-        return (
-          <Button
-            sx={{
-              padding: "5px 10px",
-              fontSize: "0.8rem",
-            }}
-            lighter
-            clickFunction={() => handleOpenModal(params.row)}
-            isDisabled={!(useAmount > 0)}
-          >
-            Withdraw
-          </Button>
-        )
-      },
-    },
+    // {
+    //   minWidth: 90,
+    //   flex: 1,
+    //   field: 'action',
+    //   headerName: '',
+    //   sortable: false,
+    //   disableColumnMenu: true,
+    //   renderCell: (params: any) => {
+    //     const useAmount = Number(params.row.amount);
+    //     return (
+    //       <Button
+    //         sx={{
+    //           padding: "5px 10px",
+    //           fontSize: "0.8rem",
+    //         }}
+    //         lighter
+    //         clickFunction={() => handleOpenModal(params.row)}
+    //         isDisabled={!(useAmount > 0)}
+    //       >
+    //         Withdraw
+    //       </Button>
+    //     )
+    //   },
+    // },
   ];
 
   const columns: GridColDef[] = colData;
   const rows = useRows || [];
+
+  let noRewards = true;
+  if (rows.some(e => e.amount > 0)) {
+    noRewards = false;
+  }
 
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
@@ -208,8 +213,29 @@ const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
         onPaginationModelChange={setPaginationModel}
         hideFooter={true}
       />
+      <Box sx={{
+        display: "flex",
+        justifyContent: {
+          xs: "normal",
+          sm: "end",
+        }
+      }}>
+        <Button
+          lighter
+          sx={{
+            width: {
+              xs: "100%",
+              sm: "unset"
+            }
+          }}
+          clickFunction={() => setOpen(true)}
+          isDisabled={noRewards}
+        >
+          Withdraw
+        </Button>
+      </Box>
       <WithdrawModal
-        stakingPosition={selectedPosition}
+        stakedPositions={rows}
         handleCloseModal={handleCloseModal}
         isOpen={open}
       />

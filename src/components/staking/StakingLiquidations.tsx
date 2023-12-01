@@ -135,19 +135,19 @@ const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
         );
       },
     },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'action',
-      headerName: '',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: () => {
-        return (
-          ''
-        );
-      },
-    },
+    // {
+    //   minWidth: 90,
+    //   flex: 1,
+    //   field: 'action',
+    //   headerName: '',
+    //   sortable: false,
+    //   disableColumnMenu: true,
+    //   renderCell: () => {
+    //     return (
+    //       ''
+    //     );
+    //   },
+    // },
   ];
 
 

@@ -162,7 +162,9 @@ const StakingStake = () => {
 
   const handleApproveEuros = async () => {
     const { write } = approveEuros;
-    write();
+    setTimeout(() => {
+      write();
+    }, 1000);
   };
 
   const approveEuros = useContractWrite({
@@ -201,7 +203,9 @@ const StakingStake = () => {
 
   const handleDepositToken = async () => {
     const { write } = depositToken;
-    write();
+    setTimeout(() => {
+      write();
+    }, 1000);
   };
     
   const depositToken = useContractWrite({
