@@ -34,6 +34,7 @@ const StakingEarn = () => {
     args: [
       address
     ],
+    watch: true,
   });
 
   const positions: any = liquidationPool && liquidationPool[0];

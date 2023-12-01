@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Modal, Typography } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useContractWrite } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { formatEther, parseEther } from "viem";
@@ -76,8 +75,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
       setClaimLoading(true);
     } else if (isSuccess) {
       setClaimLoading(false);
-      eurosInputRef.current.value = "";
-      tstInputRef.current.value = "";
       setTstWithdrawAmount(0);
       setEurosWithdrawAmount(0);
       handleCloseModal();
