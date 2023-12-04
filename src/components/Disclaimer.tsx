@@ -26,10 +26,6 @@ const Disclaimer = () => {
     setTerms(true);
   };
 
-  // const disclaimerAccepted = cookies.get('_ibcotv1');
-
-  // console.log(123123, {terms})
-
   return (
     <>
       <Modal
@@ -59,9 +55,8 @@ const Disclaimer = () => {
               xs: "80vh",
               sm: "80vh",
             },
-            // overflowY: "scroll",
           }}
-          className="modal-content" // add class name to modal content box
+          className="modal-content"
         >
           <Box sx={{
             height: "100%",
@@ -125,7 +120,6 @@ const Disclaimer = () => {
                 sx={{
                   padding: "12px",
                   marginTop: "1rem",
-                  // minHeight: "40px"
                 }}
               >
                 <Typography
