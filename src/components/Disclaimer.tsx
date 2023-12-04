@@ -12,7 +12,6 @@ const Disclaimer = () => {
 
   useEffect(() => {
     const termsCookie = cookies.get('_ibcotv1');
-    console.log(345345, {termsCookie})
     if (!termsCookie) {
       setTerms(false);
     }
