@@ -60,6 +60,7 @@ import Yield from "./pages/Yield.tsx";
 import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
+import Disclaimer from "./components/Disclaimer.tsx";
 
 import { alchemyProvider } from '@wagmi/core/providers/alchemy'
 import { publicProvider } from "wagmi/providers/public";
@@ -84,6 +85,7 @@ function App() {
       <SnackbarComponent />
       <WagmiConfig config={config}>
         <Navbar />
+        <Disclaimer />
         <Routes key={renderAppCounter}>
           <Route path="/" element={<HomePage />} />
           <Route path="collateral/:vaultId" element={<Collateral />} />
