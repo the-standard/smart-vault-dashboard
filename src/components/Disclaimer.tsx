@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Box, Typography, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Cookies from 'universal-cookie';
+import { useLocation } from 'react-router-dom'
+
 import Card from "./Card";
 import Button from "./Button";
 
@@ -24,6 +26,24 @@ const Disclaimer = () => {
     cookies.set('_ibcotv1', now, { path: '/', expires: then });
     setTerms(true);
   };
+
+  const location = useLocation();
+
+  const handleHideDisclaimer = () => {
+    switch (location?.pathname) {
+      case '/termsofuse':
+        return true;
+      default:
+        return false;
+    }  
+  };
+
+  const noDisclaimer = handleHideDisclaimer();
+
+
+  if (noDisclaimer) {
+    return (<></>);
+  }
 
   return (
     <>
@@ -68,7 +88,32 @@ const Disclaimer = () => {
             </Box>
             <Box>
               <Typography variant="body1" sx={{marginBottom: "1rem", opacity:"0.8"}}>
-                The Standard is a fully decentralized stablecoin. No representation or warranty is made concerning any aspect of the The Standard.io, including its suitability, quality, availability, accessibility, accuracy or safety. As more fully explained in the Terms of Use, your access to and use of the The Standard.io and smart contracts through this interface is entirely at your own risk and could lead to substantial losses. You take full responsibility for your use of the interface, and acknowledge that you use it on the basis of your own enquiry, without solicitation or inducement by Contributors (as defined in the Terms of Use).
+                The Standard is a fully decentralized stablecoin. No representation or warranty is made concerning any aspect of the The Standard.io, including its suitability, quality, availability, accessibility, accuracy or safety. As more fully explained in the
+                <a
+                  href="/termsofuse"
+                  rel="noreferrer"
+                  target="_blank"
+                  style={{
+                    color: "rgba(255,255,255,1)",
+                    fontWeight: "bold",
+                    textDecoration: "none"
+                  }}
+                >
+                  &nbsp;Terms of Use
+                </a>
+                , your access to and use of the The Standard.io and smart contracts through this interface is entirely at your own risk and could lead to substantial losses. You take full responsibility for your use of the interface, and acknowledge that you use it on the basis of your own enquiry, without solicitation or inducement by Contributors (as defined in the
+                  <a
+                  href="/termsofuse"
+                  rel="noreferrer"
+                  target="_blank"
+                  style={{
+                    color: "rgba(255,255,255,1)",
+                    fontWeight: "bold",
+                    textDecoration: "none"
+                  }}
+                >
+                  &nbsp;Terms of Use
+                </a>).
               </Typography>
               <Typography variant="body1" sx={{marginBottom: "1rem", opacity:"0.8"}}>
                 This interface is not available to residents of Belarus, the Central African Republic, the Democratic Republic of Congo, the Democratic People&apos;s Republic of Korea, the Crimea region of Ukraine, Cuba, Iran, Libya, Somalia, Sudan, South Sudan, Syria, the USA, Yemen, and Zimbabwe or any other jurisdiction in which accessing or using The Standard.io is prohibited (“Prohibited Jurisdictions”). In using this interface, you confirm that you are not located in, incorporated or otherwise established in, or a citizen or resident of, a Prohibited Jurisdiction.
@@ -93,7 +138,7 @@ const Disclaimer = () => {
                     <>
                       I confirm that I have read, understood and accept the&nbsp;
                       <a
-                        href="https://www.thestandard.io/termsofuse"
+                        href="/termsofuse"
                         rel="noreferrer"
                         target="_blank"
                         style={{
