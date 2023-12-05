@@ -60,6 +60,7 @@ import Yield from "./pages/Yield.tsx";
 import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
+import TermsOfUse from "./pages/TermsOfUse.tsx";
 import Disclaimer from "./components/Disclaimer.tsx";
 
 import { alchemyProvider } from '@wagmi/core/providers/alchemy'
@@ -94,6 +95,7 @@ function App() {
           <Route path="yield/*" element={<Yield />} />
           <Route path="dex/*" element={<Dex />} />
           <Route path="staking" element={<Staking />} />
+          <Route path="termsofuse" element={<TermsOfUse />} />
         </Routes>
         <Footer />
       </WagmiConfig>
