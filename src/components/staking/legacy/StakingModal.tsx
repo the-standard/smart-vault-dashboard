@@ -3,7 +3,6 @@ import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAccount, useContractRead, useContractReads, useContractWrite } from "wagmi";
 import { getNetwork } from "@wagmi/core";
-import { arbitrumGoerli } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
 import moment from 'moment';
 import {
@@ -11,8 +10,8 @@ import {
   useErc20AbiStore,
   useStakingAbiStore,
   useSnackBarStore,
-} from "../../store/Store";
-import Button from "../../components/Button";
+} from "../../../store/Store";
+import Button from "../../../components/Button";
 
 interface StakingModalProps {
   stakingContract: any;
@@ -29,7 +28,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const [stakeAmount, setStakeAmount] = useState(0);
   const {
     arbitrumTstAddress,
-    arbitrumGoerliTstAddress
+    arbitrumSepoliaTstAddress
   } = useTstAddressStore();
   const { erc20Abi } = useErc20AbiStore();
   const { stakingAbi } = useStakingAbiStore();
@@ -47,22 +46,35 @@ const StakingModal: React.FC<StakingModalProps> = ({
     setSuccess(false);
   }, [isOpen]);
 
-  const tstAddress = chain?.id === arbitrumGoerli.id ?
-  arbitrumGoerliTstAddress :
+  const tstAddress = chain?.id === 421614 ?
+  arbitrumSepoliaTstAddress :
   arbitrumTstAddress ;
 
   const amountInWei = parseEther(stakeAmount.toString());
 
   const stakingAddress = stakingContract?.address;
   const stakingMaturity = stakingContract?.maturity;
+  const stakingWindowEnd = stakingContract?.windowEnd;
   const maturityUnix = Number(stakingMaturity);
   const maturity = moment.unix(maturityUnix);
+  const windowEndUnix = Number(stakingWindowEnd);
+  const windowEnd = moment.unix(windowEndUnix);
 
   const approvePayment = useContractWrite({
     address: tstAddress as any,
     abi: erc20Abi,
     functionName: "approve",
     args: [stakingAddress as any, amountInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const {data: rewardAmount}: any = useContractRead({
@@ -117,11 +129,9 @@ const StakingModal: React.FC<StakingModalProps> = ({
     } else if (isSuccess) {
       setApproveLoading(false);
       handleMintPosition();
-      getSnackBar(0);
     } else if (isError) {
       setApproveLoading(false);
       handleCloseModal();
-      getSnackBar(1);
     }
   }, [
     approvePayment.isLoading,
@@ -140,6 +150,16 @@ const StakingModal: React.FC<StakingModalProps> = ({
     abi: stakingAbi,
     functionName: "mint",
     args: [amountInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   useEffect(() => {
@@ -150,11 +170,9 @@ const StakingModal: React.FC<StakingModalProps> = ({
     } else if (isSuccess) {
       setMintLoading(false);
       setSuccess(true);
-      getSnackBar(0);
     } else if (isError) {
       setMintLoading(false);
       setSuccess(false);
-      getSnackBar(1);
     }
   }, [
     mintPosition.isLoading,
@@ -300,6 +318,34 @@ const StakingModal: React.FC<StakingModalProps> = ({
                     backgroundSize: "100% 1px",
                     backgroundPosition: "center bottom",                    
                   }}/>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    alignItems: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      marginRight: "0.5rem",
+                      minWidth: "120px",
+                    }}
+                  >
+                    Closing Date:
+                  </Typography>
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      width: "100%",
+                    }}
+                  >
+                    {windowEnd.format('ll') || ''}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{

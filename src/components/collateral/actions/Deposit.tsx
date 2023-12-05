@@ -39,6 +39,7 @@ const Deposit: React.FC<DepositProps> = ({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [amount, setAmount] = useState(0);
+  const [maxBal, setMaxBal] = useState(0);
   ///store
   const { vaultAddress } = useVaultAddressStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
@@ -65,6 +66,10 @@ const Deposit: React.FC<DepositProps> = ({
 
   const inputRef: any = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    getMaxBalance();
+  }, [walletBalance]);
+
   const handleAmount = (e: any) => {
     if (Number(e.target.value) < 10n ** 21n) {
       setAmount(Number(e.target.value));
@@ -88,7 +93,7 @@ const Deposit: React.FC<DepositProps> = ({
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          getSnackBar(0);
+          getSnackBar('SUCCESS', 'Copied!');
         })
 
         .catch((error) => {
@@ -102,6 +107,16 @@ const Deposit: React.FC<DepositProps> = ({
     abi: erc20Abi,
     functionName: "transfer",
     args: [vaultAddress, parseUnits(amount.toString(), decimals)],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const handleDepositToken = async () => {
@@ -111,6 +126,11 @@ const Deposit: React.FC<DepositProps> = ({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getMaxBalance = async () => {
+    const formatted = formatUnits((walletBalance || 0).toString(), decimals);
+    setMaxBal(Number(formatted));
   };
 
   const handleMaxBalance = async () => {
@@ -137,14 +157,18 @@ const Deposit: React.FC<DepositProps> = ({
       setTxdata(hash);
 
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(0);
+      getSnackBar('SUCCESS', 'Success!');
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(1);
     }
   };
 
@@ -158,12 +182,16 @@ const Deposit: React.FC<DepositProps> = ({
     } else {
       try {
         handleDepositToken();
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
+        let errorMessage: any = '';
+        if (error && error.shortMessage) {
+          errorMessage = error.shortMessage;
+        }
+        getSnackBar('ERROR', errorMessage);  
         inputRef.current.value = "";
         inputRef.current.focus();
         getCircularProgress(false); // Set getCircularProgress to false if there's an error
-        getSnackBar(1);
         getGreyBarUserInput(0);
       }
     }
@@ -176,7 +204,6 @@ const Deposit: React.FC<DepositProps> = ({
       getCircularProgress(true);
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(0);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -185,7 +212,6 @@ const Deposit: React.FC<DepositProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getCircularProgress(false); // Set getCircularProgress to false if there's an error
-      getSnackBar(1);
       getGreyBarUserInput(0);
     }
   }, [
@@ -331,6 +357,26 @@ const Deposit: React.FC<DepositProps> = ({
           )}
         </Box>
       </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0",
+          marginTop: "1rem",
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "1rem",
+          }}
+        >
+          Available Balance: {maxBal || '0'} {symbol || ''}
+        </Typography>
+      </Box>
+
       <Box
         sx={{
           display: "flex",

@@ -1,31 +1,29 @@
-import { useLayoutEffect, useRef } from "react";
-import { Box, Typography } from "@mui/material";
-import { getNetwork } from "@wagmi/core";
-import { useContractRead, useContractReads, useAccount } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
+import { useMemo, useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { Box, Grid, Typography } from "@mui/material";
+import { useAccount } from "wagmi";
+import { Web3Button } from "@web3modal/react";
+import StakingMenuSmall from "../components/staking/StakingMenuSmall";
+import StakingMenuLarge from "../components/staking/StakingMenuLarge";
+import StakingAbout from "../components/staking/StakingAbout";
+import StakingStake from "../components/staking/StakingStake";
+import StakingEarn from "../components/staking/StakingEarn";
+import StakingTST from "../components/staking/legacy/StakingTST";
 
 import {
   usePositionStore,
-  useStakingAbiStore,
-  useContractAddressStore,
 } from "../store/Store.ts";
 
-import Card from "../components/Card";
-import StakingList from "../components/staking/StakingList";
-import StakingPositions from "../components/staking/StakingPositions";
+import Card from "../components/Card.tsx";
+
+function useQuery() {
+  const { search } = useLocation();
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
 
 const Staking = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
-
-  const { stakingAbi } = useStakingAbiStore();
-
-  const {
-    arbitrumGoerliContractAddress,
-    arbitrumContractAddress
-  } = useContractAddressStore();
-  const { address } = useAccount();
-  const { chain } = getNetwork();
 
   useLayoutEffect(() => {
     function updatePosition() {
@@ -41,174 +39,126 @@ const Staking = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
-  const vaultManagerAddress =
-  chain?.id === arbitrumGoerli.id
-    ? arbitrumGoerliContractAddress
-    : arbitrumContractAddress;
-  
-  //////////////////////////
-  // Handling Directory List
-  const { data: stakingAddresses } = useContractRead({
-    address: "0xda81118Ad13a2f83158333D7B7783b33e388E183",
-    abi: stakingAbi,
-    functionName: "list",
-  });
+  const query = useQuery();
+  const queryView = query.get("view") || '';
+  const { address: accountAddress } = useAccount();
 
-  const contracts: any = stakingAddresses?.map(address => {
-    const baseContract = {
-      address,
-      abi: stakingAbi
-    }
-    return [
-      {
-        ...baseContract,
-        functionName: 'active'
-      },
-      {
-        ...baseContract,
-        functionName: 'windowStart'
-      },
-      {
-        ...baseContract,
-        functionName: 'windowEnd'
-      },
-      {
-        ...baseContract,
-        functionName: 'maturity'
-      },
-      {
-        ...baseContract,
-        functionName: 'SI_RATE'
-      },
-      {
-        ...baseContract,
-        functionName: 'tstEUROsPrice'
-      },
-    ]
-  }).flat();
+  const [activeView, setActiveView] = useState('ABOUT');
 
-  const { data: stakingData } = useContractReads({contracts});
+  const handleActive = (element: any) => {
+    setActiveView(element);
+  };
 
-  const nestedStakingData = stakingData && stakingAddresses?.map((address, i) => {
-    return {
-      address: address,
-      active: stakingData[i * 6].result,
-      windowStart: stakingData[i * 6 + 1].result,
-      windowEnd: stakingData[i * 6 + 2].result,
-      maturity: stakingData[i * 6 + 3].result,
-      SI_RATE: stakingData[i * 6 + 4].result,
-      tstEUROsPrice: stakingData[i * 6 + 5].result
-    }
-  });
-  // 
+  useEffect(() => {
+    handleActive(queryView)
+  }, [queryView]);
 
-  /////////////////////
-  // Handling Positions
-  const positions: any = stakingAddresses?.map(stakeAddress => {
-    return [
-      {
-        address: stakeAddress,
-        abi: stakingAbi,
-        functionName: "position",
-        args: [address],
-      }
-    ]
-  }).flat();
-
-  const { data: positionData } = useContractReads({contracts: positions, watch: true});
-
-  const nestedPositionData = positionData && nestedStakingData && stakingAddresses?.map((address, i) => {
-    const positionItem: any = positionData[i].result;
-    const stakingItem: any = nestedStakingData[i];
-    return {
-      address: address,
-      burned: positionItem.burned,
-      nonce: positionItem.nonce,
-      open: positionItem.open,
-      reward: positionItem.reward,
-      stake: positionItem.stake,
-      tokenId: positionItem.tokenId,
-      maturity: stakingItem.maturity,
-      windowStart: stakingItem.windowStart,
-      windowEnd: stakingItem.windowEnd,
-    }
-  });
-  // 
-
-  return (
-    <Box>
-      <Card
+  if (accountAddress) {
+    return (
+      <Box
         sx={{
           margin: {
             xs: "0% 4%",
             sm: "3% 6%",
             md: "3% 12%",
           },
-          padding: "1.5rem",
         }}
       >
-        <Typography
-          sx={{
-            color: "#fff",
-            margin: "1rem 0",
-            marginTop: "0",
-            fontSize: {
-              xs: "1.5rem",
-              md: "2.125rem"
-            }
-          }}
-          variant="h4"
+        <StakingMenuLarge activeView={activeView} />
+        <StakingMenuSmall activeView={activeView} />
+  
+        <Box
+          ref={rectangleRef}
         >
-          Staking The Standard Token (TST)
-        </Typography>
-        <Typography
-          sx={{
-            marginBottom: "1rem",
-            fontSize: {
-              xs: "1rem",
-              md: "1.2rem",
-            },
-            opacity: "0.9",
-            fontWeight: "300",
-          }}
-        >
-          The yields of this pooled fund come from fees paid by borrowers. By staking TST you help stabilize the price of TST while also being rewarded. Yield is paid out in EUROs.
-        </Typography>
-        <Box>
-          <StakingList
-            stakingData={nestedStakingData || []}
-            vaultManagerAddress={vaultManagerAddress}
-          />
+          {activeView === 'ABOUT' || !activeView ? (
+            <StakingAbout />
+          ) : null}
+    
+          {activeView === 'STAKE' ? (
+            <StakingStake />
+          ) : null}
+    
+          {activeView === 'EARN' ? (
+            <StakingEarn />
+          ) : null}
+    
+          {activeView === 'TST' ? (
+            <StakingTST />
+          ) : null}
         </Box>
-      </Card>
-      <Card
+  
+      </Box>
+    );  
+  }
+
+  return (
+    <Box>
+      <Grid
         sx={{
           margin: {
-            xs: "3% 4%",
+            xs: "0% 4%",
             sm: "3% 6%",
             md: "3% 12%",
-          },
-          padding: "1.5rem",
+          },      
+          minHeight: "50vh",
         }}
       >
-        <Typography
+        <Box
           sx={{
-            color: "#fff",
-            margin: "1rem 0",
-            marginTop: "0",
-            fontSize: {
-              xs: "1.2rem",
-              md: "1.5rem"
-            }
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            width: "100%",
+            gap: "2rem",
           }}
-          variant="h4"
+          ref={rectangleRef}
         >
-          Staking Positions
-        </Typography>
-        <StakingPositions
-          stakingPositionsData={nestedPositionData || []}
-        />
-      </Card>
+          <Card
+            sx={{
+              padding: "1.5rem",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                color: "#fff",
+                fontFamily: "Poppins",
+              }}
+            >
+              Earn EUROs With TST Staking Pools
+            </Typography>
+            <Typography
+              sx={{
+                color: "#fff",
+                fontFamily: "Poppins",
+                marginTop: "1em",
+                opacity: "0.8"
+              }}
+            >
+              Help stabilize the price of TST while also being rewarded. Yield is paid out in EUROs.
+              <br/>
+              No KYC, No Trust Needed.
+            </Typography>
+            <Typography
+              sx={{
+                color: "#fff",
+                fontFamily: "Poppins",
+                marginTop: "1em",
+                opacity: "0.8"
+              }}
+            >
+              Connect your web3 wallet below to get started.
+            </Typography>
+            <Box
+              sx={{
+                marginTop: "1em",
+              }}
+            >
+              <Web3Button />
+            </Box>
+          </Card>
+        </Box>
+      </Grid>
     </Box>
   );
 };

@@ -4,12 +4,10 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useState, useEffect } from "react";
 import { useSnackBarStore, usesEuroAddressStore } from "../../store/Store";
 import { useNetwork } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 const AddEuros = () => {
   const { getSnackBar } = useSnackBarStore();
   const { chain } = useNetwork();
-  const { arbitrumGoerlisEuroAddress, arbitrumsEuroAddress } =
-    usesEuroAddressStore();
+  const { arbitrumSepoliasEuroAddress, arbitrumsEuroAddress } = usesEuroAddressStore();
 
   //clipboard logic
   // const textRef = useRef<HTMLSpanElement>(null);
@@ -26,7 +24,7 @@ const AddEuros = () => {
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          getSnackBar(0);
+          getSnackBar('SUCCESS', 'Copied!');
           //handleSnackbarClick();
         })
 
@@ -38,8 +36,8 @@ const AddEuros = () => {
   //clipboard logic end
 
   const eurosAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerlisEuroAddress
+    chain?.id === 421614
+      ? arbitrumSepoliasEuroAddress
       : arbitrumsEuroAddress;
 
   const addToken = async () => {

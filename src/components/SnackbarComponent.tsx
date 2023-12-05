@@ -12,7 +12,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const SnackbarComponent = () => {
-  const { snackBar, getSnackBar } = useSnackBarStore();
+  const { type, message, getSnackBar } = useSnackBarStore();
 
   //snackbar config
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -21,10 +21,10 @@ const SnackbarComponent = () => {
     setSnackbarOpen(true);
     const timer = setTimeout(() => {
       setSnackbarOpen(false);
-      getSnackBar(55);
+      getSnackBar('', '');
     }, 2000);
     return () => clearTimeout(timer);
-  }, [snackBar]);
+  }, [type, message]);
 
   //   const handleSnackbarClick = () => {
   //     setSnackbarOpen(true);
@@ -37,41 +37,67 @@ const SnackbarComponent = () => {
     if (reason === "clickaway") {
       return;
     }
-
     setSnackbarOpen(false);
   };
 
   return (
     <Box>
-      {" "}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
       >
-        {snackBar === 0 ? (
+        {type === 'SUCCESS' ? (
           <Alert
             onClose={handleSnackbarClose}
             severity="success"
             sx={{ width: "100%" }}
           >
-            <Box>Success!</Box>
+            <Box>
+              {message ? (
+                `${message}`
+              ) : (
+                `Success!`
+              )}
+            </Box>
           </Alert>
-        ) : snackBar === 1 ? (
+        ) : type === 'ERROR' ? (
           <Alert
             onClose={handleSnackbarClose}
             severity="error"
             sx={{ width: "100%" }}
           >
-            <Box>There was an error!</Box>
+            <Box>
+              {message ? (
+                `${message}`
+              ) : (
+                `There was an error!`
+              )}
+            </Box>
           </Alert>
-        ) : snackBar === 2 ? (
+        ) : type === 'WARNING' && message ? (
           <Alert
             onClose={handleSnackbarClose}
-            severity="error"
+            severity="warning"
             sx={{ width: "100%" }}
           >
-            <Box>Please change to Arbitrum network!</Box>
+            <Box>
+              {message ? (
+                `${message}`
+              ) : (null)}
+            </Box>
+          </Alert>
+        ) : type === 'INFO' && message ? (
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="info"
+            sx={{ width: "100%" }}
+          >
+            <Box>
+              {message ? (
+                `${message}`
+              ) : (null)}
+            </Box>
           </Alert>
         ) : (
           <Box></Box>

@@ -17,7 +17,6 @@ import arblogo from "../../assets/arblogo.svg";
 import { formatUnits } from "viem";
 import axios from "axios";
 import { getNetwork } from "@wagmi/core";
-import { arbitrumGoerli } from "wagmi/chains";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -82,8 +81,8 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         "https://smart-vault-api.thestandard.io/asset_prices"
       );
       const chainData =
-        chain?.id === arbitrumGoerli.id
-          ? response.data.arbitrum_goerli
+        chain?.id === 421614
+          ? response.data.arbitrum_sepolia
           : response.data.arbitrum;
       setChartData(chainData);
     } catch (error) {
@@ -219,6 +218,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
             display: "flex",
             alignItems: "center",
             marginTop: "2rem",
+            marginBottom: "1rem",
           }}
         >
           <Button
@@ -247,19 +247,31 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
           >
             Withdraw
           </Button>
-          <Button
-            sx={{
-              margin: "2px",
-              marginRight: "0px",
-              padding: "5px",
-              width: "33%",
+          <Box sx={{
+            position: 'relative',
+            width: "33%",
+          }}>
+            <Button
+              sx={{
+                margin: "2px",
+                marginRight: "0px",
+                padding: "5px",
+                textAlign: "center",
+              }}
+              isActive={activeElement === 3}
+              clickFunction={() => handleClick(3)}
+            >
+              Swap
+            </Button>
+            {/* <Typography sx={{
+              position: "absolute",
+              fontSize: "12px",
+              opacity: "0.3",
               textAlign: "center",
-            }}
-            isActive={activeElement === 3}
-            clickFunction={() => handleClick(3)}
-          >
-            Swap
-          </Button>
+              width: "100%",
+              bottom: "-20px",
+            }}>Temp. Unavailable</Typography> */}
+          </Box>
         </Box>
       )}
 

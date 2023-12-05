@@ -54,6 +54,16 @@ const Withdraw: React.FC<WithdrawProps> = ({
     abi: smartVaultABI,
     functionName: "removeCollateralNative",
     args: [ethers.utils.parseUnits(amount.toString()), address],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const handlewithdrawCollateralNative = async () => {
@@ -70,6 +80,16 @@ const Withdraw: React.FC<WithdrawProps> = ({
       parseUnits(amount.toString(), decimals),
       address,
     ],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const handlewithdrawCollateral = async () => {
@@ -85,7 +105,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
       getCircularProgress(true);
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(0);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -94,7 +113,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getCircularProgress(false); // Set getCircularProgress to false if there's an error
-      getSnackBar(1);
       getGreyBarUserInput(0);
     }
   }, [
@@ -111,7 +129,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
       getCircularProgress(true);
     } else if (isSuccess) {
       getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      getSnackBar(0);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -120,7 +137,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getCircularProgress(false); // Set getCircularProgress to false if there's an error
-      getSnackBar(1);
       getGreyBarUserInput(0);
     }
   }, [

@@ -1,11 +1,8 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useNavigate } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import seurologo from "../../assets/EUROs.svg";
-// import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
@@ -27,9 +24,6 @@ import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
 import { useContractWrite, useContractReads } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
-
-import axios from "axios";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -41,7 +35,7 @@ const Debt = () => {
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore();
   const { vaultStore }: any = useVaultStore();
-  const { arbitrumsEuroAddress, arbitrumGoerlisEuroAddress } =
+  const { arbitrumsEuroAddress, arbitrumSepoliasEuroAddress } =
     usesEuroAddressStore();
   const { erc20Abi } = useErc20AbiStore();
   const inputRef: any = useRef<HTMLInputElement>(null);
@@ -64,8 +58,8 @@ const Debt = () => {
 
   const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
 
-  const eurosAddress = chain?.id === arbitrumGoerli.id ?
-    arbitrumGoerlisEuroAddress :
+  const eurosAddress = chain?.id === 421614 ?
+    arbitrumSepoliasEuroAddress :
     arbitrumsEuroAddress;
   
   const eurosContract = {
@@ -113,7 +107,6 @@ const Debt = () => {
   }
 
   useEffect(() => {
-    handleYieldEstimate();
     setAmount(0);
     setActiveElement(4);
     handleInputFocus();
@@ -134,6 +127,16 @@ const Debt = () => {
     abi: smartVaultAbi,
     functionName: "mint",
     args: [address as any, amountInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   const handleBorrowMoney = async () => {
@@ -149,14 +152,12 @@ const Debt = () => {
     } else if (isSuccess) {
       getCircularProgress(false);
       incrementCounter();
-      getSnackBar(0);
       handleOpenYield();
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
     } else if (isError) {
       getCircularProgress(false);
-      getSnackBar(1);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -168,7 +169,7 @@ const Debt = () => {
     borrowMoney.isError,
   ]);
 
-  //modal
+  // modal
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -186,6 +187,16 @@ const Debt = () => {
     abi: erc20Abi,
     functionName: "approve",
     args: [vaultAddress as any, repayFee],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   useEffect(() => {
@@ -198,14 +209,12 @@ const Debt = () => {
       handleRepayMoney();
       getCircularProgress(false);
       incrementCounter();
-      getSnackBar(0);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
     } else if (isError) {
       handleClose();
       getCircularProgress(false);
-      getSnackBar(1);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -236,6 +245,16 @@ const Debt = () => {
     abi: smartVaultAbi,
     functionName: "burn",
     args: [amountInWei],
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   useEffect(() => {
@@ -250,14 +269,12 @@ const Debt = () => {
       getProgressType(2);
       getCircularProgress(false);
       incrementCounter();
-      getSnackBar(0);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
     } else if (isError) {
       setModalStep(1);
       getCircularProgress(false);
-      getSnackBar(1);
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
@@ -359,29 +376,6 @@ const Debt = () => {
       value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
     },
   ];
-
-  const [camelotPool, setCamelotPool] = useState<any>(undefined);
-  const [camelotPoolLoading, setCamelotPoolLoading] = useState(true);
-
-  const handleYieldEstimate = async () => {
-    try {
-      setCamelotPoolLoading(true);
-      const response = await axios.get(
-        `https://api.camelot.exchange/v2/liquidity-v3-data`
-      );
-      const pools = response.data.data.pools;
-      const stPool = pools['0xc9AA2fEB84F0134a38d5D1c56b1E787191327Cb0'];
-      setCamelotPool(stPool);
-      setCamelotPoolLoading(false);
-    } catch (error) {
-      setCamelotPoolLoading(false);
-      console.log(error);
-    }
-  }
-
-  // const activeTvlUSD = camelotPool?.activeTvlUSD;
-  // const activeTvlAverageAPR = camelotPool?.activeTvlAverageAPR;
-  // const totalAPR = Number(activeTvlAverageAPR + 5).toFixed(2);
 
   return (
     <Card
@@ -936,23 +930,51 @@ const Debt = () => {
           onClose={handleCloseYield}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-          className={camelotPoolLoading ? ('') : ('modal-success')}
+          className="modal-success"
         >
-          {camelotPoolLoading ? (
+          <>
+            <Box sx={{
+              zIndex: 0,
+              '& > canvas': {
+                zIndex: "0!important",
+              }
+            }}>
+              <Confetti
+                width={window.innerWidth}
+                height={window.innerHeight}
+              />
+            </Box>
             <Box
               sx={{
+                position: { xs: "absolute", md: "" },
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: {
+                  xs: "80%",
+                  sm: "70%",
+                  md: "60%",
+                },
                 background:
                   "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                borderRadius: "10px",
+                padding: "0",
                 boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
                 backdropFilter: "blur(13.9px)",
                 WebkitBackdropFilter: "blur(13.9px)",
                 border: "1px solid rgba(255, 255, 255, 0.3)",
-                borderRadius: "10px ",
-                padding: "2rem",
-                minWidth: "800px",
-                marginLeft: "1rem",
-                marginRight: "1rem",
+                p: 4,
+                maxHeight: {
+                  xs: "80vh",
+                  sm: "80vh",
+                },
+                maxWidth: {
+                  xs: "640px"
+                },
+                overflowY: "auto",
+                lineHeight: "unset",
               }}
+              className="modal-content"
             >
               <Box
                 sx={{
@@ -960,165 +982,94 @@ const Debt = () => {
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                  minHeight: "200px",
                 }}
               >
-                <CircularProgress />
-              </Box>
-            </Box>
-          ) : (
-            <>
-              <Box sx={{
-                zIndex: 0,
-                '& > canvas': {
-                  zIndex: "0!important",
-                }
-              }}>
-                <Confetti
-                  width={window.innerWidth}
-                  height={window.innerHeight}
-                />
-              </Box>
-              <Box
-                sx={{
-                  position: { xs: "absolute", md: "" },
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: {
-                    xs: "80%",
-                    sm: "70%",
-                    md: "60%",
-                  },
-                  background:
-                    "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-                  borderRadius: "10px",
-                  padding: "0",
-                  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                  backdropFilter: "blur(13.9px)",
-                  WebkitBackdropFilter: "blur(13.9px)",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  p: 4,
-                  maxHeight: {
-                    xs: "80vh",
-                    sm: "80vh",
-                  },
-                  maxWidth: {
-                    xs: "640px"
-                  },
-                  overflowY: "auto",
-                  lineHeight: "unset",
-                }}
-                className="modal-content"
-              >
-                <Box
+                <Typography
+                  variant="h4"
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    color: "#fff",
+                    fontFamily: "Poppins",
+                    marginBottom: "1rem",
+                    fontWeight: "600",
+                    fontSize: {
+                      xs: "1.8rem",
+                      sm: "2.5rem"
+                    }
                   }}
                 >
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      color: "#fff",
-                      fontFamily: "Poppins",
-                      marginBottom: "1rem",
-                      fontWeight: "600",
-                      fontSize: {
-                        xs: "1.8rem",
-                        sm: "2.5rem"
-                      }
-                    }}
-                  >
-                    CONGRATULATIONS!
-                  </Typography>
-                  {/* <Box
-                    sx={{
-                      width: "auto",
-                      height: "100px",
-                    }}
-                  >
-                    <img
-                      style={{
-                        width: "230px",
-                        height: "100%",
-                      }}
-                      src={coins}
-                      alt=""
-                    />
-                  </Box> */}
-                </Box>
-                <Box sx={{
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}>
-                  <Typography
-                    sx={{
-                      // fontWeight: "bold",
-                      color: "#fff",
-                      fontFamily: "Poppins",
-                      fontSize: {
-                        xs: "1.3rem",
-                        sm: "1.8rem"
-                      },
-                      marginBottom: "1rem",
-                      marginTop: "1rem",
-                      textAlign: "center",
-                      fontWeight: "300",
-                    }}
-                    variant="h3"
-                  >
-                    You just borrowed {amount} EUROs for 0% Interest!
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "#fff",
-                      fontFamily: "Poppins",
-                      fontSize: {
-                        xs: "1.3rem",
-                        sm: "1.8rem"
-                      },
-                      marginBottom: "1rem",
-                      marginTop: "1rem",
-                      textAlign: "center",
-                      fontWeight: "300",
-                    }}
-                    variant="h3"
-                  >
-                    Now don&apos;t miss your opportunity to earn between <b>10.3% and 91.03% APR</b> by placing your EUROs and USDC.e into a Camelot liquidity pool!
-                  </Typography>
-                  <Button
-                    sx={{
-                      padding: "12px",
-                      textAlign: "center",
-                      marginTop: "1rem",
-                      width: "250px",
-                    }}
-                    clickFunction={() => window.open('https://app.camelot.exchange/liquidity', '_blank')?.focus()}
-                    lighter
-                  >
-                    Take me to the pool!
-                  </Button>
-                  <Button
-                    sx={{
-                      padding: "12px",
-                      textAlign: "center",
-                      marginTop: "1rem",
-                      width: "250px",
-                    }}
-                    clickFunction={handleCloseYield}
-                  >
-                    Close
-                  </Button>
-                </Box>
+                  CONGRATULATIONS!
+                </Typography>
               </Box>
-            </>
-          )}
+              <Box sx={{
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
+                <Typography
+                  sx={{
+                    color: "#fff",
+                    fontFamily: "Poppins",
+                    fontSize: {
+                      xs: "1.3rem",
+                      sm: "1.8rem"
+                    },
+                    marginBottom: "1rem",
+                    marginTop: "1rem",
+                    textAlign: "center",
+                    fontWeight: "300",
+                  }}
+                  variant="h3"
+                >
+                  You just borrowed {amount} EUROs for 0% Interest!
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "#fff",
+                    fontFamily: "Poppins",
+                    fontSize: {
+                      xs: "1.3rem",
+                      sm: "1.8rem"
+                    },
+                    marginBottom: "1rem",
+                    marginTop: "1rem",
+                    textAlign: "center",
+                    fontWeight: "300",
+                  }}
+                  variant="h3"
+                >
+                  Now earn between<br/>
+                  <b>10.3% and 91.03% APR</b><br/>
+                  by placing your EUROs<br/>
+                  into a Camelot liquidity pool!
+                </Typography>
+                <Button
+                  sx={{
+                    padding: "12px",
+                    textAlign: "center",
+                    marginTop: "1rem",
+                    width: "250px",
+                  }}
+                  clickFunction={() => window.open('https://app.camelot.exchange/liquidity/?token1=0x643b34980e635719c15a2d4ce69571a258f940e9&token2=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&mode=auto&provider=gamma', '_blank')?.focus()}
+                  lighter
+                >
+                  Take me to the pool!
+                </Button>
+                <Button
+                  sx={{
+                    padding: "12px",
+                    textAlign: "center",
+                    marginTop: "1rem",
+                    width: "250px",
+                  }}
+                  clickFunction={handleCloseYield}
+                >
+                  Close
+                </Button>
+              </Box>
+            </Box>
+          </>
         </Modal>
       </div>
     </Card>

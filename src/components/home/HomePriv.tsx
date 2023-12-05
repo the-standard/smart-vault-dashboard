@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Modal, Typography } from "@mui/material";
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
@@ -12,8 +12,8 @@ import {
   useVaultManagerAbiStore,
   useContractAddressStore,
   usePositionStore,
+  useSnackBarStore
 } from "../../store/Store.ts";
-import { arbitrumGoerli } from "wagmi/chains";
 
 import VaultCard from "../vaultCard/VaultCard.tsx";
 import Datagrid from "../dataGrid/Datagrid";
@@ -52,16 +52,17 @@ const items = [
 ];
 
 const HomePriv = () => {
-  const [showHiddenVaults, setShowHiddenVaults] = useState(false);
+  const [showInactiveVaults, setShowInactiveVaults] = useState(false);
+  const [openHideModal, setOpenHideModal] = useState(false);
   const { address } = useAccount();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
-  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
-    useContractAddressStore();
+  const { arbitrumSepoliaContractAddress, arbitrumContractAddress } = useContractAddressStore();
+  const { getSnackBar } = useSnackBarStore();
 
   const { chain } = useNetwork();
   const vaultManagerAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliContractAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
   const { data: myVaults } = useContractRead({
@@ -89,19 +90,33 @@ const HomePriv = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
-  const hiddenVaults = JSON.parse(localStorage.getItem("hiddenVaults") || "[]");
-  const myHiddenVaults =
+  const myInactiveVaults =
     myVaults?.filter((vault: any) =>
-      hiddenVaults.includes(ethers.BigNumber.from(vault.tokenId).toString())
+      !vault.status.totalCollateralValue ||
+      Number(ethers.BigNumber.from(vault.status.totalCollateralValue)) <= 0
+  ) || [];
+
+  const myActiveVaults =
+    myVaults?.filter((vault: any) =>
+        Number(ethers.BigNumber.from(vault.status.totalCollateralValue)) > 0
     ) || [];
 
-  const myVisibleVaults =
-    myVaults?.filter(
-      (vault: any) =>
-        !hiddenVaults.includes(ethers.BigNumber.from(vault.tokenId).toString())
-    ) || [];
+  const inactiveVaults = localStorage.getItem("inactiveVaults");
+  let splitInactiveVaults = false;
+  if (inactiveVaults === 'HIDE') {
+    splitInactiveVaults = true;
+  }
 
-  const hasHiddenVaults = myHiddenVaults && myHiddenVaults.length > 0;
+  const handleToggleSplitInactiveVaults = () => {
+    if (inactiveVaults === 'HIDE') {
+      localStorage.setItem("inactiveVaults", 'SHOW');
+      getSnackBar('SUCCESS', 'Inactive Vaults Shown');
+    } else {
+      localStorage.setItem("inactiveVaults", 'HIDE');
+      getSnackBar('SUCCESS', 'Inactive Vaults Hidden');
+    }
+    setOpenHideModal(false)
+  };
 
   return (
     <Box>
@@ -158,11 +173,30 @@ const HomePriv = () => {
                   overflow: "scroll",
                 }}
               >
-                <Datagrid vaults={myVisibleVaults || []} />
+                {splitInactiveVaults ? (
+                  <Typography
+                    variant="h6"
+                  >
+                    Active Vaults
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="h6"
+                  >
+                    Vaults
+                  </Typography>
+                )}
+                <Datagrid
+                  vaults={splitInactiveVaults ? (
+                    myActiveVaults
+                  ) : (
+                    myVaults
+                  ) || ''}
+                />
               </Card>
-              {hasHiddenVaults ? (
+              {splitInactiveVaults ? (
                 <>
-                  {showHiddenVaults ? (
+                  {showInactiveVaults ? (
                     <Card
                       sx={{
                         margin: {
@@ -174,11 +208,22 @@ const HomePriv = () => {
                         overflow: "scroll",
                       }}
                     >
-                      <Datagrid vaults={myHiddenVaults || []} />
+                      {splitInactiveVaults ? (
+                        <Typography
+                          variant="h6"
+                        >
+                          Inactive Vaults
+                        </Typography>
+                      ) : (null)}
+                      <Datagrid vaults={myInactiveVaults || []} />
                       <Box
                         sx={{
                           display: "flex",
-                          justifyContent: "end",
+                          flexDirection: {
+                            xs: "column",
+                            sm: "row"
+                          },
+                          justifyContent: "space-between",
                         }}
                       >
                         <Button
@@ -186,12 +231,30 @@ const HomePriv = () => {
                             padding: "5px",
                             textAlign: "center",
                             marginTop: "1rem",
-                            width: "200px",
+                            width: {
+                              xs: "auto",
+                              sm: "230px",
+                            },
                           }}
-                          clickFunction={() => setShowHiddenVaults(false)}
+                          clickFunction={() => setOpenHideModal(true)}
                           lighter
                         >
-                          Hide Hidden Vaults
+                          Unsplit Inactive Vaults
+                        </Button>
+                        <Button
+                          sx={{
+                            padding: "5px",
+                            textAlign: "center",
+                            marginTop: "1rem",
+                            width: {
+                              xs: "auto",
+                              sm: "230px",
+                            },
+                          }}
+                          clickFunction={() => setShowInactiveVaults(false)}
+                          lighter
+                        >
+                          Hide Inactive Vaults
                         </Button>
                       </Box>
                     </Card>
@@ -204,29 +267,196 @@ const HomePriv = () => {
                           md: "3% 12%",
                         },
                         display: "flex",
-                        justifyContent: "end",
+                        flexDirection: {
+                          xs: "column",
+                          sm: "row"
+                        },
+                        justifyContent: "space-between",
                       }}
                     >
+                      <Box></Box>
                       <Button
                         sx={{
                           padding: "5px",
                           textAlign: "center",
-                          width: "200px",
+                          width: {
+                            xs: "auto",
+                            sm: "200px",
+                          },
+                          marginTop: {
+                            xs: "1rem",
+                            sm: "0px",
+                          },
                         }}
-                        clickFunction={() => setShowHiddenVaults(true)}
+                        clickFunction={() => setShowInactiveVaults(true)}
                       >
-                        Show Hidden Vaults
+                        Show Inactive Vaults
                       </Button>
                     </Box>
                   )}
                 </>
-              ) : null}
+              ) : (
+                <Box
+                  sx={{
+                    margin: {
+                      xs: "3% 4%",
+                      sm: "3% 6%",
+                      md: "3% 12%",
+                    },
+                    display: "flex",
+                    flexDirection: {
+                      xs: "column",
+                      sm: "row"
+                    },
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Button
+                    sx={{
+                      padding: "5px",
+                      textAlign: "center",
+                      width: {
+                        xs: "auto",
+                        sm: "200px",
+                      },
+                    }}
+                    clickFunction={() => setOpenHideModal(true)}
+                  >
+                    Hide Inactive Vaults
+                  </Button>
+                </Box>
+              )}
             </>
           ) : (
             <Box></Box>
           )}
         </>
       ) : null}
+      {/* Hide Vault modal */}
+      <Modal
+        open={openHideModal}
+        onClose={() => setOpenHideModal(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Card
+          sx={{
+            position: { xs: "absolute" as const, md: "" },
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: {
+              xs: "60%",
+              sm: "50%",
+              md: "40%",
+            },
+            // bgcolor: "#0C0C0C",
+            // border: "2px solid #000",
+            // boxShadow: 24,
+            p: 4,
+            maxHeight: {
+              xs: "80vh",
+              sm: "80vh",
+            },
+            overflowY: "auto",
+          }}
+          className="modal-content" // add class name to modal content box
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="h4"
+            >
+              {splitInactiveVaults ? (
+                'Unsplit Inactive Vaults'
+              ) : (
+                'Hide All Inactive Vaults'
+              )}
+              
+            </Typography>
+            {splitInactiveVaults ? (
+              <>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    marginTop: "1rem",
+                  }}
+                >
+                  This will re-add all vaults with 0 Collateral back to your main Vault List.
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    marginTop: "1rem",
+                  }}
+                >
+                  You can hide these vaults again at any time using the Hide All Inactive Vaults button.
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    marginTop: "1rem",
+                  }}
+                >
+                  This will add all vaults with 0 Collateral to your Hidden Vault list.
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    marginTop: "1rem",
+                  }}
+                >
+                  Hidden Vaults are not deleted. They are simply hidden from your main Vaults list.
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    marginTop: "1rem",
+                  }}
+                >
+                  You can view all of your hidden Vaults by selecting "Show Hidden Vaults" under your Vaults list.
+                </Typography>
+              </>
+            )}
+            <Box
+              sx={{
+                width: "100%",
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                clickFunction={() => setOpenHideModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                clickFunction={() => handleToggleSplitInactiveVaults()}
+                sx={{
+                  marginLeft: "1rem"
+                }}
+              >
+                {splitInactiveVaults ? (
+                  'Unsplit Inactive Vaults'
+                ) : (
+                  'Hide All Inactive Vaults'
+                )}
+              </Button>
+            </Box>
+          </Box>
+        </Card>
+      </Modal>
     </Box>
   );
 };

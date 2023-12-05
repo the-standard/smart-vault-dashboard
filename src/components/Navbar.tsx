@@ -48,7 +48,7 @@ const Navbar = () => {
           alt="Arbitrum Network"
         />
       );
-    } else if (chain?.id === 421613) {
+    } else if (chain?.id === 421614) {
       logoComponent = (
         <Box
           component="img"

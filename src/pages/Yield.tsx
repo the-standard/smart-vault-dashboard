@@ -8,7 +8,7 @@ import nitroPools from "../assets/nitro-pools.png";
 import camelotLogo from "../assets/camelotLogo.svg";
 import { usePositionStore } from "../store/Store.ts";
 import { useLayoutEffect, useRef } from "react";
-import Exchange from "./Exchange.tsx";
+import Exchange from "../components/Exchange.tsx";
 import { arbitrum } from "wagmi/chains";
 
 import Card from "../components/Card";
@@ -335,7 +335,7 @@ const Yield = () => {
                   cursor: "pointer",
                   whiteSpace: 'nowrap',
                 }}
-                href="https://app.camelot.exchange/liquidity/"
+                href="https://app.camelot.exchange/liquidity/?token1=0x643b34980e635719c15a2d4ce69571a258f940e9&token2=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&mode=auto&provider=gamma"
                 target="_blank"
               >
                 <img
@@ -681,7 +681,7 @@ const Yield = () => {
                   cursor: "pointer",
                   whiteSpace: 'nowrap',
                 }}
-                href="https://app.camelot.exchange/liquidity/"
+                href="https://app.camelot.exchange/liquidity/?token1=0x643b34980e635719c15a2d4ce69571a258f940e9&token2=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&mode=auto&provider=gamma"
                 target="_blank"
               >
                 <img

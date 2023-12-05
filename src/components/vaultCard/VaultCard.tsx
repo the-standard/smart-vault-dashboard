@@ -12,7 +12,7 @@ import "../../styles/buttonStyle.css";
 import { useNavigate } from "react-router-dom";
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useContractEvent, useContractWrite } from "wagmi";
-import { arbitrumGoerli, arbitrum } from "wagmi/chains";
+import { arbitrum } from "wagmi/chains";
 
 import Card from "../Card";
 import Button from "../Button";
@@ -43,13 +43,17 @@ const VaultCard: React.FC<VaultCardProps> = ({
   //snackbar config
   const [open, setOpen] = React.useState(false);
   const {
-    contractAddress,
-    arbitrumGoerliContractAddress,
+    // contractAddress,
+    arbitrumSepoliaContractAddress,
     arbitrumContractAddress,
   } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const navigate = useNavigate();
   const { address } = useAccount();
+
+  const { getCircularProgress, getProgressType } = useCircularProgressStore();
+  const { getSnackBar } = useSnackBarStore();
+  const [tokenId, setTokenId] = useState<any>();
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
@@ -66,17 +70,27 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const mintVault = useContractWrite({
     address:
-      chain?.id === arbitrumGoerli.id
-        ? arbitrumGoerliContractAddress
+      chain?.id === 421614
+        ? arbitrumSepoliaContractAddress
         : arbitrumContractAddress, // Set a default value or handle this case as per your requirement
     abi: vaultManagerAbi, // Make sure you have vaultManagerAbi defined
     functionName: "mint", // Assuming the function name is 'mint'
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
   });
 
   // Define your function using async/await
   const handleMintVault = async () => {
-    if (chain?.id !== arbitrumGoerli.id && chain?.id !== arbitrum.id) {
-      getSnackBar(2);
+    if (chain?.id !== 421614 && chain?.id !== arbitrum.id) {
+      getSnackBar('ERROR', 'Please change to Arbitrum network!');
       return;
     }
 
@@ -90,10 +104,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
     }
   };
 
-  const { getCircularProgress, getProgressType } = useCircularProgressStore();
-  const { getSnackBar } = useSnackBarStore();
-  const [tokenId, setTokenId] = useState<any>();
-
   useEffect(() => {
     const { isLoading, isSuccess, isError } = mintVault;
     if (isLoading) {
@@ -101,11 +111,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
       getCircularProgress(true);
     } else if (isSuccess && tokenId) {
       getCircularProgress(false);
-      getSnackBar(0);
       navigate(`Collateral/${tokenId.toString()}`);
+      getSnackBar('SUCCESS', 'Vault created successfully');
     } else if (isError) {
       getCircularProgress(false);
-      getSnackBar(1);
     }
   }, [
     mintVault.data,
@@ -117,13 +126,9 @@ const VaultCard: React.FC<VaultCardProps> = ({
 
   const unwatchDeployEvent = useContractEvent({
     address:
-      chain?.id === 421613
-        ? arbitrumGoerliContractAddress
-        : chain?.id === 11155111
-        ? contractAddress
-        : chain?.id === 42161
-        ? arbitrumContractAddress
-        : null,
+    chain?.id === 421614
+    ? arbitrumSepoliaContractAddress
+    : arbitrumContractAddress,
     abi: vaultManagerAbi,
     eventName: "VaultDeployed",
     listener(log: any) {

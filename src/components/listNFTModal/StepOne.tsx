@@ -39,13 +39,13 @@ const StepOne: React.FC<StepProps> = ({
 
   const { chain } = useNetwork();
 
-  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+  const { arbitrumSepoliaContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
 
   let vaultManagerAddress: any;
 
-  if (chain?.id == 421613) {
-    vaultManagerAddress = arbitrumGoerliContractAddress;
+  if (chain?.id == 421614) {
+    vaultManagerAddress = arbitrumSepoliaContractAddress;
   } else if (chain?.id === 42161) {
     vaultManagerAddress = arbitrumContractAddress;
   }
@@ -73,7 +73,7 @@ const StepOne: React.FC<StepProps> = ({
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          getSnackBar(0);
+          getSnackBar('SUCCESS', 'Copied!');
           //handleSnackbarClick();
         })
 

@@ -4,13 +4,13 @@ import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { formatEther } from "viem";
-import moment from 'moment';
 
-import Button from "../../components/Button";
-import ClaimingModal from "./ClaimingModal";
+import Button from "../Button";
+import WithdrawModal from "./WithdrawModal";
 
-interface StakingPositionsProps {
+interface StakingStakedAssetsProps {
   stakingPositionsData: Array<any>;
+  positions: any;
 }
 
 function NoDataOverlay() {
@@ -29,12 +29,26 @@ function NoDataOverlay() {
   );
 }
 
-const StakingPositions: React.FC<StakingPositionsProps> = ({
-  stakingPositionsData,
+const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
+  positions,
 }) => {
 
   const [selectedPosition, setSelectedPosition] = useState<any>(undefined);
   const [open, setOpen] = useState(false);
+
+  const tstAmount = positions['TST'] || 0;
+  const eurosAmount = positions['EUROs'] || 0;
+
+  const useRows = [
+    {
+      asset: 'TST',
+      amount: tstAmount || 0
+    },
+    {
+      asset: 'EUROs',
+      amount: eurosAmount || 0
+    },
+  ]
 
   const handleOpenModal = (position: any) => {
     setSelectedPosition(position);
@@ -55,54 +69,33 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
     {
       minWidth: 90,
       flex: 1,
-      field: 'stake',
-      headerName: 'Staked Amount',
+      field: 'asset',
+      headerName: 'Asset',
+      sortable: false,
+      disableColumnMenu: true,
+      renderCell: (params: any) => {
+        return (
+          <span style={{textTransform: 'capitalize'}}>
+            {params.row.asset || ''}
+          </span>
+        );
+      },
+    },
+    {
+      minWidth: 90,
+      flex: 1,
+      field: 'amount',
+      headerName: 'Amount',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
         let useAmount: any = 0;
-        if (params.row.stake) {
-          useAmount = formatEther(params.row.stake.toString());
+        if (params.row.amount) {
+          useAmount = formatEther(params.row.amount.toString());
         }
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {useAmount || ''} TST
-          </span>
-        );
-      },
-    },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'reward',
-      headerName: 'Reward',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: (params: any) => {
-        let useReward: any = 0;
-        if (params.row.stake) {
-          useReward = formatEther(params.row.reward.toString());
-        }
-        return (
-          <span style={{textTransform: 'capitalize'}}>
-            {useReward || ''} EUROs
-          </span>
-        );
-      },
-    },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'maturity',
-      headerName: 'Staked Until',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const unixDate = Number(params.row.maturity);
-        const maturity = moment.unix(unixDate);
-        return (
-          <span style={{textTransform: 'capitalize'}}>
-            {maturity.format('ll') || ''}
+            {useAmount || '0'}
           </span>
         );
       },
@@ -111,48 +104,30 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
       minWidth: 90,
       flex: 1,
       field: 'action',
-      headerName: 'Status',
+      headerName: '',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixDate = Number(params.row.maturity);
-        const maturity = moment.unix(unixDate);
-        if (params.row.burned) {
-          return (
-            <span style={{opacity: 0.5}}>
-              Claimed
-            </span>
-          )
-        } else if (moment().isAfter(maturity)) {
-          return (
-            <Button
-              sx={{
-                padding: "5px 10px",
-                fontSize: "0.8rem",
-              }}
-              lighter
-              clickFunction={() => handleOpenModal(params.row)}
-            >
-              Claim
-            </Button>
-          )
-        } else {
-          return (
-            <span style={{opacity: 0.5}}>
-              Maturing
-            </span>
-          )
-        }
+        const useAmount = Number(params.row.amount);
+        return (
+          <Button
+            sx={{
+              padding: "5px 10px",
+              fontSize: "0.8rem",
+            }}
+            lighter
+            clickFunction={() => handleOpenModal(params.row)}
+            isDisabled={!(useAmount > 0)}
+          >
+            Withdraw
+          </Button>
+        )
       },
     },
   ];
 
-  const activeData = stakingPositionsData?.filter((position: any) =>
-    Number(position.nonce) > 0
-  ) || [];
-
   const columns: GridColDef[] = colData;
-  const rows = activeData || [];
+  const rows = useRows || [];
 
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
@@ -212,7 +187,7 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
       background: "rgba(0, 0, 0, 0.38)",
     },
     "& .MuiDataGrid-virtualScroller": {
-      minHeight: "350px",
+      minHeight: "120px",
     },
   }));
 
@@ -225,7 +200,7 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
         columns={columns}
         // rowCount={totalRows || 0}
         rows={rows || []}
-        getRowId={(row) => `${row?.address}${row?.maturity}`}
+        getRowId={(row) => `${row?.asset}${row?.amount}`}
         disableRowSelectionOnClick
         pageSizeOptions={[5, 10, 15, 20]}
         paginationMode="server"
@@ -233,7 +208,7 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
         onPaginationModelChange={setPaginationModel}
         hideFooter={true}
       />
-      <ClaimingModal
+      <WithdrawModal
         stakingPosition={selectedPosition}
         handleCloseModal={handleCloseModal}
         isOpen={open}
@@ -242,4 +217,4 @@ const StakingPositions: React.FC<StakingPositionsProps> = ({
   )
 };
 
-export default StakingPositions;
+export default StakingStakedAssets;

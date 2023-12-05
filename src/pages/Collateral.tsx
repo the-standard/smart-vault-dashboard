@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useRef, useMemo } from "react";
 import {
   useVaultAddressStore,
   useVaultStore,
@@ -9,14 +9,13 @@ import {
 } from "../store/Store";
 
 import { Box, Modal, Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
-import { useMemo } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
 import { useAccount, useBlockNumber, useContractRead } from "wagmi";
-import { arbitrumGoerli } from "wagmi/chains";
 import { useNavigate } from "react-router-dom";
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
@@ -24,6 +23,7 @@ import vaultLiauidatedImg from "../assets/vault-liquidated.png";
 import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
+import EurosCompare from "../components/collateral/EurosCompare.tsx";
 import "../styles/buttonStyle.css";
 import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
@@ -43,11 +43,13 @@ const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
   const { getVaultAddress } = useVaultAddressStore();
   const { vaultStore, getVaultStore } = useVaultStore();
-  const { arbitrumGoerliContractAddress, arbitrumContractAddress } =
+  const { arbitrumSepoliaContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getVaultID } = useVaultIdStore();
+
   //local states
+  const [vaultsLoading, setVaultsLoading] = useState(true);
   const [activeElement, setActiveElement] = useState(1);
   const [collateralOrDebt, setCollateralOrDebt] = useState<number>(1);
   const { data: blockNumber } = useBlockNumber();
@@ -60,11 +62,6 @@ const Collateral = () => {
   const [openWalletModal, setOpenWalletModal] = useState(false);
   const handleWalletOpen = () => setOpenWalletModal(true);
   const handleWalletClose = () => setOpenWalletModal(false);
-  const [openHideModal, setOpenHideModal] = useState(false);
-  const handleHideOpen = () => setOpenHideModal(true);
-  const handleHideClose = () => setOpenHideModal(false);
-  const [vaultHidden, setVaultHidden] = useState(false);
-
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
@@ -76,24 +73,16 @@ const Collateral = () => {
 
   useEffect(() => {
     getVaultID(vaultId);
-    checkIfHidden(vaultId);
   }, []);
 
-  const checkIfHidden = (useVaultId: any) => {
-    const hiddenVaults = localStorage.getItem("hiddenVaults");
-    let parsedVaults = [];
-    if (hiddenVaults) {
-      parsedVaults = JSON.parse(hiddenVaults)
-    }
-    if (parsedVaults) {
-      const isHidden = parsedVaults.find((item: string) => item == useVaultId);
-      if (isHidden) {
-        setVaultHidden(true);
-      } else {
-        setVaultHidden(false);
-      }    
-    }
-  }
+  useEffect(() => {
+    // loader to allow currentVault filter to resolve
+    // fixes flashing "no vault found" on first load
+    setVaultsLoading(true);
+    setTimeout(() => {
+      setVaultsLoading(false);
+    }, 1000);
+  }, []);
 
   useLayoutEffect(() => {
     function updatePosition() {
@@ -128,10 +117,10 @@ const Collateral = () => {
   }, [vaultView]);
   
   const vaultManagerAddress =
-    chain?.id === arbitrumGoerli.id
-      ? arbitrumGoerliContractAddress
+    chain?.id === 421614
+      ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
-  const { data: vaults } = useContractRead({
+  const vaults = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaults",
@@ -140,9 +129,125 @@ const Collateral = () => {
   });
 
   //this log is just for build command
-  const currentVault: any = vaults?.filter(
+  const currentVault: any = vaults?.data?.filter(
     (vault: any) => vault.tokenId.toString() === vaultId
   )[0];
+
+  if (vaultsLoading) {
+    return (
+      <Box
+        sx={{
+          color: "#8E9BAE",
+          margin: {
+            xs: "0% 4%",
+            sm: "3% 6%",
+            md: "3% 12%",
+          },
+          minHeight: "100vh",
+          height: "100%",
+        }}
+        ref={rectangleRef}
+      >
+        {/* divide into 2 columns */}
+        {/*  column 1 */}
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-between",
+            marginBottom: "1rem",
+            marginTop: { xs: "1rem", sm: "0px" },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
+          >
+            <Button
+              sx={{
+                "&:after": {
+                  backgroundSize: "300% 100%",
+                }
+              }}
+              clickFunction={() => navigate('/')}
+              isDisabled
+            >
+              <ArrowBackIosNewIcon />
+            </Button>
+            <Button
+              isActive={activeElement === 1}
+              clickFunction={() => navigate(`../Collateral/${vaultId}`)}
+              isDisabled
+            >
+              Collateral
+            </Button>
+            <Button
+              isActive={activeElement === 2}
+              clickFunction={() => navigate(`../Collateral/${vaultId}?view=2`)}
+              isDisabled
+            >
+              Borrow/Repay
+            </Button>
+            <Button
+              isActive={activeElement === 3}
+              clickFunction={() => navigate('history')}
+              isDisabled
+            >
+              History
+            </Button>
+          </Box>
+          {/* right side of the upper column */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          ></Box>
+        </Box>
+
+        <VaultMenuSmall
+          vaultId={vaultId}
+          isDisabled
+        />
+
+        <Box
+          sx={{
+            display: { xs: "flex", lg: "grid" },
+            width: "100%",
+          }}
+        >
+          <Card
+            sx={{
+              alignItems: "center",
+              padding: "1.5rem",
+              width: {xs: "100%", sm: "auto"},
+              minHeight: "50vh",
+              marginTop: "0.5rem",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+                background: "transparent",
+                zIndex: 9999,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          </Card>
+        </Box>
+      </Box>
+    )
+  }
 
   if (!currentVault) {
     // vault not found
@@ -158,66 +263,88 @@ const Collateral = () => {
         }}
         ref={rectangleRef}
       >
-        <Link
-          style={{
-            textDecoration: "none",
-            display: "flex",
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-between",
+            marginBottom: "1rem",
+            marginTop: { xs: "1rem", sm: "0px" },
           }}
-          to="/"
         >
           <Box
             sx={{
-              padding: "10px 10px",
-              border: "2px solid rgba(255, 255, 255, 0.2)",
-              boxShadow:
-                "0 5px 15px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2)",
-              fontFamily: '"Poppins", sans-serif',
-              color: "#ffffff",
-              fontSize: "1rem",
-              letterSpacing: "1px",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              cursor: "pointer",
-              borderRadius: "10px",
-              transition: "0.5s",
-              position: "relative",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-
-              "&:after": {
-                content: '""',
-                position: "absolute",
-                height: "100%",
-                width: "100%",
-                top: "0",
-                left: "0",
-                background:
-                  "linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0.16) 67%, transparent 68%)",
-                backgroundSize: "300% 100%",
-                backgroundPosition: "165% 0",
-                transition: "0.7s",
-              },
-              "&:hover:after": {
-                backgroundPosition: "-20% 0",
-              },
-              "&:hover": {
-                boxShadow: "15px 30px 32px rgba(0, 0, 0, 0.5)",
-                transform: "translateY(-5px)",
-              },
-
-              "&.activeBtn": {
-                background:
-                  "linear-gradient(110.28deg, rgba(0, 0, 0, 0.156) 0.2%, rgba(14, 8, 8, 0.6) 101.11%)",
-                border: "1px solid white",
-                boxShadow: "0 0 2px 2px rgba(255, 255, 255, 0.5)",
-              },
+              justifyContent: "flex-start",
+              flexWrap: "wrap",
+              gap: "1rem",
             }}
           >
-            <ArrowBackIosNewIcon />
-          </Box>{" "}
-        </Link>
-        <p>Vault not found</p>
+            <Button
+              sx={{
+                "&:after": {
+                  backgroundSize: "300% 100%",
+                }
+              }}
+              clickFunction={() => navigate('/')}
+            >
+              <ArrowBackIosNewIcon />
+            </Button>
+            <Button
+              isActive={activeElement === 1}
+              clickFunction={() => navigate(`../Collateral/${vaultId}`)}
+              isDisabled
+            >
+              Collateral
+            </Button>
+            <Button
+              isActive={activeElement === 2}
+              clickFunction={() => navigate(`../Collateral/${vaultId}?view=2`)}
+              isDisabled
+            >
+              Borrow/Repay
+            </Button>
+            <Button
+              isActive={activeElement === 3}
+              clickFunction={() => navigate('history')}
+              isDisabled
+            >
+              History
+            </Button>
+          </Box>
+          {/* right side of the upper column */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          ></Box>
+        </Box>
+
+        <VaultMenuSmall
+          vaultId={vaultId}
+          isDisabled
+        />
+
+        <Box
+          sx={{
+            display: { xs: "flex", lg: "grid" },
+            width: "100%",
+          }}
+        >
+          <Card
+            sx={{
+              alignItems: "center",
+              padding: "1.5rem",
+              width: {xs: "100%", sm: "auto"},
+              minHeight: "50vh",
+              marginTop: "0.5rem",
+            }}
+          >
+            Vault Not Found
+          </Card>
+        </Box>
       </Box>
     );
   }
@@ -272,8 +399,8 @@ const Collateral = () => {
 
   const handleButtonActions = (id: number) => {
     const arbiscanUrl =
-      chain?.id === arbitrumGoerli.id
-        ? `https://goerli.arbiscan.io/address/${vaultAddress}`
+      chain?.id === 421614
+        ? `https://sepolia.arbiscan.io/address/${vaultAddress}`
         : `https://arbiscan.io/address/${vaultAddress}`;
     if (id === 1) {
       window.open(arbiscanUrl, "_blank");
@@ -282,42 +409,6 @@ const Collateral = () => {
     } else if (id === 3) {
       navigate("/yield");
     }
-  };
-
-  const handleToggleVaultHidden = () => {
-    const hiddenVaults = localStorage.getItem("hiddenVaults");
-    let parsedVaults = [];
-    if (hiddenVaults) {
-      parsedVaults = JSON.parse(hiddenVaults);
-    }
-    let newHiddenVaults = parsedVaults;
-    // If parsedVaults exists
-    if (parsedVaults) {
-      // Check if this Vault is hidden
-      const isHidden = parsedVaults
-        .find((item: string) => item == vaultId);
-      // If this vault is hidden
-      if (isHidden) {
-        // Remove this vault from the array
-        newHiddenVaults = parsedVaults
-          .filter((item: string) => item != vaultId);
-      }
-      // If vault is not hidden
-      else {
-        // Add vault to hidden list
-        newHiddenVaults = parsedVaults
-          .concat(vaultId);
-      }
-    }
-    // If hiddenVaults does not exist
-    else {
-      // Add this vault to the hidden vaults
-      newHiddenVaults = parsedVaults
-        .concat(vaultId);
-    }
-    localStorage.setItem("hiddenVaults", JSON.stringify(newHiddenVaults));
-    checkIfHidden(vaultId);
-    handleHideClose();
   };
 
   return (
@@ -418,7 +509,14 @@ const Collateral = () => {
             }}
           >
             {/* list available tokens here */}
-            {collateralOrDebt === 2 ? displayDebt() : displayTokens()}
+            {collateralOrDebt === 2 ? (
+              <>
+                {displayDebt()}
+                <EurosCompare />
+              </>
+            ) : (
+              displayTokens()
+            )}
           </Box>
         </Box>{" "}
         {/* right side of the container */}
@@ -486,113 +584,8 @@ const Collateral = () => {
           >
             <LiquidityPool />
           </Card>
-          <Box>
-            <Button
-              sx={{
-                padding: "5px 20px",
-                width: "auto",
-                height: "3rem",
-                marginTop: "1rem",
-                fontSize: {
-                  xs: "0.7rem",
-                  sm: "0.8rem",
-                  md: "0.88rem",
-                },
-              }}
-              clickFunction={() => {
-                handleHideOpen()
-              }}
-            >
-              {vaultHidden ? ('Unhide Vault') : ('Hide Vault')}
-            </Button>
-          </Box>
         </Box>
       </Box>
-      {/* Hide Vault modal */}
-      <Modal
-        open={openHideModal}
-        onClose={handleHideClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Card
-          sx={{
-            position: { xs: "absolute" as const, md: "" },
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: {
-              xs: "60%",
-              sm: "50%",
-              md: "40%",
-            },
-            // bgcolor: "#0C0C0C",
-            // border: "2px solid #000",
-            // boxShadow: 24,
-            p: 4,
-            maxHeight: {
-              xs: "80vh",
-              sm: "80vh",
-            },
-            overflowY: "auto",
-          }}
-          className="modal-content" // add class name to modal content box
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
-            <Typography
-              variant="h4"
-            >
-              Hidden Vaults
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                marginTop: "1rem",
-              }}
-            >
-              Hidden Vaults are not deleted. They are simply hidden from your main Vaults list.
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                marginTop: "1rem",
-              }}
-            >
-              You can view all of your hidden Vaults by selecting "Show Hidden Vaults" under your Vaults list.
-            </Typography>
-            <Box
-              sx={{
-                width: "100%",
-                marginTop: "1rem",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                clickFunction={() => handleHideClose()}
-              >
-                Cancel
-              </Button>
-              <Button
-                clickFunction={() => handleToggleVaultHidden()}
-                sx={{
-                  marginLeft: "1rem"
-                }}
-              >
-                {vaultHidden ? ('Unhide This Vault') : ('Hide This Vault')}
-              </Button>
-            </Box>
-          </Box>
-        </Card>
-      </Modal>
       {/* Scan QR code modal */}
       <Modal
         open={open}

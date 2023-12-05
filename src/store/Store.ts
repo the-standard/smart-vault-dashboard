@@ -4,70 +4,96 @@ import erc20Abi from "../abis/erc20.ts";
 import chainlinkAbi from "../abis/priceFeeds/chainlink.ts";
 import smartVaultABI from "../abis/smartVault.ts";
 import stakingAbi from "../abis/staking.ts";
+import liquidationPoolAbi from "../abis/liquidationPool.ts";
 import { Address } from "viem";
 
 interface EthToUsdAddressState {
-  ethToUsdAddress: Address;
-  arbitrumGoerliethToUsdAddress: Address;
+  ethToUsdAddress?: Address;
   arbitrumOneEthToUsdAddress: Address;
+  arbitrumSepoliaEthToUsdAddress: Address;
   getEthToUsdAddress: (ethToUsdAddress: Address) => void;
 }
 
 export const useEthToUsdAddressStore = create<EthToUsdAddressState>()(
   (set) => ({
-    ethToUsdAddress: "0x10742171dD4aB632653869d3a03b2195a10C5f1F",
-    arbitrumGoerliethToUsdAddress: "0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08",
     arbitrumOneEthToUsdAddress: "0x639fe6ab55c921f74e7fac1ee960c0b6293ba612",
-    getEthToUsdAddress: (ethToUsdAddress) =>
-      set(() => ({ ethToUsdAddress: ethToUsdAddress })),
+    arbitrumSepoliaEthToUsdAddress: "0x1DD905cb0a5aCEFF9E050eB8FAEB9b54d6C09940",
+    getEthToUsdAddress: (arbitrumOneEthToUsdAddress) =>
+      set(() => ({ ethToUsdAddress: arbitrumOneEthToUsdAddress })),
   })
 );
 
 interface USDToEuroAddressState {
-  usdToEuroAddress: Address;
-  arbitrumGoerliUSDToEuroAddress: Address;
+  usdToEuroAddress?: Address;
   arbitrumOneUSDToEuroAddress: Address;
+  arbitrumSepoliaUSDToEuroAddress: Address;
   getUSDToEuroAddress: (usdToEuroAddress: Address) => void;
 }
 
 export const useUSDToEuroAddressStore = create<USDToEuroAddressState>()(
   (set) => ({
-    usdToEuroAddress: "0x59a6A8357BD5Ae002DEd9A5F72ab526f9fDc573A",
-    arbitrumGoerliUSDToEuroAddress:
-      "0xe5CD8A83fc9E1bb87b2576B2999f99A1328D3888",
     arbitrumOneUSDToEuroAddress: "0xA14d53bC1F1c0F31B4aA3BD109344E5009051a84",
-    getUSDToEuroAddress: (usdToEuroAddress: Address) =>
-      set(() => ({ usdToEuroAddress: usdToEuroAddress })),
+    arbitrumSepoliaUSDToEuroAddress: "0x34319A7424bC39C29958d2eb905D743C2b1cAFCa",
+    getUSDToEuroAddress: (arbitrumOneUSDToEuroAddress) =>
+      set(() => ({ usdToEuroAddress: arbitrumOneUSDToEuroAddress })),
   })
 );
 
 interface sEuroAddressState {
-  sEuroAddress: Address;
-  arbitrumGoerlisEuroAddress: Address;
+  sEuroAddress?: Address;
   arbitrumsEuroAddress: Address;
+  arbitrumSepoliasEuroAddress: Address;
   getsEuroAddress: (sEuroAddress: Address) => void;
 }
 
 export const usesEuroAddressStore = create<sEuroAddressState>()((set) => ({
-  sEuroAddress: "0xf23F59316A2700D88F6F503B24aEE01118255645",
-  arbitrumGoerlisEuroAddress: "0x9C777AD2575010E3ED67F6E849cfE1115BFE2A50",
   arbitrumsEuroAddress: "0x643b34980e635719c15a2d4ce69571a258f940e9",
-  getsEuroAddress: (sEuroAddress) =>
-    set(() => ({ sEuroAddress: sEuroAddress })),
+  arbitrumSepoliasEuroAddress: "0x5D1684E5b989Eb232ac84D6b73D783FE44114C2b",
+  getsEuroAddress: (arbitrumsEuroAddress) =>
+    set(() => ({ sEuroAddress: arbitrumsEuroAddress })),
 }));
 
 interface tstAddressState {
   tstAddress?: Address;
-  arbitrumGoerliTstAddress: Address;
   arbitrumTstAddress: Address;
+  arbitrumSepoliaTstAddress: Address;
   getTstAddress: (tstAddress: Address) => void;
 }
 
 export const useTstAddressStore = create<tstAddressState>()((set) => ({
-  arbitrumGoerliTstAddress: "0xa42b5cF31BD2b817aa16D515DAFDe79cccE6CD0B",
   arbitrumTstAddress: "0xf5A27E55C748bCDdBfeA5477CB9Ae924f0f7fd2e",
+  arbitrumSepoliaTstAddress: "0xcD2204188db24d8db2b15151357e43365443B113",
   getTstAddress: (arbitrumTstAddress) =>
     set(() => ({ tstAddress: arbitrumTstAddress })),
+}));
+
+interface stakingContractsAddressState {
+  stakingContractsAddress?: Address;
+  arbitrumStakingContractsAddress: Address;
+  arbitrumSepoliaStakingContractsAddress: Address;
+  getStakingContractsAddress: (stakingContractsAddress: Address) => void;
+}
+
+export const useStakingContractsStore = create<stakingContractsAddressState>()((set) => ({
+  arbitrumStakingContractsAddress: "0xBe57E0d3126a1F28a2E840ECbB842cb357e56866",
+  arbitrumSepoliaStakingContractsAddress: "0x367836e4E4C3624b53aE8821d5ffe85602A83C3C",
+  getStakingContractsAddress: (arbitrumStakingContractsAddress) =>
+    set(() => ({ stakingContractsAddress: arbitrumStakingContractsAddress })),
+}));
+
+interface liquidationPoolAddressState {
+  liquidationPoolAddress?: Address;
+  arbitrumLiquidationPoolAddress: Address;
+  arbitrumSepoliaLiquidationPoolAddress: Address;
+  getLiquidationPoolAddress: (liquidationPool: Address) => void;
+}
+
+export const useLiquidationPoolStore = create<liquidationPoolAddressState>()((set) => ({
+  // TODO ADD REAL ARB ONE ADDRESS, currently same as testnet
+  arbitrumLiquidationPoolAddress: "0x44901f0E6E515DDa7cbCA3908db6E1F66aBcE06E",
+  arbitrumSepoliaLiquidationPoolAddress: "0x44901f0E6E515DDa7cbCA3908db6E1F66aBcE06E",
+  getLiquidationPoolAddress: (arbitrumLiquidationPoolAddress) =>
+    set(() => ({ liquidationPoolAddress: arbitrumLiquidationPoolAddress })),
 }));
 
 interface ChainlinkAbiState {
@@ -90,19 +116,18 @@ export const useSmartVaultABIStore = create<smartVaultABIState>(() => ({
 }));
 
 interface contractAddressState {
-  contractAddress: any;
-  arbitrumGoerliContractAddress: any;
+  contractAddress?: any;
   arbitrumContractAddress: any;
+  arbitrumSepoliaContractAddress: any;
   getContractAddress: (contractAddress: string) => void;
 }
 //this is the smart vault manager, I need to change its name to it
 export const useContractAddressStore = create<contractAddressState>()(
   (set) => ({
-    contractAddress: "0x0b64cb41B81f631503a562D2ACd9EBF52ac09061",
-    arbitrumGoerliContractAddress: "0x2342755a637451e9af75545e257Cb007EaC930B1",
     arbitrumContractAddress: "0xba169cceCCF7aC51dA223e04654Cf16ef41A68CC",
-    getContractAddress: (contractAddress) =>
-      set(() => ({ contractAddress: contractAddress })),
+    arbitrumSepoliaContractAddress: "0xBbB704f184E716410a9c00435530eA055CfAD187",
+    getContractAddress: (arbitrumContractAddress) =>
+      set(() => ({ contractAddress: arbitrumContractAddress })),
   })
 );
 
@@ -129,6 +154,19 @@ export const useStakingAbiStore = create<StakingAbiState>()(
     stakingAbi: stakingAbi,
     getStakingAbi: (stakingAbi) =>
       set(() => ({ stakingAbi: stakingAbi })),
+  })
+);
+
+interface LiquidationPoolAbiState {
+  liquidationPoolAbi: Array<any>;
+  getLiquidationPoolAbi: (liquidationPoolAbi: Array<any>) => void;
+}
+
+export const useLiquidationPoolAbiStore = create<LiquidationPoolAbiState>()(
+  (set) => ({
+    liquidationPoolAbi: liquidationPoolAbi,
+    getLiquidationPoolAbi: (liquidationPoolAbi) =>
+      set(() => ({ liquidationPoolAbi: liquidationPoolAbi })),
   })
 );
 
@@ -225,13 +263,15 @@ export const useCircularProgressStore = create<CirccularProgressState>(
 );
 
 interface SnackBarState {
-  snackBar: number;
-  getSnackBar: (snackBar: number) => void;
+  type: string;
+  message: string;
+  getSnackBar: (type: string, message: string) => void;
 }
 
 export const useSnackBarStore = create<SnackBarState>((set) => ({
-  snackBar: 55,
-  getSnackBar: (snackBar) => set({ snackBar }),
+  type: '',
+  message: '',
+  getSnackBar: (type, message) => set({type, message }),
 }));
 
 interface VaultForListingState {

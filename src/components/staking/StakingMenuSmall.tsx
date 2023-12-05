@@ -1,21 +1,13 @@
-import { useState, useMemo, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Button from "./Button";
 import {Button as MuiButton} from '@mui/material';
 
-function useQuery() {
-  const { search } = useLocation();
-  return useMemo(() => new URLSearchParams(search), [search]);
-}
-
-export function VaultMenuSmall(props: any) {  
+export function StakingMenuSmall(props: any) {  
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [currentPage, setCurrentPage] = useState('Collateral');
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -24,29 +16,40 @@ export function VaultMenuSmall(props: any) {
     setAnchorEl(null);
   };
   const navigate = useNavigate();
-  const query = useQuery();
-  const vaultView = query.get("view");
 
-  useEffect(() => {
-    if (vaultView && (vaultView === '2')) {
-      setCurrentPage('Borrow/Repay')
-    } else {
-      setCurrentPage('Collateral')
-    }
-    if (window.location.href.indexOf("history") != -1) {
-      setCurrentPage('History')
-    }
-  }, [vaultView]);
+  const activeView = props?.activeView || '';
+
+  let currentPage = 'ABOUT';
+  switch (activeView) {
+    case 'ABOUT':
+      currentPage = 'About';
+      break;
+    case 'STAKE':
+      currentPage = 'Staking';
+      break;
+    case 'EARN':
+      currentPage = 'Earning';
+      break;
+    case 'TST':
+      currentPage = 'TST Staking';
+      break;  
+    default:
+      currentPage = 'About';
+      break;
+  }
 
   const handleLinkClick = (link: any) => {
-    if (link === 'Collateral') {
-      navigate(`../Collateral/${props.vaultId}`);
+    if (link === 'ABOUT') {
+      navigate(`../Staking?view=ABOUT`);
     }
-    if (link === 'Borrow/Repay') {
-      navigate(`../Collateral/${props.vaultId}?view=2`);
+    if (link === 'STAKE') {
+      navigate(`../Staking?view=STAKE`);
     }
-    if (link === 'History') {
-      navigate('history');
+    if (link === 'EARN') {
+      navigate(`../Staking?view=EARN`);
+    }
+    if (link === 'TST') {
+      navigate(`../Staking?view=TST`);
     }
     handleClose();
   }
@@ -57,8 +60,8 @@ export function VaultMenuSmall(props: any) {
         display: { xs: "flex", sm: "none" },
         flexDirection: { xs: "column", md: "row" },
         justifyContent: "space-between",
-        marginBottom: "1rem",
-        marginTop: { xs: "1rem", sm: "0px" },
+        marginBottom: { xs: "2rem", sm: "1rem" },
+        marginTop: { xs: "0px", sm: "0px" },
       }}
     >
       <Box
@@ -69,18 +72,8 @@ export function VaultMenuSmall(props: any) {
           gap: "1rem",
         }}
       >
-        <Button
-          sx={{
-            "&:after": {
-              backgroundSize: "300% 100%",
-            }
-          }}
-          clickFunction={() => navigate('/')}
-        >
-          <ArrowBackIosNewIcon />
-        </Button>
+        <Box></Box>
         <MuiButton
-          disabled={props?.isDisabled}
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
@@ -180,25 +173,32 @@ export function VaultMenuSmall(props: any) {
             horizontal: 'right',
           }}
         >
-          {currentPage === 'Collateral' ? (null) : (
+          {activeView === 'ABOUT' || !activeView ? (null) : (
             <MenuItem
-              onClick={() => handleLinkClick('Collateral')}
+              onClick={() => handleLinkClick('ABOUT')}
             >
-              Collateral
+              About
             </MenuItem>
           )}
-          {currentPage === 'Borrow/Repay' ? (null) : (
+          {activeView === 'STAKE' ? (null) : (
             <MenuItem
-              onClick={() => handleLinkClick('Borrow/Repay')}
+              onClick={() => handleLinkClick('STAKE')}
             >
-              Borrow/Repay
+              Staking
             </MenuItem>
           )}
-          {currentPage === 'History' ? (null) : (
+          {activeView === 'EARN' ? (null) : (
             <MenuItem
-              onClick={() => handleLinkClick('History')}
+              onClick={() => handleLinkClick('EARN')}
             >
-              History
+              Earning
+            </MenuItem>
+          )}
+          {activeView === 'TST' ? (null) : (
+            <MenuItem
+              onClick={() => handleLinkClick('TST')}
+            >
+              TST Staking
             </MenuItem>
           )}
         </Menu>
@@ -214,4 +214,4 @@ export function VaultMenuSmall(props: any) {
   )
 }
 
-export default VaultMenuSmall;
+export default StakingMenuSmall;
