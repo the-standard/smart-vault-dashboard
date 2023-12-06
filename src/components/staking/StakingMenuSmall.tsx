@@ -19,11 +19,8 @@ export function StakingMenuSmall(props: any) {
 
   const activeView = props?.activeView || '';
 
-  let currentPage = 'ABOUT';
+  let currentPage = 'STAKE';
   switch (activeView) {
-    case 'ABOUT':
-      currentPage = 'About';
-      break;
     case 'STAKE':
       currentPage = 'Staking';
       break;
@@ -34,14 +31,11 @@ export function StakingMenuSmall(props: any) {
       currentPage = 'TST Staking';
       break;  
     default:
-      currentPage = 'About';
+      currentPage = 'Staking';
       break;
   }
 
   const handleLinkClick = (link: any) => {
-    if (link === 'ABOUT') {
-      navigate(`../Staking?view=ABOUT`);
-    }
     if (link === 'STAKE') {
       navigate(`../Staking?view=STAKE`);
     }
@@ -173,14 +167,7 @@ export function StakingMenuSmall(props: any) {
             horizontal: 'right',
           }}
         >
-          {activeView === 'ABOUT' || !activeView ? (null) : (
-            <MenuItem
-              onClick={() => handleLinkClick('ABOUT')}
-            >
-              About
-            </MenuItem>
-          )}
-          {activeView === 'STAKE' ? (null) : (
+          {activeView === 'STAKE' || !activeView ? (null) : (
             <MenuItem
               onClick={() => handleLinkClick('STAKE')}
             >

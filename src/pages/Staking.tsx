@@ -5,7 +5,6 @@ import { useAccount } from "wagmi";
 import { Web3Button } from "@web3modal/react";
 import StakingMenuSmall from "../components/staking/StakingMenuSmall";
 import StakingMenuLarge from "../components/staking/StakingMenuLarge";
-import StakingAbout from "../components/staking/StakingAbout";
 import StakingStake from "../components/staking/StakingStake";
 import StakingEarn from "../components/staking/StakingEarn";
 import StakingTST from "../components/staking/legacy/StakingTST";
@@ -43,7 +42,7 @@ const Staking = () => {
   const queryView = query.get("view") || '';
   const { address: accountAddress } = useAccount();
 
-  const [activeView, setActiveView] = useState('ABOUT');
+  const [activeView, setActiveView] = useState('STAKE');
 
   const handleActive = (element: any) => {
     setActiveView(element);
@@ -69,12 +68,8 @@ const Staking = () => {
   
         <Box
           ref={rectangleRef}
-        >
-          {activeView === 'ABOUT' || !activeView ? (
-            <StakingAbout />
-          ) : null}
-    
-          {activeView === 'STAKE' ? (
+        >    
+          {activeView === 'STAKE' || !activeView ? (
             <StakingStake />
           ) : null}
     
