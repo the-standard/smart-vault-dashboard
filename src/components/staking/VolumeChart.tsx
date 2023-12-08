@@ -34,55 +34,65 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
   useEffect(() => {
     const useData: Array<any> = [];
 
-    console.log(123123, chartData)
-    chartData.map((chartItem: any) => {
-      const date = chartItem?.snapshot_at;
+    chartData.forEach((snapshot: any) => {
+      snapshot.assets.forEach((asset: any) => {
+        if (!useData.find(section => section.name === asset[0])) {
+          useData.push({name: asset[0], data: []});
+        }
+        useData.find(section => section.name === asset[0]).data.push([
+          snapshot.snapshot_at, asset[1], asset[2]
+        ]);
+      });
+    });
 
-      console.log('CHART ITEM', {chartItem})
+    // chartData.map((chartItem: any) => {
+    //   const date = chartItem?.snapshot_at;
 
-      const useAssets = chartItem?.assets.map((asset: any) => {
-        const assetName = asset[0] || '';
-        const assetQuantity = asset[1] || '0';
-        const assetValue = asset[2] || '0';
+    //   console.log('CHART ITEM', {chartItem})
+
+    //   const useAssets = chartItem?.assets.map((asset: any) => {
+    //     const assetName = asset[0] || '';
+    //     const assetQuantity = asset[1] || '0';
+    //     const assetValue = asset[2] || '0';
         
-        const array: any[] = [];
-        const newSeries = {
-          name: assetName,
-          data: array,
-        };
+    //     const array: any[] = [];
+    //     const newSeries = {
+    //       name: assetName,
+    //       data: array,
+    //     };
 
-        const existingSeries = useData?.find((item: any) => item.name === assetName);
+    //     const existingSeries = useData?.find((item: any) => item.name === assetName);
 
-        if (existingSeries) {
-          existingSeries.data.push([date, assetQuantity, assetValue]);
-        } else {
-          newSeries.data.push([date, assetQuantity, assetValue]);
-        }
+    //     if (existingSeries) {
+    //       existingSeries.data.push([date, assetQuantity, assetValue]);
+    //     } else {
+    //       newSeries.data.push([date, assetQuantity, assetValue]);
+    //     }
 
-        let useSeries = newSeries;
+    //     let useSeries = newSeries;
 
-        if (existingSeries) {
-          useSeries = existingSeries;
-        }
+    //     if (existingSeries) {
+    //       useSeries = existingSeries;
+    //     }
 
-        // console.log(345345, existingSeries)
-        // console.log(567567, asset[0])
+    //     // console.log(345345, existingSeries)
+    //     // console.log(567567, asset[0])
 
-        // return (
-        //   useSeries
-        // );
-        useData.push(useSeries)
-        return;
-      })
+    //     // return (
+    //     //   useSeries
+    //     // );
+    //     useData.push(useSeries)
+    //     return;
+    //   })
 
-      // useData.push()
+    //   // useData.push()
 
       console.log('USE DATA', {useData})
 
-      return (
-        useAssets
-      );
-    });
+    //   return (
+    //     useAssets
+    //   );
+    // });
     // console.log(123123, {chartData}, {newData})
     // setData(useData)
   }, [chartData]);
