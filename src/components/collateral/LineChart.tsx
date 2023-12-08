@@ -78,6 +78,8 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
     return null; // or render a loading state or placeholder
   }
 
+  console.log(12313, {data}, {series})
+
   return (
     <div id="chart">
       <ReactApexChart
