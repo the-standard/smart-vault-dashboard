@@ -13,7 +13,7 @@ import Card from "../Card.tsx";
 import StakingLiquidations from "./StakingLiquidations";
 import StakingStakedAssets from "./StakingStakedAssets";
 import VolumeChart from "./VolumeChart";
-// import ValueChart from "./ValueChart";
+import ValueChart from "./ValueChart";
 
 const StakingEarn = () => {
   const [chartData, setChartData] = useState(undefined);
@@ -173,6 +173,19 @@ const StakingEarn = () => {
           rewards={rewards || []}
         />
       </Card>
+
+      <Card
+        sx={{
+          marginBottom: "1rem",
+          padding: "1.5rem",
+          width: {xs: "auto"},
+        }}
+      >
+        <ValueChart
+          chartData={chartData || []}
+        />
+      </Card>
+
     </Box>
   );
 };

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import moment from 'moment';
 
-interface VolumeChartProps {
+interface ValueChartProps {
   chartData: Array<any>;
 }
 
-const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
+const ValueChart: React.FC<ValueChartProps> = ({ chartData }) => {
   const [chartWidth, setChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(220);
   const [data, setData] = useState<any>([]);
@@ -20,7 +20,7 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
           useData.push({name: asset[0], data: []});
         }
         useData.find(section => section.name === asset[0]).data.push([
-          timestamp, asset[1], asset[2]
+          timestamp, asset[2], asset[1]
         ]);
       });
     });
@@ -59,7 +59,7 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
         options={{
           chart: {
             type: "area",
-            stacked: false,
+            stacked: true,
             toolbar: {
               show: false,
             },
@@ -71,7 +71,7 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
             enabled: false,
           },
           title: {
-            text: "Asset Totals",
+            text: "Asset Values (USD)",
             align: "left",
             style: {
               color: "#fff",
@@ -128,24 +128,24 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
             enabled: true,
             shared: false,
             x: {
-              show: false,
-              // formatter: function (
-              //   value,
-              //   {
-              //     seriesIndex, w
-              //   }
-              // ) {
-              //   const title = w.config.series[seriesIndex].name || '' || value;
-              //   return (
-              //     title
-              //   );
-              // }
+              show: true,
+              formatter: function (
+                value,
+                {
+                  seriesIndex, w
+                }
+              ) {
+                const title = w.config.series[seriesIndex].name || '' || value;
+                return (
+                  title
+                );
+              }
             },
             y: {
               title: {
                 formatter: () =>  {
                   return (
-                    'Token Amount: '
+                    'Value (USD): '
                   )
                 }
               },
@@ -154,7 +154,7 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
               },
             },
             z: {
-              title: 'Value (USD): ',
+              title: 'Token Amount: ',
             },
           },
         }}
@@ -167,4 +167,4 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
   );
 };
 
-export default VolumeChart;
+export default ValueChart;
