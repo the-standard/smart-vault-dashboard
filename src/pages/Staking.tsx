@@ -3,11 +3,11 @@ import { useLocation } from "react-router-dom";
 import { Box, Grid, Typography } from "@mui/material";
 import { useAccount } from "wagmi";
 import { Web3Button } from "@web3modal/react";
-import StakingMenuSmall from "../components/staking/StakingMenuSmall";
-import StakingMenuLarge from "../components/staking/StakingMenuLarge";
-import StakingAbout from "../components/staking/StakingAbout";
-import StakingStake from "../components/staking/StakingStake";
-import StakingEarn from "../components/staking/StakingEarn";
+// import StakingMenuSmall from "../components/staking/StakingMenuSmall";
+// import StakingMenuLarge from "../components/staking/StakingMenuLarge";
+// import StakingAbout from "../components/staking/StakingAbout";
+// import StakingStake from "../components/staking/StakingStake";
+// import StakingEarn from "../components/staking/StakingEarn";
 import StakingTST from "../components/staking/legacy/StakingTST";
 
 import {
@@ -43,7 +43,7 @@ const Staking = () => {
   const queryView = query.get("view") || '';
   const { address: accountAddress } = useAccount();
 
-  const [activeView, setActiveView] = useState('ABOUT');
+  const [activeView, setActiveView] = useState('TST');
 
   const handleActive = (element: any) => {
     setActiveView(element);
@@ -64,13 +64,13 @@ const Staking = () => {
           },
         }}
       >
-        <StakingMenuLarge activeView={activeView} />
-        <StakingMenuSmall activeView={activeView} />
+        {/* <StakingMenuLarge activeView={activeView} />
+        <StakingMenuSmall activeView={activeView} /> */}
   
         <Box
           ref={rectangleRef}
         >
-          {activeView === 'ABOUT' || !activeView ? (
+          {/* {activeView === 'ABOUT' || !activeView ? (
             <StakingAbout />
           ) : null}
     
@@ -84,7 +84,8 @@ const Staking = () => {
     
           {activeView === 'TST' ? (
             <StakingTST />
-          ) : null}
+          ) : null} */}
+          <StakingTST />
         </Box>
   
       </Box>
