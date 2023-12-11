@@ -63,9 +63,11 @@ const StakingEarn = () => {
   return (
     <Box
       sx={{
-        display: { xs: "flex", lg: "grid" },
-        gridTemplateColumns:
-        " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
+        display: {
+          xs: "flex",
+          md: "grid"
+        },
+        gridTemplateColumns: "repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
         gap: "20px" /* Gap between the columns */,
         gridAutoColumns: "1fr" /* Equal width for child components */,
         // now flexbox
@@ -76,11 +78,25 @@ const StakingEarn = () => {
 
       <Card
         sx={{
-          marginBottom: "1rem",
           padding: "1.5rem",
           width: {xs: "auto"},
+          justifyContent: "unset",
         }}
       >
+        <Typography
+          sx={{
+            color: "#fff",
+            margin: "0",
+            marginBottom: "1rem",
+            fontSize: {
+              xs: "1.2rem",
+              md: "1.5rem"
+            }
+          }}
+          variant="h4"
+        >
+          Asset Totals
+        </Typography>
         <VolumeChart
           chartData={chartData || []}
         />
@@ -88,47 +104,10 @@ const StakingEarn = () => {
 
       <Card
         sx={{
-          marginBottom: "1rem",
           padding: "1.5rem",
           width: {xs: "auto"},
         }}
       >
-        {/* <Typography
-          sx={{
-            color: "#fff",
-            margin: "1rem 0",
-            marginTop: "0",
-            fontSize: {
-              xs: "1.5rem",
-              md: "2.125rem"
-            }
-          }}
-          variant="h4"
-        >
-          Earning
-        </Typography>
-        <Typography
-          sx={{
-            marginBottom: "1rem",
-            fontSize: {
-              xs: "1rem",
-              md: "1.2rem",
-            },
-            opacity: "0.9",
-            fontWeight: "300",
-          }}
-        >
-          Sit back and let the good times roll
-        </Typography>
-        <Box sx={{
-          width: "100%",
-          height: "2px",
-          backgroundImage: "linear-gradient( to right, transparent, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.5) 85%, transparent )",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "100% 1px",
-          backgroundPosition: "center bottom",     
-          marginBottom: "1rem",               
-        }}/> */}
         <Typography
           sx={{
             color: "#fff",
@@ -150,9 +129,8 @@ const StakingEarn = () => {
       </Card>
       <Card
         sx={{
-          marginBottom: "1rem",
           padding: "1.5rem",
-          width: {xs: "100%", sm: "auto"},
+          width: {xs: "auto"},
         }}
       >
         <Typography
@@ -176,11 +154,25 @@ const StakingEarn = () => {
 
       <Card
         sx={{
-          marginBottom: "1rem",
           padding: "1.5rem",
           width: {xs: "auto"},
+          justifyContent: "unset",
         }}
       >
+        <Typography
+          sx={{
+            color: "#fff",
+            margin: "0",
+            marginBottom: "1rem",
+            fontSize: {
+              xs: "1.2rem",
+              md: "1.5rem"
+            }
+          }}
+          variant="h4"
+        >
+          Total Value (USD)
+        </Typography>
         <ValueChart
           chartData={chartData || []}
         />

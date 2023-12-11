@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
+import { Box } from "@mui/material";
 import moment from 'moment';
 
 interface ValueChartProps {
@@ -7,8 +8,6 @@ interface ValueChartProps {
 }
 
 const ValueChart: React.FC<ValueChartProps> = ({ chartData }) => {
-  const [chartWidth, setChartWidth] = useState(400);
-  const [chartHeight, setChartHeight] = useState(220);
   const [data, setData] = useState<any>([]);
 
   useEffect(() => {
@@ -27,39 +26,16 @@ const ValueChart: React.FC<ValueChartProps> = ({ chartData }) => {
     setData(useData);
   }, [chartData]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.matchMedia("(max-width: 600px)").matches) {
-        setChartWidth(250);
-        setChartHeight(120);
-      } else if (window.matchMedia("(max-width: 1200px)").matches) {
-        setChartWidth(400);
-        setChartHeight(150);
-      } else {
-        setChartWidth(350);
-        setChartHeight(220);
-      }
-    };
-    handleResize(); // Set initial dimensions
-    window.addEventListener("resize", handleResize); // Add event listener for window resize
-    return () => {
-      window.removeEventListener("resize", handleResize); // Clean up event listener on component unmount
-    };
-  }, []);
-
-  // if (!data || data.length === 0) {
-  //   return null; // or render a loading state or placeholder
-  // }
-
-  const colours = ['#b84644', '#4576b5', '#008FFB', '#00E396', '#CED4DC', '#008FFB', '#00E396', '#CED4DC'];
+  const colours = ['#8b4df9', '#f8e223', '#008FFB', '#00E396', '#e91e63', '#008FFB', '#00E396', '#CED4DC'];
 
   return (
-    <div id="chart">
+    <Box>
       <ReactApexChart
         options={{
           chart: {
             type: "area",
             stacked: true,
+            foreColor: 'rgba(255,255,255,0.8)',
             toolbar: {
               show: false,
             },
@@ -71,7 +47,7 @@ const ValueChart: React.FC<ValueChartProps> = ({ chartData }) => {
             enabled: false,
           },
           title: {
-            text: "Asset Values (USD)",
+            // text: "Total Value (USD)",  
             align: "left",
             style: {
               color: "#fff",
@@ -92,11 +68,15 @@ const ValueChart: React.FC<ValueChartProps> = ({ chartData }) => {
           },
           grid: {
             show: false,
+            padding: {
+              left: -10,
+            }
           },
           yaxis: {
             show: true,
             labels: {
               show: true,
+              offsetX: -15,
             },
           },
           stroke: {
@@ -126,44 +106,54 @@ const ValueChart: React.FC<ValueChartProps> = ({ chartData }) => {
           },
           tooltip: {
             enabled: true,
-            shared: false,
+            shared: true,
             x: {
-              show: true,
-              formatter: function (
-                value,
-                {
-                  seriesIndex, w
-                }
-              ) {
-                const title = w.config.series[seriesIndex].name || '' || value;
-                return (
-                  title
-                );
-              }
+              show: false,
+              // formatter: function (
+              //   value,
+              //   {
+              //     seriesIndex, w
+              //   }
+              // ) {
+              //   const title = w.config.series[seriesIndex].name || '' || value;
+              //   return (
+              //     title
+              //   );
+              // }
             },
             y: {
               title: {
-                formatter: () =>  {
+                formatter: (value: any) =>  {
                   return (
-                    'Value (USD): '
+                    `${value} (USD): `
                   )
                 }
               },
+              // title: {
+              //   formatter: () =>  {
+              //     return (
+              //       'Value (USD): '
+              //     )
+              //   }
+              // },
               formatter: function (value:number) {
-                return value.toString();
+                return `$${value.toString()}`;
               },
             },
             z: {
-              title: 'Token Amount: ',
+              title: '',
+              formatter: function () {
+                return '';
+              },
             },
           },
         }}
         series={data}
         type="area"
-        height={chartHeight}
-        width={chartWidth}
+        // height={chartHeight}
+        // width={chartWidth}
       />
-    </div>
+    </Box>
   );
 };
 
