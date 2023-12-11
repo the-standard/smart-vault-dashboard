@@ -85,7 +85,9 @@ const Staking = () => {
           {activeView === 'TST' ? (
             <StakingTST />
           ) : null} */}
-          <StakingTST />
+          {activeView === 'TST' ? (
+            <StakingTST />
+          ) : <StakingTST />}
         </Box>
   
       </Box>
