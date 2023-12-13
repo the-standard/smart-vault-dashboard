@@ -145,7 +145,7 @@ const StakingEarn = () => {
           }}
           variant="h4"
         >
-          Positions
+          Liquidated Assets Purchased
         </Typography>
         <StakingLiquidations
           rewards={rewards || []}
@@ -171,7 +171,7 @@ const StakingEarn = () => {
           }}
           variant="h4"
         >
-          Total Value (USD)
+          Total Value Stacked (USD)
         </Typography>
         <ValueChart
           chartData={chartData || []}

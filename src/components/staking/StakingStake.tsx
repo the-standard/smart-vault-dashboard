@@ -505,7 +505,7 @@ const StakingStake = () => {
                     fontWeight: "300",
                   }}                  
                 >
-                  1 - The amount of TST you stake here will represent the share of the TST pool. If you stake 3% of the pool then you will recieve 3% of all fees collected. 
+                  1 - The amount of TST you stake here will represent the share of the TST pool. If you stake 3% of the pool then you will receive 3% of all fees collected. 
                 </Typography>
                 <Typography
                   sx={{

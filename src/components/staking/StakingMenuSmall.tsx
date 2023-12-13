@@ -178,14 +178,14 @@ export function StakingMenuSmall(props: any) {
             <MenuItem
               onClick={() => handleLinkClick('EARN')}
             >
-              Earning
+              Dashboard
             </MenuItem>
           )}
           {activeView === 'TST' ? (null) : (
             <MenuItem
               onClick={() => handleLinkClick('TST')}
             >
-              TST Staking
+              TST Staking (Legacy)
             </MenuItem>
           )}
         </Menu>
