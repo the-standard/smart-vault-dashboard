@@ -80,6 +80,7 @@ const Staking = () => {
           {activeView === 'TST' ? (
             <StakingTST />
           ) : null}
+
         </Box>
   
       </Box>
