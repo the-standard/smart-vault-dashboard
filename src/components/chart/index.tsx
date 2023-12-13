@@ -110,8 +110,6 @@ const Index = () => {
     });
 
   const computeGreyBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
-    const useTotalDebt = totalDebt || 0n;
-    const useTotalCollateralValue = totalCollateralValue || 0n;
     let operation: any;
     let userInputInEur = 0n;
     const userInputInWei = parseEther(userInputForGreyBarOperation.toString());
@@ -123,22 +121,28 @@ const Index = () => {
       userInputInEur = userInputInWei * prices[1] / prices[0];
     }
 
-    console.log(123123, {useTotalDebt}, {useTotalCollateralValue}, {userInputInEur})
-
-    if (useTotalCollateralValue === 0n) {
+    if (totalCollateralValue === 0n) {
       operation = 0;
     } else if (operationType === 1) {
       //deposit
-      operation = convertInflatedPercentageTo2Dec(10000n * useTotalDebt / (useTotalCollateralValue + userInputInEur));
+      operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue + userInputInEur));
     } else if (operationType === 2) {
       //withdraw
-      operation = convertInflatedPercentageTo2Dec(10000n * useTotalDebt / (useTotalCollateralValue - userInputInEur));
+      if (
+        userInputInEur === totalCollateralValue
+        ||
+        userInputInEur > totalCollateralValue
+      ) {
+        operation = 100;
+      } else {
+        operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue - userInputInEur));
+      }
     } else if (operationType === 4) {
       //borrow
-      operation = convertInflatedPercentageTo2Dec(10000n * (useTotalDebt + userInputInWei) / useTotalCollateralValue);
+      operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt + userInputInWei) / totalCollateralValue);
     } else if (operationType === 5) {
       //repay
-      operation = convertInflatedPercentageTo2Dec(10000n * (useTotalDebt - userInputInWei) / useTotalCollateralValue);
+      operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt - userInputInWei) / totalCollateralValue);
     }
 
     return operation < 0 ? 0 : operation > 100 ? 100 : operation;
