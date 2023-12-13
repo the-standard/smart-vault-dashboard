@@ -14,6 +14,7 @@ const links = [
   { name: "FAQ", link: "https://www.thestandard.io/faq" },
   { name: "Whitepaper", link: "https://www.thestandard.io/whitepaper" },
   { name: "Blog", link: "https://blog.thestandard.io/" },
+  { name: "Terms of Use", link: "/termsofuse" },
 ];
 
 const icons = [

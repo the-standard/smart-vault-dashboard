@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ethers } from "ethers";
 import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import moment from 'moment';
-import Button from "../../components/Button";
-import StakingModal from "./StakingModal";
+import {
+  useContractWrite
+} from "wagmi";
+import { getNetwork } from "@wagmi/core";
+import {
+  useSnackBarStore,
+  useCircularProgressStore,
+  useLiquidationPoolAbiStore,
+  useLiquidationPoolStore,
+} from "../../store/Store.ts";
 
-interface StakingListProps {
-  stakingData: Array<any>;
-  vaultManagerAddress: any;
-}
+import Button from "../Button";
+import { formatUnits } from "ethers/lib/utils";
 
 function NoDataOverlay() {
   return (
@@ -27,42 +33,84 @@ function NoDataOverlay() {
   );
 }
 
-const StakingList: React.FC<StakingListProps> = ({
-  stakingData,
+interface StakingLiquidationsProps {
+  rewards: Array<any>;
+}
+
+const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
+  rewards,
 }) => {
+  const { chain } = getNetwork();
+
+  const { liquidationPoolAbi } = useLiquidationPoolAbiStore();
+  const { getSnackBar } = useSnackBarStore();
+  const { getCircularProgress, getProgressType } = useCircularProgressStore();
+  
+  const {
+    arbitrumSepoliaLiquidationPoolAddress,
+    arbitrumLiquidationPoolAddress,
+  } = useLiquidationPoolStore();
+
+  const liquidationPoolAddress =
+  chain?.id === 421614
+    ? arbitrumSepoliaLiquidationPoolAddress
+    : arbitrumLiquidationPoolAddress;
+
+  const depositToken = useContractWrite({
+    address: liquidationPoolAddress,
+    abi: liquidationPoolAbi,
+    functionName: "claimRewards",
+    onError(error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    },
+    onSuccess() {
+      getSnackBar('SUCCESS', 'Success!');
+    }
+  });
+  
+  const handleWithdrawTokens = async () => {
+    const { write } = depositToken;
+    write();
+  };
+  
+  useEffect(() => {
+    const { isLoading, isSuccess, isError } = depositToken;
+    if (isLoading) {
+      getProgressType('STAKE_CLAIM');
+      getCircularProgress(true);
+    } else if (isSuccess) {
+      getCircularProgress(false);
+    } else if (isError) {
+      getCircularProgress(false);
+    }
+  }, [
+    depositToken.isLoading,
+    depositToken.isSuccess,
+    depositToken.isError,
+  ]);
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
 
-  const [selectedStakingContract, setSelectedStakingContract] = useState<any>(undefined);
-  const [open, setOpen] = useState(false);
-
-  const handleOpenModal = (contract: any) => {
-    setSelectedStakingContract(contract);
-    setOpen(true)
-  };
-
-  const handleCloseModal = () => {
-    setOpen(false)
-    setSelectedStakingContract(undefined);
-  };
-
   const colData = [
     {
       minWidth: 90,
       flex: 1,
-      field: 'windowStart',
-      headerName: 'Opening',
+      field: 'asset',
+      headerName: 'Asset',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixDate = Number(params.row.windowStart);
-        const useDate = moment.unix(unixDate).format('ll');
+        const useSymbol = ethers.utils.parseBytes32String(params.row.symbol) || '';
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {useDate || ''}
+            {useSymbol || ''}
           </span>
         );
       },
@@ -70,49 +118,18 @@ const StakingList: React.FC<StakingListProps> = ({
     {
       minWidth: 90,
       flex: 1,
-      field: 'windowEnd',
-      headerName: 'Closing',
+      field: 'amount',
+      headerName: 'Amount',
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const unixDate = Number(params.row.windowEnd);
-        const useDate = moment.unix(unixDate).format('ll');
+        let useAmount: any = 0;
+        if (params.row.amount) {
+          useAmount = formatUnits(params.row.amount.toString(), params.row.dec);
+        }
         return (
           <span style={{textTransform: 'capitalize'}}>
-            {useDate || ''}
-          </span>
-        );
-      },
-    },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'SI_Rate',
-      headerName: 'Reward',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const si_rate = Number(params.row.SI_RATE)
-        const reward = Number(si_rate / 1000);
-
-        return (
-          <span>{reward}%</span>
-        )
-    },
-    },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'maturity',
-      headerName: 'Maturity',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const unixDate = Number(params.row.maturity);
-        const maturity = moment.unix(unixDate);
-        return (
-          <span style={{textTransform: 'capitalize'}}>
-            {maturity.format('ll') || ''}
+            {useAmount || '0'}
           </span>
         );
       },
@@ -121,51 +138,25 @@ const StakingList: React.FC<StakingListProps> = ({
       minWidth: 90,
       flex: 1,
       field: 'action',
-      headerName: 'Status',
+      headerName: '',
       sortable: false,
       disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const unixStart = Number(params.row.windowStart);
-        const unixEnd = Number(params.row.windowEnd);
-        const startPeriod = moment.unix(unixStart);
-        const endPeriod = moment.unix(unixEnd);
-        const hasOpened = moment().isSameOrBefore(endPeriod) && moment().isSameOrAfter(startPeriod);
-        if (!hasOpened) {
-          if (moment().isAfter(endPeriod)) {
-            return (
-              <span style={{opacity: 0.5}}>Closed</span>
-            );
-          } else {
-            return (
-              <span style={{opacity: 0.5}}>
-                Opening Soon
-              </span>
-            )
-          }
-        } else {
-          return (
-            <Button
-              sx={{
-                padding: "5px 10px",
-                fontSize: "0.8rem",
-              }}
-              lighter
-              clickFunction={() => handleOpenModal(params.row)}
-            >
-              Stake TST
-            </Button>
-          )
-        }
+      renderCell: () => {
+        return (
+          ''
+        );
       },
     },
   ];
 
-  const activeData = stakingData?.filter((contract: any) =>
-    contract.active === true
-  ) || [];
 
   const columns: GridColDef[] = colData;
-  const rows = activeData || [];
+  const rows = rewards || [];
+
+  let noRewards = true;
+  if (rows.some(e => e.amount > 0)) {
+    noRewards = false;
+  }
 
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
@@ -225,7 +216,7 @@ const StakingList: React.FC<StakingListProps> = ({
       background: "rgba(0, 0, 0, 0.38)",
     },
     "& .MuiDataGrid-virtualScroller": {
-      minHeight: "350px",
+      minHeight: "200px",
     },
   }));
 
@@ -238,7 +229,7 @@ const StakingList: React.FC<StakingListProps> = ({
         columns={columns}
         // rowCount={totalRows || 0}
         rows={rows || []}
-        getRowId={(row) => `${row?.address}${row?.maturity}`}
+        getRowId={(row) => `${row?.symbol}${row?.amount}`}
         disableRowSelectionOnClick
         pageSizeOptions={[5, 10, 15, 20]}
         paginationMode="server"
@@ -246,14 +237,31 @@ const StakingList: React.FC<StakingListProps> = ({
         onPaginationModelChange={setPaginationModel}
         hideFooter={true}
       />
-
-      <StakingModal
-        stakingContract={selectedStakingContract}
-        handleCloseModal={handleCloseModal}
-        isOpen={open}
-      />
+      {rows.length > 0 ? (
+        <Box sx={{
+          display: "flex",
+          justifyContent: {
+            xs: "normal",
+            sm: "end",
+          }
+        }}>
+          <Button
+            lighter
+            sx={{
+              width: {
+                xs: "100%",
+                sm: "unset"
+              }
+            }}
+            clickFunction={handleWithdrawTokens}
+            isDisabled={noRewards}
+          >
+            Claim All Rewards
+          </Button>
+        </Box>
+      ) : null}
     </>
   )
 };
 
-export default StakingList;
+export default StakingLiquidations;

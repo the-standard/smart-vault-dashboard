@@ -72,125 +72,153 @@ const EurosCompare = () => {
 
   const poolPrice = poolEurosData?.priceUsd || '0';
   
-  const priceComparison = Number(poolPrice) / Number(chainPrice) * 100;
-  
-  return (
-    <Card
-      sx={{
-        marginTop: "1rem",
-        padding: "1.5rem",
-      }}
-    >
-      <Box sx={{
-        // marginTop: "1rem",
-      }}>
-        <Typography
-          sx={{
-            fontWeight: "bold",
-            color: "#fff",
-            fontFamily: "Poppins",
-            fontSize: "1rem",
-            marginBottom: "10px",
-          }}
-          variant="h6"
-        >
-          Repay Your EUROs Debt For Less
-        </Typography>
-        <Typography
-          variant="body1"
-        >
-          You can make big savings when repaying your EUROs debt by buying them up while the EUROs Pool Value is lower than the EUR Chainlink Value.
-        </Typography>
-      </Box>
+  // const priceComparison = Number(poolPrice) / Number(chainPrice) * 100;
 
-      <Box sx={{
-        marginTop: "1rem",
-        width: "100%",
-        height: "2px",
-        backgroundImage: "linear-gradient( to right, transparent, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.5) 85%, transparent )",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "100% 1px",
-        backgroundPosition: "center bottom",
-      }}/>
+  const currentDiscount = (Number(poolPrice) / Number(chainPrice) - 1) * 100;
 
-      <Box sx={{
-        marginTop: "1rem",
-      }}>
-        <Typography
-          sx={{
-            fontFamily: "Poppins",
-            fontSize: "0.88rem",
-          }}
-          variant="body2"
-        >
-          EUR Chainlink Value (USD):
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            fontSize: "1.5rem",
-            color: "#fff",
-            fontFamily: "Poppins",
-            fontWeight: "200",
-          }}
-        >
-          ${chainPrice}
-        </Typography>
-      </Box>
-      <Box sx={{
-        marginTop: "1rem",
-        display: "flex",
-        justifyContent: "space-between",
-      }}>
-        <Box>
-          <Typography
-            sx={{
-              fontFamily: "Poppins",
-              fontSize: "0.88rem",
-            }}
-            variant="body2"
-          >
-            EUROs Pool Value (USD):
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              fontSize: "1.5rem",
-              color: "#fff",
-              fontFamily: "Poppins",
-              fontWeight: "200",
-            }}
-          >
-            ${poolPrice}
-          </Typography>
-        </Box>
+  const showDiscount = Math.abs(currentDiscount);
+
+  if (currentDiscount < 0) {
+    return (
+      <Card
+        sx={{
+          marginTop: "1rem",
+          padding: "1.5rem",
+        }}
+      >
         <Box sx={{
-          textAlign: "right",
+          // marginTop: "1rem",
         }}>
           <Typography
             sx={{
+              fontWeight: "bold",
+              color: "#fff",
               fontFamily: "Poppins",
-              fontSize: "0.88rem",
+              fontSize: "1rem",
+              marginBottom: "10px",
             }}
-            variant="body2"
+            variant="h6"
           >
-            Difference:
+            Repay Your Debt for a Discount
           </Typography>
           <Typography
             variant="body1"
-            sx={{
-              fontSize: "1.5rem",
-              color: "#fff",
-              fontFamily: "Poppins",
-              fontWeight: "200",
-            }}
           >
-            {priceComparison.toFixed(2)}%
+            Take advantage of market conditions to reduce your EUROs debt.
+            <br/>
+            When the EUROs Value dips below the FX market price of EUR, you have the opportunity to repay your debt at discount. Act swiftly to lock in your savings and strengthen your financial position.
           </Typography>
         </Box>
-      </Box>
-
-    </Card>
+    
+        <Box sx={{
+          marginTop: "1.5rem",
+        }}>
+  
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "#fff",
+              fontFamily: "Poppins",
+              fontSize: "1rem",
+              marginBottom: "1rem",
+            }}
+            variant="h6"
+          >
+            Current Savings Opportunity
+          </Typography>
+          <Box sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "row"
+            },
+            justifyContent: {
+              xs: "space-between"
+            },
+          }}>
+            <Typography
+              variant="body1"
+            >
+              EUR FX market price (USD):
+            </Typography>
+            <Typography
+              variant="body1"
+            >
+              ${chainPrice}
+            </Typography>
+          </Box>
+  
+          <Box sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "row"
+            },
+            justifyContent: {
+              xs: "space-between"
+            },
+          }}>
+            <Typography
+              variant="body1"
+            >
+              EUROs price (USD):
+            </Typography>
+            <Typography
+              variant="body1"
+            >
+              ${poolPrice}
+            </Typography>
+          </Box>
+  
+          <Box sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "row"
+            },
+            justifyContent: {
+              xs: "space-between"
+            },
+          }}>
+            <Typography
+              variant="body1"
+            >
+              Current discount %:
+            </Typography>
+            <Typography
+              variant="body1"
+            >
+              {showDiscount.toFixed(2)}%
+            </Typography>
+          </Box>
+  
+        </Box>
+  
+        <Box sx={{
+          marginTop: "1rem",
+        }}>
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "#fff",
+              fontFamily: "Poppins",
+              fontSize: "1rem",
+              // marginBottom: "1rem",
+            }}
+            variant="h6"
+          >
+            Act Now: Save XX% on Repayment
+          </Typography>
+          <Typography
+            variant="body1"
+          >
+            Repaying now maximises your savings.
+            <br/>
+            Monitor the market, seize the moment, and reduce your debt for less.
+            </Typography>
+        </Box>
+      </Card>
+    );  
+  }
+  return (
+    <></>
   );
 };
 
