@@ -128,7 +128,9 @@ const Index = () => {
       operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue + userInputInEur));
     } else if (operationType === 2) {
       //withdraw
-      if (
+      if (totalDebt <= 0) {
+        operation = 0;
+      } else if (
         userInputInEur === totalCollateralValue
         ||
         userInputInEur > totalCollateralValue
