@@ -128,7 +128,17 @@ const Index = () => {
       operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue + userInputInEur));
     } else if (operationType === 2) {
       //withdraw
-      operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue - userInputInEur));
+      if (totalDebt <= 0) {
+        operation = 0;
+      } else if (
+        userInputInEur === totalCollateralValue
+        ||
+        userInputInEur > totalCollateralValue
+      ) {
+        operation = 100;
+      } else {
+        operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue - userInputInEur));
+      }
     } else if (operationType === 4) {
       //borrow
       operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt + userInputInWei) / totalCollateralValue);
