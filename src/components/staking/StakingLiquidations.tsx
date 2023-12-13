@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import {
@@ -16,6 +16,13 @@ import {
 
 import Button from "../Button";
 import { formatUnits } from "ethers/lib/utils";
+import ethereumlogo from "../../assets/ethereumlogo.svg";
+import wbtclogo from "../../assets/wbtclogo.svg";
+import linklogo from "../../assets/linklogo.svg";
+import paxglogo from "../../assets/paxglogo.svg";
+import arblogo from "../../assets/arblogo.svg";
+import seurologo from "../../assets/EUROs.svg";
+import tstlogo from "../../assets/standardiologoicon.svg";
 
 function NoDataOverlay() {
   return (
@@ -107,11 +114,78 @@ const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const useSymbol = ethers.utils.parseBytes32String(params.row.symbol) || '';
+        const symbol = ethers.utils.parseBytes32String(params.row.symbol) || '';
         return (
-          <span style={{textTransform: 'capitalize'}}>
-            {useSymbol || ''}
-          </span>
+          <Box
+            sx={{
+              textTransform: "capitalize",
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              height: "100%",
+            }}
+          >
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+            }}>
+              {symbol === "ETH" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={ethereumlogo}
+                  alt="ethereum logo"
+                />
+              ) : symbol === "TST" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={tstlogo}
+                  alt="TST logo"
+                />  
+              ) : symbol === "EUROs" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={seurologo}
+                  alt="EUROs logo"
+                />  
+              ) : symbol === "WBTC" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={wbtclogo}
+                  alt="wbtc logo"
+                />
+              ) : symbol === "LINK" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={linklogo}
+                  alt="link logo"
+                />
+              ) : symbol === "ARB" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={arblogo}
+                  alt="arb logo"
+                />
+              ) : symbol === "PAXG" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={paxglogo}
+                  alt="paxg logo"
+                />
+              ) : (
+                <Box sx={{height: "2rem", width: "2rem"}}>
+                </Box>
+              )}
+            </Box>
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+            }}>
+              <Typography variant="body2" sx={{marginLeft: "8px"}}>
+                {symbol || ''}
+              </Typography>
+            </Box>
+          </Box>
         );
       },
     },
