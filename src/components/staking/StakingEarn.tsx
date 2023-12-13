@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import { getNetwork } from "@wagmi/core";
 import { useContractRead, useAccount } from "wagmi";
 import axios from "axios";
+
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import {
   useLiquidationPoolAbiStore,
@@ -83,20 +85,49 @@ const StakingEarn = () => {
           justifyContent: "unset",
         }}
       >
-        <Typography
+        <Box
           sx={{
-            color: "#fff",
-            margin: "0",
-            marginBottom: "1rem",
-            fontSize: {
-              xs: "1.2rem",
-              md: "1.5rem"
-            }
+            display: "flex",
+            justifyContent: "space-between",
           }}
-          variant="h4"
         >
-          Asset Totals
-        </Typography>
+          <Typography
+            sx={{
+              color: "#fff",
+              margin: "0",
+              marginBottom: "1rem",
+              fontSize: {
+                xs: "1.2rem",
+                md: "1.5rem"
+              }
+            }}
+            variant="h4"
+          >
+            Asset Totals
+          </Typography>
+          <Tooltip
+            arrow
+            placement="top"
+            enterTouchDelay={0}
+            leaveTouchDelay={5000}
+            title={
+              <span style={{
+                fontSize: "0.8rem",
+                lineHeight: "1.2rem"
+              }}>
+                This displays the total amounts of both your Staked Assets & Rewards over time.
+              </span>
+            }
+          >
+            <HelpOutlineIcon sx={{
+              opacity: "0.5",
+              "&:hover": {
+                opacity: "0.8",
+                transition: "0.5s",
+              },  
+            }}/>
+          </Tooltip>
+        </Box>
         <VolumeChart
           chartData={chartData || []}
         />
@@ -108,20 +139,53 @@ const StakingEarn = () => {
           width: {xs: "auto"},
         }}
       >
-        <Typography
+        <Box
           sx={{
-            color: "#fff",
-            margin: "1rem 0",
-            marginTop: "0",
-            fontSize: {
-              xs: "1.2rem",
-              md: "1.5rem"
-            }
+            display: "flex",
+            justifyContent: "space-between",
           }}
-          variant="h4"
         >
-          Staked Assets
-        </Typography>
+          <Typography
+            sx={{
+              color: "#fff",
+              margin: "0",
+              marginBottom: "1rem",
+              fontSize: {
+                xs: "1.2rem",
+                md: "1.5rem"
+              }
+            }}
+            variant="h4"
+          >
+            Staked Assets
+          </Typography>
+          <Tooltip
+            arrow
+            placement="top"
+            enterTouchDelay={0}
+            leaveTouchDelay={5000}
+            title={
+              <span style={{
+                fontSize: "0.8rem",
+                lineHeight: "1.2rem"
+              }}>
+                Staked TST represents your share of the pool. The larger it is, the more fees you will collect.
+                <span style={{display: "block", marginBottom:"0.5rem"}}/>
+                Staked EUROs will be spent to buy liquidated assets at up to a 10% discount.
+                <span style={{display: "block", marginBottom:"0.5rem"}}/>
+                Your staked TST determines the max amount of EUROs you will spend (e.g 300 TST = 300 EUROs), so you should always try to have more TST than EUROs.
+              </span>
+            }
+          >
+            <HelpOutlineIcon sx={{
+              opacity: "0.5",
+              "&:hover": {
+                opacity: "0.8",
+                transition: "0.5s",
+              },  
+            }}/>
+          </Tooltip>
+        </Box>
         <StakingStakedAssets
           positions={positions || {}}
           stakingPositionsData={[] || []}
@@ -133,20 +197,49 @@ const StakingEarn = () => {
           width: {xs: "auto"},
         }}
       >
-        <Typography
+        <Box
           sx={{
-            color: "#fff",
-            margin: "1rem 0",
-            marginTop: "0",
-            fontSize: {
-              xs: "1.2rem",
-              md: "1.5rem"
-            }
+            display: "flex",
+            justifyContent: "space-between",
           }}
-          variant="h4"
         >
-          Liquidated Assets Purchased
-        </Typography>
+          <Typography
+            sx={{
+              color: "#fff",
+              margin: "0",
+              marginBottom: "1rem",
+              fontSize: {
+                xs: "1.2rem",
+                md: "1.5rem"
+              }
+            }}
+            variant="h4"
+          >
+            Liquidated Assets Purchased
+          </Typography>
+          <Tooltip
+            arrow
+            placement="top"
+            enterTouchDelay={0}
+            leaveTouchDelay={5000}
+            title={
+              <span style={{
+                fontSize: "0.8rem",
+                lineHeight: "1.2rem"
+              }}>
+                These assets are earned through staking a mixture of TST and EUROs.
+              </span>
+            }
+          >
+            <HelpOutlineIcon sx={{
+              opacity: "0.5",
+              "&:hover": {
+                opacity: "0.8",
+                transition: "0.5s",
+              },  
+            }}/>
+          </Tooltip>
+        </Box>
         <StakingLiquidations
           rewards={rewards || []}
         />
@@ -159,20 +252,51 @@ const StakingEarn = () => {
           justifyContent: "unset",
         }}
       >
-        <Typography
+        <Box
           sx={{
-            color: "#fff",
-            margin: "0",
-            marginBottom: "1rem",
-            fontSize: {
-              xs: "1.2rem",
-              md: "1.5rem"
-            }
+            display: "flex",
+            justifyContent: "space-between",
           }}
-          variant="h4"
         >
-          Total Value Stacked (USD)
-        </Typography>
+          <Typography
+            sx={{
+              color: "#fff",
+              margin: "0",
+              marginBottom: "1rem",
+              fontSize: {
+                xs: "1.2rem",
+                md: "1.5rem"
+              }
+            }}
+            variant="h4"
+          >
+            Total Value Stacked (USD)
+          </Typography>
+          <Tooltip
+            arrow
+            placement="top"
+            enterTouchDelay={0}
+            leaveTouchDelay={5000}
+            title={
+              <span style={{
+                fontSize: "0.8rem",
+                lineHeight: "1.2rem"
+              }}>
+                This shows the USD value of both your Staked Assets & Rewards over time.
+                <span style={{display: "block", marginBottom:"0.5rem"}}/>
+                The chart data is stacked on top of eachother, giving you a better idea of your total staked portfolio value. 
+              </span>
+            }
+          >
+            <HelpOutlineIcon sx={{
+              opacity: "0.5",
+              "&:hover": {
+                opacity: "0.8",
+                transition: "0.5s",
+              },  
+            }}/>
+          </Tooltip>
+        </Box>
         <ValueChart
           chartData={chartData || []}
         />
