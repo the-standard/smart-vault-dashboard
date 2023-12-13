@@ -204,7 +204,7 @@ const EurosCompare = () => {
             }}
             variant="h6"
           >
-            Act Now: Save XX% on Repayment
+            Act Now: Save {showDiscount.toFixed(2)}% on Repayment
           </Typography>
           <Typography
             variant="body1"
