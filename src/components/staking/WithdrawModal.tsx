@@ -424,12 +424,23 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                   <Button
                     sx={{
                       padding: "5px",
-                      height: "1.5rem",
+                      height: "2rem",
                     }}
                     clickFunction={handleApproveWithdraw}
                     isDisabled={!(tstWithdrawAmount > 0)}
+                    lighter
                   >
                     Withdraw
+                  </Button>
+                  <Button
+                    sx={{
+                      padding: "5px",
+                      // height: "1rem",
+                      marginTop: "1rem",
+                    }}
+                    clickFunction={handleCloseModal}
+                  >
+                    Cancel
                   </Button>
                 </>
               )}
