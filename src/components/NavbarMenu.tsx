@@ -47,7 +47,7 @@ const menuItems = [
     icon: historylogo,
     icon2: historylogo2,
     isWorking: true,
-    route: "staking?view=ABOUT",
+    route: "staking",
   }
 ];
 
