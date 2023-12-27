@@ -56,7 +56,7 @@ jobs:
     # 
     - name: Build
       run: |-
-        docker build --build-arg opensea_key=${{ vars.VITE_OPENSEA_API_KEY }} --build-arg alchemy_key=${{ vars.VITE_ALCHEMY_API_KEY }} -t "gcr.io/$PROJECT_NAME/$DEPLOYMENT:${GITHUB_REF##*/}.$GITHUB_SHA" .
+        docker build --build-arg opensea_key=${{ vars.VITE_OPENSEA_API_KEY }} --build-arg alchemy_key=${{ vars.VITE_ALCHEMY_API_KEY }} --build-arg alchemy_sepolia_key=${{ vars.VITE_ALCHEMY_SEPOLIA_API_KEY }} -t "gcr.io/$PROJECT_NAME/$DEPLOYMENT:${GITHUB_REF##*/}.$GITHUB_SHA" .
 
     # Push the Docker image to Google Container Registry
     - name: Publish

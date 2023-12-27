@@ -18,8 +18,8 @@ export const arbitrumSepolia = {
     symbol: 'ETH',
   },
   rpcUrls: {
-    public: { http: ['https://sepolia-rollup.arbitrum.io/rpc'] },
-    default: { http: ['https://sepolia-rollup.arbitrum.io/rpc'] },
+    public: { http: [`https://arb-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_SEPOLIA_API_KEY}`] },
+    default: { http: [`https://arb-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_SEPOLIA_API_KEY}`] },
   },
   blockExplorers: {
     etherscan: { name: 'Arbiscan', url: 'https://sepolia.arbiscan.io/' },
