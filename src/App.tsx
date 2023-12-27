@@ -8,6 +8,7 @@ import {
   arbitrum
 } from "wagmi/chains";
 
+console.log(import.meta.env.VITE_ALCHEMY_SEPOLIA_API_KEY)
 export const arbitrumSepolia = {
   id: 421614,
   name: 'Arbitrum Sepolia',

@@ -12,7 +12,6 @@ env:
   CLOUDSDK_COMPUTE_ZONE: europe-west2-c
   DEPLOYMENT: smart-vault
   NAMESPACE: default
-
 jobs:
 
   build:
