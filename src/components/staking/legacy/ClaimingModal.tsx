@@ -364,11 +364,20 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
                       <Button
                         sx={{
                           padding: "5px",
-                          height: "1.5rem",
+                          height: "2rem",
                         }}
                         clickFunction={handleApproveClaim}
                       >
                         Claim
+                      </Button>
+                      <Button
+                        sx={{
+                          padding: "5px",
+                          marginTop: "1rem",
+                        }}
+                        clickFunction={handleCloseModal}
+                      >
+                        Cancel
                       </Button>
                     </>
                   )}

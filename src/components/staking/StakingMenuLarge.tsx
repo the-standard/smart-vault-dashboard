@@ -26,13 +26,7 @@ export function StakingMenuLarge(props: any) {
         }}
       >
         <Button
-          isActive={activeView === 'ABOUT' || !activeView}
-          clickFunction={() => navigate(`../Staking?view=ABOUT`)}
-        >
-          About
-        </Button>
-        <Button
-          isActive={activeView === 'STAKE'}
+          isActive={activeView === 'STAKE' || !activeView}
           clickFunction={() => navigate(`../Staking?view=STAKE`)}
         >
           Staking
@@ -41,13 +35,13 @@ export function StakingMenuLarge(props: any) {
           isActive={activeView === 'EARN'}
           clickFunction={() => navigate(`../Staking?view=EARN`)}
         >
-          Earning
+          Dashboard
         </Button>
         <Button
           isActive={activeView === 'TST'}
           clickFunction={() => navigate(`../Staking?view=TST`)}
         >
-          TST Staking
+          TST Staking (Legacy)
         </Button>
       </Box>
       <Box

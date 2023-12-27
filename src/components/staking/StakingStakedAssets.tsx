@@ -1,12 +1,20 @@
 import { useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { formatEther } from "viem";
 
 import Button from "../Button";
 import WithdrawModal from "./WithdrawModal";
+import ethereumlogo from "../../assets/ethereumlogo.svg";
+import wbtclogo from "../../assets/wbtclogo.svg";
+import linklogo from "../../assets/linklogo.svg";
+import paxglogo from "../../assets/paxglogo.svg";
+import arblogo from "../../assets/arblogo.svg";
+import seurologo from "../../assets/EUROs.svg";
+import tstlogo from "../../assets/standardiologoicon.svg";
+
 
 interface StakingStakedAssetsProps {
   stakingPositionsData: Array<any>;
@@ -32,8 +40,6 @@ function NoDataOverlay() {
 const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
   positions,
 }) => {
-
-  const [selectedPosition, setSelectedPosition] = useState<any>(undefined);
   const [open, setOpen] = useState(false);
 
   const tstAmount = positions['TST'] || 0;
@@ -50,14 +56,8 @@ const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
     },
   ]
 
-  const handleOpenModal = (position: any) => {
-    setSelectedPosition(position);
-    setOpen(true)
-  };
-
   const handleCloseModal = () => {
     setOpen(false)
-    setSelectedPosition(undefined);
   };
 
   const [paginationModel, setPaginationModel] = useState({
@@ -74,10 +74,78 @@ const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params: any) => {
+        const symbol = params?.row?.asset || '';
         return (
-          <span style={{textTransform: 'capitalize'}}>
-            {params.row.asset || ''}
-          </span>
+          <Box
+            sx={{
+              textTransform: "capitalize",
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              height: "100%",
+            }}
+          >
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+            }}>
+              {symbol === "ETH" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={ethereumlogo}
+                  alt="ethereum logo"
+                />
+              ) : symbol === "TST" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={tstlogo}
+                  alt="TST logo"
+                />  
+              ) : symbol === "EUROs" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={seurologo}
+                  alt="EUROs logo"
+                />  
+              ) : symbol === "WBTC" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={wbtclogo}
+                  alt="wbtc logo"
+                />
+              ) : symbol === "LINK" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={linklogo}
+                  alt="link logo"
+                />
+              ) : symbol === "ARB" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={arblogo}
+                  alt="arb logo"
+                />
+              ) : symbol === "PAXG" ? (
+                <img
+                  style={{ height: "2rem", width: "2rem" }}
+                  src={paxglogo}
+                  alt="paxg logo"
+                />
+              ) : (
+                <Box sx={{height: "2rem", width: "2rem"}}>
+                </Box>
+              )}
+            </Box>
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+            }}>
+              <Typography variant="body2" sx={{marginLeft: "8px"}}>
+                {symbol || ''}
+              </Typography>
+            </Box>
+          </Box>
         );
       },
     },
@@ -100,34 +168,39 @@ const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
         );
       },
     },
-    {
-      minWidth: 90,
-      flex: 1,
-      field: 'action',
-      headerName: '',
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const useAmount = Number(params.row.amount);
-        return (
-          <Button
-            sx={{
-              padding: "5px 10px",
-              fontSize: "0.8rem",
-            }}
-            lighter
-            clickFunction={() => handleOpenModal(params.row)}
-            isDisabled={!(useAmount > 0)}
-          >
-            Withdraw
-          </Button>
-        )
-      },
-    },
+    // {
+    //   minWidth: 90,
+    //   flex: 1,
+    //   field: 'action',
+    //   headerName: '',
+    //   sortable: false,
+    //   disableColumnMenu: true,
+    //   renderCell: (params: any) => {
+    //     const useAmount = Number(params.row.amount);
+    //     return (
+    //       <Button
+    //         sx={{
+    //           padding: "5px 10px",
+    //           fontSize: "0.8rem",
+    //         }}
+    //         lighter
+    //         clickFunction={() => handleOpenModal(params.row)}
+    //         isDisabled={!(useAmount > 0)}
+    //       >
+    //         Withdraw
+    //       </Button>
+    //     )
+    //   },
+    // },
   ];
 
   const columns: GridColDef[] = colData;
   const rows = useRows || [];
+
+  let noRewards = true;
+  if (rows.some(e => e.amount > 0)) {
+    noRewards = false;
+  }
 
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
@@ -208,8 +281,29 @@ const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
         onPaginationModelChange={setPaginationModel}
         hideFooter={true}
       />
+      <Box sx={{
+        display: "flex",
+        justifyContent: {
+          xs: "normal",
+          sm: "end",
+        }
+      }}>
+        <Button
+          lighter
+          sx={{
+            width: {
+              xs: "100%",
+              sm: "unset"
+            }
+          }}
+          clickFunction={() => setOpen(true)}
+          isDisabled={noRewards}
+        >
+          Withdraw
+        </Button>
+      </Box>
       <WithdrawModal
-        stakingPosition={selectedPosition}
+        stakedPositions={rows}
         handleCloseModal={handleCloseModal}
         isOpen={open}
       />
