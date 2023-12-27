@@ -3,6 +3,7 @@ WORKDIR /app
 COPY . /app
 ARG opensea_key
 ARG alchemy_key
+ARG alchemy_sepolia_key
 ENV VITE_OPENSEA_API_KEY $opensea_key
 ENV VITE_ALCHEMY_API_KEY $alchemy_key
 ENV VITE_ALCHEMY_SEPOLIA_API_KEY $alchemy_sepolia_key
