@@ -38,19 +38,20 @@ const Staking = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
-  const query = useQuery();
-  const queryView = query.get("view") || '';
+  // const query = useQuery();
+  // const queryView = query.get("view") || '';
+
+  // const [activeView, setActiveView] = useState('STAKE');
+
+  // const handleActive = (element: any) => {
+  //   setActiveView(element);
+  // };
+  // 
+  // useEffect(() => {
+  //   handleActive(queryView)
+  // }, [queryView]);
+
   const { address: accountAddress } = useAccount();
-
-  const [activeView, setActiveView] = useState('STAKE');
-
-  const handleActive = (element: any) => {
-    setActiveView(element);
-  };
-
-  useEffect(() => {
-    handleActive(queryView)
-  }, [queryView]);
 
   if (accountAddress) {
     return (
