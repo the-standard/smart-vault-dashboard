@@ -3,10 +3,10 @@ import { useLocation } from "react-router-dom";
 import { Box, Grid, Typography } from "@mui/material";
 import { useAccount } from "wagmi";
 import { Web3Button } from "@web3modal/react";
-import StakingMenuSmall from "../components/staking/StakingMenuSmall";
-import StakingMenuLarge from "../components/staking/StakingMenuLarge";
-import StakingStake from "../components/staking/StakingStake";
-import StakingEarn from "../components/staking/StakingEarn";
+// import StakingMenuSmall from "../components/staking/StakingMenuSmall";
+// import StakingMenuLarge from "../components/staking/StakingMenuLarge";
+// import StakingStake from "../components/staking/StakingStake";
+// import StakingEarn from "../components/staking/StakingEarn";
 import StakingTST from "../components/staking/legacy/StakingTST";
 
 import {
@@ -63,13 +63,13 @@ const Staking = () => {
           },
         }}
       >
-        <StakingMenuLarge activeView={activeView} />
-        <StakingMenuSmall activeView={activeView} />
+        {/* <StakingMenuLarge activeView={activeView} />
+        <StakingMenuSmall activeView={activeView} /> */}
   
         <Box
           ref={rectangleRef}
         >    
-          {activeView === 'STAKE' || !activeView ? (
+          {/* {activeView === 'STAKE' || !activeView ? (
             <StakingStake />
           ) : null}
     
@@ -79,8 +79,8 @@ const Staking = () => {
     
           {activeView === 'TST' ? (
             <StakingTST />
-          ) : null}
-
+          ) : null} */}
+          <StakingTST />
         </Box>
   
       </Box>
