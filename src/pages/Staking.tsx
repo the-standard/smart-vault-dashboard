@@ -38,18 +38,18 @@ const Staking = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
-  // const query = useQuery();
-  // const queryView = query.get("view") || '';
+  const query = useQuery();
+  const queryView = query.get("view") || '';
 
-  // const [activeView, setActiveView] = useState('STAKE');
+  const [activeView, setActiveView] = useState('STAKE');
 
-  // const handleActive = (element: any) => {
-  //   setActiveView(element);
-  // };
+  const handleActive = (element: any) => {
+    setActiveView(element);
+  };
   // 
-  // useEffect(() => {
-  //   handleActive(queryView)
-  // }, [queryView]);
+  useEffect(() => {
+    handleActive(queryView)
+  }, [queryView]);
 
   const { address: accountAddress } = useAccount();
 
@@ -81,7 +81,11 @@ const Staking = () => {
           {activeView === 'TST' ? (
             <StakingTST />
           ) : null} */}
-          <StakingTST />
+
+          {activeView ? (
+            <StakingTST />
+          ) : <StakingTST />}
+
         </Box>
   
       </Box>
