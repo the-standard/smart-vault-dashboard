@@ -81,7 +81,7 @@ const HomePriv = () => {
     watch: true,
   });
 
-  console.log(123123, debug)
+  console.log(123123, {debug}, {vaultManagerAddress}, {vaultManagerAbi}, {address})
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
