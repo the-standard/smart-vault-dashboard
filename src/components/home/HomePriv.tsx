@@ -73,6 +73,16 @@ const HomePriv = () => {
     watch: true,
   });
 
+  const debug = useContractRead({
+    address: vaultManagerAddress,
+    abi: vaultManagerAbi,
+    functionName: "vaults",
+    account: address,
+    watch: true,
+  });
+
+  console.log(123123, debug)
+
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
 
