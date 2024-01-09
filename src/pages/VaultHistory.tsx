@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getNetwork } from "@wagmi/core";
-import { useAccount, useContractRead } from "wagmi";
+import { useContractRead } from "wagmi";
 import { formatUnits, formatEther } from "viem";
 import moment from 'moment';
 import axios from "axios";
@@ -44,7 +44,6 @@ function NoDataOverlay() {
 
 const VaultHistory = () => {
   const { chain } = getNetwork();
-  const { address } = useAccount();
   const { arbitrumSepoliaContractAddress, arbitrumContractAddress } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { vaultId } = useParams<RouteParams>();
