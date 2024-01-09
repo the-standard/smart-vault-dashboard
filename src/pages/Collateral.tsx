@@ -120,13 +120,15 @@ const Collateral = () => {
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: currentVault } = useContractRead({
+  const { data: vaultData } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultData",
     args: [vaultId],
     watch: true
   });
+
+  const currentVault: any = vaultData;
 
   if (vaultsLoading) {
     return (
