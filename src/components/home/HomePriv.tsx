@@ -7,7 +7,7 @@ import seurologo from "../../assets/EUROs.svg";
 import swonlogo from "../../assets/KRWs.svg";
 import sgbplogo from "../../assets/GBPs.svg";
 import susdlogo from "../../assets/USDs.svg";
-import { useAccount, useContractRead, useNetwork } from "wagmi";
+import { useAccount, useContractRead, useContractReads, useNetwork } from "wagmi";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
@@ -65,23 +65,39 @@ const HomePriv = () => {
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: myVaults } = useContractRead({
+  const { data: vaultIDs } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
-    functionName: "vaults",
-    account: address,
+    functionName: "vaultIDs",
+    args: [address],
     watch: true,
   });
 
-  const debug = useContractRead({
+  const vaultDataContract = {
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
-    functionName: "vaults",
-    account: address,
-    watch: true,
+    functionName: "vaultData",
+  };
+
+  const contracts = vaultIDs?.map((id:any) => {
+    return ({
+      ...vaultDataContract,
+      args: [id],
+    })
   });
 
-  console.log(123123, {debug}, {vaultManagerAddress}, {vaultManagerAbi}, {address})
+  const { data: vaultData } = useContractReads({
+    contracts,
+    watch: true
+  });
+
+  const myVaults = vaultData?.map((item) => {
+    if (item && item.result) {
+      return (
+        item.result
+      )    
+    }
+  });
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);

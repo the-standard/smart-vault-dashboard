@@ -15,7 +15,7 @@ import { ethers } from "ethers";
 import { useParams, useLocation } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
-import { useAccount, useBlockNumber, useContractRead } from "wagmi";
+import { useBlockNumber, useContractRead } from "wagmi";
 import { useNavigate } from "react-router-dom";
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
@@ -66,7 +66,6 @@ const Collateral = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
 
-  const { address } = useAccount();
   const { chain } = getNetwork();
   const query = useQuery();
   const vaultView = query.get("view");
@@ -120,18 +119,16 @@ const Collateral = () => {
     chain?.id === 421614
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
-  const vaults = useContractRead({
+
+  const { data: vaultData } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
-    functionName: "vaults",
-    account: address,
+    functionName: "vaultData",
+    args: [vaultId],
     watch: true
   });
 
-  //this log is just for build command
-  const currentVault: any = vaults?.data?.filter(
-    (vault: any) => vault.tokenId.toString() === vaultId
-  )[0];
+  const currentVault: any = vaultData;
 
   if (vaultsLoading) {
     return (

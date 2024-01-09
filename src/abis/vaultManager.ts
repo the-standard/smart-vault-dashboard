@@ -836,5 +836,156 @@ export const abi = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_holder",
+        "type": "address"
+      }
+    ],
+    "name": "vaultIDs",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_tokenID",
+        "type": "uint256"
+      }
+    ],
+    "name": "vaultData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateralRate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mintFeeRate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "burnFeeRate",
+            "type": "uint256"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "vaultAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "minted",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "maxMintable",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalCollateralValue",
+                "type": "uint256"
+              },
+              {
+                "components": [
+                  {
+                    "components": [
+                      {
+                        "internalType": "bytes32",
+                        "name": "symbol",
+                        "type": "bytes32"
+                      },
+                      {
+                        "internalType": "address",
+                        "name": "addr",
+                        "type": "address"
+                      },
+                      {
+                        "internalType": "uint8",
+                        "name": "dec",
+                        "type": "uint8"
+                      },
+                      {
+                        "internalType": "address",
+                        "name": "clAddr",
+                        "type": "address"
+                      },
+                      {
+                        "internalType": "uint8",
+                        "name": "clDec",
+                        "type": "uint8"
+                      }
+                    ],
+                    "internalType": "struct ITokenManager.Token",
+                    "name": "token",
+                    "type": "tuple"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "collateralValue",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct ISmartVault.Asset[]",
+                "name": "collateral",
+                "type": "tuple[]"
+              },
+              {
+                "internalType": "bool",
+                "name": "liquidated",
+                "type": "bool"
+              },
+              {
+                "internalType": "uint8",
+                "name": "version",
+                "type": "uint8"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "vaultType",
+                "type": "bytes32"
+              }
+            ],
+            "internalType": "struct ISmartVault.Status",
+            "name": "status",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct SmartVaultManagerV5.SmartVaultData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
 ];
 export default abi;
