@@ -76,16 +76,16 @@ const VaultHistory = () => {
     chain?.id === 421614
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
-  const { data: vaults } = useContractRead({
+
+  const { data: vaultData } = useContractRead({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
-    functionName: "vaults",
-    account: address,
-    watch: false
+    functionName: "vaultData",
+    args: [vaultId],
+    watch: true
   });
-  const currentVault: any = vaults?.filter(
-    (vault: any) => vault.tokenId.toString() === vaultId
-  )[0];
+
+  const currentVault: any = vaultData;
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
