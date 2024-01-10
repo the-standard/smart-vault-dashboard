@@ -46,7 +46,7 @@ const Staking = () => {
   const handleActive = (element: any) => {
     setActiveView(element);
   };
-  // 
+
   useEffect(() => {
     handleActive(queryView)
   }, [queryView]);
@@ -64,12 +64,14 @@ const Staking = () => {
           },
         }}
       >
+        {/* TEMP */}
         {/* <StakingMenuLarge activeView={activeView} />
         <StakingMenuSmall activeView={activeView} /> */}
   
         <Box
           ref={rectangleRef}
-        >    
+        >
+          {/* TEMP */}
           {/* {activeView === 'STAKE' || !activeView ? (
             <StakingStake />
           ) : null}
@@ -84,7 +86,9 @@ const Staking = () => {
 
           {activeView ? (
             <StakingTST />
-          ) : <StakingTST />}
+          ) : 
+            <StakingTST />
+          }
 
         </Box>
   
