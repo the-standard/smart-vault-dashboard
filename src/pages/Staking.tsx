@@ -64,13 +64,15 @@ const Staking = () => {
           },
         }}
       >
-        <StakingMenuLarge activeView={activeView} />
-        <StakingMenuSmall activeView={activeView} />
+        {/* TEMP */}
+        {/* <StakingMenuLarge activeView={activeView} />
+        <StakingMenuSmall activeView={activeView} /> */}
   
         <Box
           ref={rectangleRef}
-        >    
-          {activeView === 'STAKE' || !activeView ? (
+        >
+          {/* TEMP */}
+          {/* {activeView === 'STAKE' || !activeView ? (
             <StakingStake />
           ) : null}
     
@@ -80,7 +82,13 @@ const Staking = () => {
     
           {activeView === 'TST' ? (
             <StakingTST />
-          ) : null}
+          ) : null} */}
+
+          {activeView ? (
+            <StakingTST />
+          ) : 
+            <StakingTST />
+          }
 
         </Box>
   
