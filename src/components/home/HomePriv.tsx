@@ -4,8 +4,8 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
 
 import seurologo from "../../assets/EUROs.svg";
-import swonlogo from "../../assets/KRWs.svg";
-import sgbplogo from "../../assets/GBPs.svg";
+// import swonlogo from "../../assets/KRWs.svg";
+// import sgbplogo from "../../assets/GBPs.svg";
 import susdlogo from "../../assets/USDs.svg";
 import { useAccount, useContractRead, useContractReads, useNetwork } from "wagmi";
 import {
@@ -22,33 +22,33 @@ import Button from "../Button";
 
 const items = [
   {
-    title: "EUROs",
-    para: "Euro pegged",
+    title: "EUROs (Standard Euro)",
+    para: "Euro pegged stablecoin",
     borrowRate: "Borrow up to 90.91%",
     image: seurologo,
     isActive: true,
   },
   {
-    title: "USDs",
-    para: "USD pegged",
+    title: "USDs (Standard Dollar)",
+    para: "US Dollar pegged stablecoin",
     borrowRate: "Borrow up to 90.91%",
     image: susdlogo,
     isActive: false,
   },
-  {
-    title: "GBPs",
-    para: "Great Britain Pound pegged",
-    borrowRate: "Borrow up to 90.91%",
-    image: sgbplogo,
-    isActive: false,
-  },
-  {
-    title: "KRWs",
-    para: "South Korean Won pegged",
-    borrowRate: "Borrow up to 90.91%",
-    image: swonlogo,
-    isActive: false,
-  },
+  // {
+  //   title: "GBPs",
+  //   para: "Great Britain Pound pegged",
+  //   borrowRate: "Borrow up to 90.91%",
+  //   image: sgbplogo,
+  //   isActive: false,
+  // },
+  // {
+  //   title: "KRWs",
+  //   para: "South Korean Won pegged",
+  //   borrowRate: "Borrow up to 90.91%",
+  //   image: swonlogo,
+  //   isActive: false,
+  // },
 ];
 
 const HomePriv = () => {
@@ -173,7 +173,7 @@ const HomePriv = () => {
                 key={item.title}
                 title={item.title}
                 para={item.para}
-                borrowRate={item.borrowRate}
+                // borrowRate={item.borrowRate}
                 image={item.image}
                 isActive={item.isActive}
               />
@@ -192,10 +192,11 @@ const HomePriv = () => {
                     sm: "3% 6%",
                     md: "3% 12%",
                   },
-                  padding: {
-                    xs: "5px",
-                    sm: "1.5rem",
-                  },
+                  padding: "1.5rem",
+                  // padding: {
+                  //   xs: "5px",
+                  //   sm: "1.5rem",
+                  // },
                   overflow: "scroll",
                 }}
               >
@@ -231,6 +232,10 @@ const HomePriv = () => {
                           md: "3% 12%",
                         },
                         padding: "1.5rem",
+                        // padding: {
+                        //   xs: "5px",
+                        //   sm: "1.5rem",
+                        // },
                         overflow: "scroll",
                       }}
                     >

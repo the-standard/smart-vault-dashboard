@@ -28,7 +28,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 interface VaultCardProps {
   title: string;
   para: string;
-  borrowRate: string;
+  // borrowRate: string;
   image: string;
   isActive: boolean;
 }
@@ -36,7 +36,7 @@ interface VaultCardProps {
 const VaultCard: React.FC<VaultCardProps> = ({
   title,
   para,
-  borrowRate,
+  // borrowRate,
   image,
   isActive,
 }) => {
@@ -143,8 +143,14 @@ const VaultCard: React.FC<VaultCardProps> = ({
   return (
     <Card
       sx={{
-        padding: "0",
-      }}
+        padding: "1.5rem",
+        display: "flex",
+        flexDirection: {
+          xs: "column",
+          xl: "row",
+        },
+        justifyContent: "space-between",
+    }}
     >
       <Box
         sx={{
@@ -152,8 +158,6 @@ const VaultCard: React.FC<VaultCardProps> = ({
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "1rem",
-          paddingLeft: "2rem",
         }}
       >
         <Box
@@ -191,34 +195,38 @@ const VaultCard: React.FC<VaultCardProps> = ({
               sx={{
                 width: "auto",
                 height: "15px",
-                marginBottom: {
-                  xs: "2rem",
-                  lg: "0.5rem",
-                },
+                marginBottom: "0.5rem",
               }}
               variant="body1"
             >
               {para}
             </Typography>
-            <Typography
+            {/* <Typography
               sx={{
                 fontWeight: "300",
               }}
               variant="body1"
             >
               {borrowRate}
-            </Typography>
+            </Typography> */}
           </Box>
         </Box>
       </Box>
       <Box
         sx={{
-          padding: "1.5rem 1rem",
-          margin: "1rem 0 0 0",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
+          width: "100%",
+          maxWidth: {
+            xs: "none",
+            xl: "200px",
+          },
+          padding: {
+            xs: "1rem 0px 0px 0px",
+            xl: "0px 0px 0px 1rem",
+          }
         }}
       >
         <Button

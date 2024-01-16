@@ -215,6 +215,7 @@ const Collateral = () => {
         <Box
           sx={{
             display: { xs: "flex", lg: "grid" },
+            flexDirection: "column",
             width: "100%",
           }}
         >
@@ -327,6 +328,7 @@ const Collateral = () => {
         <Box
           sx={{
             display: { xs: "flex", lg: "grid" },
+            flexDirection: "column",
             width: "100%",
           }}
         >
@@ -489,12 +491,12 @@ const Collateral = () => {
           height: "100%",
           width: "100%",
           display: { xs: "flex", lg: "grid" },
+          flexDirection: "column",
           gridTemplateColumns:
             " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
           gap: "20px" /* Gap between the columns */,
           gridAutoColumns: "1fr" /* Equal width for child components */,
           // now flexbox
-          flexDirection: "column",
         }}
       >
         {/* left side of the container */}

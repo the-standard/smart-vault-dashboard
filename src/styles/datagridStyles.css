@@ -54,7 +54,7 @@ tr:not(:last-child) th {
 th,
 td {
   padding: 10px;
-  text-align: center;
+  text-align: start;
   padding-top: 0px; /* Adjust this value as needed */
 }
 
