@@ -82,7 +82,14 @@ export function useBackgroundImage() {
 
     const styleElement = document.createElement("style");
     styleElement.innerHTML = `
-    html {
+    html:before {
+      content: "";
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      left: 0px;
+      bottom: 0px;
+      opacity: 0.3;
       background-image: url(${bgImage});
       background-repeat: no-repeat;
       background-size: cover;
