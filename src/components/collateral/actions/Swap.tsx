@@ -14,6 +14,7 @@ import { useContractWrite } from "wagmi";
 import Select from "../../../components/Select";
 import Button from "../../../components/Button";
 import axios from "axios";
+// import { min } from "moment";
 
 interface SwapProps {
   symbol: string;
@@ -35,6 +36,7 @@ const Swap: React.FC<SwapProps> = ({
   const [swapLoading, setSwapLoading] = useState<any>(false);
   const [swapAssets, setSwapAssets] = useState<any>();
   const [amount, setAmount] = useState<any>(0);
+  const [minReturn, setMinReturn] = useState<any>(0);
   const [receiveAmount, setReceiveAmount] = useState<any>(0);
   const [receiveAsset, setReceiveAsset] = useState<any>('');
   const [receiveDecimals, setReceiveDecimals] = useState<any>();
@@ -56,6 +58,10 @@ const Swap: React.FC<SwapProps> = ({
 
   const handleAmount = (e: any) => {
     setAmount(Number(e.target.value));
+  };
+
+  const handleMinReturn = (e: any) => {
+    setMinReturn(Number(e.target.value));
   };
 
   const getSwapConversion = async () => {
@@ -80,6 +86,10 @@ const Swap: React.FC<SwapProps> = ({
       getSwapConversion();
     }
   }, [amount, receiveAsset]);
+
+  useEffect(() => {
+    setMinReturn(Number(receiveAmount))
+  }, [receiveAmount])
 
   useEffect(() => {
     const useAssets: Array<any> = [];
@@ -110,6 +120,7 @@ const Swap: React.FC<SwapProps> = ({
       ethers.utils.formatBytes32String(symbol),
       ethers.utils.formatBytes32String(receiveAsset),
       parseUnits(amount.toString(), decimals),
+      parseUnits(minReturn.toString(), receiveDecimals),
     ],
     onError(error: any) {
       let errorMessage: any = '';
@@ -139,6 +150,7 @@ const Swap: React.FC<SwapProps> = ({
       setSwapLoading(false);
       inputRef.current.value = "";
       setAmount(0);
+      setMinReturn(0);
       setReceiveAmount(0);
       setReceiveAsset('');
     } else if (isError) {
@@ -146,6 +158,7 @@ const Swap: React.FC<SwapProps> = ({
       setSwapLoading(false);
       inputRef.current.value = "";
       setAmount(0);
+      setMinReturn(0);
       setReceiveAmount(0);
       setReceiveAsset('');
     }
@@ -276,8 +289,9 @@ const Swap: React.FC<SwapProps> = ({
             </Select>
           </Box>
           <Box
-            sx={!amount || !receiveAsset || !receiveAmount ? (
-              {
+            // sx={!amount || !receiveAsset || !receiveAmount ? (
+            sx={!amount || !receiveAsset ? (
+                {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "flex-start",
@@ -304,7 +318,7 @@ const Swap: React.FC<SwapProps> = ({
                 minWidth: "112px",
               }}
             >
-              Approx Return:
+              Min. Return:
             </Typography>
             <input
               style={{
@@ -325,12 +339,13 @@ const Swap: React.FC<SwapProps> = ({
               value={swapLoading ? (
                 ''
               ) : (
-                receiveAmount || ''
+                minReturn || ''
               )}
               ref={inputReceiveRef}
               type="number"
+              onChange={handleMinReturn}
               placeholder="Amount"
-              readOnly
+              // readOnly
             />
           </Box>
           {receiveAsset === 'PAXG' || symbol === 'PAXG' ? (
@@ -376,7 +391,7 @@ const Swap: React.FC<SwapProps> = ({
             }}
           >
             <Button
-              isDisabled={!amount || !receiveAsset || !(receiveAmount > 0) || swapLoading}
+              isDisabled={!amount || !receiveAsset || !(minReturn > 0) || swapLoading}
               sx={{
                 width: "100%"
               }}
