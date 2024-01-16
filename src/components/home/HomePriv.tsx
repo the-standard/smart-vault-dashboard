@@ -192,10 +192,11 @@ const HomePriv = () => {
                     sm: "3% 6%",
                     md: "3% 12%",
                   },
-                  padding: {
-                    xs: "5px",
-                    sm: "1.5rem",
-                  },
+                  padding: "1.5rem",
+                  // padding: {
+                  //   xs: "5px",
+                  //   sm: "1.5rem",
+                  // },
                   overflow: "scroll",
                 }}
               >
@@ -231,6 +232,10 @@ const HomePriv = () => {
                           md: "3% 12%",
                         },
                         padding: "1.5rem",
+                        // padding: {
+                        //   xs: "5px",
+                        //   sm: "1.5rem",
+                        // },
                         overflow: "scroll",
                       }}
                     >
