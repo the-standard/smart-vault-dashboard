@@ -21,10 +21,12 @@ import "../../styles/datagridStyles.css";
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther } from "viem";
 import { useContractReads, useNetwork } from "wagmi";
-import parse from "html-react-parser";
-import DOMPurify from "dompurify";
+// import parse from "html-react-parser";
+// import DOMPurify from "dompurify";
 
-import nftmask from "../../assets/nftmask.svg";
+// import nftmask from "../../assets/nftmask.svg";
+
+import seurologo from "../../assets/EUROs.svg";
 
 interface DataGridComponentProps {
   vaults: any[];
@@ -89,7 +91,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-              textAlign: "center",
+              // textAlign: "center",
             }}
           >
             {truncatedValue}
@@ -141,13 +143,13 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   });
 
   //the same function as below, but for NFT thumbnails
-  const handleNFTClick = (params: any) => {
-    setModalChildState(params.vaultID);
-    getVaultID(params.vaultID);
-    getVaultForListing(params.smartVault);
-    getVaultStore(params.smartVault);
-    getVaultAddress(params.smartVault.status.vaultAddress);
-  };
+  // const handleNFTClick = (params: any) => {
+  //   setModalChildState(params.vaultID);
+  //   getVaultID(params.vaultID);
+  //   getVaultForListing(params.smartVault);
+  //   getVaultStore(params.smartVault);
+  //   getVaultAddress(params.smartVault.status.vaultAddress);
+  // };
 
   const renderActions = (params: any) => {
     const handleManageClick = () => {
@@ -190,7 +192,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: "rgba(0, 0, 0, 0.2)",
-              marginLeft: "0.5rem",
+              // marginLeft: "0.5rem",
             }}
             className="myBtn"
           >
@@ -286,16 +288,16 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     return withTwoDecimals ? withTwoDecimals[0] : num;
   }
 
-  const sanitizedNFTs = sortedVaults.map((vault) => {
-    const nft = tokenToNFTMap.current.get(
-      ethers.BigNumber.from(vault.tokenId).toString()
-    );
-    const NFTPurified = DOMPurify.sanitize(nft);
-    return {
-      ...vault,
-      NFTPurified,
-    };
-  });
+  // const sanitizedNFTs = sortedVaults.map((vault) => {
+  //   const nft = tokenToNFTMap.current.get(
+  //     ethers.BigNumber.from(vault.tokenId).toString()
+  //   );
+  //   const NFTPurified = DOMPurify.sanitize(nft);
+  //   return {
+  //     ...vault,
+  //     NFTPurified,
+  //   };
+  // });
 
   return (
     <Box>
@@ -321,7 +323,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           >
             <thead>
               <tr>
-                <th>NFT</th>
+                <th>Type</th>
                 <th>Vault ID</th>
                 <th style={{ lineBreak: "anywhere" }}>
                   Collateral
@@ -340,7 +342,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               </tr>
             </thead>
 
-            <tbody>
+            {/* <tbody>
               {sanitizedNFTs
                 .slice(
                   (currentPage - 1) * itemsPerPage,
@@ -414,6 +416,83 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       )}
                     </td>{" "}
                     <td>
+                      {vault.status.liquidated ? (
+                        <Typography sx={{ color: "white" }}>
+                          Vault Liquidated
+                        </Typography>
+                      ) : (
+                        <ProgressBar
+                          progressValue={computeProgressBar(
+                            vault.status.minted,
+                            vault.status.totalCollateralValue
+                          )}
+                        />
+                      )}
+                    </td>
+                    <td
+                      style={{
+                        width: "50px",
+                        height: "auto",
+                      }}
+                    >
+                      {" "}
+                      {renderActions({
+                        vaultID: ethers.BigNumber.from(
+                          vault.tokenId
+                        ).toString(),
+                        smartVault: vault,
+                      })}
+                    </td>
+                  </tr>
+                ))}
+            </tbody> */}
+            <tbody>
+              {sortedVaults
+                .slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .sort((a, b) =>
+                  ethers.BigNumber.from(b.tokenId)
+                    .sub(ethers.BigNumber.from(a.tokenId))
+                    .toNumber()
+                )
+                .map((vault, index) => (
+                  <tr key={index}>
+                    <td>
+                      <img
+                        style={{
+                          display: "block",
+                          width: "42px",
+                          // margin: "auto",
+                        }}
+                        src={seurologo}
+                      />
+                    </td>
+                    <td>
+                      {vault.status.version ? (
+                        `V${vault.status.version}-`
+                      ) : ('')}
+                      {ethers.BigNumber.from(vault.tokenId).toString()}
+                    </td>{" "}
+                    <TruncatedTableCell
+                      value={truncateToTwoDecimals(
+                        ethers.utils.formatEther(
+                          ethers.BigNumber.from(
+                            vault.status.totalCollateralValue
+                          ).toString()
+                        )
+                      )}
+                      length={12}
+                    />{" "}
+                    <td>
+                      {truncateToTwoDecimals(
+                        formatEther(vault.status.minted.toString())
+                      )}
+                    </td>{" "}
+                    <td style={{
+                      minWidth: "80px"
+                    }}>
                       {vault.status.liquidated ? (
                         <Typography sx={{ color: "white" }}>
                           Vault Liquidated
