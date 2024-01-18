@@ -16,7 +16,6 @@ import { getNetwork } from "@wagmi/core";
 import { arbitrum } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
 import {
-  useVaultStore,
   usePositionStore,
   useTstAddressStore,
   useErc20AbiStore,
@@ -32,7 +31,6 @@ import Exchange from "../Exchange.tsx";
 
 const StakingStake = () => {
   const { chain } = getNetwork();
-  const { vaultStore }: any = useVaultStore();
   const {
     arbitrumTstAddress,
     arbitrumSepoliaTstAddress,
@@ -231,17 +229,10 @@ const StakingStake = () => {
   });
 
   const handleDepositTokens = async () => {
-    // V3 UPDATE
-    // if vault version exists and if >= 3 skip the approval step
-    if (vaultStore && vaultStore.status && vaultStore.status.version && vaultStore.status.version !== 1 && vaultStore.status.version !== 2) {
-      const { write } = depositToken;
-      write();
-    } else {
-      const { write } = existingTstAllowance < tstInWei ?
-      approveTst : existingEurosAllowance < eurosInWei ?
-      approveEuros : depositToken;
-      write();  
-    }
+    const { write } = existingTstAllowance < tstInWei ?
+    approveTst : existingEurosAllowance < eurosInWei ?
+    approveEuros : depositToken;
+    write();  
   };
 
   useEffect(() => {

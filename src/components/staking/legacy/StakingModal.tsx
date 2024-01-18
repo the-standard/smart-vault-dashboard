@@ -6,7 +6,6 @@ import { getNetwork } from "@wagmi/core";
 import { formatEther, parseEther } from "viem";
 import moment from 'moment';
 import {
-  useVaultStore,
   useTstAddressStore,
   useErc20AbiStore,
   useStakingAbiStore,
@@ -26,7 +25,6 @@ const StakingModal: React.FC<StakingModalProps> = ({
   handleCloseModal,
 }) => {
   const { chain } = getNetwork();
-  const { vaultStore }: any = useVaultStore();
   const [stakeAmount, setStakeAmount] = useState(0);
   const {
     arbitrumTstAddress,
@@ -196,15 +194,9 @@ const StakingModal: React.FC<StakingModalProps> = ({
   }
 
   const handleStaking = async () => {
-    // V3 UPDATE
-    // if vault version exists and if >= 3 skip the approval step
-    if (vaultStore && vaultStore.status && vaultStore.status.version && vaultStore.status.version !== 1 && vaultStore.status.version !== 2) {
-      handleMintPosition()
-    } else {
-      const { write } = existingAllowance >= amountInWei ?
-      mintPosition : approvePayment;
-      write();  
-    }
+    const { write } = existingAllowance >= amountInWei ?
+    mintPosition : approvePayment;
+    write();  
   };
 
   return (
