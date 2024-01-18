@@ -115,7 +115,7 @@ const Swap: React.FC<SwapProps> = ({
       ethers.utils.formatBytes32String(symbol),
       ethers.utils.formatBytes32String(receiveAsset),
       parseUnits(amount.toString(), decimals),
-      parseUnits(receiveAmountFormatted.toString(), decimals),
+      parseUnits(receiveAmountFormatted.toString(), receiveDecimals),
     ],
     onError(error: any) {
       let errorMessage: any = '';
