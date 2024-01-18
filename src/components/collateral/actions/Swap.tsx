@@ -14,7 +14,6 @@ import { useContractWrite } from "wagmi";
 import Select from "../../../components/Select";
 import Button from "../../../components/Button";
 import axios from "axios";
-// import { min } from "moment";
 
 interface SwapProps {
   symbol: string;
@@ -82,9 +81,6 @@ const Swap: React.FC<SwapProps> = ({
       );
       const data = response.data;
       handleReceive(data);
-      // setReceiveAmount(formatUnits(data.toString(), receiveDecimals));
-      // setReceiveAmount(formatUnits(data.toString(), receiveDecimals));
-      // console.log(234234, data)
       setSwapLoading(false);
     } catch (error) {
       console.log(error);
@@ -96,13 +92,6 @@ const Swap: React.FC<SwapProps> = ({
       getSwapConversion();
     }
   }, [amount, receiveAsset]);
-
-  // useEffect(() => {
-  //   setMinReturn(Number(receiveAmount))
-  //   // console.log(123123, receiveAmount)
-  // }, [receiveAmount])
-
-  console.log(123123, receiveAmount, receiveAmountFormatted)
 
   useEffect(() => {
     const useAssets: Array<any> = [];
