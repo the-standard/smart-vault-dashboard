@@ -227,11 +227,17 @@ const Debt = () => {
   ]);
 
   const handleApprovePayment = async () => {
-    if (allowance && allowance as any >= repayFee) {
+    // V3 UPDATE
+    // if vault version exists and if >= 3 skip the approval step
+    if (vaultStore && vaultStore.status && vaultStore.status.version && vaultStore.status.version !== 1 && vaultStore.status.version !== 2) {
       handleRepayMoney()
     } else {
-      const { write } = approvePayment;
-      write();
+      if (allowance && allowance as any >= repayFee) {
+        handleRepayMoney()
+      } else {
+        const { write } = approvePayment;
+        write();
+      }  
     }
   };
 
