@@ -118,13 +118,14 @@ const HomePriv = () => {
 
   const myInactiveVaults =
     myVaults?.filter((vault: any) =>
-      !vault.status.totalCollateralValue ||
+      !vault.status || !vault.status.totalCollateralValue ||
       Number(ethers.BigNumber.from(vault.status.totalCollateralValue)) <= 0
   ) || [];
 
   const myActiveVaults =
     myVaults?.filter((vault: any) =>
-        Number(ethers.BigNumber.from(vault.status.totalCollateralValue)) > 0
+      vault.status && vault.status.totalCollateralValue &&
+      Number(ethers.BigNumber.from(vault.status.totalCollateralValue)) > 0
     ) || [];
 
   const inactiveVaults = localStorage.getItem("inactiveVaults");
