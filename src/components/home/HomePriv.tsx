@@ -35,20 +35,6 @@ const items = [
     image: susdlogo,
     isActive: false,
   },
-  // {
-  //   title: "GBPs",
-  //   para: "Great Britain Pound pegged",
-  //   borrowRate: "Borrow up to 90.91%",
-  //   image: sgbplogo,
-  //   isActive: false,
-  // },
-  // {
-  //   title: "KRWs",
-  //   para: "South Korean Won pegged",
-  //   borrowRate: "Borrow up to 90.91%",
-  //   image: swonlogo,
-  //   isActive: false,
-  // },
 ];
 
 const HomePriv = () => {

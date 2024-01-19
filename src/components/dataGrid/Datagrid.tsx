@@ -142,15 +142,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     }
   });
 
-  //the same function as below, but for NFT thumbnails
-  // const handleNFTClick = (params: any) => {
-  //   setModalChildState(params.vaultID);
-  //   getVaultID(params.vaultID);
-  //   getVaultForListing(params.smartVault);
-  //   getVaultStore(params.smartVault);
-  //   getVaultAddress(params.smartVault.status.vaultAddress);
-  // };
-
   const renderActions = (params: any) => {
     const handleManageClick = () => {
       setModalChildState(params.vaultID);
@@ -180,7 +171,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             justifyContent: "center",
           }}
           to={`Collateral/${params.vaultID}`}
-          onClick={handleManageClick}
         >
           <Button
             sx={{
@@ -288,17 +278,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     return withTwoDecimals ? withTwoDecimals[0] : num;
   }
 
-  // const sanitizedNFTs = sortedVaults.map((vault) => {
-  //   const nft = tokenToNFTMap.current.get(
-  //     ethers.BigNumber.from(vault.tokenId).toString()
-  //   );
-  //   const NFTPurified = DOMPurify.sanitize(nft);
-  //   return {
-  //     ...vault,
-  //     NFTPurified,
-  //   };
-  // });
-
   return (
     <Box>
       {/* responsive table container */}
@@ -342,110 +321,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               </tr>
             </thead>
 
-            {/* <tbody>
-              {sanitizedNFTs
-                .slice(
-                  (currentPage - 1) * itemsPerPage,
-                  currentPage * itemsPerPage
-                )
-                .sort((a, b) =>
-                  ethers.BigNumber.from(b.tokenId)
-                    .sub(ethers.BigNumber.from(a.tokenId))
-                    .toNumber()
-                )
-                .map((vault, index) => (
-                  <tr key={index}>
-                    <td>
-                      {tokenToNFTMap.current.has(
-                        ethers.BigNumber.from(vault.tokenId).toString()
-                      ) ? (
-                        <div
-                          style={{
-                            // borderRadius: "5px",
-                            overflow: "hidden",
-                            objectFit: "contain",
-                            // border: "1px solid red",
-                            //  width: "70px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            maskImage: `url(${nftmask})`,
-                            maskRepeat: "no-repeat",
-                            maskSize: "contain",
-                            maskPosition: "center",
-                            WebkitMaskImage: `url(${nftmask})`,
-                            WebkitMaskRepeat: "no-repeat",
-                            WebkitMaskSize: "contain",
-                            WebkitMaskPosition: "center",
-                            cursor: "pointer",
-                          }}
-                          className="hello"
-                          onClick={() => {
-                            handleOpen();
-                            handleNFTClick({
-                              vaultID: ethers.BigNumber.from(
-                                vault.tokenId
-                              ).toString(),
-                              smartVault: vault,
-                            });
-                          }}
-                        >
-                          {parse(vault.NFTPurified)}
-                        </div>
-                      ) : null}
-                    </td>
-                    <td>
-                      {vault.status.version ? (
-                        `V${vault.status.version}-`
-                      ) : ('')}
-                      {ethers.BigNumber.from(vault.tokenId).toString()}
-                    </td>{" "}
-                    <TruncatedTableCell
-                      value={truncateToTwoDecimals(
-                        ethers.utils.formatEther(
-                          ethers.BigNumber.from(
-                            vault.status.totalCollateralValue
-                          ).toString()
-                        )
-                      )}
-                      length={12}
-                    />{" "}
-                    <td>
-                      {truncateToTwoDecimals(
-                        formatEther(vault.status.minted.toString())
-                      )}
-                    </td>{" "}
-                    <td>
-                      {vault.status.liquidated ? (
-                        <Typography sx={{ color: "white" }}>
-                          Vault Liquidated
-                        </Typography>
-                      ) : (
-                        <ProgressBar
-                          progressValue={computeProgressBar(
-                            vault.status.minted,
-                            vault.status.totalCollateralValue
-                          )}
-                        />
-                      )}
-                    </td>
-                    <td
-                      style={{
-                        width: "50px",
-                        height: "auto",
-                      }}
-                    >
-                      {" "}
-                      {renderActions({
-                        vaultID: ethers.BigNumber.from(
-                          vault.tokenId
-                        ).toString(),
-                        smartVault: vault,
-                      })}
-                    </td>
-                  </tr>
-                ))}
-            </tbody> */}
             <tbody>
               {sortedVaults
                 .slice(
