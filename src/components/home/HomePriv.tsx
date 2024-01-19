@@ -116,8 +116,6 @@ const HomePriv = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
-  console.log(123123, {vaultData}, {myVaults})
-
   const myInactiveVaults =
     myVaults?.filter((vault: any) =>
       !vault.status || !vault.status.totalCollateralValue ||
@@ -135,8 +133,6 @@ const HomePriv = () => {
   if (inactiveVaults === 'HIDE') {
     splitInactiveVaults = true;
   }
-
-  console.log(234234, {myInactiveVaults}, {myActiveVaults})
 
   const handleToggleSplitInactiveVaults = () => {
     if (inactiveVaults === 'HIDE') {
