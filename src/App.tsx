@@ -68,6 +68,13 @@ function App() {
           <Disclaimer />
           <Routes key={renderAppCounter}>
             <Route path="/" element={<HomePage />} />
+            <Route path="termsofuse" element={<TermsOfUse />} />
+            <Route path="stats" element={<Stats />} />
+            <Route path="yield/*" element={<Yield />} />
+            <Route path="dex/*" element={<Dex />} />
+            {/* <Route path="collateral/:vaultId" element={<Collateral />} /> */}
+            {/* <Route path="collateral/:vaultId/history" element={<VaultHistory />} /> */}
+            {/* <Route path="staking/*" element={<Staking />} /> */}
           </Routes>
           <Footer />
         </QueryClientProvider>

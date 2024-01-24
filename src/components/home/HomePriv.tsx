@@ -14,7 +14,6 @@ import {
 import seurologo from "../../assets/EUROs.svg";
 import susdlogo from "../../assets/USDs.svg";
 import VaultCard from "../vaultCard/VaultCard.tsx";
-// import Datagrid from "../dataGrid/Datagrid";
 import VaultList from "./VaultList";
 import Card from "../Card";
 import Button from "../Button";

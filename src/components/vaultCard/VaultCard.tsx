@@ -70,7 +70,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
     ? arbitrumSepoliaContractAddress
     : arbitrumContractAddress;
 
-  const { writeContract: mintVault, isError, error, isPending, isSuccess } = useWriteContract();
+  const { writeContract: mintVault, isError, isPending, isSuccess } = useWriteContract();
 
   // Define your function using async/await
   const handleMintVault = async () => {
