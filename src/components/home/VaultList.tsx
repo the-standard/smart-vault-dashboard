@@ -14,26 +14,21 @@ import {
   useVaultAddressStore,
   useCurrentPageStore,
 } from "../../store/Store.ts";
-import { Button, Pagination, Tooltip, Typography } from "@mui/material";
+import { Button, Pagination, Typography } from "@mui/material";
 import "../../styles/progressBarStyle.css";
 import "../../styles/datagridStyles.css";
 
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther } from "viem";
 import { useContractReads, useNetwork } from "wagmi";
-// import parse from "html-react-parser";
-// import DOMPurify from "dompurify";
-
-// import nftmask from "../../assets/nftmask.svg";
 
 import seurologo from "../../assets/EUROs.svg";
 
-interface DataGridComponentProps {
+interface VaultListProps {
   vaults: any[];
 }
 
-const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
-  const tokenToNFTMap = useRef(new Map());
+const VaultList: React.FC<VaultListProps> = ({ vaults }) => {
   const tokenMap = useRef(new Map());
   //store values
   const { vaultManagerAbi } = useVaultManagerAbiStore();
@@ -57,50 +52,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const truncateValue = (value: string, length: number) => {
-    if (value.length <= length) {
-      return value;
-    }
-
-    const prefixLength = Math.floor(length / 3);
-    const suffixLength = length - prefixLength - 3;
-    const truncatedValue = `${value.substring(
-      0,
-      prefixLength
-    )}...${value.substring(value.length - suffixLength)}`;
-    return truncatedValue;
-  };
-
-  interface TruncatedTableCellProps {
-    value: string; // Specify the type of the 'value' prop as string
-    length: number;
-  }
-
-  const TruncatedTableCell: React.FC<TruncatedTableCellProps> = ({
-    value,
-    length,
-  }) => {
-    const truncatedValue = truncateValue(value, length);
-
-    return (
-      <td data-label={value}>
-        <Tooltip title={value}>
-          <Typography
-            sx={{
-              // maxWidth: 100,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              // textAlign: "center",
-            }}
-          >
-            {truncatedValue}
-          </Typography>
-        </Tooltip>
-      </td>
-    );
-  };
-
   const contractFunction = {
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
@@ -119,10 +70,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     if (decodable) {
       const decoded = atob(decodable);
       const parsed = JSON.parse(decoded);
-      tokenToNFTMap.current.set(
-        ethers.BigNumber.from(vaults[index].tokenId).toString(),
-        parsed.image_data
-      );
       tokenMap.current.set(
         ethers.BigNumber.from(vaults[index].tokenId).toString(),
         parsed
@@ -350,16 +297,15 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) : ('')}
                       {ethers.BigNumber.from(vault.tokenId).toString()}
                     </td>{" "}
-                    <TruncatedTableCell
-                      value={truncateToTwoDecimals(
+                    <td>
+                      {truncateToTwoDecimals(
                         ethers.utils.formatEther(
                           ethers.BigNumber.from(
                             vault.status.totalCollateralValue
                           ).toString()
                         )
                       )}
-                      length={12}
-                    />{" "}
+                    </td>
                     <td>
                       {truncateToTwoDecimals(
                         formatEther(vault.status.minted.toString())
@@ -465,4 +411,4 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   );
 };
 
-export default DataGridComponent;
+export default VaultList;

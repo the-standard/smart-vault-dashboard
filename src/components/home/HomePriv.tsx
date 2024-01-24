@@ -16,7 +16,8 @@ import {
 } from "../../store/Store.ts";
 
 import VaultCard from "../vaultCard/VaultCard.tsx";
-import Datagrid from "../dataGrid/Datagrid";
+// import Datagrid from "../dataGrid/Datagrid";
+import VaultList from "./VaultList";
 import Card from "../Card";
 import Button from "../Button";
 
@@ -35,20 +36,6 @@ const items = [
     image: susdlogo,
     isActive: false,
   },
-  // {
-  //   title: "GBPs",
-  //   para: "Great Britain Pound pegged",
-  //   borrowRate: "Borrow up to 90.91%",
-  //   image: sgbplogo,
-  //   isActive: false,
-  // },
-  // {
-  //   title: "KRWs",
-  //   para: "South Korean Won pegged",
-  //   borrowRate: "Borrow up to 90.91%",
-  //   image: swonlogo,
-  //   isActive: false,
-  // },
 ];
 
 const HomePriv = () => {
@@ -214,7 +201,7 @@ const HomePriv = () => {
                     Vaults
                   </Typography>
                 )}
-                <Datagrid
+                <VaultList
                   vaults={splitInactiveVaults ? (
                     myActiveVaults
                   ) : (
@@ -247,7 +234,7 @@ const HomePriv = () => {
                           Inactive Vaults
                         </Typography>
                       ) : (null)}
-                      <Datagrid vaults={myInactiveVaults || []} />
+                      <VaultList vaults={myInactiveVaults || []} />
                       <Box
                         sx={{
                           display: "flex",
