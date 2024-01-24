@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, Tooltip } from "@mui/material";
-import { getNetwork } from "@wagmi/core";
-import { useReadContract, useAccount } from "wagmi";
+import { useReadContract, useAccount, useChainId } from "wagmi";
 import axios from "axios";
-
+import { arbitrumSepolia } from "wagmi/chains";
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import {
@@ -27,10 +26,10 @@ const StakingEarn = () => {
   } = useLiquidationPoolStore();
 
   const { address } = useAccount();
-  const { chain } = getNetwork();
+  const chainId = useChainId();
 
   const liquidationPoolAddress =
-  chain?.id === 421614
+  chainId === arbitrumSepolia.id
     ? arbitrumSepoliaLiquidationPoolAddress
     : arbitrumLiquidationPoolAddress;
 
@@ -38,10 +37,7 @@ const StakingEarn = () => {
     address: liquidationPoolAddress,
     abi: liquidationPoolAbi,
     functionName: "position",
-    args: [
-      address
-    ],
-    watch: false,
+    args: [address as any],
   });
 
   const positions: any = liquidationPool && liquidationPool[0];
