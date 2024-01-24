@@ -10,9 +10,8 @@ import {
 } from "../../store/Store.ts";
 import "../../styles/buttonStyle.css";
 import { useNavigate } from "react-router-dom";
-import { getNetwork } from "@wagmi/core";
-import { useAccount, useContractEvent, useContractWrite } from "wagmi";
-import { arbitrum } from "wagmi/chains";
+import { useAccount, useChainId, useWatchContractEvent, useWriteContract } from "wagmi";
+import { arbitrum, arbitrumSepolia } from "wagmi/chains";
 
 import Card from "../Card";
 import Button from "../Button";
@@ -50,10 +49,10 @@ const VaultCard: React.FC<VaultCardProps> = ({
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const navigate = useNavigate();
   const { address } = useAccount();
+  const [tokenId, setTokenId] = useState<any>();
 
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
   const { getSnackBar } = useSnackBarStore();
-  const [tokenId, setTokenId] = useState<any>();
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
@@ -66,47 +65,30 @@ const VaultCard: React.FC<VaultCardProps> = ({
     setOpen(false);
   };
 
-  const { chain } = getNetwork();
+  const chainId = useChainId();
+  const vaultAddress = chainId === arbitrumSepolia.id
+    ? arbitrumSepoliaContractAddress
+    : arbitrumContractAddress;
 
-  const mintVault = useContractWrite({
-    address:
-      chain?.id === 421614
-        ? arbitrumSepoliaContractAddress
-        : arbitrumContractAddress, // Set a default value or handle this case as per your requirement
-    abi: vaultManagerAbi, // Make sure you have vaultManagerAbi defined
-    functionName: "mint", // Assuming the function name is 'mint'
-    onError(error: any) {
-      let errorMessage: any = '';
-      if (error && error.shortMessage) {
-        errorMessage = error.shortMessage;
-      }
-      getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
-    }
-  });
+  const { writeContract: mintVault, isError, error, isPending, isSuccess } = useWriteContract();
 
   // Define your function using async/await
   const handleMintVault = async () => {
-    if (chain?.id !== 421614 && chain?.id !== arbitrum.id) {
+    if (chainId !== arbitrumSepolia.id && chainId !== arbitrum.id) {
       getSnackBar('ERROR', 'Please change to Arbitrum network!');
       return;
     }
 
-    const { write } = mintVault;
-    try {
-      // Execute the contract method by calling the 'write' function
-      write();
-    } catch (error) {
-      console.error("error", error);
-      // Handle error state
-    }
+    mintVault({
+      abi: vaultManagerAbi,
+      address: vaultAddress,
+      functionName: 'mint',
+      args: [],
+    });
   };
-
+  
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = mintVault;
-    if (isLoading) {
+    if (isPending) {
       getProgressType(3);
       getCircularProgress(true);
     } else if (isSuccess && tokenId) {
@@ -117,27 +99,25 @@ const VaultCard: React.FC<VaultCardProps> = ({
       getCircularProgress(false);
     }
   }, [
-    mintVault.data,
-    mintVault.error,
-    mintVault.isLoading,
-    mintVault.isSuccess,
-    tokenId,
+    isError,
+    isPending,
+    isSuccess,
+    tokenId
   ]);
 
-  const unwatchDeployEvent = useContractEvent({
-    address:
-    chain?.id === 421614
-    ? arbitrumSepoliaContractAddress
-    : arbitrumContractAddress,
+  useWatchContractEvent({
+    address: vaultAddress,
     abi: vaultManagerAbi,
     eventName: "VaultDeployed",
-    listener(log: any) {
-      const { owner, tokenId: newTokenId } = log[0].args;
-      if (owner === address) {
-        unwatchDeployEvent?.();
-        setTokenId(newTokenId);
-      }
+    args: {
+      owner: address
     },
+    onLogs(logs) {
+      if (logs[0] && logs[0].args) {
+        const { tokenId } = logs[0] && logs[0].args;
+        setTokenId(tokenId)
+      }
+    }
   });
 
   return (

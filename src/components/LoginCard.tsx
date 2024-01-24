@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { Web3Button } from "@web3modal/react";
+// import { Web3Button } from "@web3modal/react";
 import Card from "./Card";
 
 const LoginCard = () => {
@@ -47,7 +47,7 @@ const LoginCard = () => {
             marginTop: "1em",
           }}
         >
-          <Web3Button />
+          <w3m-button />
         </Box>
       </Card>
     </>

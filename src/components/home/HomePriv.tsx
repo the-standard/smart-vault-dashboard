@@ -7,7 +7,7 @@ import seurologo from "../../assets/EUROs.svg";
 // import swonlogo from "../../assets/KRWs.svg";
 // import sgbplogo from "../../assets/GBPs.svg";
 import susdlogo from "../../assets/USDs.svg";
-import { useAccount, useContractRead, useContractReads, useNetwork } from "wagmi";
+import { useAccount, useBlockNumber, useChainId, useReadContract, useReadContracts } from "wagmi";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
@@ -19,6 +19,7 @@ import VaultCard from "../vaultCard/VaultCard.tsx";
 import Datagrid from "../dataGrid/Datagrid";
 import Card from "../Card";
 import Button from "../Button";
+import { arbitrumSepolia } from "viem/chains";
 
 const items = [
   {
@@ -58,19 +59,19 @@ const HomePriv = () => {
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { arbitrumSepoliaContractAddress, arbitrumContractAddress } = useContractAddressStore();
   const { getSnackBar } = useSnackBarStore();
+  const { data: blockNumber } = useBlockNumber({ watch: true });
 
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const vaultManagerAddress =
-    chain?.id === 421614
+    chainId === arbitrumSepolia.id
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: vaultIDs } = useContractRead({
+  const { data: vaultIDs } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultIDs",
-    args: [address],
-    watch: true,
+    args: [address || ethers.constants.AddressZero]
   });
 
   const vaultDataContract = {
@@ -86,9 +87,8 @@ const HomePriv = () => {
     })
   });
 
-  const { data: vaultData } = useContractReads({
-    contracts,
-    watch: true
+  const { data: vaultData } = useReadContracts({
+    contracts
   });
 
   const myVaults = vaultData?.map((item) => {
@@ -214,13 +214,13 @@ const HomePriv = () => {
                     Vaults
                   </Typography>
                 )}
-                <Datagrid
+                {/* <Datagrid
                   vaults={splitInactiveVaults ? (
                     myActiveVaults
                   ) : (
                     myVaults
                   ) || ''}
-                />
+                /> */}
               </Card>
               {splitInactiveVaults ? (
                 <>
@@ -247,7 +247,7 @@ const HomePriv = () => {
                           Inactive Vaults
                         </Typography>
                       ) : (null)}
-                      <Datagrid vaults={myInactiveVaults || []} />
+                      {/* <Datagrid vaults={myInactiveVaults || []} /> */}
                       <Box
                         sx={{
                           display: "flex",
