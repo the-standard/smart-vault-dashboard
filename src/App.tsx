@@ -72,9 +72,9 @@ function App() {
             <Route path="stats" element={<Stats />} />
             <Route path="yield/*" element={<Yield />} />
             <Route path="dex/*" element={<Dex />} />
+            <Route path="staking/*" element={<Staking />} />
             {/* <Route path="collateral/:vaultId" element={<Collateral />} /> */}
             {/* <Route path="collateral/:vaultId/history" element={<VaultHistory />} /> */}
-            {/* <Route path="staking/*" element={<Staking />} /> */}
           </Routes>
           <Footer />
         </QueryClientProvider>

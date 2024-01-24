@@ -1,16 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useAccount, useContractRead, useReadContracts, useWriteContracts } from "wagmi";
-import { getNetwork } from "@wagmi/core";
+import {
+  useAccount,
+  useReadContract,
+  useReadContracts,
+  useWriteContract,
+  useChainId,
+  useWatchBlockNumber
+} from "wagmi";
 import { formatEther, parseEther } from "viem";
 import moment from 'moment';
+import { arbitrum, arbitrumSepolia } from "wagmi/chains";
+
 import {
   useTstAddressStore,
   useErc20AbiStore,
   useStakingAbiStore,
   useSnackBarStore,
 } from "../../../store/Store";
+
 import Button from "../../../components/Button";
 
 interface StakingModalProps {
@@ -24,7 +33,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
   isOpen,
   handleCloseModal,
 }) => {
-  const { chain } = getNetwork();
+  const chainId = useChainId();
   const [stakeAmount, setStakeAmount] = useState(0);
   const {
     arbitrumTstAddress,
@@ -38,6 +47,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const [mintLoading, setMintLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [stage, setStage] = useState('');
 
   const inputRef: any = useRef<HTMLInputElement>(null);
 
@@ -46,7 +56,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
     setSuccess(false);
   }, [isOpen]);
 
-  const tstAddress = chain?.id === 421614 ?
+  const tstAddress = chainId === arbitrumSepolia.id ?
   arbitrumSepoliaTstAddress :
   arbitrumTstAddress ;
 
@@ -60,54 +70,57 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const windowEndUnix = Number(stakingWindowEnd);
   const windowEnd = moment.unix(windowEndUnix);
 
-  const approvePayment = useWriteContracts({
-    address: tstAddress as any,
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [stakingAddress as any, amountInWei],
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleApprovePayment = async () => {
+    setStage('APPROVE_PAYMENT');
+    try {
+      writeContract({
+        abi: erc20Abi,
+        address: tstAddress as any,
+        functionName: "approve",
+        args: [stakingAddress as any, amountInWei],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
+  };
 
-  const {data: rewardAmount}: any = useContractRead({
+  const {data: rewardAmount}: any = useReadContract({
     address: stakingAddress,
     abi: stakingAbi,
     functionName: "calculateReward",
     args: [amountInWei]
   });
 
-  // const {data: existingAllowance}: any = useContractRead({
-  //   address: tstAddress as any,
-  //   abi: erc20Abi,
-  //   functionName: "allowance",
-  //   args: [accountAddress, stakingAddress]
-  // })
-
   const tstContract = {
     address: tstAddress,
     abi: erc20Abi,
   }
 
-  const { data: tstData } = useReadContracts({
+  const { data: tstData, refetch } = useReadContracts({
     contracts: [{
       ... tstContract,
       functionName: "allowance",
       args: [accountAddress as any, stakingAddress]
-  },{
+    },{
       ... tstContract,
       functionName: "balanceOf",
       args: [accountAddress as any]
-  }],
-    watch: true
+    }],
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   const existingAllowance: any = tstData && tstData[0].result;
   const tstBalance: any = tstData && tstData[1].result;
@@ -122,63 +135,55 @@ const StakingModal: React.FC<StakingModalProps> = ({
     rewardRate = Number(stakingContract.SI_RATE) / 1000;
   }
 
-  useEffect(() => {
-    const { isLoading, isSuccess, isError } = approvePayment;
-    if (isLoading) {
-      setApproveLoading(true);
-    } else if (isSuccess) {
-      setApproveLoading(false);
-      handleMintPosition();
-    } else if (isError) {
-      setApproveLoading(false);
-      handleCloseModal();
-    }
-  }, [
-    approvePayment.isLoading,
-    approvePayment.isSuccess,
-    approvePayment.data,
-    approvePayment.isError,
-  ]);
-
   const handleMintPosition = async () => {
-    const { write } = mintPosition;
-    write();
-  };
+    setStage('MINT_POSITION');
+    try {
+      writeContract({
+        abi: stakingAbi,
+        address: stakingAddress as any,
+        functionName: "mint",
+        args: [amountInWei],
+      });
 
-  const mintPosition = useWriteContracts({
-    address: stakingAddress,
-    abi: stakingAbi,
-    functionName: "mint",
-    args: [amountInWei],
-    onError(error: any) {
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
+  };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = mintPosition;
-    if (isLoading) {
-      setMintLoading(true);
-      setSuccess(false);
-    } else if (isSuccess) {
-      setMintLoading(false);
-      setSuccess(true);
-    } else if (isError) {
-      setMintLoading(false);
-      setSuccess(false);
+    if (stage === 'APPROVE_PAYMENT') {
+      if (isPending) {
+        setApproveLoading(true);
+      } else if (isSuccess) {
+        setApproveLoading(false);
+        handleMintPosition();
+      } else if (isError) {
+        setApproveLoading(false);
+        handleCloseModal();
+      }
     }
+    if (stage === 'MINT_POSITION') {
+      if (isPending) {
+        setMintLoading(true);
+        setSuccess(false);
+      } else if (isSuccess) {
+        setMintLoading(false);
+        setSuccess(true);
+      } else if (isError) {
+        setMintLoading(false);
+        setSuccess(false);
+      }
+    }
+    setStage('');
   }, [
-    mintPosition.isLoading,
-    mintPosition.isSuccess,
-    mintPosition.data,
-    mintPosition.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
   const handleAmount = (e: any) => {
@@ -194,9 +199,14 @@ const StakingModal: React.FC<StakingModalProps> = ({
   }
 
   const handleStaking = async () => {
-    const { write } = existingAllowance >= amountInWei ?
-    mintPosition : approvePayment;
-    write();  
+    // const { write } = existingAllowance >= amountInWei ?
+    // handleMintPosition : handleApprovePayment;
+    // write();  
+    if (existingAllowance >= amountInWei) {
+      handleMintPosition();
+    } else {
+      handleApprovePayment();
+    }
   };
 
   return (

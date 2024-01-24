@@ -9,7 +9,7 @@ import {
 } from "../../../store/Store";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { formatUnits, parseUnits } from "viem";
-import { useWriteContracts } from "wagmi";
+import { useWriteContract } from "wagmi";
 
 import Select from "../../../components/Select";
 import Button from "../../../components/Button";
@@ -107,7 +107,7 @@ const Swap: React.FC<SwapProps> = ({
 
   const availableAssets = swapAssets?.filter((item: any) => item.symbol !== symbol);
 
-  const swapTokens = useWriteContracts({
+  const swapTokens = useWriteContract({
     address: vaultAddress as any,
     abi: smartVaultABI,
     functionName: "swap",

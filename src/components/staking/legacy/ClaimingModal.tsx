@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useAccount, useWriteContracts } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { formatEther } from "viem";
 import Confetti from 'react-confetti';
 import {
@@ -44,7 +44,7 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
 
   const stakingAddress = stakingPosition?.address;
 
-  const claimPosition = useWriteContracts({
+  const claimPosition = useWriteContract({
     address: stakingAddress as any,
     abi: stakingAbi,
     functionName: "burn",

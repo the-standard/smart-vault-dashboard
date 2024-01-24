@@ -23,7 +23,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import Lottie from "lottie-react";
 import depositLottie from "../../lotties/deposit.json";
 import { getNetwork } from "@wagmi/core";
-import { useWriteContracts, useReadContracts } from "wagmi";
+import { useWriteContract, useReadContracts } from "wagmi";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -122,7 +122,7 @@ const Debt = () => {
     };
   }, []);
 
-  const borrowMoney = useWriteContracts({
+  const borrowMoney = useWriteContract({
     address: vaultAddress as any,
     abi: smartVaultAbi,
     functionName: "mint",
@@ -182,7 +182,7 @@ const Debt = () => {
   const burnFeeRate: bigint = vaultStore.burnFeeRate;
   const repayFee = amountInWei * burnFeeRate / HUNDRED_PC;
 
-  const approvePayment = useWriteContracts({
+  const approvePayment = useWriteContract({
     address: eurosAddress as any,
     abi: erc20Abi,
     functionName: "approve",
@@ -246,7 +246,7 @@ const Debt = () => {
     write();
   };
 
-  const repayMoney = useWriteContracts({
+  const repayMoney = useWriteContract({
     address: vaultAddress as any,
     abi: smartVaultAbi,
     functionName: "burn",

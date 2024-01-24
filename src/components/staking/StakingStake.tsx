@@ -10,7 +10,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   useAccount,
   useReadContracts,
-  useWriteContracts
+  useWriteContract
 } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { arbitrum } from "wagmi/chains";
@@ -126,7 +126,7 @@ const StakingStake = () => {
   const tstInWei = parseEther(tstStakeAmount.toString());
   const eurosInWei = parseEther(eurosStakeAmount.toString());
 
-  const approveTst = useWriteContracts({
+  const approveTst = useWriteContract({
     address: tstAddress as any,
     abi: erc20Abi,
     functionName: "approve",
@@ -167,7 +167,7 @@ const StakingStake = () => {
     }, 1000);
   };
 
-  const approveEuros = useWriteContracts({
+  const approveEuros = useWriteContract({
     address: eurosAddress as any,
     abi: erc20Abi,
     functionName: "approve",
@@ -208,7 +208,7 @@ const StakingStake = () => {
     }, 1000);
   };
     
-  const depositToken = useWriteContracts({
+  const depositToken = useWriteContract({
     address: liquidationPoolAddress,
     abi: liquidationPoolAbi,
     functionName: "increasePosition",
