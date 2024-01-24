@@ -1,13 +1,9 @@
-import { Box, Grid, Modal, Typography } from "@mui/material";
-
 import { useLayoutEffect, useRef, useState } from "react";
+import { Box, Grid, Modal, Typography } from "@mui/material";
 import { ethers } from "ethers";
-
-import seurologo from "../../assets/EUROs.svg";
-// import swonlogo from "../../assets/KRWs.svg";
-// import sgbplogo from "../../assets/GBPs.svg";
-import susdlogo from "../../assets/USDs.svg";
 import { useAccount, useBlockNumber, useChainId, useReadContract, useReadContracts } from "wagmi";
+import { arbitrumSepolia } from "viem/chains";
+
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
@@ -15,11 +11,13 @@ import {
   useSnackBarStore
 } from "../../store/Store.ts";
 
+import seurologo from "../../assets/EUROs.svg";
+import susdlogo from "../../assets/USDs.svg";
 import VaultCard from "../vaultCard/VaultCard.tsx";
-import Datagrid from "../dataGrid/Datagrid";
+// import Datagrid from "../dataGrid/Datagrid";
+import VaultList from "./VaultList";
 import Card from "../Card";
 import Button from "../Button";
-import { arbitrumSepolia } from "viem/chains";
 
 const items = [
   {
@@ -36,20 +34,6 @@ const items = [
     image: susdlogo,
     isActive: false,
   },
-  // {
-  //   title: "GBPs",
-  //   para: "Great Britain Pound pegged",
-  //   borrowRate: "Borrow up to 90.91%",
-  //   image: sgbplogo,
-  //   isActive: false,
-  // },
-  // {
-  //   title: "KRWs",
-  //   para: "South Korean Won pegged",
-  //   borrowRate: "Borrow up to 90.91%",
-  //   image: swonlogo,
-  //   isActive: false,
-  // },
 ];
 
 const HomePriv = () => {
@@ -214,13 +198,13 @@ const HomePriv = () => {
                     Vaults
                   </Typography>
                 )}
-                {/* <Datagrid
+                <VaultList
                   vaults={splitInactiveVaults ? (
                     myActiveVaults
                   ) : (
                     myVaults
                   ) || ''}
-                /> */}
+                />
               </Card>
               {splitInactiveVaults ? (
                 <>
@@ -247,7 +231,7 @@ const HomePriv = () => {
                           Inactive Vaults
                         </Typography>
                       ) : (null)}
-                      {/* <Datagrid vaults={myInactiveVaults || []} /> */}
+                      <VaultList vaults={myInactiveVaults || []} />
                       <Box
                         sx={{
                           display: "flex",
