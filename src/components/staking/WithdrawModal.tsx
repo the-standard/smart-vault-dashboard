@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Modal, Typography } from "@mui/material";
-import { useWriteContract } from "wagmi";
-import { getNetwork } from "@wagmi/core";
+import {
+  useWriteContract,
+  useChainId,
+} from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
 import Lottie from "lottie-react";
 import withdrawLottie from "../../lotties/withdrawal.json";
@@ -32,7 +35,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const [claimLoading, setClaimLoading] = useState(false);
   const [tstWithdrawAmount, setTstWithdrawAmount] = useState(0);
   const [eurosWithdrawAmount, setEurosWithdrawAmount] = useState(0);
-  const { chain } = getNetwork();
+  const chainId = useChainId();
 
   const tstInputRef: any = useRef<HTMLInputElement>(null);
   const eurosInputRef: any = useRef<HTMLInputElement>(null);
@@ -46,32 +49,35 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const useTstStakedAmount = formatEther(tstStakedAmount.toString());
   const useEurosStakedAmount = formatEther(eurosStakedAmount.toString());
 
-  const liquidationPoolAddress = chain?.id === 421614 ? arbitrumSepoliaLiquidationPoolAddress :
+  const liquidationPoolAddress = chainId === arbitrumSepolia.id ? arbitrumSepoliaLiquidationPoolAddress :
   arbitrumLiquidationPoolAddress;
 
-  const withdrawToken = useWriteContract({
-    address: liquidationPoolAddress,
-    abi: liquidationPoolAbi,
-    functionName: "decreasePosition",
-    args: [
-      parseEther(tstWithdrawAmount.toString()),
-      parseEther(eurosWithdrawAmount.toString()),
-    ],
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleApproveWithdraw = async () => {
+    try {
+      writeContract({
+        abi: liquidationPoolAbi,
+        address: liquidationPoolAddress as any,
+        functionName: "decreasePosition",
+        args: [
+          parseEther(tstWithdrawAmount.toString()),
+          parseEther(eurosWithdrawAmount.toString()),
+        ],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
+  };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = withdrawToken;
-    if (isLoading) {
+    if (isPending) {
       setClaimLoading(true);
     } else if (isSuccess) {
       setClaimLoading(false);
@@ -84,16 +90,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
       setEurosWithdrawAmount(0);
     }
   }, [
-    withdrawToken.isLoading,
-    withdrawToken.isSuccess,
-    withdrawToken.data,
-    withdrawToken.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
-
-  const handleApproveWithdraw = async () => {
-    const { write } = withdrawToken;
-    write();
-  };
 
   const handleTstAmount = (e: any) => {
     if (Number(e.target.value) < 10n ** 21n) {
