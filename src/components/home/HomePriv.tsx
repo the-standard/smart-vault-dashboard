@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { Box, Grid, Modal, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import { useAccount, useBlockNumber, useChainId, useReadContract, useReadContracts } from "wagmi";
-import { arbitrumSepolia } from "viem/chains";
+import { arbitrumSepolia } from "wagmi/chains";
 
 import {
   useVaultManagerAbiStore,

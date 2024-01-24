@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Button, Pagination, Typography } from "@mui/material";
 import { formatEther } from "viem";
 import { useReadContracts, useChainId, useWatchBlockNumber } from "wagmi";
-import { arbitrumSepolia } from "viem/chains";
+import { arbitrumSepolia } from "wagmi/chains";
 
 import {
   useVaultIdStore,

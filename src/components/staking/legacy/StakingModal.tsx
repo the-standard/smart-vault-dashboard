@@ -11,7 +11,7 @@ import {
 } from "wagmi";
 import { formatEther, parseEther } from "viem";
 import moment from 'moment';
-import { arbitrum, arbitrumSepolia } from "wagmi/chains";
+import { arbitrumSepolia } from "wagmi/chains";
 
 import {
   useTstAddressStore,
