@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Modal, Typography } from "@mui/material";
-import { useContractWrite } from "wagmi";
+import { useWriteContracts } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { formatEther, parseEther } from "viem";
 import Lottie from "lottie-react";
@@ -49,7 +49,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const liquidationPoolAddress = chain?.id === 421614 ? arbitrumSepoliaLiquidationPoolAddress :
   arbitrumLiquidationPoolAddress;
 
-  const withdrawToken = useContractWrite({
+  const withdrawToken = useWriteContracts({
     address: liquidationPoolAddress,
     abi: liquidationPoolAbi,
     functionName: "decreasePosition",

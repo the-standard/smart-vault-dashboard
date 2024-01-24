@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import { Link } from "react-router-dom";
 import { Button, Pagination, Typography } from "@mui/material";
 import { formatEther } from "viem";
-import { useContractReads, useChainId } from "wagmi";
+import { useReadContracts, useChainId } from "wagmi";
 import { arbitrumSepolia } from "viem/chains";
 
 import {
@@ -59,7 +59,7 @@ const VaultList: React.FC<VaultListProps> = ({ vaults }) => {
     functionName: "tokenURI",
   };
 
-  const { data: NFTsMetadata } = useContractReads({
+  const { data: NFTsMetadata } = useReadContracts({
     contracts: vaults.map((vault) => {
       return { ...contractFunction, args: [vault.tokenId] };
     }),

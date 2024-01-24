@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import {
-  useContractWrite
+  useWriteContracts
 } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import {
@@ -63,7 +63,7 @@ const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
     ? arbitrumSepoliaLiquidationPoolAddress
     : arbitrumLiquidationPoolAddress;
 
-  const depositToken = useContractWrite({
+  const depositToken = useWriteContracts({
     address: liquidationPoolAddress,
     abi: liquidationPoolAbi,
     functionName: "claimRewards",

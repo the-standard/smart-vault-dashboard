@@ -10,7 +10,7 @@ import {
 } from "../../store/Store";
 import { BigNumber, ethers } from "ethers";
 import { formatEther, formatUnits, parseEther } from "viem";
-import { useContractReads, useNetwork } from "wagmi";
+import { useReadContracts, useNetwork } from "wagmi";
 import { parseBytes32String } from "ethers/lib/utils";
 
 const Index = () => {
@@ -53,7 +53,7 @@ const Index = () => {
     });
   }
 
-  const { data: priceData } = useContractReads({
+  const { data: priceData } = useReadContracts({
     contracts,
   });
 

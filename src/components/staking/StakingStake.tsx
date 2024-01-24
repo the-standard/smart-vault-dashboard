@@ -9,8 +9,8 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   useAccount,
-  useContractReads,
-  useContractWrite
+  useReadContracts,
+  useWriteContracts
 } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { arbitrum } from "wagmi/chains";
@@ -86,7 +86,7 @@ const StakingStake = () => {
     abi: erc20Abi,
   }
 
-  const { data: tstData } = useContractReads({
+  const { data: tstData } = useReadContracts({
     contracts: [{
       ... tstContract,
       functionName: "allowance",
@@ -104,7 +104,7 @@ const StakingStake = () => {
     abi: erc20Abi,
   }
 
-  const { data: eurosData } = useContractReads({
+  const { data: eurosData } = useReadContracts({
     contracts: [{
       ... eurosContract,
       functionName: "allowance",
@@ -126,7 +126,7 @@ const StakingStake = () => {
   const tstInWei = parseEther(tstStakeAmount.toString());
   const eurosInWei = parseEther(eurosStakeAmount.toString());
 
-  const approveTst = useContractWrite({
+  const approveTst = useWriteContracts({
     address: tstAddress as any,
     abi: erc20Abi,
     functionName: "approve",
@@ -167,7 +167,7 @@ const StakingStake = () => {
     }, 1000);
   };
 
-  const approveEuros = useContractWrite({
+  const approveEuros = useWriteContracts({
     address: eurosAddress as any,
     abi: erc20Abi,
     functionName: "approve",
@@ -208,7 +208,7 @@ const StakingStake = () => {
     }, 1000);
   };
     
-  const depositToken = useContractWrite({
+  const depositToken = useWriteContracts({
     address: liquidationPoolAddress,
     abi: liquidationPoolAbi,
     functionName: "increasePosition",

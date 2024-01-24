@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, Tooltip } from "@mui/material";
 import { getNetwork } from "@wagmi/core";
-import { useContractRead, useAccount } from "wagmi";
+import { useReadContract, useAccount } from "wagmi";
 import axios from "axios";
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -34,7 +34,7 @@ const StakingEarn = () => {
     ? arbitrumSepoliaLiquidationPoolAddress
     : arbitrumLiquidationPoolAddress;
 
-  const { data: liquidationPool } = useContractRead({
+  const { data: liquidationPool } = useReadContract({
     address: liquidationPoolAddress,
     abi: liquidationPoolAbi,
     functionName: "position",

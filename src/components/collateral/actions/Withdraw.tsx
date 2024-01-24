@@ -8,7 +8,7 @@ import {
   useRenderAppCounterStore,
 } from "../../../store/Store";
 import { Box } from "@mui/material";
-import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
+import { useAccount, useWriteContracts, useWaitForTransaction } from "wagmi";
 import { ethers } from "ethers";
 import { parseUnits } from "viem";
 import Button from "../../../components/Button";
@@ -49,7 +49,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
 
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
 
-  const withdrawCollateralNative = useContractWrite({
+  const withdrawCollateralNative = useWriteContracts({
     address: vaultAddress as any,
     abi: smartVaultABI,
     functionName: "removeCollateralNative",
@@ -71,7 +71,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
     write();
   };
 
-  const withdrawCollateral = useContractWrite({
+  const withdrawCollateral = useWriteContracts({
     address: vaultAddress as any,
     abi: smartVaultABI,
     functionName: "removeCollateral",

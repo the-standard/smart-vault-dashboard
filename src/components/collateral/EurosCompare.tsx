@@ -7,7 +7,7 @@ import {
 } from "../../store/Store";
 import Card from "../../components/Card";
 import { formatUnits } from "viem";
-import { useContractReads, useNetwork } from "wagmi";
+import { useReadContracts, useNetwork } from "wagmi";
 import axios from "axios";
 
 const EurosCompare = () => {
@@ -34,7 +34,7 @@ const EurosCompare = () => {
     },
   ];
 
-  const { data: priceData } = useContractReads({
+  const { data: priceData } = useReadContracts({
     contracts,
   });
 

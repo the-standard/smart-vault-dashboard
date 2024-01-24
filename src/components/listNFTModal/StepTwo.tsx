@@ -5,7 +5,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
 import { providers, BigNumber, ethers } from "ethers";
-import { useAccount, useContractReads, useWalletClient, useChainId} from "wagmi";
+import { useAccount, useReadContracts, useWalletClient, useChainId} from "wagmi";
 import { OpenSeaSDK, Chain } from "opensea-js";
 import { arbitrumSepolia } from "viem/chains";
 import { fromHex } from "viem";
@@ -53,7 +53,7 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
       ? arbitrumSepoliaEthToUsdAddress
       : arbitrumOneEthToUsdAddress;
 
-  const { data: priceData } = useContractReads({
+  const { data: priceData } = useReadContracts({
     contracts: [
       {
         address: ethUsdAddress,

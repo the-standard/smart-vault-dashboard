@@ -15,7 +15,7 @@ import { ethers } from "ethers";
 import { useParams, useLocation } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { getNetwork } from "@wagmi/core";
-import { useBlockNumber, useContractRead } from "wagmi";
+import { useBlockNumber, useReadContract } from "wagmi";
 import { useNavigate } from "react-router-dom";
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
@@ -120,7 +120,7 @@ const Collateral = () => {
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: vaultData } = useContractRead({
+  const { data: vaultData } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultData",

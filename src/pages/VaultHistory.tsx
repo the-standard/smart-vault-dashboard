@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getNetwork } from "@wagmi/core";
-import { useContractRead } from "wagmi";
+import { useReadContract } from "wagmi";
 import { formatUnits, formatEther } from "viem";
 import moment from 'moment';
 import axios from "axios";
@@ -76,7 +76,7 @@ const VaultHistory = () => {
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: vaultData } = useContractRead({
+  const { data: vaultData } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultData",

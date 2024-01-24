@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { getNetwork } from "@wagmi/core";
-import { useContractRead, useContractReads, useAccount } from "wagmi";
+import { useReadContract, useReadContracts, useAccount } from "wagmi";
 
 import {
   useStakingAbiStore,
@@ -40,7 +40,7 @@ const StakingTST = () => {
 
   //////////////////////////
   // Handling Directory List
-  const { data: stakingAddresses } = useContractRead({
+  const { data: stakingAddresses } = useReadContract({
     address: stakingContractsAddress,
     abi: stakingAbi,
     functionName: "list",
@@ -79,7 +79,7 @@ const StakingTST = () => {
     ]
   }).flat();
 
-  const { data: stakingData } = useContractReads({contracts});
+  const { data: stakingData } = useReadContracts({contracts});
 
   const nestedStakingData = stakingData && stakingAddresses?.map((address, i) => {
     return {
@@ -107,7 +107,7 @@ const StakingTST = () => {
     ]
   }).flat();
 
-  const { data: positionData } = useContractReads({contracts: positions, watch: true});
+  const { data: positionData } = useReadContracts({contracts: positions, watch: true});
 
   const nestedPositionData = positionData && nestedStakingData && stakingAddresses?.map((address, i) => {
     const positionItem: any = positionData[i].result;

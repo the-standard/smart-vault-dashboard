@@ -20,7 +20,7 @@ import "../../styles/datagridStyles.css";
 
 import ProgressBar from "../ProgressBar.tsx";
 import { formatEther } from "viem";
-import { useContractReads, useNetwork } from "wagmi";
+import { useReadContracts, useNetwork } from "wagmi";
 // import parse from "html-react-parser";
 // import DOMPurify from "dompurify";
 
@@ -107,7 +107,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     functionName: "tokenURI",
   };
 
-  const { data: NFTsMetadata } = useContractReads({
+  const { data: NFTsMetadata } = useReadContracts({
     contracts: vaults.map((vault) => {
       return { ...contractFunction, args: [vault.tokenId] };
     }),

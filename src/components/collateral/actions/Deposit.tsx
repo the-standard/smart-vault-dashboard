@@ -15,7 +15,7 @@ import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import { parseEther, parseUnits } from "viem";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
-import { useContractWrite } from "wagmi";
+import { useWriteContracts } from "wagmi";
 import { useWaitForTransaction, useBalance } from "wagmi";
 import { constants } from "ethers";
 
@@ -102,7 +102,7 @@ const Deposit: React.FC<DepositProps> = ({
     }
   };
 
-  const depositToken = useContractWrite({
+  const depositToken = useWriteContracts({
     address: tokenAddress as any,
     abi: erc20Abi,
     functionName: "transfer",

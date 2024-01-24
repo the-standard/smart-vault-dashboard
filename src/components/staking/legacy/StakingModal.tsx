@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useAccount, useContractRead, useContractReads, useContractWrite } from "wagmi";
+import { useAccount, useContractRead, useReadContracts, useWriteContracts } from "wagmi";
 import { getNetwork } from "@wagmi/core";
 import { formatEther, parseEther } from "viem";
 import moment from 'moment';
@@ -60,7 +60,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
   const windowEndUnix = Number(stakingWindowEnd);
   const windowEnd = moment.unix(windowEndUnix);
 
-  const approvePayment = useContractWrite({
+  const approvePayment = useWriteContracts({
     address: tstAddress as any,
     abi: erc20Abi,
     functionName: "approve",
@@ -96,7 +96,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
     abi: erc20Abi,
   }
 
-  const { data: tstData } = useContractReads({
+  const { data: tstData } = useReadContracts({
     contracts: [{
       ... tstContract,
       functionName: "allowance",
@@ -145,7 +145,7 @@ const StakingModal: React.FC<StakingModalProps> = ({
     write();
   };
 
-  const mintPosition = useContractWrite({
+  const mintPosition = useWriteContracts({
     address: stakingAddress,
     abi: stakingAbi,
     functionName: "mint",
