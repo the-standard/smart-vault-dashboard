@@ -16,7 +16,8 @@ import {
 } from "../../store/Store.ts";
 
 import VaultCard from "../vaultCard/VaultCard.tsx";
-import Datagrid from "../dataGrid/Datagrid";
+// import Datagrid from "../dataGrid/Datagrid";
+import VaultList from "./VaultList";
 import Card from "../Card";
 import Button from "../Button";
 
@@ -200,7 +201,7 @@ const HomePriv = () => {
                     Vaults
                   </Typography>
                 )}
-                <Datagrid
+                <VaultList
                   vaults={splitInactiveVaults ? (
                     myActiveVaults
                   ) : (
@@ -233,7 +234,7 @@ const HomePriv = () => {
                           Inactive Vaults
                         </Typography>
                       ) : (null)}
-                      <Datagrid vaults={myInactiveVaults || []} />
+                      <VaultList vaults={myInactiveVaults || []} />
                       <Box
                         sx={{
                           display: "flex",
