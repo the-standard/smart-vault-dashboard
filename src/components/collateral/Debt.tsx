@@ -7,6 +7,17 @@ import Confetti from 'react-confetti';
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
+import { formatEther, parseEther } from "viem";
+import CheckIcon from "@mui/icons-material/Check";
+import Lottie from "lottie-react";
+import {
+  useWriteContract,
+  useReadContracts,
+  useChainId,
+  useWatchBlockNumber
+} from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
 import {
   useVaultAddressStore,
   useVaultStore,
@@ -18,13 +29,8 @@ import {
   useCounterStore,
   useErc20AbiStore,
 } from "../../store/Store";
-import { formatEther, parseEther } from "viem";
-import CheckIcon from "@mui/icons-material/Check";
-import Lottie from "lottie-react";
-import depositLottie from "../../lotties/deposit.json";
-import { getNetwork } from "@wagmi/core";
-import { useWriteContract, useReadContracts } from "wagmi";
 
+import depositLottie from "../../lotties/deposit.json";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 
@@ -45,10 +51,9 @@ const Debt = () => {
   const { getGreyBarUserInput, getOperationType } =
     useGreyProgressBarValuesStore();
   const { getCounter } = useCounterStore();
-  const { chain } = getNetwork();
+  const chainId = useChainId();
   const HUNDRED_PC = 100_000n;
-
-  // const navigate = useNavigate();
+  const [stage, setStage] = useState('');
 
   const incrementCounter = () => {
     getCounter(1);
@@ -58,7 +63,7 @@ const Debt = () => {
 
   const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
 
-  const eurosAddress = chain?.id === 421614 ?
+  const eurosAddress = chainId === arbitrumSepolia.id ?
     arbitrumSepoliasEuroAddress :
     arbitrumsEuroAddress;
   
@@ -67,18 +72,23 @@ const Debt = () => {
     abi: erc20Abi,
   }
     
-  const { data: eurosData } = useReadContracts({
+  const { data: eurosData, refetch } = useReadContracts({
     contracts: [{
       ... eurosContract,
       functionName: "allowance",
       args: [address as any, vaultAddress]
-  },{
+    },{
       ... eurosContract,
       functionName: "balanceOf",
       args: [address as any]
-  }],
-    watch: true
+    }],
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   const allowance: any = eurosData && eurosData[0].result;
   const eurosWalletBalance: any = eurosData && eurosData[1].result;
@@ -122,52 +132,27 @@ const Debt = () => {
     };
   }, []);
 
-  const borrowMoney = useWriteContract({
-    address: vaultAddress as any,
-    abi: smartVaultAbi,
-    functionName: "mint",
-    args: [address as any, amountInWei],
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleMint = async () => {
+    setStage('MINT');
+    try {
+      writeContract({
+        abi: smartVaultAbi,
+        address: vaultAddress as any,
+        functionName: "mint",
+        args: [address as any, amountInWei],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
-
-  const handleBorrowMoney = async () => {
-    const { write } = borrowMoney;
-
-    write();
   };
-  useEffect(() => {
-    const { isLoading, isSuccess, isError } = borrowMoney;
-
-    if (isLoading) {
-      getProgressType(1);
-    } else if (isSuccess) {
-      getCircularProgress(false);
-      incrementCounter();
-      handleOpenYield();
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    } else if (isError) {
-      getCircularProgress(false);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    }
-  }, [
-    borrowMoney.isLoading,
-    borrowMoney.isSuccess,
-    borrowMoney.data,
-    borrowMoney.isError,
-  ]);
 
   // modal
   const [open, setOpen] = useState(false);
@@ -182,115 +167,129 @@ const Debt = () => {
   const burnFeeRate: bigint = vaultStore.burnFeeRate;
   const repayFee = amountInWei * burnFeeRate / HUNDRED_PC;
 
-  const approvePayment = useWriteContract({
-    address: eurosAddress as any,
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [vaultAddress as any, repayFee],
-    onError(error: any) {
+  const handleApprove = async () => {
+    setStage('APPROVE');
+    try {
+      writeContract({
+        abi: erc20Abi,
+        address: eurosAddress as any,
+        functionName: "approve",
+        args: [vaultAddress as any, repayFee],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
-
-  useEffect(() => {
-    const { isLoading, isSuccess, isError } = approvePayment;
-
-    if (isLoading) {
-      handleOpen();
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      handleRepayMoney();
-      getCircularProgress(false);
-      incrementCounter();
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    } else if (isError) {
-      handleClose();
-      getCircularProgress(false);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    }
-  }, [
-    approvePayment.isLoading,
-    approvePayment.isSuccess,
-    approvePayment.data,
-    approvePayment.isError,
-  ]);
+  };
 
   const handleApprovePayment = async () => {
     // V3 UPDATE
     // if vault version exists and if >= 3 skip the approval step
     if (vaultStore && vaultStore.status && vaultStore.status.version && vaultStore.status.version !== 1 && vaultStore.status.version !== 2) {
-      handleRepayMoney()
+      handleBurn()
     } else {
       if (allowance && allowance as any >= repayFee) {
-        handleRepayMoney()
+        handleBurn()
       } else {
-        const { write } = approvePayment;
-        write();
+        handleApprove()
       }  
     }
   };
 
-  const handleRepayMoney = async () => {
-    const { write } = repayMoney;
-    write();
-  };
+  const handleBurn = async () => {
+    setStage('BURN');
+    try {
+      writeContract({
+        abi: smartVaultAbi,
+        address: vaultAddress as any,
+        functionName: "burn",
+        args: [amountInWei],
+      });
 
-  const repayMoney = useWriteContract({
-    address: vaultAddress as any,
-    abi: smartVaultAbi,
-    functionName: "burn",
-    args: [amountInWei],
-    onError(error: any) {
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
+  };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = repayMoney;
-
-    if (isLoading) {
-      setModalStep(2);
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      handleClose();
-      setModalStep(1);
-      getProgressType(2);
-      getCircularProgress(false);
-      incrementCounter();
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    } else if (isError) {
-      setModalStep(1);
-      getCircularProgress(false);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-      console.log(isError);
+    if (stage === 'MINT') {
+      if (isPending) {
+        getProgressType(1);
+      } else if (isSuccess) {
+        getCircularProgress(false);
+        incrementCounter();
+        handleOpenYield();
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      } else if (isError) {
+        getCircularProgress(false);
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      }  
+    }
+    if (stage === 'APPROVE') {
+      if (isPending) {
+        handleOpen();
+        getCircularProgress(true);
+      } else if (isSuccess) {
+        handleBurn();
+        getCircularProgress(false);
+        incrementCounter();
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      } else if (isError) {
+        handleClose();
+        getCircularProgress(false);
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      }  
+    }
+    if (stage === 'BURN') {
+      if (isPending) {
+        setModalStep(2);
+        getCircularProgress(true);
+      } else if (isSuccess) {
+        handleClose();
+        setModalStep(1);
+        getProgressType(2);
+        getCircularProgress(false);
+        incrementCounter();
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      } else if (isError) {
+        setModalStep(1);
+        getCircularProgress(false);
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        console.log(isError);
+        setStage('');
+      }
     }
   }, [
-    repayMoney.isLoading,
-    repayMoney.isSuccess,
-    repayMoney.data,
-    repayMoney.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
   const toPercentage = (rate: bigint) => {
@@ -308,7 +307,7 @@ const Debt = () => {
   const handleDebtAction = () => {
     if (activeElement === 4) {
       getCircularProgress(true);
-      handleBorrowMoney();
+      handleMint();
     } else {
       if (amountInWei > vaultStore.status.minted) {
         alert('Repayment amount exceeds debt in vault');
