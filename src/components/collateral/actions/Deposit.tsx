@@ -16,7 +16,7 @@ import { parseEther, parseUnits } from "viem";
 import { getAccount } from "@wagmi/core";
 import { sendTransaction } from "@wagmi/core";
 import { useWriteContract } from "wagmi";
-import { useWaitForTransaction, useBalance } from "wagmi";
+import { useWaitForTransactionReceipt, useBalance } from "wagmi";
 import { constants } from "ethers";
 
 import Button from "../../../components/Button";
@@ -221,7 +221,7 @@ const Deposit: React.FC<DepositProps> = ({
     depositToken.isSuccess,
   ]);
 
-  const { data, isError, isLoading } = useWaitForTransaction({
+  const { data, isError, isLoading } = useWaitForTransactionReceipt({
     hash: txdata,
   });
 

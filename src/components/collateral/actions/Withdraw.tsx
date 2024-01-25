@@ -8,7 +8,7 @@ import {
   useRenderAppCounterStore,
 } from "../../../store/Store";
 import { Box } from "@mui/material";
-import { useAccount, useWriteContract, useWaitForTransaction } from "wagmi";
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { ethers } from "ethers";
 import { parseUnits } from "viem";
 import Button from "../../../components/Button";
@@ -155,7 +155,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
 
   const { incrementRenderAppCounter } = useRenderAppCounterStore();
 
-  const { data, isError, isLoading } = useWaitForTransaction({
+  const { data, isError, isLoading } = useWaitForTransactionReceipt({
     hash: txdata,
   });
 
