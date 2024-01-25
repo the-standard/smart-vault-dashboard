@@ -162,9 +162,11 @@ const StakingModal: React.FC<StakingModalProps> = ({
       } else if (isSuccess) {
         setApproveLoading(false);
         handleMintPosition();
+        setStage('');
       } else if (isError) {
         setApproveLoading(false);
         handleCloseModal();
+        setStage('');
       }
     }
     if (stage === 'MINT_POSITION') {
@@ -174,17 +176,19 @@ const StakingModal: React.FC<StakingModalProps> = ({
       } else if (isSuccess) {
         setMintLoading(false);
         setSuccess(true);
+        setStage('');
       } else if (isError) {
         setMintLoading(false);
         setSuccess(false);
+        setStage('');
       }
     }
-    setStage('');
   }, [
     isPending,
     isSuccess,
     isError,
   ]);
+
 
   const handleAmount = (e: any) => {
     if (Number(e.target.value) < 10n ** 21n) {

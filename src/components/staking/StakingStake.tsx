@@ -223,8 +223,10 @@ const StakingStake = () => {
         getCircularProgress(true);
       } else if (isSuccess) {
         handleApproveEuros();
+        setStage('');
       } else if (isError) {
         getCircularProgress(false);
+        setStage('');
       }  
     }
     if (stage === 'APPROVE_EUROS') {
@@ -233,8 +235,10 @@ const StakingStake = () => {
         getCircularProgress(true);
       } else if (isSuccess) {
         handleDepositToken();
+        setStage('');
       } else if (isError) {
         getCircularProgress(false);
+        setStage('');
       }
     }
     if (stage === 'DEPOSIT_TOKEN') {
@@ -247,15 +251,16 @@ const StakingStake = () => {
         tstInputRef.current.value = "";
         setTstStakeAmount(0);
         setEurosStakeAmount(0);
+        setStage('');
       } else if (isError) {
         getCircularProgress(false);
         eurosInputRef.current.value = "";
         tstInputRef.current.value = "";
         setTstStakeAmount(0);
         setEurosStakeAmount(0);
+        setStage('');
       }  
     }
-    setStage('');
   }, [
     isPending,
     isSuccess,
