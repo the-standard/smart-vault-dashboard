@@ -1,6 +1,11 @@
 import FullChart from "./FullChart";
 import { Box, Typography } from "@mui/material";
-import ProgressBar from "../ProgressBar";
+import { BigNumber, ethers } from "ethers";
+import { formatEther, formatUnits, parseEther } from "viem";
+import { parseBytes32String } from "ethers/lib/utils";
+import { useReadContracts, useChainId } from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
 import {
   useVaultStore,
   useVaultIdStore,
@@ -8,10 +13,8 @@ import {
   useChainlinkAbiStore,
   useUSDToEuroAddressStore,
 } from "../../store/Store";
-import { BigNumber, ethers } from "ethers";
-import { formatEther, formatUnits, parseEther } from "viem";
-import { useReadContracts, useNetwork } from "wagmi";
-import { parseBytes32String } from "ethers/lib/utils";
+
+import ProgressBar from "../ProgressBar";
 
 const Index = () => {
   const { vaultStore } = useVaultStore();
@@ -20,7 +23,7 @@ const Index = () => {
     useGreyProgressBarValuesStore();
   const vaultVersion = vaultStore?.status.version || '';
   const chosenVault: any = vaultStore;
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { chainlinkAbi } = useChainlinkAbiStore();
   const { arbitrumOneUSDToEuroAddress, arbitrumSepoliaUSDToEuroAddress } =
     useUSDToEuroAddressStore();
@@ -31,7 +34,7 @@ const Index = () => {
   };
 
   const eurUsdAddress =
-    chain?.id === 421614
+    chainId === arbitrumSepolia.id
       ? arbitrumSepoliaUSDToEuroAddress
       : arbitrumOneUSDToEuroAddress;
 
