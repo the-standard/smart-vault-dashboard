@@ -1,4 +1,19 @@
 import { useEffect, useLayoutEffect, useState, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Modal, Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import QRCode from "react-qr-code";
+import { ethers } from "ethers";
+import { useParams, useLocation } from "react-router-dom";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import {
+  useBlockNumber,
+  useReadContract,
+  useChainId,
+  useWatchBlockNumber,
+} from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
 import {
   useVaultAddressStore,
   useVaultStore,
@@ -7,16 +22,6 @@ import {
   useVaultManagerAbiStore,
   usePositionStore,
 } from "../store/Store";
-
-import { Box, Modal, Typography } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import QRCode from "react-qr-code";
-import { ethers } from "ethers";
-import { useParams, useLocation } from "react-router-dom";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { getNetwork } from "@wagmi/core";
-import { useBlockNumber, useReadContract } from "wagmi";
-import { useNavigate } from "react-router-dom";
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 import vaultLiauidatedImg from "../assets/vault-liquidated.png";
@@ -66,7 +71,7 @@ const Collateral = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
 
-  const { chain } = getNetwork();
+  const chainId = useChainId();
   const query = useQuery();
   const vaultView = query.get("view");
 
@@ -116,17 +121,22 @@ const Collateral = () => {
   }, [vaultView]);
   
   const vaultManagerAddress =
-    chain?.id === 421614
+    chainId === arbitrumSepolia.id
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: vaultData } = useReadContract({
+  const { data: vaultData, refetch } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultData",
-    args: [vaultId],
-    watch: true
+    args: [vaultId as any],
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   const currentVault: any = vaultData;
 
@@ -398,7 +408,7 @@ const Collateral = () => {
 
   const handleButtonActions = (id: number) => {
     const arbiscanUrl =
-      chain?.id === 421614
+      chainId === arbitrumSepolia.id
         ? `https://sepolia.arbiscan.io/address/${vaultAddress}`
         : `https://arbiscan.io/address/${vaultAddress}`;
     if (id === 1) {
