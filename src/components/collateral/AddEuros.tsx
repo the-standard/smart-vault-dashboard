@@ -2,11 +2,17 @@ import { Box, Typography } from "@mui/material";
 import metamasklogo from "../../assets/metamasklogo.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useState, useEffect } from "react";
-import { useSnackBarStore, usesEuroAddressStore } from "../../store/Store";
-import { useNetwork } from "wagmi";
+import { useChainId } from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
+import {
+  useSnackBarStore,
+  usesEuroAddressStore
+} from "../../store/Store";
+
 const AddEuros = () => {
   const { getSnackBar } = useSnackBarStore();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { arbitrumSepoliasEuroAddress, arbitrumsEuroAddress } = usesEuroAddressStore();
 
   //clipboard logic
@@ -36,7 +42,7 @@ const AddEuros = () => {
   //clipboard logic end
 
   const eurosAddress =
-    chain?.id === 421614
+    chainId === arbitrumSepolia.id 
       ? arbitrumSepoliasEuroAddress
       : arbitrumsEuroAddress;
 
@@ -214,24 +220,7 @@ const AddEuros = () => {
         }}
       >
         <Box
-          // sx={{
-          //   flexDirection: "row",
-          //   justifyContent: "flex-start",
-          //   alignItems: "center",
-          //   width: "50%",
-          //   bgcolor: "black",
-          //   padding: "10px",
-          //   borderRadius: "10px",
-          //   border: "1px solid gray",
-          //   margin: "15px 0 15px 0",
-          //   cursor: "pointer",
-          //   display: {
-          //     xs: "none",
-          //     sm: "flex",
-          //   },
-          // }}
           sx={{
-            //   margin: "2px",
             padding: "5px 20px",
             width: "auto",
             height: "3rem",
