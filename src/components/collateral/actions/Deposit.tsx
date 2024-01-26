@@ -1,6 +1,13 @@
-import { Box, Modal, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { Box, Modal, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
+import { parseEther, parseUnits } from "viem";
+import { constants } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
+import { useWaitForTransactionReceipt, useBalance, useWriteContract, useAccount } from "wagmi";
+import { sendTransaction, http, createConfig, getAccount } from "@wagmi/core";
+import { mainnet, sepolia } from '@wagmi/core/chains'
+
 import {
   useVaultAddressStore,
   useCircularProgressStore,
@@ -9,18 +16,13 @@ import {
   useErc20AbiStore,
   useRenderAppCounterStore,
 } from "../../../store/Store";
+
 import QRicon from "../../../assets/qricon.png";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
-import { parseEther, parseUnits } from "viem";
-import { getAccount } from "@wagmi/core";
-import { sendTransaction } from "@wagmi/core";
-import { useWriteContract } from "wagmi";
-import { useWaitForTransactionReceipt, useBalance } from "wagmi";
-import { constants } from "ethers";
-
 import Button from "../../../components/Button";
-import { formatUnits } from "ethers/lib/utils";
+import config from "../../../WagmiConfig";
+
 
 interface DepositProps {
   symbol: string;
@@ -50,7 +52,10 @@ const Deposit: React.FC<DepositProps> = ({
   const { incrementRenderAppCounter } = useRenderAppCounterStore();
   const [txdata, setTxdata] = useState<any>(null);
 
-  const { address } = getAccount();
+  // const { address } = getAccount(config);
+  const { address } = useAccount();
+
+  console.log(123123, address)
 
   //get the balance of the current wallet address
   const balanceReqData: any = {

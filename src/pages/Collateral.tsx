@@ -11,6 +11,7 @@ import {
   useReadContract,
   useChainId,
   useWatchBlockNumber,
+  useAccount,
 } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 
@@ -35,6 +36,8 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import VaultMenuSmall from "../components/VaultMenuSmall";
 
+import { useReconnect } from 'wagmi'
+
 type RouteParams = {
   vaultId: string;
 };
@@ -43,6 +46,7 @@ function useQuery() {
   const { search } = useLocation();
   return useMemo(() => new URLSearchParams(search), [search]);
 }
+
 
 const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
@@ -74,6 +78,17 @@ const Collateral = () => {
   const chainId = useChainId();
   const query = useQuery();
   const vaultView = query.get("view");
+
+  const { reconnect } = useReconnect()
+
+  useEffect(() => {
+    reconnect()
+    console.log("RECONNECTING")
+  }, [])
+
+  const { address, addresses, chain, chainId: accountChainId, status } = useAccount();
+
+  console.log(20202, {status}, {address}, {addresses}, {chain})
 
   useEffect(() => {
     getVaultID(vaultId);

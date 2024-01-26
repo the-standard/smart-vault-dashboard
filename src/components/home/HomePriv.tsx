@@ -44,6 +44,8 @@ const HomePriv = () => {
   const { getSnackBar } = useSnackBarStore();
   const { data: blockNumber } = useBlockNumber({ watch: true });
 
+  console.log(1010101, address)
+
   const chainId = useChainId();
   const vaultManagerAddress =
     chainId === arbitrumSepolia.id
