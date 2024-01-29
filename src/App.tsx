@@ -30,6 +30,7 @@ import Disclaimer from "./components/Disclaimer.tsx";
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { EthereumProvider } from "@walletconnect/ethereum-provider";
+import wagmiConfig from "./WagmiConfig";
 
 const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";
 
@@ -38,15 +39,6 @@ function App() {
   const { renderAppCounter } = useRenderAppCounterStore();
 
   const queryClient = new QueryClient()
-
-  const wagmiConfig = createConfig({
-    chains: [arbitrum, arbitrumSepolia],
-    transports: {
-      [arbitrum.id]: http(`https://arb-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`),
-      [arbitrumSepolia.id]: http(`https://arb-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_SEPOLIA_API_KEY}`)
-    },
-    connectors: [ walletConnect({projectId}) ],
-  });
 
   createWeb3Modal({ wagmiConfig, projectId, chains: [arbitrum, arbitrumSepolia] });
 

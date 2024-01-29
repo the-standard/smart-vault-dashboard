@@ -21,7 +21,6 @@ import QRicon from "../../../assets/qricon.png";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import Button from "../../../components/Button";
-import config from "../../../WagmiConfig";
 
 
 interface DepositProps {
@@ -54,8 +53,6 @@ const Deposit: React.FC<DepositProps> = ({
 
   // const { address } = getAccount(config);
   const { address } = useAccount();
-
-  console.log(123123, address)
 
   //get the balance of the current wallet address
   const balanceReqData: any = {
@@ -202,9 +199,9 @@ const Deposit: React.FC<DepositProps> = ({
     }
   };
   useEffect(() => {
-    const { isLoading, isSuccess, isError, data } = depositToken;
+    const { isPending, isSuccess, isError, data } = depositToken;
 
-    if (isLoading) {
+    if (isPending) {
       getProgressType(2);
       getCircularProgress(true);
     } else if (isSuccess) {
@@ -222,11 +219,11 @@ const Deposit: React.FC<DepositProps> = ({
   }, [
     depositToken.data,
     depositToken.error,
-    depositToken.isLoading,
+    depositToken.isPending,
     depositToken.isSuccess,
   ]);
 
-  const { data, isError, isLoading } = useWaitForTransactionReceipt({
+  const { data, isError, isPending } = useWaitForTransactionReceipt({
     hash: txdata,
   });
 
@@ -235,10 +232,10 @@ const Deposit: React.FC<DepositProps> = ({
       incrementRenderAppCounter();
     } else if (isError) {
       incrementRenderAppCounter();
-    } else if (isLoading) {
+    } else if (isPending) {
       incrementRenderAppCounter();
     }
-  }, [data, isError, isLoading]);
+  }, [data, isError, isPending]);
 
   //trunate string logic
   const [width, setWidth] = useState(window.innerWidth);

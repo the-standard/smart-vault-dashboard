@@ -79,16 +79,14 @@ const Collateral = () => {
   const query = useQuery();
   const vaultView = query.get("view");
 
-  const { reconnect } = useReconnect()
+  // const { reconnect } = useReconnect()
 
-  useEffect(() => {
-    reconnect()
-    console.log("RECONNECTING")
-  }, [])
+  // useEffect(() => {
+  //   reconnect()
+  //   console.log("RECONNECTING")
+  // }, [])
 
   const { address, addresses, chain, chainId: accountChainId, status } = useAccount();
-
-  console.log(20202, {status}, {address}, {addresses}, {chain})
 
   useEffect(() => {
     getVaultID(vaultId);
