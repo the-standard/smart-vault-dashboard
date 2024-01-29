@@ -1,11 +1,18 @@
-import { useEffect, useRef, useState } from "react";
 import { Box, Modal, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import { parseEther, parseUnits } from "viem";
+import { sendTransaction } from "@wagmi/core";
+import {
+  useWriteContract,
+  useAccount,
+  useWaitForTransactionReceipt,
+  useBalance,
+  useWatchBlockNumber
+} from "wagmi";
 import { constants } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
-import { useWaitForTransactionReceipt, useBalance, useWriteContract, useAccount } from "wagmi";
-import { sendTransaction, getAccount } from "@wagmi/core";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import {
   useVaultAddressStore,
@@ -13,14 +20,12 @@ import {
   useSnackBarStore,
   useGreyProgressBarValuesStore,
   useErc20AbiStore,
-  useRenderAppCounterStore,
 } from "../../../store/Store";
 
+import wagmiConfig from "../../../WagmiConfig";
 import QRicon from "../../../assets/qricon.png";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import Button from "../../../components/Button";
-
 
 interface DepositProps {
   symbol: string;
@@ -47,7 +52,7 @@ const Deposit: React.FC<DepositProps> = ({
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
-  const { incrementRenderAppCounter } = useRenderAppCounterStore();
+  // const { incrementRenderAppCounter } = useRenderAppCounterStore();
   const [txdata, setTxdata] = useState<any>(null);
 
   const { address } = useAccount();
@@ -55,12 +60,18 @@ const Deposit: React.FC<DepositProps> = ({
   //get the balance of the current wallet address
   const balanceReqData: any = {
     address: address,
-    watch: true,
   };
+
   if (tokenAddress !== constants.AddressZero) {
     balanceReqData.token = tokenAddress;
   }
-  const { data: balanceData } = useBalance(balanceReqData);
+  const { data: balanceData, refetch } = useBalance(balanceReqData);
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   const walletBalance = balanceData?.value;
 
@@ -101,30 +112,25 @@ const Deposit: React.FC<DepositProps> = ({
         });
     }
   };
+  
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
 
-  const depositToken = useWriteContract({
-    address: tokenAddress as any,
-    abi: erc20Abi,
-    functionName: "transfer",
-    args: [vaultAddress, parseUnits(amount.toString(), decimals)],
-    onError(error: any) {
+  const handleDepositToken = async () => {
+    try {
+      writeContract({
+        abi: erc20Abi,
+        address: tokenAddress as any,
+        functionName: "transfer",
+        args: [vaultAddress, parseUnits(amount.toString(), decimals)],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
-    }
-  });
-
-  const handleDepositToken = async () => {
-    try {
-      const { write } = depositToken;
-      write();
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -142,17 +148,17 @@ const Deposit: React.FC<DepositProps> = ({
   const depositEther = async () => {
     getProgressType(2);
     getCircularProgress(true);
-    const account = getAccount();
 
     try {
       const txAmount: any = amount;
 
       const toAddress: any = vaultAddress;
-      const { hash } = await sendTransaction({
-        account: account.address,
+
+      const hash = await sendTransaction(wagmiConfig, {
+        account: address,
         to: toAddress,
         value: parseEther(txAmount.toString()),
-      });
+      })
 
       setTxdata(hash);
 
@@ -196,9 +202,16 @@ const Deposit: React.FC<DepositProps> = ({
       }
     }
   };
-  useEffect(() => {
-    const { isPending, isSuccess, isError, data } = depositToken;
 
+  const {
+    data: txRcptData,
+    // isError: txRcptError,
+    // isPending: txRcptPending
+  } = useWaitForTransactionReceipt({
+    hash: txdata,
+  });
+
+  useEffect(() => {
     if (isPending) {
       getProgressType(2);
       getCircularProgress(true);
@@ -207,7 +220,7 @@ const Deposit: React.FC<DepositProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
-      setTxdata(data);
+      setTxdata(txRcptData);
     } else if (isError) {
       inputRef.current.value = "";
       inputRef.current.focus();
@@ -215,25 +228,20 @@ const Deposit: React.FC<DepositProps> = ({
       getGreyBarUserInput(0);
     }
   }, [
-    depositToken.data,
-    depositToken.error,
-    depositToken.isPending,
-    depositToken.isSuccess,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
-  const { data, isError, isPending } = useWaitForTransactionReceipt({
-    hash: txdata,
-  });
-
-  useEffect(() => {
-    if (data) {
-      incrementRenderAppCounter();
-    } else if (isError) {
-      incrementRenderAppCounter();
-    } else if (isPending) {
-      incrementRenderAppCounter();
-    }
-  }, [data, isError, isPending]);
+  // useEffect(() => {
+  //   if (txRcptData) {
+  //     incrementRenderAppCounter();
+  //   } else if (txRcptError) {
+  //     incrementRenderAppCounter();
+  //   } else if (txRcptPending) {
+  //     incrementRenderAppCounter();
+  //   }
+  // }, [txRcptData, txRcptError, txRcptPending]);
 
   //trunate string logic
   const [width, setWidth] = useState(window.innerWidth);
@@ -262,6 +270,7 @@ const Deposit: React.FC<DepositProps> = ({
       setTruncatedAddress(vaultAddress);
     }
   }, [width, vaultAddress]);
+
   return (
     <Box>
       <Box
@@ -409,7 +418,7 @@ const Deposit: React.FC<DepositProps> = ({
         open={open}
         onClose={() => {
           handleClose();
-          incrementRenderAppCounter();
+          // incrementRenderAppCounter();
         }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"

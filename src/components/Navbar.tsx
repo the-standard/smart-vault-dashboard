@@ -10,9 +10,7 @@ import arbitrumTestLogoLong from "../assets/arbitrumTestLogoLong.svg";
 import arbitrumTestLogoShort from "../assets/arbitrumTestLogoShort.svg";
 import networkNotSupportedLong from "../assets/networkNotSupportedLong.svg";
 import networkNotSupportedShort from "../assets/networkNotSupportedShort.svg";
-import { useAccount, useChainId, useConnect, useConnectorClient, useConnectors } from "wagmi";
-import { useEffect } from "react";
-import { walletConnect } from "wagmi/connectors";
+import { useChainId } from "wagmi";
 
 const Navbar = () => {
   const { right } = usePositionStore((state) => state);
