@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import { WagmiProvider, createConfig, http } from "wagmi";
+import { WagmiProvider } from "wagmi";
 import {
   arbitrum,
   arbitrumSepolia
 } from "wagmi/chains";
-import { walletConnect } from "wagmi/connectors";
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import HomePage from "./pages/HomePage.tsx";
 //import navbar
@@ -27,9 +26,7 @@ import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
 import TermsOfUse from "./pages/TermsOfUse.tsx";
 import Disclaimer from "./components/Disclaimer.tsx";
-import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { EthereumProvider } from "@walletconnect/ethereum-provider";
 import wagmiConfig from "./WagmiConfig";
 
 const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";

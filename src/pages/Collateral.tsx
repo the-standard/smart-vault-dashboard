@@ -11,7 +11,6 @@ import {
   useReadContract,
   useChainId,
   useWatchBlockNumber,
-  useAccount,
 } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 
@@ -35,8 +34,6 @@ import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import VaultMenuSmall from "../components/VaultMenuSmall";
-
-import { useReconnect } from 'wagmi'
 
 type RouteParams = {
   vaultId: string;
@@ -79,21 +76,12 @@ const Collateral = () => {
   const query = useQuery();
   const vaultView = query.get("view");
 
-  // const { reconnect } = useReconnect()
-
-  // useEffect(() => {
-  //   reconnect()
-  //   console.log("RECONNECTING")
-  // }, [])
-
-  const { address, addresses, chain, chainId: accountChainId, status } = useAccount();
-
   useEffect(() => {
     getVaultID(vaultId);
   }, []);
 
   useEffect(() => {
-    // loader to allow currentVault filter to resolve
+    // forced loader to allow currentVault filter to resolve
     // fixes flashing "no vault found" on first load
     setVaultsLoading(true);
     setTimeout(() => {
