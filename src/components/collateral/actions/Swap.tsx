@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
+import { Box, Typography, CircularProgress } from "@mui/material";
+import { formatUnits, parseUnits } from "viem";
+import { useWriteContract } from "wagmi";
+import axios from "axios";
+
 import {
   useVaultStore,
   useVaultAddressStore,
@@ -7,13 +12,9 @@ import {
   useSnackBarStore,
   useCircularProgressStore,
 } from "../../../store/Store";
-import { Box, Typography, CircularProgress } from "@mui/material";
-import { formatUnits, parseUnits } from "viem";
-import { useWriteContract } from "wagmi";
 
 import Select from "../../../components/Select";
 import Button from "../../../components/Button";
-import axios from "axios";
 
 interface SwapProps {
   symbol: string;
@@ -107,36 +108,34 @@ const Swap: React.FC<SwapProps> = ({
 
   const availableAssets = swapAssets?.filter((item: any) => item.symbol !== symbol);
 
-  const swapTokens = useWriteContract({
-    address: vaultAddress as any,
-    abi: smartVaultABI,
-    functionName: "swap",
-    args: [
-      ethers.utils.formatBytes32String(symbol),
-      ethers.utils.formatBytes32String(receiveAsset),
-      parseUnits(amount.toString(), decimals),
-      parseUnits(receiveAmountFormatted.toString(), receiveDecimals),
-    ],
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleSwapTokens = async () => {
+    try {
+      writeContract({
+        abi: smartVaultABI,
+        address: vaultAddress as any,
+        functionName: "swap",
+        args: [
+          ethers.utils.formatBytes32String(symbol),
+          ethers.utils.formatBytes32String(receiveAsset),
+          parseUnits(amount.toString(), decimals),
+          parseUnits(receiveAmountFormatted.toString(), receiveDecimals),
+        ],
+    });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
-
-  const handleSwapTokens = async () => {
-    const { write } = swapTokens;
-    write();
   };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = swapTokens;
-    if (isLoading) {
+    if (isPending) {
       getProgressType('SWAP');
       getCircularProgress(true);
       setSwapLoading(true);
@@ -156,9 +155,9 @@ const Swap: React.FC<SwapProps> = ({
       setReceiveAsset('');
     }
   }, [
-    swapTokens.isLoading,
-    swapTokens.isSuccess,
-    swapTokens.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
   const handleMaxBalance = async () => {
