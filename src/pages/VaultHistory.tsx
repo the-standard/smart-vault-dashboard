@@ -118,8 +118,6 @@ const VaultHistory = () => {
     }
   }, [paginationModel]);
 
-  console.log(123123, currentVault)
-
   if (vaultsLoading) {
     return (
       <Box
