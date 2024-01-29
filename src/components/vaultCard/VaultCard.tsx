@@ -112,6 +112,8 @@ const VaultCard: React.FC<VaultCardProps> = ({
     args: {
       owner: address
     },
+    poll: true,
+    pollingInterval: 1000,
     onLogs(logs: any) {
       if (logs[0] && logs[0].args) {
         const { tokenId } = logs[0] && logs[0].args;
