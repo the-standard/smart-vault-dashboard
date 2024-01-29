@@ -5,8 +5,7 @@ import { parseEther, parseUnits } from "viem";
 import { constants } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { useWaitForTransactionReceipt, useBalance, useWriteContract, useAccount } from "wagmi";
-import { sendTransaction, http, createConfig, getAccount } from "@wagmi/core";
-import { mainnet, sepolia } from '@wagmi/core/chains'
+import { sendTransaction, getAccount } from "@wagmi/core";
 
 import {
   useVaultAddressStore,
@@ -51,7 +50,6 @@ const Deposit: React.FC<DepositProps> = ({
   const { incrementRenderAppCounter } = useRenderAppCounterStore();
   const [txdata, setTxdata] = useState<any>(null);
 
-  // const { address } = getAccount(config);
   const { address } = useAccount();
 
   //get the balance of the current wallet address
