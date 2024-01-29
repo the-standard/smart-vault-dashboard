@@ -52,7 +52,6 @@ const Deposit: React.FC<DepositProps> = ({
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
-  // const { incrementRenderAppCounter } = useRenderAppCounterStore();
   const [txdata, setTxdata] = useState<any>(null);
 
   const { address } = useAccount();
@@ -233,16 +232,6 @@ const Deposit: React.FC<DepositProps> = ({
     isError,
   ]);
 
-  // useEffect(() => {
-  //   if (txRcptData) {
-  //     incrementRenderAppCounter();
-  //   } else if (txRcptError) {
-  //     incrementRenderAppCounter();
-  //   } else if (txRcptPending) {
-  //     incrementRenderAppCounter();
-  //   }
-  // }, [txRcptData, txRcptError, txRcptPending]);
-
   //trunate string logic
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -418,7 +407,6 @@ const Deposit: React.FC<DepositProps> = ({
         open={open}
         onClose={() => {
           handleClose();
-          // incrementRenderAppCounter();
         }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
