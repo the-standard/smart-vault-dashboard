@@ -3,12 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getNetwork } from "@wagmi/core";
-import { useReadContract } from "wagmi";
+import CircularProgress from "@mui/material/CircularProgress";
+import {
+  useReadContract,
+  useChainId,
+  useWatchBlockNumber,
+} from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
 import { formatUnits, formatEther } from "viem";
 import moment from 'moment';
 import axios from "axios";
-
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 import {
@@ -43,7 +47,7 @@ function NoDataOverlay() {
 }
 
 const VaultHistory = () => {
-  const { chain } = getNetwork();
+  const chainId = useChainId();
   const { arbitrumSepoliaContractAddress, arbitrumContractAddress } = useContractAddressStore();
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { vaultId } = useParams<RouteParams>();
@@ -53,9 +57,18 @@ const VaultHistory = () => {
   const [historyLoading, setHistoryLoading] = useState<any>(true);
   const [historyData, setHistoryData] = useState<any>(undefined);
   const [totalRows, setTotalRows] = useState<any>(undefined);
+  const [vaultsLoading, setVaultsLoading] = useState(true);
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
+
+  useEffect(() => {
+    // fixes flashing "no vault found" on first load
+    setVaultsLoading(true);
+    setTimeout(() => {
+      setVaultsLoading(false);
+    }, 1000);
+  }, []);
 
   useLayoutEffect(() => {
     function updatePosition() {
@@ -71,18 +84,22 @@ const VaultHistory = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
-  const vaultManagerAddress =
-    chain?.id === 421614
-      ? arbitrumSepoliaContractAddress
-      : arbitrumContractAddress;
+  const vaultManagerAddress = chainId === arbitrumSepolia.id ?
+      arbitrumSepoliaContractAddress :
+      arbitrumContractAddress;
 
-  const { data: vaultData } = useReadContract({
+  const { data: vaultData, refetch } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultData",
-    args: [vaultId],
-    watch: true
+    args: [vaultId as any],
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   const currentVault: any = vaultData;
 
@@ -95,7 +112,247 @@ const VaultHistory = () => {
     getVaultID(vaultId);
   }, []);
 
+  useEffect(() => {
+    if (currentVault) {
+      getHistoryData();
+    }
+  }, [paginationModel]);
+
+  console.log(123123, currentVault)
+
+  if (vaultsLoading) {
+    return (
+      <Box
+        sx={{
+          color: "#8E9BAE",
+          margin: {
+            xs: "0% 4%",
+            sm: "3% 6%",
+            md: "3% 12%",
+          },
+          minHeight: "100vh",
+          height: "100%",
+        }}
+        ref={rectangleRef}
+      >
+        {/* divide into 2 columns */}
+        {/*  column 1 */}
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-between",
+            marginBottom: "1rem",
+            marginTop: { xs: "1rem", sm: "0px" },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
+          >
+            <Button
+              sx={{
+                "&:after": {
+                  backgroundSize: "300% 100%",
+                }
+              }}
+              clickFunction={() => navigate('/')}
+              isDisabled
+            >
+              <ArrowBackIosNewIcon />
+            </Button>
+            <Button
+              clickFunction={() => navigate(`../Collateral/${vaultId}`)}
+              isDisabled
+            >
+              Collateral
+            </Button>
+            <Button
+              clickFunction={() => navigate(`../Collateral/${vaultId}?view=2`)}
+              isDisabled
+            >
+              Borrow/Repay
+            </Button>
+            <Button
+              isActive={true}
+              clickFunction={() => navigate('history')}
+              isDisabled
+            >
+              History
+            </Button>
+          </Box>
+          {/* right side of the upper column */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          ></Box>
+        </Box>
+
+        <VaultMenuSmall
+          vaultId={vaultId}
+          isDisabled
+        />
+
+        <Box
+          sx={{
+            display: { xs: "flex", lg: "grid" },
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
+          <Card
+            sx={{
+              alignItems: "center",
+              padding: "1.5rem",
+              width: {xs: "100%", sm: "auto"},
+              minHeight: "50vh",
+              marginTop: "0.5rem",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+                background: "transparent",
+                zIndex: 9999,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          </Card>
+        </Box>
+      </Box>
+    )
+  }
+
+  if (!currentVault) {
+    // vault not found
+    return (
+      <Box
+        sx={{
+          color: "#ffffff",
+          margin: {
+            xs: "0% 4%",
+            sm: "3% 6%",
+            md: "3% 12%",
+          },
+        }}
+        ref={rectangleRef}
+      >
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-between",
+            marginBottom: "1rem",
+            marginTop: { xs: "1rem", sm: "0px" },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
+          >
+            <Button
+              sx={{
+                "&:after": {
+                  backgroundSize: "300% 100%",
+                }
+              }}
+              clickFunction={() => navigate('/')}
+            >
+              <ArrowBackIosNewIcon />
+            </Button>
+            <Button
+              clickFunction={() => navigate(`../Collateral/${vaultId}`)}
+              isDisabled
+            >
+              Collateral
+            </Button>
+            <Button
+              clickFunction={() => navigate(`../Collateral/${vaultId}?view=2`)}
+              isDisabled
+            >
+              Borrow/Repay
+            </Button>
+            <Button
+              isActive={true}
+              clickFunction={() => navigate('history')}
+              isDisabled
+            >
+              History
+            </Button>
+          </Box>
+          {/* right side of the upper column */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          ></Box>
+        </Box>
+
+        <VaultMenuSmall
+          vaultId={vaultId}
+          isDisabled
+        />
+
+        <Box
+          sx={{
+            display: { xs: "flex", lg: "grid" },
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
+          <Card
+            sx={{
+              alignItems: "center",
+              padding: "1.5rem",
+              width: {xs: "100%", sm: "auto"},
+              minHeight: "50vh",
+              marginTop: "0.5rem",
+            }}
+          >
+            Vault Not Found
+          </Card>
+        </Box>
+      </Box>
+    );
+  }
+
   const { vaultAddress } = currentVault.status;
+
+  const getHistoryData = async () => {
+    try {
+      setHistoryLoading(true);
+      const limit = paginationModel.pageSize;
+      const page = paginationModel.page + 1;
+      const response = await axios.get(
+        `https://smart-vault-api.thestandard.io/transactions/${vaultAddress}?page=${page}&limit=${limit}`
+      );
+      const data = response.data.data;
+      const rows = response.data.pagination.totalRows;
+      setHistoryData(data);
+      setTotalRows(rows);
+      setHistoryLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const colData = [
     {
@@ -245,34 +502,12 @@ const VaultHistory = () => {
     },
   ];
 
-  const getHistoryData = async () => {
-    try {
-      setHistoryLoading(true);
-      const limit = paginationModel.pageSize;
-      const page = paginationModel.page + 1;
-      const response = await axios.get(
-        `https://smart-vault-api.thestandard.io/transactions/${vaultAddress}?page=${page}&limit=${limit}`
-      );
-      const data = response.data.data;
-      const rows = response.data.pagination.totalRows;
-      setHistoryData(data);
-      setTotalRows(rows);
-      setHistoryLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getHistoryData();
-  }, [paginationModel]);
-
   const columns: GridColDef[] = colData;
   const rows = historyData || [];
 
   const handleEtherscanLink = (txRef: string) => {
     // const arbiscanUrl = `https://arbiscan.io/tx/${txRef}`;
-    const arbiscanUrl = chain?.id === 421614
+    const arbiscanUrl = chainId === arbitrumSepolia.id
       ? `https://sepolia.arbiscan.io/tx/${txRef}`
       : `https://arbiscan.io/tx/${txRef}`;
       
