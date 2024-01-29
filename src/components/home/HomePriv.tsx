@@ -42,11 +42,10 @@ const HomePriv = () => {
   const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { arbitrumSepoliaContractAddress, arbitrumContractAddress } = useContractAddressStore();
   const { getSnackBar } = useSnackBarStore();
-  
+
   /* eslint-disable @typescript-eslint/ban-ts-comment */
   //@ts-ignore
   const { data: blockNumber } = useBlockNumber({ watch: true });
-
 
   const chainId = useChainId();
   const vaultManagerAddress =
