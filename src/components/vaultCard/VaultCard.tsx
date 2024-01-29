@@ -112,7 +112,7 @@ const VaultCard: React.FC<VaultCardProps> = ({
     args: {
       owner: address
     },
-    onLogs(logs) {
+    onLogs(logs: any) {
       if (logs[0] && logs[0].args) {
         const { tokenId } = logs[0] && logs[0].args;
         setTokenId(tokenId)
