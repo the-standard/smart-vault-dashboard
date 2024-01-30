@@ -1,7 +1,13 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { Box, Grid, Modal, Typography } from "@mui/material";
 import { ethers } from "ethers";
-import { useAccount, useBlockNumber, useChainId, useReadContract, useReadContracts } from "wagmi";
+import {
+  useAccount,
+  useChainId,
+  useReadContract,
+  useReadContracts,
+  useWatchBlockNumber
+} from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 
 import {
@@ -43,17 +49,13 @@ const HomePriv = () => {
   const { arbitrumSepoliaContractAddress, arbitrumContractAddress } = useContractAddressStore();
   const { getSnackBar } = useSnackBarStore();
 
-  /* eslint-disable @typescript-eslint/ban-ts-comment */
-  //@ts-ignore
-  const { data: blockNumber } = useBlockNumber({ watch: true });
-
   const chainId = useChainId();
   const vaultManagerAddress =
     chainId === arbitrumSepolia.id
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: vaultIDs } = useReadContract({
+  const { data: vaultIDs, refetch: refetchVaultIDs } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultIDs",
@@ -73,7 +75,7 @@ const HomePriv = () => {
     })
   });
 
-  const { data: vaultData } = useReadContracts({
+  const { data: vaultData, refetch: refetchVaultData } = useReadContracts({
     contracts
   });
 
@@ -84,6 +86,13 @@ const HomePriv = () => {
       )    
     }
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetchVaultIDs();
+      refetchVaultData();
+    },
+  })
 
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
