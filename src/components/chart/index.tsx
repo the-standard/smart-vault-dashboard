@@ -16,13 +16,18 @@ import {
 
 import ProgressBar from "../ProgressBar";
 
-const Index = () => {
-  const { vaultStore } = useVaultStore();
+interface ChartProps {
+  currentVault: any;
+}
+
+const Index: React.FC<ChartProps> = ({
+  currentVault,
+}) => {  const { vaultStore } = useVaultStore();
   const { vaultID } = useVaultIdStore();
   const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
   const vaultVersion = vaultStore?.status.version || '';
-  const chosenVault: any = vaultStore;
+  // const chosenVault: any = vaultStore;
   const chainId = useChainId();
   const { chainlinkAbi } = useChainlinkAbiStore();
   const { arbitrumOneUSDToEuroAddress, arbitrumSepoliaUSDToEuroAddress } =
@@ -46,7 +51,7 @@ const Index = () => {
   ];
 
   if (symbolForGreyBar.length > 0) {
-    const focusedAsset = chosenVault.status.collateral.filter(
+    const focusedAsset = currentVault.status.collateral.filter(
       (asset: any) =>
         parseBytes32String(asset.token.symbol) === symbolForGreyBar
     )[0];
@@ -67,7 +72,7 @@ const Index = () => {
     }
   });
 
-  const chartData = chosenVault.status.collateral.map((asset: any) => {
+  const chartData = currentVault.status.collateral.map((asset: any) => {
     return {
       id: ethers.utils.parseBytes32String(asset.token.symbol),
       value: Number(formatEther(asset.collateralValue)).toFixed(2),
@@ -76,36 +81,36 @@ const Index = () => {
   });
 
   // smart vaults use 100000 as 100%
-  const liquidationTrigger: any = BigNumber.from(chosenVault.status.minted)
-    .mul(chosenVault.collateralRate)
+  const liquidationTrigger: any = BigNumber.from(currentVault.status.minted)
+    .mul(currentVault.collateralRate)
     .div(100000);
 
   const chartValues = [
     {
       title: "Debt outstanding",
-      value: Number(formatEther(chosenVault.status.minted)).toFixed(2),
+      value: Number(formatEther(currentVault.status.minted)).toFixed(2),
       currency: "EUROs",
     },
     {
       title: "Collateral Value",
       value: '€' + Number(
-        formatEther(chosenVault.status.totalCollateralValue)
+        formatEther(currentVault.status.totalCollateralValue)
       ).toFixed(2),
       currency: "",
     },
     {
       title: "Borrow up to:",
       value: (
-        ((Number(formatEther(chosenVault.status.maxMintable)) -
-          Number(formatEther(chosenVault.status.minted))) *
-          (100000 - Number(chosenVault.mintFeeRate))) /
+        ((Number(formatEther(currentVault.status.maxMintable)) -
+          Number(formatEther(currentVault.status.minted))) *
+          (100000 - Number(currentVault.mintFeeRate))) /
         100000
       ).toFixed(2),
       currency: "EUROs",
     },
   ];
 
-  if (Number(chosenVault.status.minted) > 0)
+  if (Number(currentVault.status.minted) > 0)
     chartValues.push({
       title: "Minimum Collateral Value Required",
       value: "€" + Number(formatEther(liquidationTrigger)).toFixed(2),
@@ -287,12 +292,12 @@ const Index = () => {
         </Typography>
         <ProgressBar
           progressValue={computeProgressBar(
-            chosenVault.status.minted,
-            chosenVault.status.totalCollateralValue
+            currentVault.status.minted,
+            currentVault.status.totalCollateralValue
           )}
           greyBarValue={computeGreyBar(
-            chosenVault.status.minted,
-            chosenVault.status.totalCollateralValue
+            currentVault.status.minted,
+            currentVault.status.totalCollateralValue
           )}
         />
         <Typography

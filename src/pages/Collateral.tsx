@@ -554,7 +554,7 @@ const Collateral = () => {
                 />
               </Box>
             ) : (
-              <ChartComponent />
+              <ChartComponent currentVault={currentVault} />
             )}
           </Card>
           <Box
