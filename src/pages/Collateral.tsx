@@ -76,6 +76,10 @@ const Collateral = () => {
   const query = useQuery();
   const vaultView = query.get("view");
 
+  // TODO
+  const { vaultStore: testStore }: any = useVaultStore();
+
+
   useEffect(() => {
     getVaultID(vaultId);
   }, []);
@@ -126,7 +130,7 @@ const Collateral = () => {
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: vaultData, refetch } = useReadContract({
+  const { data: vaultData, isFetched, refetch } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultData",
@@ -135,6 +139,8 @@ const Collateral = () => {
 
   useWatchBlockNumber({
     onBlockNumber() {
+      // console.log('REFETCH', {blockNumber}, blockNumber !== renderedBlock)
+      setRenderedBlock(blockNumber);
       refetch();
     },
   })
@@ -361,14 +367,18 @@ const Collateral = () => {
 
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
+
   if (
     vaultStore.tokenId !== currentVault.tokenId ||
     blockNumber !== renderedBlock
   ) {
+    console.log('SET STORE')
     getVaultStore(currentVault);
     getVaultAddress(vaultAddress);
     setRenderedBlock(blockNumber);
   }
+
+  console.log(123123, {currentVault}, {testStore})
 
   const displayTokens = () => {
     if (assets.length === 0) {
@@ -521,7 +531,7 @@ const Collateral = () => {
             {/* list available tokens here */}
             {collateralOrDebt === 2 ? (
               <>
-                {displayDebt()}
+                <Debt />
                 <EurosCompare />
               </>
             ) : (
