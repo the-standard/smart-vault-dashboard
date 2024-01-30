@@ -372,13 +372,10 @@ const Collateral = () => {
     vaultStore.tokenId !== currentVault.tokenId ||
     blockNumber !== renderedBlock
   ) {
-    console.log('SET STORE')
     getVaultStore(currentVault);
     getVaultAddress(vaultAddress);
     setRenderedBlock(blockNumber);
   }
-
-  console.log(123123, {currentVault}, {testStore})
 
   const displayTokens = () => {
     if (assets.length === 0) {
@@ -396,10 +393,6 @@ const Collateral = () => {
         />
       );
     });
-  };
-
-  const displayDebt = () => {
-    return <Debt />;
   };
 
   const buttonDetails = [
@@ -531,7 +524,7 @@ const Collateral = () => {
             {/* list available tokens here */}
             {collateralOrDebt === 2 ? (
               <>
-                <Debt />
+                <Debt currentVault={currentVault}/>
                 <EurosCompare />
               </>
             ) : (

@@ -20,7 +20,7 @@ import { arbitrumSepolia } from "wagmi/chains";
 
 import {
   useVaultAddressStore,
-  useVaultStore,
+  // useVaultStore,
   usesEuroAddressStore,
   useCircularProgressStore,
   useSnackBarStore,
@@ -34,13 +34,19 @@ import depositLottie from "../../lotties/deposit.json";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 
-const Debt = () => {
+interface DebtProps {
+  currentVault: any;
+}
+
+const Debt: React.FC<DebtProps> = ({
+  currentVault,
+}) => {
   const [activeElement, setActiveElement] = useState(1);
   // const { windowWidth, windowHeight } = useWindowSize();
   const { address } = useAccount();
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore();
-  const { vaultStore }: any = useVaultStore();
+  // const { vaultStore }: any = useVaultStore();
   const { arbitrumsEuroAddress, arbitrumSepoliasEuroAddress } =
     usesEuroAddressStore();
   const { erc20Abi } = useErc20AbiStore();
@@ -61,7 +67,7 @@ const Debt = () => {
 
   const amountInWei = parseEther(amount.toString());
 
-  const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
+  const debtValue: any = ethers.BigNumber.from(currentVault?.status?.minted);
 
   const eurosAddress = chainId === arbitrumSepolia.id ?
     arbitrumSepoliasEuroAddress :
@@ -108,9 +114,11 @@ const Debt = () => {
   };
 
   const handleInputMax = () => {
-    const maxRepayWei = eurosWalletBalance < (vaultStore.status.minted + calculateRateAmount(vaultStore.status.minted, vaultStore.burnFeeRate)) ?
-      eurosWalletBalance * HUNDRED_PC / (HUNDRED_PC + vaultStore.burnFeeRate) :
-      vaultStore.status.minted;
+    const minted = currentVault?.status?.minted;
+    const burnFeeRate = currentVault?.burnFeeRate;
+    const maxRepayWei = eurosWalletBalance < (minted + calculateRateAmount(minted, burnFeeRate)) ?
+      eurosWalletBalance * HUNDRED_PC / (HUNDRED_PC + burnFeeRate) :
+      minted;
     const maxRepay = formatEther(maxRepayWei);
     inputRef.current.value = maxRepay;
     handleAmount({target: {value: maxRepay}});
@@ -164,7 +172,7 @@ const Debt = () => {
   const handleOpenYield = () => setYieldModalOpen(true);
   const handleCloseYield = () => setYieldModalOpen(false);
 
-  const burnFeeRate: bigint = vaultStore.burnFeeRate;
+  const burnFeeRate: bigint = currentVault?.burnFeeRate;
   const repayFee = amountInWei * burnFeeRate / HUNDRED_PC;
 
   const handleApprove = async () => {
@@ -190,7 +198,7 @@ const Debt = () => {
   const handleApprovePayment = async () => {
     // V3 UPDATE
     // if vault version exists and if >= 3 skip the approval step
-    if (vaultStore && vaultStore.status && vaultStore.status.version && vaultStore.status.version !== 1 && vaultStore.status.version !== 2) {
+    if (currentVault && currentVault.status && currentVault.status.version && currentVault.status.version !== 1 && currentVault.status.version !== 2) {
       handleBurn()
     } else {
       if (allowance && allowance as any >= repayFee) {
@@ -301,7 +309,7 @@ const Debt = () => {
   };
 
   const calculateRepaymentWithFee = () => {
-    return amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate);
+    return amountInWei + calculateRateAmount(amountInWei, currentVault?.burnFeeRate);
   }
 
   const handleDebtAction = () => {
@@ -309,7 +317,7 @@ const Debt = () => {
       getCircularProgress(true);
       handleMint();
     } else {
-      if (amountInWei > vaultStore.status.minted) {
+      if (amountInWei > currentVault?.status.minted) {
         alert('Repayment amount exceeds debt in vault');
       } else if (eurosWalletBalance < calculateRepaymentWithFee()) {
         alert('Repayment amount exceeds your EUROs balance');
@@ -351,12 +359,12 @@ const Debt = () => {
       value: "0",
     },
     {
-      key: `Minting Fee (${toPercentage(vaultStore.mintFeeRate)}%)`,
-      value: formatEther(calculateRateAmount(amountInWei, vaultStore.mintFeeRate)),
+      key: `Minting Fee (${toPercentage(currentVault?.mintFeeRate)}%)`,
+      value: formatEther(calculateRateAmount(amountInWei, currentVault?.mintFeeRate)),
     },
     {
       key: "Borrowing",
-      value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.mintFeeRate)),
+      value: formatEther(amountInWei + calculateRateAmount(amountInWei, currentVault?.mintFeeRate)),
     },
     {
       key: "Receiving",
@@ -369,8 +377,8 @@ const Debt = () => {
       value: "0",
     },
     {
-      key: `Burn Fee (${toPercentage(vaultStore.burnFeeRate)}%)`,
-      value: formatEther(calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
+      key: `Burn Fee (${toPercentage(currentVault?.burnFeeRate)}%)`,
+      value: formatEther(calculateRateAmount(amountInWei, currentVault?.burnFeeRate)),
     },
     {
       key: "Actual Repayment",
@@ -378,7 +386,7 @@ const Debt = () => {
     },
     {
       key: "Send",
-      value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
+      value: formatEther(amountInWei + calculateRateAmount(amountInWei, currentVault?.burnFeeRate)),
     },
   ];
 
@@ -768,7 +776,7 @@ const Debt = () => {
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   We suggest a cap of {formatEther(repayFee)} for this transaction. This
-                  fee ({toPercentage(vaultStore.burnFeeRate)}%) is rewarded to TST stakers, helping the DAO grow
+                  fee ({toPercentage(currentVault?.burnFeeRate)}%) is rewarded to TST stakers, helping the DAO grow
                   and build more features.{" "}
                 </Typography>{" "}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
