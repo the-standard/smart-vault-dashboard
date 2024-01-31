@@ -342,8 +342,8 @@ const Debt: React.FC<DebtProps> = ({
   };
 
   const shortenAddress = (address: any) => {
-    const prefix = address.slice(0, 6);
-    const suffix = address.slice(-8);
+    const prefix = address?.slice(0, 6);
+    const suffix = address?.slice(-8);
     return `${prefix}...${suffix}`;
   };
 
