@@ -76,10 +76,6 @@ const Collateral = () => {
   const query = useQuery();
   const vaultView = query.get("view");
 
-  // TODO
-  const { vaultStore: testStore }: any = useVaultStore();
-
-
   useEffect(() => {
     getVaultID(vaultId);
   }, []);
@@ -130,7 +126,7 @@ const Collateral = () => {
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: vaultData, isFetched, refetch } = useReadContract({
+  const { data: vaultData, refetch } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultData",
