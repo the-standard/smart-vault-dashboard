@@ -1,26 +1,31 @@
 import { Box, Modal, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
+import { parseEther, parseUnits } from "viem";
+import { sendTransaction } from "@wagmi/core";
+import {
+  useWriteContract,
+  useAccount,
+  useWaitForTransactionReceipt,
+  useBalance,
+  useWatchBlockNumber
+} from "wagmi";
+import { constants } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+
 import {
   useVaultAddressStore,
   useCircularProgressStore,
   useSnackBarStore,
   useGreyProgressBarValuesStore,
   useErc20AbiStore,
-  useRenderAppCounterStore,
 } from "../../../store/Store";
-import QRicon from "../../../assets/qricon.png";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import MetamaskIcon from "../../../assets/metamasklogo.svg";
-import { parseEther, parseUnits } from "viem";
-import { getAccount } from "@wagmi/core";
-import { sendTransaction } from "@wagmi/core";
-import { useContractWrite } from "wagmi";
-import { useWaitForTransaction, useBalance } from "wagmi";
-import { constants } from "ethers";
 
+import wagmiConfig from "../../../WagmiConfig";
+import QRicon from "../../../assets/qricon.png";
+import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import Button from "../../../components/Button";
-import { formatUnits } from "ethers/lib/utils";
 
 interface DepositProps {
   symbol: string;
@@ -47,20 +52,25 @@ const Deposit: React.FC<DepositProps> = ({
   const { getSnackBar } = useSnackBarStore();
   const { getGreyBarUserInput, getSymbolForGreyBar } =
     useGreyProgressBarValuesStore();
-  const { incrementRenderAppCounter } = useRenderAppCounterStore();
   const [txdata, setTxdata] = useState<any>(null);
 
-  const { address } = getAccount();
+  const { address } = useAccount();
 
   //get the balance of the current wallet address
   const balanceReqData: any = {
     address: address,
-    watch: true,
   };
+
   if (tokenAddress !== constants.AddressZero) {
     balanceReqData.token = tokenAddress;
   }
-  const { data: balanceData } = useBalance(balanceReqData);
+  const { data: balanceData, refetch } = useBalance(balanceReqData);
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   const walletBalance = balanceData?.value;
 
@@ -101,30 +111,25 @@ const Deposit: React.FC<DepositProps> = ({
         });
     }
   };
+  
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
 
-  const depositToken = useContractWrite({
-    address: tokenAddress as any,
-    abi: erc20Abi,
-    functionName: "transfer",
-    args: [vaultAddress, parseUnits(amount.toString(), decimals)],
-    onError(error: any) {
+  const handleDepositToken = async () => {
+    try {
+      writeContract({
+        abi: erc20Abi,
+        address: tokenAddress as any,
+        functionName: "transfer",
+        args: [vaultAddress, parseUnits(amount.toString(), decimals)],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
-    }
-  });
-
-  const handleDepositToken = async () => {
-    try {
-      const { write } = depositToken;
-      write();
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -142,17 +147,17 @@ const Deposit: React.FC<DepositProps> = ({
   const depositEther = async () => {
     getProgressType(2);
     getCircularProgress(true);
-    const account = getAccount();
 
     try {
       const txAmount: any = amount;
 
       const toAddress: any = vaultAddress;
-      const { hash } = await sendTransaction({
-        account: account.address,
+
+      const hash = await sendTransaction(wagmiConfig, {
+        account: address,
         to: toAddress,
         value: parseEther(txAmount.toString()),
-      });
+      })
 
       setTxdata(hash);
 
@@ -196,10 +201,17 @@ const Deposit: React.FC<DepositProps> = ({
       }
     }
   };
-  useEffect(() => {
-    const { isLoading, isSuccess, isError, data } = depositToken;
 
-    if (isLoading) {
+  const {
+    data: txRcptData,
+    // isError: txRcptError,
+    // isPending: txRcptPending
+  } = useWaitForTransactionReceipt({
+    hash: txdata,
+  });
+
+  useEffect(() => {
+    if (isPending) {
       getProgressType(2);
       getCircularProgress(true);
     } else if (isSuccess) {
@@ -207,7 +219,7 @@ const Deposit: React.FC<DepositProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
-      setTxdata(data);
+      setTxdata(txRcptData);
     } else if (isError) {
       inputRef.current.value = "";
       inputRef.current.focus();
@@ -215,25 +227,10 @@ const Deposit: React.FC<DepositProps> = ({
       getGreyBarUserInput(0);
     }
   }, [
-    depositToken.data,
-    depositToken.error,
-    depositToken.isLoading,
-    depositToken.isSuccess,
+    isPending,
+    isSuccess,
+    isError,
   ]);
-
-  const { data, isError, isLoading } = useWaitForTransaction({
-    hash: txdata,
-  });
-
-  useEffect(() => {
-    if (data) {
-      incrementRenderAppCounter();
-    } else if (isError) {
-      incrementRenderAppCounter();
-    } else if (isLoading) {
-      incrementRenderAppCounter();
-    }
-  }, [data, isError, isLoading]);
 
   //trunate string logic
   const [width, setWidth] = useState(window.innerWidth);
@@ -262,6 +259,7 @@ const Deposit: React.FC<DepositProps> = ({
       setTruncatedAddress(vaultAddress);
     }
   }, [width, vaultAddress]);
+
   return (
     <Box>
       <Box
@@ -409,7 +407,6 @@ const Deposit: React.FC<DepositProps> = ({
         open={open}
         onClose={() => {
           handleClose();
-          incrementRenderAppCounter();
         }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"

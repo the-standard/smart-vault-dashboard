@@ -1,10 +1,13 @@
-import Box from "@mui/material/Box";
-import "../../styles/buttonStyle.css";
-import { BigNumber, ethers } from "ethers";
 import { useEffect, useRef, useState } from "react";
+import Box from "@mui/material/Box";
+import { BigNumber, ethers } from "ethers";
 import Modal from "@mui/material/Modal";
-import ManageSteps from "../listNFTModal/ManageSteps.tsx";
 import { Link } from "react-router-dom";
+import { Button, Pagination, Typography } from "@mui/material";
+import { formatEther } from "viem";
+import { useReadContracts, useChainId, useWatchBlockNumber } from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
 import {
   useVaultIdStore,
   useContractAddressStore,
@@ -14,24 +17,19 @@ import {
   useVaultAddressStore,
   useCurrentPageStore,
 } from "../../store/Store.ts";
-import { Button, Pagination, Tooltip, Typography } from "@mui/material";
+
+import "../../styles/buttonStyle.css";
 import "../../styles/progressBarStyle.css";
 import "../../styles/datagridStyles.css";
-
+import ManageSteps from "../listNFTModal/ManageSteps.tsx";
 import ProgressBar from "../ProgressBar.tsx";
-import { formatEther } from "viem";
-import { useContractReads, useNetwork } from "wagmi";
-import parse from "html-react-parser";
-import DOMPurify from "dompurify";
+import seurologo from "../../assets/EUROs.svg";
 
-import nftmask from "../../assets/nftmask.svg";
-
-interface DataGridComponentProps {
+interface VaultListProps {
   vaults: any[];
 }
 
-const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
-  const tokenToNFTMap = useRef(new Map());
+const VaultList: React.FC<VaultListProps> = ({ vaults }) => {
   const tokenMap = useRef(new Map());
   //store values
   const { vaultManagerAbi } = useVaultManagerAbiStore();
@@ -49,55 +47,11 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   //modal child state
   const [modalChildState, setModalChildState] = useState();
 
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const vaultManagerAddress =
-    chain?.id === 421614
+      chainId === arbitrumSepolia.id
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
-
-  const truncateValue = (value: string, length: number) => {
-    if (value.length <= length) {
-      return value;
-    }
-
-    const prefixLength = Math.floor(length / 3);
-    const suffixLength = length - prefixLength - 3;
-    const truncatedValue = `${value.substring(
-      0,
-      prefixLength
-    )}...${value.substring(value.length - suffixLength)}`;
-    return truncatedValue;
-  };
-
-  interface TruncatedTableCellProps {
-    value: string; // Specify the type of the 'value' prop as string
-    length: number;
-  }
-
-  const TruncatedTableCell: React.FC<TruncatedTableCellProps> = ({
-    value,
-    length,
-  }) => {
-    const truncatedValue = truncateValue(value, length);
-
-    return (
-      <td data-label={value}>
-        <Tooltip title={value}>
-          <Typography
-            sx={{
-              // maxWidth: 100,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              textAlign: "center",
-            }}
-          >
-            {truncatedValue}
-          </Typography>
-        </Tooltip>
-      </td>
-    );
-  };
 
   const contractFunction = {
     address: vaultManagerAddress,
@@ -105,22 +59,23 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     functionName: "tokenURI",
   };
 
-  const { data: NFTsMetadata } = useContractReads({
+  const { data: NFTsMetadata, refetch } = useReadContracts({
     contracts: vaults.map((vault) => {
       return { ...contractFunction, args: [vault.tokenId] };
     }),
-    watch: true,
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   NFTsMetadata?.forEach((data, index) => {
     const decodable = data.result?.toString().split(",")[1];
     if (decodable) {
       const decoded = atob(decodable);
       const parsed = JSON.parse(decoded);
-      tokenToNFTMap.current.set(
-        ethers.BigNumber.from(vaults[index].tokenId).toString(),
-        parsed.image_data
-      );
       tokenMap.current.set(
         ethers.BigNumber.from(vaults[index].tokenId).toString(),
         parsed
@@ -139,15 +94,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
       return 0;
     }
   });
-
-  //the same function as below, but for NFT thumbnails
-  const handleNFTClick = (params: any) => {
-    setModalChildState(params.vaultID);
-    getVaultID(params.vaultID);
-    getVaultForListing(params.smartVault);
-    getVaultStore(params.smartVault);
-    getVaultAddress(params.smartVault.status.vaultAddress);
-  };
 
   const renderActions = (params: any) => {
     const handleManageClick = () => {
@@ -178,7 +124,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             justifyContent: "center",
           }}
           to={`Collateral/${params.vaultID}`}
-          onClick={handleManageClick}
         >
           <Button
             sx={{
@@ -190,7 +135,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: "rgba(0, 0, 0, 0.2)",
-              marginLeft: "0.5rem",
+              // marginLeft: "0.5rem",
             }}
             className="myBtn"
           >
@@ -286,17 +231,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
     return withTwoDecimals ? withTwoDecimals[0] : num;
   }
 
-  const sanitizedNFTs = sortedVaults.map((vault) => {
-    const nft = tokenToNFTMap.current.get(
-      ethers.BigNumber.from(vault.tokenId).toString()
-    );
-    const NFTPurified = DOMPurify.sanitize(nft);
-    return {
-      ...vault,
-      NFTPurified,
-    };
-  });
-
   return (
     <Box>
       {/* responsive table container */}
@@ -321,7 +255,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
           >
             <thead>
               <tr>
-                <th>NFT</th>
+                <th>Type</th>
                 <th>Vault ID</th>
                 <th style={{ lineBreak: "anywhere" }}>
                   Collateral
@@ -341,7 +275,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
             </thead>
 
             <tbody>
-              {sanitizedNFTs
+              {sortedVaults
                 .slice(
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage
@@ -354,43 +288,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                 .map((vault, index) => (
                   <tr key={index}>
                     <td>
-                      {tokenToNFTMap.current.has(
-                        ethers.BigNumber.from(vault.tokenId).toString()
-                      ) ? (
-                        <div
-                          style={{
-                            // borderRadius: "5px",
-                            overflow: "hidden",
-                            objectFit: "contain",
-                            // border: "1px solid red",
-                            //  width: "70px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            maskImage: `url(${nftmask})`,
-                            maskRepeat: "no-repeat",
-                            maskSize: "contain",
-                            maskPosition: "center",
-                            WebkitMaskImage: `url(${nftmask})`,
-                            WebkitMaskRepeat: "no-repeat",
-                            WebkitMaskSize: "contain",
-                            WebkitMaskPosition: "center",
-                            cursor: "pointer",
-                          }}
-                          className="hello"
-                          onClick={() => {
-                            handleOpen();
-                            handleNFTClick({
-                              vaultID: ethers.BigNumber.from(
-                                vault.tokenId
-                              ).toString(),
-                              smartVault: vault,
-                            });
-                          }}
-                        >
-                          {parse(vault.NFTPurified)}
-                        </div>
-                      ) : null}
+                      <img
+                        style={{
+                          display: "block",
+                          width: "42px",
+                          // margin: "auto",
+                        }}
+                        src={seurologo}
+                      />
                     </td>
                     <td>
                       {vault.status.version ? (
@@ -398,22 +303,23 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
                       ) : ('')}
                       {ethers.BigNumber.from(vault.tokenId).toString()}
                     </td>{" "}
-                    <TruncatedTableCell
-                      value={truncateToTwoDecimals(
+                    <td>
+                      {truncateToTwoDecimals(
                         ethers.utils.formatEther(
                           ethers.BigNumber.from(
                             vault.status.totalCollateralValue
                           ).toString()
                         )
                       )}
-                      length={12}
-                    />{" "}
+                    </td>
                     <td>
                       {truncateToTwoDecimals(
                         formatEther(vault.status.minted.toString())
                       )}
                     </td>{" "}
-                    <td>
+                    <td style={{
+                      minWidth: "80px"
+                    }}>
                       {vault.status.liquidated ? (
                         <Typography sx={{ color: "white" }}>
                           Vault Liquidated
@@ -511,4 +417,4 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({ vaults }) => {
   );
 };
 
-export default DataGridComponent;
+export default VaultList;

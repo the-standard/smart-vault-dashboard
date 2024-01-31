@@ -1,4 +1,19 @@
 import { useEffect, useLayoutEffect, useState, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Modal, Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import QRCode from "react-qr-code";
+import { ethers } from "ethers";
+import { useParams, useLocation } from "react-router-dom";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import {
+  useBlockNumber,
+  useReadContract,
+  useChainId,
+  useWatchBlockNumber,
+} from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
 import {
   useVaultAddressStore,
   useVaultStore,
@@ -7,16 +22,6 @@ import {
   useVaultManagerAbiStore,
   usePositionStore,
 } from "../store/Store";
-
-import { Box, Modal, Typography } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import QRCode from "react-qr-code";
-import { ethers } from "ethers";
-import { useParams, useLocation } from "react-router-dom";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { getNetwork } from "@wagmi/core";
-import { useBlockNumber, useContractRead } from "wagmi";
-import { useNavigate } from "react-router-dom";
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 import vaultLiauidatedImg from "../assets/vault-liquidated.png";
@@ -38,6 +43,7 @@ function useQuery() {
   const { search } = useLocation();
   return useMemo(() => new URLSearchParams(search), [search]);
 }
+
 
 const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
@@ -66,7 +72,7 @@ const Collateral = () => {
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const setPosition = usePositionStore((state) => state.setPosition);
 
-  const { chain } = getNetwork();
+  const chainId = useChainId();
   const query = useQuery();
   const vaultView = query.get("view");
 
@@ -75,7 +81,7 @@ const Collateral = () => {
   }, []);
 
   useEffect(() => {
-    // loader to allow currentVault filter to resolve
+    // forced loader to allow currentVault filter to resolve
     // fixes flashing "no vault found" on first load
     setVaultsLoading(true);
     setTimeout(() => {
@@ -116,17 +122,24 @@ const Collateral = () => {
   }, [vaultView]);
   
   const vaultManagerAddress =
-    chain?.id === 421614
+    chainId === arbitrumSepolia.id
       ? arbitrumSepoliaContractAddress
       : arbitrumContractAddress;
 
-  const { data: vaultData } = useContractRead({
+  const { data: vaultData, refetch } = useReadContract({
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
     functionName: "vaultData",
-    args: [vaultId],
-    watch: true
+    args: [vaultId as any],
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      // console.log('REFETCH', {blockNumber}, blockNumber !== renderedBlock)
+      setRenderedBlock(blockNumber);
+      refetch();
+    },
+  })
 
   const currentVault: any = vaultData;
 
@@ -215,6 +228,7 @@ const Collateral = () => {
         <Box
           sx={{
             display: { xs: "flex", lg: "grid" },
+            flexDirection: "column",
             width: "100%",
           }}
         >
@@ -327,6 +341,7 @@ const Collateral = () => {
         <Box
           sx={{
             display: { xs: "flex", lg: "grid" },
+            flexDirection: "column",
             width: "100%",
           }}
         >
@@ -348,6 +363,7 @@ const Collateral = () => {
 
   const assets = currentVault.status.collateral;
   const { vaultAddress } = currentVault.status;
+
   if (
     vaultStore.tokenId !== currentVault.tokenId ||
     blockNumber !== renderedBlock
@@ -375,10 +391,6 @@ const Collateral = () => {
     });
   };
 
-  const displayDebt = () => {
-    return <Debt />;
-  };
-
   const buttonDetails = [
     {
       id: 1,
@@ -396,7 +408,7 @@ const Collateral = () => {
 
   const handleButtonActions = (id: number) => {
     const arbiscanUrl =
-      chain?.id === 421614
+      chainId === arbitrumSepolia.id
         ? `https://sepolia.arbiscan.io/address/${vaultAddress}`
         : `https://arbiscan.io/address/${vaultAddress}`;
     if (id === 1) {
@@ -489,12 +501,12 @@ const Collateral = () => {
           height: "100%",
           width: "100%",
           display: { xs: "flex", lg: "grid" },
+          flexDirection: "column",
           gridTemplateColumns:
             " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
           gap: "20px" /* Gap between the columns */,
           gridAutoColumns: "1fr" /* Equal width for child components */,
           // now flexbox
-          flexDirection: "column",
         }}
       >
         {/* left side of the container */}
@@ -508,7 +520,7 @@ const Collateral = () => {
             {/* list available tokens here */}
             {collateralOrDebt === 2 ? (
               <>
-                {displayDebt()}
+                <Debt currentVault={currentVault}/>
                 <EurosCompare />
               </>
             ) : (
@@ -538,7 +550,7 @@ const Collateral = () => {
                 />
               </Box>
             ) : (
-              <ChartComponent />
+              <ChartComponent currentVault={currentVault} />
             )}
           </Card>
           <Box

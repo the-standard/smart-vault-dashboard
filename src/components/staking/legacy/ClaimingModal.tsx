@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useAccount, useContractWrite } from "wagmi";
 import { formatEther } from "viem";
 import Confetti from 'react-confetti';
+import {
+  useAccount,
+  useWriteContract,
+} from "wagmi";
+
 import {
   useStakingAbiStore,
   useSnackBarStore,
 } from "../../../store/Store";
+
 import Button from "../../../components/Button";
 
 interface ClaimingModalProps {
@@ -44,26 +49,30 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
 
   const stakingAddress = stakingPosition?.address;
 
-  const claimPosition = useContractWrite({
-    address: stakingAddress as any,
-    abi: stakingAbi,
-    functionName: "burn",
-    account: address,
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleClaimPosition = async () => {
+    try {
+      writeContract({
+        abi: stakingAbi,
+        address: stakingAddress as any,
+        functionName: "burn",
+        account: address as any,
+        args: [],
+      });
+
+      getSnackBar('SUCCESS', 'TST Approved');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
+  };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = claimPosition;
-    if (isLoading) {
+    if (isPending) {
       setClaimLoading(true);
       setSuccess(false);
     } else if (isSuccess) {
@@ -74,16 +83,10 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
       setSuccess(false);
     }
   }, [
-    claimPosition.isLoading,
-    claimPosition.isSuccess,
-    claimPosition.data,
-    claimPosition.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
-
-  const handleApproveClaim = async () => {
-    const { write } = claimPosition;
-    write();
-  };
 
   return (
     <>
@@ -366,7 +369,7 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
                           padding: "5px",
                           height: "2rem",
                         }}
-                        clickFunction={handleApproveClaim}
+                        clickFunction={handleClaimPosition}
                       >
                         Claim
                       </Button>

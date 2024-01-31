@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
+import { formatUnits } from "viem";
+import { useReadContracts, useChainId } from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+import axios from "axios";
 
 import {
   useChainlinkAbiStore,
   useUSDToEuroAddressStore,
 } from "../../store/Store";
+
 import Card from "../../components/Card";
-import { formatUnits } from "viem";
-import { useContractReads, useNetwork } from "wagmi";
-import axios from "axios";
 
 const EurosCompare = () => {
   const [poolData, setPoolData] = useState<any>(undefined);
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { chainlinkAbi } = useChainlinkAbiStore();
   const { arbitrumOneUSDToEuroAddress, arbitrumSepoliaUSDToEuroAddress } =
     useUSDToEuroAddressStore();
@@ -23,7 +25,7 @@ const EurosCompare = () => {
   };
 
   const eurUsdAddress =
-    chain?.id === 421614
+    chainId === arbitrumSepolia.id
       ? arbitrumSepoliaUSDToEuroAddress
       : arbitrumOneUSDToEuroAddress;
 
@@ -34,7 +36,7 @@ const EurosCompare = () => {
     },
   ];
 
-  const { data: priceData } = useContractReads({
+  const { data: priceData } = useReadContracts({
     contracts,
   });
 

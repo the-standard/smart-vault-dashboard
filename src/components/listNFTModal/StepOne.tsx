@@ -3,15 +3,17 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Button } from "@mui/material";
+import { arbitrumSepolia } from "viem/chains";
+import { useChainId } from "wagmi";
+
 import {
   useVaultForListingStore,
   useNFTListingModalStore,
   useSnackBarStore,
   useContractAddressStore,
 } from "../../store/Store.ts";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useNetwork } from "wagmi";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,18 +39,15 @@ const StepOne: React.FC<StepProps> = ({
   } = useNFTListingModalStore();
   const { getSnackBar } = useSnackBarStore();
 
-  const { chain } = useNetwork();
+  const chainId = useChainId();
 
   const { arbitrumSepoliaContractAddress, arbitrumContractAddress } =
     useContractAddressStore();
 
-  let vaultManagerAddress: any;
-
-  if (chain?.id == 421614) {
-    vaultManagerAddress = arbitrumSepoliaContractAddress;
-  } else if (chain?.id === 42161) {
-    vaultManagerAddress = arbitrumContractAddress;
-  }
+  const vaultManagerAddress =
+      chainId === arbitrumSepolia.id
+      ? arbitrumSepoliaContractAddress
+      : arbitrumContractAddress;
 
   useEffect(() => {
     getNFTListingModalTotalValue(

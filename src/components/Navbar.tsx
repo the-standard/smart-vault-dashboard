@@ -1,4 +1,3 @@
-import { Web3Button } from "@web3modal/react";
 import { Box } from "@mui/material";
 import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
@@ -11,7 +10,7 @@ import arbitrumTestLogoLong from "../assets/arbitrumTestLogoLong.svg";
 import arbitrumTestLogoShort from "../assets/arbitrumTestLogoShort.svg";
 import networkNotSupportedLong from "../assets/networkNotSupportedLong.svg";
 import networkNotSupportedShort from "../assets/networkNotSupportedShort.svg";
-import { useNetwork } from "wagmi";
+import { useChainId } from "wagmi";
 
 const Navbar = () => {
   const { right } = usePositionStore((state) => state);
@@ -22,77 +21,75 @@ const Navbar = () => {
     getBurgerMenu(state.isOpen);
   };
 
-  const { chain } = useNetwork();
+  const chainId = useChainId();
 
   let logoComponent = null;
-  if (chain) {
-    if (chain?.id === 42161) {
-      logoComponent = (
-        <Box
-          component="img"
-          sx={{
-            content: {
-              xs: `url(${arbitrumLogoShort})`,
-              md: `url(${arbitrumLogoLong})`,
-            },
-            width: {
-              xs: "42px",
-              md: "170px",
-            },
-            height: {
-              xs: "42px",
-              md: "170px",
-            },
-            marginRight: "1rem"
-          }}
-          alt="Arbitrum Network"
-        />
-      );
-    } else if (chain?.id === 421614) {
-      logoComponent = (
-        <Box
-          component="img"
-          sx={{
-            content: {
-              xs: `url(${arbitrumTestLogoShort})`,
-              md: `url(${arbitrumTestLogoLong})`,
-            },
-            width: {
-              xs: "42px",
-              md: "170px",
-            },
-            height: {
-              xs: "42px",
-              md: "170px",
-            },
-            marginRight: "1rem"
-          }}
-          alt="Arbitrum Test Network"
-        />
-      );
-    } else {
-      logoComponent = (
-        <Box
-          component="img"
-          sx={{
-            content: {
-              xs: `url(${networkNotSupportedShort})`,
-              md: `url(${networkNotSupportedLong})`,
-            },
-            width: {
-              xs: "42px",
-              md: "170px",
-            },
-            height: {
-              xs: "42px",
-              md: "170px",
-            },
-            marginRight: "1rem"
-          }}
-          alt="Network Not Supported"
-        />
-      );
-    }
+  if (chainId === 42161) {
+    logoComponent = (
+      <Box
+        component="img"
+        sx={{
+          content: {
+            xs: `url(${arbitrumLogoShort})`,
+            md: `url(${arbitrumLogoLong})`,
+          },
+          width: {
+            xs: "42px",
+            md: "170px",
+          },
+          height: {
+            xs: "42px",
+            md: "170px",
+          },
+          marginRight: "1rem"
+        }}
+        alt="Arbitrum Network"
+      />
+    );
+  } else if (chainId === 421614) {
+    logoComponent = (
+      <Box
+        component="img"
+        sx={{
+          content: {
+            xs: `url(${arbitrumTestLogoShort})`,
+            md: `url(${arbitrumTestLogoLong})`,
+          },
+          width: {
+            xs: "42px",
+            md: "170px",
+          },
+          height: {
+            xs: "42px",
+            md: "170px",
+          },
+          marginRight: "1rem"
+        }}
+        alt="Arbitrum Test Network"
+      />
+    );
+  } else {
+    logoComponent = (
+      <Box
+        component="img"
+        sx={{
+          content: {
+            xs: `url(${networkNotSupportedShort})`,
+            md: `url(${networkNotSupportedLong})`,
+          },
+          width: {
+            xs: "42px",
+            md: "170px",
+          },
+          height: {
+            xs: "42px",
+            md: "170px",
+          },
+          marginRight: "1rem"
+        }}
+        alt="Network Not Supported"
+      />
+    );
   }
 
   const styles: any = {
@@ -250,8 +247,8 @@ const Navbar = () => {
               alignItems: "center",
             }}
           >
-            {chain ? logoComponent : null}
-            <Web3Button />
+          {chainId ? logoComponent : null}
+          <w3m-button />
           </Box>
         </Box>
       </Box>

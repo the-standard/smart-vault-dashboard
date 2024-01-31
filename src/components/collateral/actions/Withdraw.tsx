@@ -1,16 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Box } from "@mui/material";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
+import { ethers } from "ethers";
+import { parseUnits } from "viem";
+
 import {
   useVaultAddressStore,
   useCircularProgressStore,
   useSnackBarStore,
   useGreyProgressBarValuesStore,
   useSmartVaultABIStore,
-  useRenderAppCounterStore,
 } from "../../../store/Store";
-import { Box } from "@mui/material";
-import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
-import { ethers } from "ethers";
-import { parseUnits } from "viem";
+
 import Button from "../../../components/Button";
 import MetamaskIcon from "../../../assets/metamasklogo.svg";
 
@@ -49,58 +54,55 @@ const Withdraw: React.FC<WithdrawProps> = ({
 
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
 
-  const withdrawCollateralNative = useContractWrite({
-    address: vaultAddress as any,
-    abi: smartVaultABI,
-    functionName: "removeCollateralNative",
-    args: [ethers.utils.parseUnits(amount.toString()), address],
-    onError(error: any) {
-      let errorMessage: any = '';
-      if (error && error.shortMessage) {
-        errorMessage = error.shortMessage;
-      }
-      getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
-    }
-  });
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
 
   const handlewithdrawCollateralNative = async () => {
-    const { write } = withdrawCollateralNative;
-    write();
-  };
+    try {
+      writeContract({
+        abi: smartVaultABI,
+        address: vaultAddress as any,
+        functionName: "removeCollateralNative",
+        args: [
+          ethers.utils.parseUnits(amount.toString()),
+          address as any
+        ],
+      });
 
-  const withdrawCollateral = useContractWrite({
-    address: vaultAddress as any,
-    abi: smartVaultABI,
-    functionName: "removeCollateral",
-    args: [
-      ethers.utils.formatBytes32String(symbol),
-      parseUnits(amount.toString(), decimals),
-      address,
-    ],
-    onError(error: any) {
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
+  };
 
   const handlewithdrawCollateral = async () => {
-    const { write } = withdrawCollateral;
-    write();
+    try {
+      writeContract({
+        abi: smartVaultABI,
+        address: vaultAddress as any,
+        functionName: "removeCollateral",
+        args: [
+          ethers.utils.formatBytes32String(symbol),
+          parseUnits(amount.toString(), decimals),
+          address as any
+        ],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
+      let errorMessage: any = '';
+      if (error && error.shortMessage) {
+        errorMessage = error.shortMessage;
+      }
+      getSnackBar('ERROR', errorMessage);
+    }
   };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError, data } = withdrawCollateral;
-
-    if (isLoading) {
+    if (isPending) {
       getProgressType(1);
       getCircularProgress(true);
     } else if (isSuccess) {
@@ -108,7 +110,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
       inputRef.current.value = "";
       inputRef.current.focus();
       getGreyBarUserInput(0);
-      setTxdata(data);
+      setTxdata(txRcptData);
     } else if (isError) {
       inputRef.current.value = "";
       inputRef.current.focus();
@@ -116,46 +118,24 @@ const Withdraw: React.FC<WithdrawProps> = ({
       getGreyBarUserInput(0);
     }
   }, [
-    withdrawCollateral.isLoading,
-    withdrawCollateral.isSuccess,
-    withdrawCollateral.isError,
-  ]);
-
-  useEffect(() => {
-    const { isLoading, isSuccess, isError, data } = withdrawCollateralNative;
-    if (isLoading) {
-      getProgressType(1);
-
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      getCircularProgress(false); // Set getCircularProgress to false after the transaction is mined
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-      setTxdata(data);
-    } else if (isError) {
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getCircularProgress(false); // Set getCircularProgress to false if there's an error
-      getGreyBarUserInput(0);
-    }
-  }, [
-    withdrawCollateralNative.isLoading,
-    withdrawCollateralNative.isSuccess,
-    withdrawCollateralNative.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
   const shortenAddress = (address: any) => {
-    const prefix = address.slice(0, 6);
-    const suffix = address.slice(-8);
+    const prefix = address?.slice(0, 6);
+    const suffix = address?.slice(-8);
     return `${prefix}...${suffix}`;
   };
 
   const shortenedAddress = shortenAddress(address);
 
-  const { incrementRenderAppCounter } = useRenderAppCounterStore();
-
-  const { data, isError, isLoading } = useWaitForTransaction({
+  const {
+    data: txRcptData,
+    // isError: txRcptError,
+    // isPending: txRcptPending
+  } = useWaitForTransactionReceipt({
     hash: txdata,
   });
 
@@ -163,16 +143,6 @@ const Withdraw: React.FC<WithdrawProps> = ({
     inputRef.current.value = collateralValue.toString();
     handleAmount({ target: { value: collateralValue } });
   };
-
-  useEffect(() => {
-    if (data) {
-      incrementRenderAppCounter();
-    } else if (isError) {
-      incrementRenderAppCounter();
-    } else if (isLoading) {
-      incrementRenderAppCounter();
-    }
-  }, [data, isError, isLoading]);
 
   return (
     <Box>
@@ -238,20 +208,7 @@ const Withdraw: React.FC<WithdrawProps> = ({
       >
         {collateralSymbol} to address "{shortenedAddress}"
       </Box>
-      <Box
-        sx={
-          {
-            // marginTop: "1rem",
-            // display: "flex",
-            // alignItems: "center",
-            // background: " rgba(18, 18, 18, 0.5)",
-            // boxShadow:
-            //   " 0px 1.24986px 1.24986px rgba(255, 255, 255, 0.5), inset 0px 1.24986px 0px rgba(0, 0, 0, 0.25)",
-            // borderRadius: "6.24932px",
-            // padding: "1%",
-          }
-        }
-      >
+      <Box>
         <Button
           clickFunction={
             symbol === "ETH" || symbol === "AGOR"

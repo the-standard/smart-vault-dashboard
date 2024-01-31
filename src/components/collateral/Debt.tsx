@@ -7,9 +7,20 @@ import Confetti from 'react-confetti';
 import { useAccount } from "wagmi";
 import smartVaultAbi from "../../abis/smartVault";
 import { ethers } from "ethers";
+import { formatEther, parseEther } from "viem";
+import CheckIcon from "@mui/icons-material/Check";
+import Lottie from "lottie-react";
+import {
+  useWriteContract,
+  useReadContracts,
+  useChainId,
+  useWatchBlockNumber
+} from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
 import {
   useVaultAddressStore,
-  useVaultStore,
+  // useVaultStore,
   usesEuroAddressStore,
   useCircularProgressStore,
   useSnackBarStore,
@@ -18,23 +29,24 @@ import {
   useCounterStore,
   useErc20AbiStore,
 } from "../../store/Store";
-import { formatEther, parseEther } from "viem";
-import CheckIcon from "@mui/icons-material/Check";
-import Lottie from "lottie-react";
-import depositLottie from "../../lotties/deposit.json";
-import { getNetwork } from "@wagmi/core";
-import { useContractWrite, useContractReads } from "wagmi";
 
+import depositLottie from "../../lotties/deposit.json";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 
-const Debt = () => {
+interface DebtProps {
+  currentVault: any;
+}
+
+const Debt: React.FC<DebtProps> = ({
+  currentVault,
+}) => {
   const [activeElement, setActiveElement] = useState(1);
   // const { windowWidth, windowHeight } = useWindowSize();
   const { address } = useAccount();
   const [amount, setAmount] = useState<any>(0);
   const { vaultAddress } = useVaultAddressStore();
-  const { vaultStore }: any = useVaultStore();
+  // const { vaultStore }: any = useVaultStore();
   const { arbitrumsEuroAddress, arbitrumSepoliasEuroAddress } =
     usesEuroAddressStore();
   const { erc20Abi } = useErc20AbiStore();
@@ -45,10 +57,9 @@ const Debt = () => {
   const { getGreyBarUserInput, getOperationType } =
     useGreyProgressBarValuesStore();
   const { getCounter } = useCounterStore();
-  const { chain } = getNetwork();
+  const chainId = useChainId();
   const HUNDRED_PC = 100_000n;
-
-  // const navigate = useNavigate();
+  const [stage, setStage] = useState('');
 
   const incrementCounter = () => {
     getCounter(1);
@@ -56,9 +67,9 @@ const Debt = () => {
 
   const amountInWei = parseEther(amount.toString());
 
-  const debtValue: any = ethers.BigNumber.from(vaultStore.status.minted);
+  const debtValue: any = ethers.BigNumber.from(currentVault?.status?.minted);
 
-  const eurosAddress = chain?.id === 421614 ?
+  const eurosAddress = chainId === arbitrumSepolia.id ?
     arbitrumSepoliasEuroAddress :
     arbitrumsEuroAddress;
   
@@ -67,18 +78,23 @@ const Debt = () => {
     abi: erc20Abi,
   }
     
-  const { data: eurosData } = useContractReads({
+  const { data: eurosData, refetch } = useReadContracts({
     contracts: [{
       ... eurosContract,
       functionName: "allowance",
       args: [address as any, vaultAddress]
-  },{
+    },{
       ... eurosContract,
       functionName: "balanceOf",
       args: [address as any]
-  }],
-    watch: true
+    }],
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   const allowance: any = eurosData && eurosData[0].result;
   const eurosWalletBalance: any = eurosData && eurosData[1].result;
@@ -98,9 +114,11 @@ const Debt = () => {
   };
 
   const handleInputMax = () => {
-    const maxRepayWei = eurosWalletBalance < (vaultStore.status.minted + calculateRateAmount(vaultStore.status.minted, vaultStore.burnFeeRate)) ?
-      eurosWalletBalance * HUNDRED_PC / (HUNDRED_PC + vaultStore.burnFeeRate) :
-      vaultStore.status.minted;
+    const minted = currentVault?.status?.minted;
+    const burnFeeRate = currentVault?.burnFeeRate;
+    const maxRepayWei = eurosWalletBalance < (minted + calculateRateAmount(minted, burnFeeRate)) ?
+      eurosWalletBalance * HUNDRED_PC / (HUNDRED_PC + burnFeeRate) :
+      minted;
     const maxRepay = formatEther(maxRepayWei);
     inputRef.current.value = maxRepay;
     handleAmount({target: {value: maxRepay}});
@@ -122,52 +140,27 @@ const Debt = () => {
     };
   }, []);
 
-  const borrowMoney = useContractWrite({
-    address: vaultAddress as any,
-    abi: smartVaultAbi,
-    functionName: "mint",
-    args: [address as any, amountInWei],
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleMint = async () => {
+    setStage('MINT');
+    try {
+      writeContract({
+        abi: smartVaultAbi,
+        address: vaultAddress as any,
+        functionName: "mint",
+        args: [address as any, amountInWei],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
-
-  const handleBorrowMoney = async () => {
-    const { write } = borrowMoney;
-
-    write();
   };
-  useEffect(() => {
-    const { isLoading, isSuccess, isError } = borrowMoney;
-
-    if (isLoading) {
-      getProgressType(1);
-    } else if (isSuccess) {
-      getCircularProgress(false);
-      incrementCounter();
-      handleOpenYield();
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    } else if (isError) {
-      getCircularProgress(false);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    }
-  }, [
-    borrowMoney.isLoading,
-    borrowMoney.isSuccess,
-    borrowMoney.data,
-    borrowMoney.isError,
-  ]);
 
   // modal
   const [open, setOpen] = useState(false);
@@ -179,112 +172,132 @@ const Debt = () => {
   const handleOpenYield = () => setYieldModalOpen(true);
   const handleCloseYield = () => setYieldModalOpen(false);
 
-  const burnFeeRate: bigint = vaultStore.burnFeeRate;
+  const burnFeeRate: bigint = currentVault?.burnFeeRate;
   const repayFee = amountInWei * burnFeeRate / HUNDRED_PC;
 
-  const approvePayment = useContractWrite({
-    address: eurosAddress as any,
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [vaultAddress as any, repayFee],
-    onError(error: any) {
+  const handleApprove = async () => {
+    setStage('APPROVE');
+    try {
+      writeContract({
+        abi: erc20Abi,
+        address: eurosAddress as any,
+        functionName: "approve",
+        args: [vaultAddress as any, repayFee],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
-
-  useEffect(() => {
-    const { isLoading, isSuccess, isError } = approvePayment;
-
-    if (isLoading) {
-      handleOpen();
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      handleRepayMoney();
-      getCircularProgress(false);
-      incrementCounter();
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    } else if (isError) {
-      handleClose();
-      getCircularProgress(false);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    }
-  }, [
-    approvePayment.isLoading,
-    approvePayment.isSuccess,
-    approvePayment.data,
-    approvePayment.isError,
-  ]);
+  };
 
   const handleApprovePayment = async () => {
-    if (allowance && allowance as any >= repayFee) {
-      handleRepayMoney()
+    // V3 UPDATE
+    // if vault version exists and if >= 3 skip the approval step
+    if (currentVault && currentVault.status && currentVault.status.version && currentVault.status.version !== 1 && currentVault.status.version !== 2) {
+      handleBurn()
     } else {
-      const { write } = approvePayment;
-      write();
+      if (allowance && allowance as any >= repayFee) {
+        handleBurn()
+      } else {
+        handleApprove()
+      }  
     }
   };
 
-  const handleRepayMoney = async () => {
-    const { write } = repayMoney;
-    write();
-  };
+  const handleBurn = async () => {
+    setStage('BURN');
+    try {
+      writeContract({
+        abi: smartVaultAbi,
+        address: vaultAddress as any,
+        functionName: "burn",
+        args: [amountInWei],
+      });
 
-  const repayMoney = useContractWrite({
-    address: vaultAddress as any,
-    abi: smartVaultAbi,
-    functionName: "burn",
-    args: [amountInWei],
-    onError(error: any) {
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
+  };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = repayMoney;
-
-    if (isLoading) {
-      setModalStep(2);
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      handleClose();
-      setModalStep(1);
-      getProgressType(2);
-      getCircularProgress(false);
-      incrementCounter();
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-    } else if (isError) {
-      setModalStep(1);
-      getCircularProgress(false);
-      inputRef.current.value = "";
-      inputRef.current.focus();
-      getGreyBarUserInput(0);
-      console.log(isError);
+    if (stage === 'MINT') {
+      if (isPending) {
+        getProgressType(1);
+      } else if (isSuccess) {
+        getCircularProgress(false);
+        incrementCounter();
+        handleOpenYield();
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      } else if (isError) {
+        getCircularProgress(false);
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      }  
+    }
+    if (stage === 'APPROVE') {
+      if (isPending) {
+        handleOpen();
+        getCircularProgress(true);
+      } else if (isSuccess) {
+        handleBurn();
+        getCircularProgress(false);
+        incrementCounter();
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      } else if (isError) {
+        handleClose();
+        getCircularProgress(false);
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      }  
+    }
+    if (stage === 'BURN') {
+      if (isPending) {
+        setModalStep(2);
+        getCircularProgress(true);
+      } else if (isSuccess) {
+        handleClose();
+        setModalStep(1);
+        getProgressType(2);
+        getCircularProgress(false);
+        incrementCounter();
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        setStage('');
+      } else if (isError) {
+        setModalStep(1);
+        getCircularProgress(false);
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        getGreyBarUserInput(0);
+        console.log(isError);
+        setStage('');
+      }
     }
   }, [
-    repayMoney.isLoading,
-    repayMoney.isSuccess,
-    repayMoney.data,
-    repayMoney.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
   const toPercentage = (rate: bigint) => {
@@ -296,15 +309,15 @@ const Debt = () => {
   };
 
   const calculateRepaymentWithFee = () => {
-    return amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate);
+    return amountInWei + calculateRateAmount(amountInWei, currentVault?.burnFeeRate);
   }
 
   const handleDebtAction = () => {
     if (activeElement === 4) {
       getCircularProgress(true);
-      handleBorrowMoney();
+      handleMint();
     } else {
-      if (amountInWei > vaultStore.status.minted) {
+      if (amountInWei > currentVault?.status.minted) {
         alert('Repayment amount exceeds debt in vault');
       } else if (eurosWalletBalance < calculateRepaymentWithFee()) {
         alert('Repayment amount exceeds your EUROs balance');
@@ -329,8 +342,8 @@ const Debt = () => {
   };
 
   const shortenAddress = (address: any) => {
-    const prefix = address.slice(0, 6);
-    const suffix = address.slice(-8);
+    const prefix = address?.slice(0, 6);
+    const suffix = address?.slice(-8);
     return `${prefix}...${suffix}`;
   };
 
@@ -346,12 +359,12 @@ const Debt = () => {
       value: "0",
     },
     {
-      key: `Minting Fee (${toPercentage(vaultStore.mintFeeRate)}%)`,
-      value: formatEther(calculateRateAmount(amountInWei, vaultStore.mintFeeRate)),
+      key: `Minting Fee (${toPercentage(currentVault?.mintFeeRate)}%)`,
+      value: formatEther(calculateRateAmount(amountInWei, currentVault?.mintFeeRate)),
     },
     {
       key: "Borrowing",
-      value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.mintFeeRate)),
+      value: formatEther(amountInWei + calculateRateAmount(amountInWei, currentVault?.mintFeeRate)),
     },
     {
       key: "Receiving",
@@ -364,8 +377,8 @@ const Debt = () => {
       value: "0",
     },
     {
-      key: `Burn Fee (${toPercentage(vaultStore.burnFeeRate)}%)`,
-      value: formatEther(calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
+      key: `Burn Fee (${toPercentage(currentVault?.burnFeeRate)}%)`,
+      value: formatEther(calculateRateAmount(amountInWei, currentVault?.burnFeeRate)),
     },
     {
       key: "Actual Repayment",
@@ -373,7 +386,7 @@ const Debt = () => {
     },
     {
       key: "Send",
-      value: formatEther(amountInWei + calculateRateAmount(amountInWei, vaultStore.burnFeeRate)),
+      value: formatEther(amountInWei + calculateRateAmount(amountInWei, currentVault?.burnFeeRate)),
     },
   ];
 
@@ -763,7 +776,7 @@ const Debt = () => {
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   We suggest a cap of {formatEther(repayFee)} for this transaction. This
-                  fee ({toPercentage(vaultStore.burnFeeRate)}%) is rewarded to TST stakers, helping the DAO grow
+                  fee ({toPercentage(currentVault?.burnFeeRate)}%) is rewarded to TST stakers, helping the DAO grow
                   and build more features.{" "}
                 </Typography>{" "}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>

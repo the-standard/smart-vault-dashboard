@@ -1,13 +1,13 @@
 import { LiFiWidget, WidgetConfig, WidgetWalletManagement, WidgetVariant } from '@lifi/widget';
-import { Address, useWalletClient } from "wagmi";
+import { useWalletClient } from "wagmi";
 import { providers } from "ethers";
 
 interface ExchangeProps {
   variant?: WidgetVariant,
   fromChain?: number,
   toChain?: number,
-  fromToken?: Address,
-  toToken?: Address
+  fromToken?: any,
+  toToken?: any
 }
 const Exchange: React.FC<ExchangeProps> = ({
   variant = 'default',
@@ -31,7 +31,7 @@ const Exchange: React.FC<ExchangeProps> = ({
 
   const walletConfig:WidgetWalletManagement = {
     signer,
-    disconnect: async () => {},
+    disconnect: async () => {null},
     connect: async () => signer,
   }
 

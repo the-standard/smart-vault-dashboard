@@ -5,8 +5,11 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Button } from "@mui/material";
 import { providers, BigNumber, ethers } from "ethers";
-import { useAccount, useContractReads, useWalletClient } from "wagmi";
+import { useAccount, useReadContracts, useWalletClient, useChainId} from "wagmi";
 import { OpenSeaSDK, Chain } from "opensea-js";
+import { arbitrumSepolia } from "viem/chains";
+import { fromHex } from "viem";
+
 import {
   useVaultForListingStore,
   useContractAddressStore,
@@ -15,8 +18,6 @@ import {
   useEthToUsdAddressStore,
   useSnackBarStore,
 } from "../../store/Store";
-import { fromHex } from "viem";
-import { useNetwork } from "wagmi";
 
 interface StepProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,7 +33,7 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
     useContractAddressStore();
   //this might be useless. where else do I u,se it?
   const { chainlinkAbi } = useChainlinkAbiStore();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { arbitrumOneUSDToEuroAddress, arbitrumSepoliaUSDToEuroAddress } =
     useUSDToEuroAddressStore();
   const { arbitrumOneEthToUsdAddress, arbitrumSepoliaEthToUsdAddress } =
@@ -44,15 +45,15 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
     functionName: "latestRoundData",
   };
   const eurUsdAddress =
-    chain?.id === 421614
+    chainId === arbitrumSepolia.id
       ? arbitrumSepoliaUSDToEuroAddress
       : arbitrumOneUSDToEuroAddress;
   const ethUsdAddress =
-    chain?.id === 421614
+    chainId === arbitrumSepolia.id
       ? arbitrumSepoliaEthToUsdAddress
       : arbitrumOneEthToUsdAddress;
 
-  const { data: priceData } = useContractReads({
+  const { data: priceData } = useReadContracts({
     contracts: [
       {
         address: ethUsdAddress,
@@ -83,7 +84,7 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
     };
     provider = new providers.Web3Provider(transport, network);
 
-    openseaSDK = chain?.id === 421614 ?
+    openseaSDK = chainId === arbitrumSepolia.id ?
       new OpenSeaSDK(provider, {
         chain: Chain.ArbitrumGoerli,
       }) :
@@ -99,7 +100,7 @@ const StepTwo: React.FC<StepProps> = ({ modalChildState, tokenMap }) => {
   const tokenIdBeforeConversion: any = vaultForListing.tokenId;
   const tokenId: any = fromHex(tokenIdBeforeConversion, "number").toString();
 
-  const tokenAddress = chain?.id === 421614 ?
+  const tokenAddress = chainId === arbitrumSepolia.id ?
     arbitrumSepoliaContractAddress :
     arbitrumContractAddress;
 

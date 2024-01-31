@@ -2,22 +2,26 @@ import { Box, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import React, { useState, useLayoutEffect, useRef, useEffect } from "react";
 import Actions from "./Actions";
+import { formatUnits } from "viem";
+import axios from "axios";
+import {
+  useChainId,
+} from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
 import {
   useCollateralSymbolStore,
   useWidthStore,
   useGreyProgressBarValuesStore,
   useVaultStore,
 } from "../../store/Store";
+
 import LineChart from "./LineChart";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
 import wbtclogo from "../../assets/wbtclogo.svg";
 import linklogo from "../../assets/linklogo.svg";
 import paxglogo from "../../assets/paxglogo.svg";
 import arblogo from "../../assets/arblogo.svg";
-import { formatUnits } from "viem";
-import axios from "axios";
-import { getNetwork } from "@wagmi/core";
-
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 
@@ -67,7 +71,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   const symbol = ethers.utils.parseBytes32String(token.symbol);
   // const tokenAddress = token.addr;
 
-  const { chain } = getNetwork();
+  const chainId = useChainId();
 
   //ref to width sharing
   const ref = useRef<HTMLDivElement>(null);
@@ -81,7 +85,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         "https://smart-vault-api.thestandard.io/asset_prices"
       );
       const chainData =
-        chain?.id === 421614
+        chainId === arbitrumSepolia.id
           ? response.data.arbitrum_sepolia
           : response.data.arbitrum;
       setChartData(chainData);

@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
+import { Box, Typography, CircularProgress } from "@mui/material";
+import { formatUnits, parseUnits } from "viem";
+import { useWriteContract } from "wagmi";
+import axios from "axios";
+
 import {
   useVaultStore,
   useVaultAddressStore,
@@ -7,13 +12,9 @@ import {
   useSnackBarStore,
   useCircularProgressStore,
 } from "../../../store/Store";
-import { Box, Typography, CircularProgress } from "@mui/material";
-import { formatUnits, parseUnits } from "viem";
-import { useContractWrite } from "wagmi";
 
 import Select from "../../../components/Select";
 import Button from "../../../components/Button";
-import axios from "axios";
 
 interface SwapProps {
   symbol: string;
@@ -35,7 +36,8 @@ const Swap: React.FC<SwapProps> = ({
   const [swapLoading, setSwapLoading] = useState<any>(false);
   const [swapAssets, setSwapAssets] = useState<any>();
   const [amount, setAmount] = useState<any>(0);
-  const [receiveAmount, setReceiveAmount] = useState<any>(0);
+  // const [receiveAmount, setReceiveAmount] = useState<any>(0);
+  const [receiveAmountFormatted, setReceiveAmountFormatted] = useState<any>(0);
   const [receiveAsset, setReceiveAsset] = useState<any>('');
   const [receiveDecimals, setReceiveDecimals] = useState<any>();
   const { vaultStore } = useVaultStore();
@@ -58,6 +60,10 @@ const Swap: React.FC<SwapProps> = ({
     setAmount(Number(e.target.value));
   };
 
+  const handleMinReturn = (e: any) => {
+    setReceiveAmountFormatted(e.target.value);
+  };
+
   const getSwapConversion = async () => {
     try {
       setSwapLoading(true);
@@ -68,7 +74,7 @@ const Swap: React.FC<SwapProps> = ({
         `https://smart-vault-api.thestandard.io/estimate_swap?in=${swapIn}&out=${swapOut}&amount=${swapAmount}`
       );
       const data = response.data;
-      setReceiveAmount(formatUnits(data.toString(), receiveDecimals));
+      setReceiveAmountFormatted(formatUnits(data.toString(), receiveDecimals));
       setSwapLoading(false);
     } catch (error) {
       console.log(error);
@@ -102,35 +108,34 @@ const Swap: React.FC<SwapProps> = ({
 
   const availableAssets = swapAssets?.filter((item: any) => item.symbol !== symbol);
 
-  const swapTokens = useContractWrite({
-    address: vaultAddress as any,
-    abi: smartVaultABI,
-    functionName: "swap",
-    args: [
-      ethers.utils.formatBytes32String(symbol),
-      ethers.utils.formatBytes32String(receiveAsset),
-      parseUnits(amount.toString(), decimals),
-    ],
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleSwapTokens = async () => {
+    try {
+      writeContract({
+        abi: smartVaultABI,
+        address: vaultAddress as any,
+        functionName: "swap",
+        args: [
+          ethers.utils.formatBytes32String(symbol),
+          ethers.utils.formatBytes32String(receiveAsset),
+          parseUnits(amount.toString(), decimals),
+          parseUnits(receiveAmountFormatted.toString(), receiveDecimals),
+        ],
+    });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
-
-  const handleSwapTokens = async () => {
-    const { write } = swapTokens;
-    write();
   };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = swapTokens;
-    if (isLoading) {
+    if (isPending) {
       getProgressType('SWAP');
       getCircularProgress(true);
       setSwapLoading(true);
@@ -139,20 +144,20 @@ const Swap: React.FC<SwapProps> = ({
       setSwapLoading(false);
       inputRef.current.value = "";
       setAmount(0);
-      setReceiveAmount(0);
+      setReceiveAmountFormatted(0);
       setReceiveAsset('');
     } else if (isError) {
       getCircularProgress(false);
       setSwapLoading(false);
       inputRef.current.value = "";
       setAmount(0);
-      setReceiveAmount(0);
+      setReceiveAmountFormatted(0);
       setReceiveAsset('');
     }
   }, [
-    swapTokens.isLoading,
-    swapTokens.isSuccess,
-    swapTokens.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
   const handleMaxBalance = async () => {
@@ -276,8 +281,9 @@ const Swap: React.FC<SwapProps> = ({
             </Select>
           </Box>
           <Box
-            sx={!amount || !receiveAsset || !receiveAmount ? (
-              {
+            // sx={!amount || !receiveAsset || !receiveAmount ? (
+            sx={!amount || !receiveAsset ? (
+                {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "flex-start",
@@ -304,7 +310,7 @@ const Swap: React.FC<SwapProps> = ({
                 minWidth: "112px",
               }}
             >
-              Approx Return:
+              Min. Return:
             </Typography>
             <input
               style={{
@@ -325,12 +331,13 @@ const Swap: React.FC<SwapProps> = ({
               value={swapLoading ? (
                 ''
               ) : (
-                receiveAmount || ''
+                receiveAmountFormatted
               )}
               ref={inputReceiveRef}
               type="number"
+              onChange={handleMinReturn}
               placeholder="Amount"
-              readOnly
+              // readOnly
             />
           </Box>
           {receiveAsset === 'PAXG' || symbol === 'PAXG' ? (
@@ -376,7 +383,7 @@ const Swap: React.FC<SwapProps> = ({
             }}
           >
             <Button
-              isDisabled={!amount || !receiveAsset || !(receiveAmount > 0) || swapLoading}
+              isDisabled={!amount || !receiveAsset || !(receiveAmountFormatted > 0) || swapLoading}
               sx={{
                 width: "100%"
               }}

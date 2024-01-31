@@ -1,6 +1,12 @@
 import { Box, Typography } from "@mui/material";
-import { getNetwork } from "@wagmi/core";
-import { useContractRead, useContractReads, useAccount } from "wagmi";
+import {
+  useReadContract,
+  useReadContracts,
+  useAccount,
+  useChainId,
+  useWatchBlockNumber
+} from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
 
 import {
   useStakingAbiStore,
@@ -26,21 +32,21 @@ const StakingTST = () => {
   } = useStakingContractsStore();
 
   const { address } = useAccount();
-  const { chain } = getNetwork();
+  const chainId = useChainId();
 
   const vaultManagerAddress =
-  chain?.id === 421614
+  chainId === arbitrumSepolia.id
     ? arbitrumSepoliaContractAddress
     : arbitrumContractAddress;
   
   const stakingContractsAddress = 
-  chain?.id === 421614
+  chainId === arbitrumSepolia.id
     ? arbitrumSepoliaStakingContractsAddress
     : arbitrumStakingContractsAddress;
 
   //////////////////////////
   // Handling Directory List
-  const { data: stakingAddresses } = useContractRead({
+  const { data: stakingAddresses } = useReadContract({
     address: stakingContractsAddress,
     abi: stakingAbi,
     functionName: "list",
@@ -79,7 +85,7 @@ const StakingTST = () => {
     ]
   }).flat();
 
-  const { data: stakingData } = useContractReads({contracts});
+  const { data: stakingData } = useReadContracts({contracts});
 
   const nestedStakingData = stakingData && stakingAddresses?.map((address, i) => {
     return {
@@ -107,7 +113,15 @@ const StakingTST = () => {
     ]
   }).flat();
 
-  const { data: positionData } = useContractReads({contracts: positions, watch: true});
+  const { data: positionData, refetch } = useReadContracts({
+    contracts: positions,
+  });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetch();
+    },
+  })
 
   const nestedPositionData = positionData && nestedStakingData && stakingAddresses?.map((address, i) => {
     const positionItem: any = positionData[i].result;

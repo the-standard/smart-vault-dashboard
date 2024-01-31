@@ -2,7 +2,6 @@ import { useMemo, useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { Box, Grid, Typography } from "@mui/material";
 import { useAccount } from "wagmi";
-import { Web3Button } from "@web3modal/react";
 // import StakingMenuSmall from "../components/staking/StakingMenuSmall";
 // import StakingMenuLarge from "../components/staking/StakingMenuLarge";
 // import StakingStake from "../components/staking/StakingStake";
@@ -157,9 +156,11 @@ const Staking = () => {
             <Box
               sx={{
                 marginTop: "1em",
+                display: "flex",
+                justifyContent: "center",
               }}
             >
-              <Web3Button />
+              <w3m-button />
             </Box>
           </Card>
         </Box>

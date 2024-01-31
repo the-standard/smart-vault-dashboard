@@ -9,12 +9,14 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   useAccount,
-  useContractReads,
-  useContractWrite
+  useReadContracts,
+  useWriteContract,
+  useChainId,
+  useWatchBlockNumber,
 } from "wagmi";
-import { getNetwork } from "@wagmi/core";
-import { arbitrum } from "wagmi/chains";
+import { arbitrum, arbitrumSepolia } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
+
 import {
   usePositionStore,
   useTstAddressStore,
@@ -25,12 +27,13 @@ import {
   useLiquidationPoolAbiStore,
   useLiquidationPoolStore,
 } from "../../store/Store.ts";
+
 import Card from "../Card.tsx";
 import Button from "../Button.tsx";
 import Exchange from "../Exchange.tsx";
 
 const StakingStake = () => {
-  const { chain } = getNetwork();
+  const chainId = useChainId();
   const {
     arbitrumTstAddress,
     arbitrumSepoliaTstAddress,
@@ -53,6 +56,7 @@ const StakingStake = () => {
   const [learnMore, setLearnMore] = useState(false);
   const [tstStakeAmount, setTstStakeAmount] = useState(0);
   const [eurosStakeAmount, setEurosStakeAmount] = useState(0);
+  const [stage, setStage] = useState('');
   // const [autoTrade, setAutoTrade] = useState(false);
 
   const tstInputRef: any = useRef<HTMLInputElement>(null);
@@ -70,15 +74,15 @@ const StakingStake = () => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [setPosition]);
 
-  const tstAddress = chain?.id === 421614 ?
+  const tstAddress = chainId === arbitrumSepolia.id ?
   arbitrumSepoliaTstAddress :
   arbitrumTstAddress;
 
-  const eurosAddress = chain?.id === 421614 ?
+  const eurosAddress = chainId === arbitrumSepolia.id ?
   arbitrumSepoliasEuroAddress :
   arbitrumsEuroAddress;
 
-  const liquidationPoolAddress = chain?.id === 421614 ? arbitrumSepoliaLiquidationPoolAddress :
+  const liquidationPoolAddress = chainId === arbitrumSepolia.id ? arbitrumSepoliaLiquidationPoolAddress :
   arbitrumLiquidationPoolAddress;
 
   const tstContract = {
@@ -86,17 +90,16 @@ const StakingStake = () => {
     abi: erc20Abi,
   }
 
-  const { data: tstData } = useContractReads({
+  const { data: tstData, refetch: refetchTst } = useReadContracts({
     contracts: [{
       ... tstContract,
       functionName: "allowance",
       args: [address as any, liquidationPoolAddress]
-  },{
+    },{
       ... tstContract,
       functionName: "balanceOf",
       args: [address as any]
-  }],
-    watch: true
+    }],
   });
 
   const eurosContract = {
@@ -104,18 +107,24 @@ const StakingStake = () => {
     abi: erc20Abi,
   }
 
-  const { data: eurosData } = useContractReads({
+  const { data: eurosData, refetch: refetchEuros } = useReadContracts({
     contracts: [{
       ... eurosContract,
       functionName: "allowance",
       args: [address as any, liquidationPoolAddress]
-  },{
+    },{
       ... eurosContract,
       functionName: "balanceOf",
       args: [address as any]
-  }],
-    watch: true
+    }],
   });
+
+  useWatchBlockNumber({
+    onBlockNumber() {
+      refetchTst();
+      refetchEuros();
+    },
+  })
 
   const existingTstAllowance: any = tstData && tstData[0].result;
   const tstBalance: any = tstData && tstData[1].result;
@@ -126,137 +135,136 @@ const StakingStake = () => {
   const tstInWei = parseEther(tstStakeAmount.toString());
   const eurosInWei = parseEther(eurosStakeAmount.toString());
 
-  const approveTst = useContractWrite({
-    address: tstAddress as any,
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [liquidationPoolAddress as any, tstInWei],
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleApproveTst = async () => {
+    setStage('APPROVE_TST');
+    try {
+      writeContract({
+        abi: erc20Abi,
+        address: tstAddress as any,
+        functionName: "approve",
+        args: [liquidationPoolAddress as any, tstInWei],
+      });
+
+      getSnackBar('SUCCESS', 'TST Approved');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'TST Approved');
     }
-  });
-
-  useEffect(() => {
-    const { isLoading, isSuccess, isError } = approveTst;
-    if (isLoading) {
-      getProgressType('STAKE_DEPOSIT');
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      handleApproveEuros();
-    } else if (isError) {
-      getCircularProgress(false);
-    }
-  }, [
-    approveTst.isLoading,
-    approveTst.isSuccess,
-    approveTst.data,
-    approveTst.isError,
-  ]);
+  };
 
   const handleApproveEuros = async () => {
-    const { write } = approveEuros;
+    setStage('APPROVE_EUROS');
     setTimeout(() => {
-      write();
+      try {
+        writeContract({
+          abi: erc20Abi,
+          address: eurosAddress as any,
+          functionName: "approve",
+          args: [liquidationPoolAddress as any, eurosInWei],
+        });
+  
+        getSnackBar('SUCCESS', 'EUROs Approved');
+      } catch (error: any) {
+        let errorMessage: any = '';
+        if (error && error.shortMessage) {
+          errorMessage = error.shortMessage;
+        }
+        getSnackBar('ERROR', errorMessage);
+      }  
     }, 1000);
   };
-
-  const approveEuros = useContractWrite({
-    address: eurosAddress as any,
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [liquidationPoolAddress as any, eurosInWei],
-    onError(error: any) {
-      let errorMessage: any = '';
-      if (error && error.shortMessage) {
-        errorMessage = error.shortMessage;
-      }
-      getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'EUROs Approved');
-    }
-  });
-
-  useEffect(() => {
-    const { isLoading, isSuccess, isError } = approveEuros;
-    if (isLoading) {
-      getProgressType('STAKE_DEPOSIT');
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      handleDepositToken();
-    } else if (isError) {
-      getCircularProgress(false);
-    }
-  }, [
-    approveEuros.isLoading,
-    approveEuros.isSuccess,
-    approveEuros.data,
-    approveEuros.isError,
-  ]);
 
   const handleDepositToken = async () => {
-    const { write } = depositToken;
+    setStage('DEPOSIT_TOKEN');
     setTimeout(() => {
-      write();
+      try {
+        writeContract({
+          abi: liquidationPoolAbi,
+          address: liquidationPoolAddress as any,
+          functionName: "increasePosition",
+          args: [
+            tstInWei,
+            eurosInWei
+          ],
+        });
+  
+        getSnackBar('SUCCESS', 'Success!');
+      } catch (error: any) {
+        let errorMessage: any = '';
+        if (error && error.shortMessage) {
+          errorMessage = error.shortMessage;
+        }
+        getSnackBar('ERROR', errorMessage);
+      }  
     }, 1000);
   };
-    
-  const depositToken = useContractWrite({
-    address: liquidationPoolAddress,
-    abi: liquidationPoolAbi,
-    functionName: "increasePosition",
-    args: [
-      tstInWei,
-      eurosInWei
-    ],
-    onError(error: any) {
-      let errorMessage: any = '';
-      if (error && error.shortMessage) {
-        errorMessage = error.shortMessage;
-      }
-      getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
-    }
-  });
 
-  const handleDepositTokens = async () => {
-    const { write } = existingTstAllowance < tstInWei ?
-    approveTst : existingEurosAllowance < eurosInWei ?
-    approveEuros : depositToken;
-    write();
+  const handleLetsStake = async () => {
+    if (existingTstAllowance < tstInWei) {
+      handleApproveTst();
+    } else {
+      if (existingEurosAllowance < eurosInWei) {
+        handleApproveEuros();
+      } else {
+        handleDepositToken();
+      }
+    }
   };
 
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = depositToken;
-    if (isLoading) {
-      getProgressType('STAKE_DEPOSIT');
-      getCircularProgress(true);
-    } else if (isSuccess) {
-      getCircularProgress(false);
-      eurosInputRef.current.value = "";
-      tstInputRef.current.value = "";
-      setTstStakeAmount(0);
-      setEurosStakeAmount(0);
-    } else if (isError) {
-      getCircularProgress(false);
-      eurosInputRef.current.value = "";
-      tstInputRef.current.value = "";
-      setTstStakeAmount(0);
-      setEurosStakeAmount(0);
+    if (stage === 'APPROVE_TST') {
+      if (isPending) {
+        getProgressType('STAKE_DEPOSIT');
+        getCircularProgress(true);
+      } else if (isSuccess) {
+        handleApproveEuros();
+        setStage('');
+      } else if (isError) {
+        getCircularProgress(false);
+        setStage('');
+      }  
+    }
+    if (stage === 'APPROVE_EUROS') {
+      if (isPending) {
+        getProgressType('STAKE_DEPOSIT');
+        getCircularProgress(true);
+      } else if (isSuccess) {
+        handleDepositToken();
+        setStage('');
+      } else if (isError) {
+        getCircularProgress(false);
+        setStage('');
+      }
+    }
+    if (stage === 'DEPOSIT_TOKEN') {
+      if (isPending) {
+        getProgressType('STAKE_DEPOSIT');
+        getCircularProgress(true);
+      } else if (isSuccess) {
+        getCircularProgress(false);
+        eurosInputRef.current.value = "";
+        tstInputRef.current.value = "";
+        setTstStakeAmount(0);
+        setEurosStakeAmount(0);
+        setStage('');
+      } else if (isError) {
+        getCircularProgress(false);
+        eurosInputRef.current.value = "";
+        tstInputRef.current.value = "";
+        setTstStakeAmount(0);
+        setEurosStakeAmount(0);
+        setStage('');
+      }  
     }
   }, [
-    depositToken.isLoading,
-    depositToken.isSuccess,
-    depositToken.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
   const handleTstAmount = (e: any) => {
@@ -456,7 +464,7 @@ const StakingStake = () => {
                   marginTop: "1rem",
                 }}
                 isDisabled={tstStakeAmount <= 0 && eurosStakeAmount <= 0}
-                clickFunction={handleDepositTokens}
+                clickFunction={handleLetsStake}
               >
                 Let&apos;s Stake
               </Button>

@@ -238,28 +238,33 @@ export const abi = [
   },
   { stateMutability: "payable", type: "receive" },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "bytes32",
-        name: "_inToken",
-        type: "bytes32"
+        "internalType": "bytes32",
+        "name": "_inToken",
+        "type": "bytes32"
       },
       {
-        internalType: "bytes32",
-        name: "_outToken",
-        type: "bytes32"
+        "internalType": "bytes32",
+        "name": "_outToken",
+        "type": "bytes32"
       },
       {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256"
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_requestedMinOut",
+        "type": "uint256"
       }
     ],
-    name: "swap",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  }
+    "name": "swap",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
 ];
 
 export default abi;

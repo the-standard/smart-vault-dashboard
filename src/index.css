@@ -6,12 +6,14 @@
   padding: 0;
   margin: 0; */
   font-family: "Poppins", sans-serif;
-  background-color: black;
+  background-color: #212121;
   background-position: center;
 }
 
 html {
   height: 100%;
+  display: block;
+  overflow: auto;
 }
 
 body {

@@ -3,10 +3,12 @@ import { ethers } from "ethers";
 import { Box, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { formatUnits } from "ethers/lib/utils";
 import {
-  useContractWrite
+  useWriteContract,
+  useChainId,
 } from "wagmi";
-import { getNetwork } from "@wagmi/core";
+import { arbitrumSepolia } from "wagmi/chains";
 import {
   useSnackBarStore,
   useCircularProgressStore,
@@ -15,7 +17,6 @@ import {
 } from "../../store/Store.ts";
 
 import Button from "../Button";
-import { formatUnits } from "ethers/lib/utils";
 import ethereumlogo from "../../assets/ethereumlogo.svg";
 import wbtclogo from "../../assets/wbtclogo.svg";
 import linklogo from "../../assets/linklogo.svg";
@@ -47,7 +48,7 @@ interface StakingLiquidationsProps {
 const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
   rewards,
 }) => {
-  const { chain } = getNetwork();
+  const chainId = useChainId();
 
   const { liquidationPoolAbi } = useLiquidationPoolAbiStore();
   const { getSnackBar } = useSnackBarStore();
@@ -59,34 +60,33 @@ const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
   } = useLiquidationPoolStore();
 
   const liquidationPoolAddress =
-  chain?.id === 421614
+  chainId === arbitrumSepolia.id
     ? arbitrumSepoliaLiquidationPoolAddress
     : arbitrumLiquidationPoolAddress;
 
-  const depositToken = useContractWrite({
-    address: liquidationPoolAddress,
-    abi: liquidationPoolAbi,
-    functionName: "claimRewards",
-    onError(error: any) {
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+
+  const handleClaimRewards = async () => {
+    try {
+      writeContract({
+        abi: liquidationPoolAbi,
+        address: liquidationPoolAddress as any,
+        functionName: "claimRewards",
+        args: [],
+      });
+
+      getSnackBar('SUCCESS', 'Success!');
+    } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
-    },
-    onSuccess() {
-      getSnackBar('SUCCESS', 'Success!');
     }
-  });
-  
-  const handleWithdrawTokens = async () => {
-    const { write } = depositToken;
-    write();
   };
   
   useEffect(() => {
-    const { isLoading, isSuccess, isError } = depositToken;
-    if (isLoading) {
+    if (isPending) {
       getProgressType('STAKE_CLAIM');
       getCircularProgress(true);
     } else if (isSuccess) {
@@ -95,9 +95,9 @@ const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
       getCircularProgress(false);
     }
   }, [
-    depositToken.isLoading,
-    depositToken.isSuccess,
-    depositToken.isError,
+    isPending,
+    isSuccess,
+    isError,
   ]);
 
   const [paginationModel, setPaginationModel] = useState({
@@ -327,7 +327,7 @@ const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
                 sm: "unset"
               }
             }}
-            clickFunction={handleWithdrawTokens}
+            clickFunction={handleClaimRewards}
             isDisabled={noRewards}
           >
             Claim All Rewards
