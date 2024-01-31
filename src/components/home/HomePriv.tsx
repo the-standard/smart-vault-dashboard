@@ -62,8 +62,6 @@ const HomePriv = () => {
     args: [address || ethers.constants.AddressZero]
   });
 
-  console.log(vaultIDs);
-
   const vaultDataContract = {
     address: vaultManagerAddress,
     abi: vaultManagerAbi,
@@ -80,8 +78,6 @@ const HomePriv = () => {
   const { data: vaultData, refetch: refetchVaultData } = useReadContracts({
     contracts
   });
-
-  console.log(vaultData)
 
   const myVaults = vaultData?.map((item) => {
     if (item && item.result) {
