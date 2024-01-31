@@ -45,6 +45,8 @@ const LoginCard = () => {
         <Box
           sx={{
             marginTop: "1em",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
           <w3m-button />
