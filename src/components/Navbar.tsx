@@ -39,7 +39,7 @@ const Navbar = () => {
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "120px",
           },
           marginRight: "1rem"
         }}
@@ -61,7 +61,7 @@ const Navbar = () => {
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "120px",
           },
           marginRight: "1rem"
         }}
@@ -83,7 +83,7 @@ const Navbar = () => {
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "120px",
           },
           marginRight: "1rem"
         }}
