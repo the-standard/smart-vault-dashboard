@@ -43,9 +43,12 @@ function App() {
     <Box
       sx={{
         overflowX: {
-          xs: "scroll",
+          xs: "auto",
           md: "hidden",
         },
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* <button onClick={handleRemountClick}>Remount</button>{" "} */}
