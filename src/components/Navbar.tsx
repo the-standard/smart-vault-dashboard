@@ -221,6 +221,7 @@ const Navbar = () => {
                 xs: "40px",
                 md: "60px",
               },
+              zIndex: "1",
             }}
             alt="Standard.io Logo"
           />
