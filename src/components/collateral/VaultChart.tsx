@@ -1,76 +1,24 @@
-import FullChart from "./FullChart";
+import FullChart from "../chart/FullChart";
 import { Box, Typography } from "@mui/material";
-import { BigNumber, ethers } from "ethers";
-import { formatEther, formatUnits, parseEther } from "viem";
-import { parseBytes32String } from "ethers/lib/utils";
-import { useReadContracts, useChainId } from "wagmi";
-import { arbitrumSepolia } from "wagmi/chains";
+import { ethers } from "ethers";
+import { formatEther, formatUnits } from "viem";
 
 import {
   useVaultStore,
   useVaultIdStore,
   useGreyProgressBarValuesStore,
-  useChainlinkAbiStore,
-  useUSDToEuroAddressStore,
 } from "../../store/Store";
 
-import ProgressBar from "../ProgressBar";
-
-interface ChartProps {
+interface VaultChartProps {
   currentVault: any;
 }
 
-const Index: React.FC<ChartProps> = ({
+const VaultChart: React.FC<VaultChartProps> = ({
   currentVault,
 }) => {  const { vaultStore } = useVaultStore();
   const { vaultID } = useVaultIdStore();
-  const { userInputForGreyBarOperation, symbolForGreyBar, operationType } =
     useGreyProgressBarValuesStore();
   const vaultVersion = vaultStore?.status.version || '';
-  // const chosenVault: any = vaultStore;
-  const chainId = useChainId();
-  const { chainlinkAbi } = useChainlinkAbiStore();
-  const { arbitrumOneUSDToEuroAddress, arbitrumSepoliaUSDToEuroAddress } =
-    useUSDToEuroAddressStore();
-
-  const chainlinkContract = {
-    abi: chainlinkAbi,
-    functionName: "latestRoundData",
-  };
-
-  const eurUsdAddress =
-    chainId === arbitrumSepolia.id
-      ? arbitrumSepoliaUSDToEuroAddress
-      : arbitrumOneUSDToEuroAddress;
-
-  const contracts = [
-    {
-      address: eurUsdAddress,
-      ...chainlinkContract,
-    },
-  ];
-
-  if (symbolForGreyBar.length > 0) {
-    const focusedAsset = currentVault.status.collateral.filter(
-      (asset: any) =>
-        parseBytes32String(asset.token.symbol) === symbolForGreyBar
-    )[0];
-    contracts.push({
-      address: focusedAsset.token.clAddr,
-      ...chainlinkContract,
-    });
-  }
-
-  const { data: priceData } = useReadContracts({
-    contracts,
-  });
-
-  const prices: any = priceData?.map((data:any) => {
-    const result: any = data.result;
-    if (result && result[1]) {
-      return result[1];
-    }
-  });
 
   const chartData = currentVault.status.collateral.map((asset: any) => {
     return {
@@ -80,241 +28,41 @@ const Index: React.FC<ChartProps> = ({
     };
   });
 
-  // smart vaults use 100000 as 100%
-  const liquidationTrigger: any = BigNumber.from(currentVault.status.minted)
-    .mul(currentVault.collateralRate)
-    .div(100000);
-
-  const chartValues = [
-    {
-      title: "Debt outstanding",
-      value: Number(formatEther(currentVault.status.minted)).toFixed(2),
-      currency: "EUROs",
-    },
-    {
-      title: "Collateral Value",
-      value: '€' + Number(
-        formatEther(currentVault.status.totalCollateralValue)
-      ).toFixed(2),
-      currency: "",
-    },
-    {
-      title: "Borrow up to:",
-      value: (
-        ((Number(formatEther(currentVault.status.maxMintable)) -
-          Number(formatEther(currentVault.status.minted))) *
-          (100000 - Number(currentVault.mintFeeRate))) /
-        100000
-      ).toFixed(2),
-      currency: "EUROs",
-    },
-  ];
-
-  if (Number(currentVault.status.minted) > 0)
-    chartValues.push({
-      title: "Minimum Collateral Value Required",
-      value: "€" + Number(formatEther(liquidationTrigger)).toFixed(2),
-      currency: "",
-    });
-
-  const computeGreyBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
-    let operation: any;
-    let userInputInEur = 0n;
-    const userInputInWei = parseEther(userInputForGreyBarOperation.toString());
-    const convertInflatedPercentageTo2Dec = (inflatedValue:bigint) => {
-      return parseFloat((Number(inflatedValue) / 100).toFixed(2));
-    }
-
-    if (prices && prices[0] && prices[1]) {
-      userInputInEur = userInputInWei * prices[1] / prices[0];
-    }
-
-    if (totalCollateralValue === 0n) {
-      operation = 0;
-    } else if (operationType === 1) {
-      //deposit
-      operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue + userInputInEur));
-    } else if (operationType === 2) {
-      //withdraw
-      if (totalDebt <= 0) {
-        operation = 0;
-      } else if (
-        userInputInEur === totalCollateralValue
-        ||
-        userInputInEur > totalCollateralValue
-      ) {
-        operation = 100;
-      } else {
-        operation = convertInflatedPercentageTo2Dec(10000n * totalDebt / (totalCollateralValue - userInputInEur));
-      }
-    } else if (operationType === 4) {
-      //borrow
-      operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt + userInputInWei) / totalCollateralValue);
-    } else if (operationType === 5) {
-      //repay
-      operation = convertInflatedPercentageTo2Dec(10000n * (totalDebt - userInputInWei) / totalCollateralValue);
-    }
-
-    return operation < 0 ? 0 : operation > 100 ? 100 : operation;
-  };
-
-  const computeProgressBar = (totalDebt: bigint, totalCollateralValue: bigint) => {
-    if (totalCollateralValue === 0n) return 0;
-    const safeBigIntWithNoDec = 10000n * totalDebt / totalCollateralValue;
-    return parseFloat((Number(safeBigIntWithNoDec) / 100).toFixed(2));
-  };
-
   return (
     <Box
       sx={{
-        padding: "10px",
-        width: "100%",
-        color: "white",
+        width: { xs: "200px", sm: "300px" },
+        height: { xs: "200px", sm: "300px" },
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Box
+      <FullChart fullChartData={chartData} />
+      <Typography
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          justifyContent: { xs: "center", sm: "space-between" },
-          alignItems: { xs: "center", sm: "flex-start" },
-          margin: "10px",
+          position: "relative",
+          top: { xs: "-120px", sm: "-170px" },
+          fontFamily: "Poppins",
         }}
+        variant="body1"
       >
+        {" "}
+        VAULT ID <br></br>
         <Box
           sx={{
-            padding: "0",
-            width: "auto",
-            display: { xs: "grid", sm: "flex" },
-            flexDirection: { sm: "column" },
-            justifyContent: { sm: "flex-start" },
-            alignItems: { sm: "flex-start" },
-            gridTemplateColumns: { xs: "1fr 1fr" },
+            textAlign: "center",
           }}
         >
-          {chartValues.map((item, index) => (
-            <Box
-              sx={{
-                marginBottom: "25px",
-                marginRight: { xs: "1.5rem", sm: "0" },
-                width: "auto",
-              }}
-              key={index}
-            >
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  fontSize: "0.88rem",
-                }}
-                variant="body2"
-              >
-                {item.title}
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontSize: "1.5rem",
-                    color: "#fff",
-                    marginRight: "10px",
-                    fontFamily: "Poppins",
-                    fontWeight: "200",
-                  }}
-                >
-                  {item.value}
-                </Typography>
-                <Typography
-                  sx={{
-                    position: "relative",
-                    top: "4.2px",
-                    fontFamily: "Poppins",
-                    fontWeight: "200",
-                  }}
-                  variant="body2"
-                >
-                  {item.currency}
-                </Typography>
-              </Box>
-            </Box>
-          ))}
+          {vaultVersion ? (
+            `V${vaultVersion}-`
+          ) : ('')}
+          {vaultID}
         </Box>
-        <Box
-          sx={{
-            width: { xs: "200px", sm: "300px" },
-            height: { xs: "200px", sm: "300px" },
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <FullChart fullChartData={chartData} />
-          <Typography
-            sx={{
-              position: "relative",
-              top: { xs: "-120px", sm: "-170px" },
-              fontFamily: "Poppins",
-            }}
-            variant="body1"
-          >
-            {" "}
-            VAULT ID <br></br>
-            <Box
-              sx={{
-                textAlign: "center",
-              }}
-            >
-              {vaultVersion ? (
-                `V${vaultVersion}-`
-              ) : ('')}
-              {vaultID}
-            </Box>
-          </Typography>
-        </Box>
-      </Box>
-      <Box>
-        <Typography
-          sx={{
-            marginLeft: "5px",
-            fontWeight: "200",
-            marginBottom: "7px",
-          }}
-          variant="body1"
-        >
-          How close you are to liquidation
-        </Typography>
-        <ProgressBar
-          progressValue={computeProgressBar(
-            currentVault.status.minted,
-            currentVault.status.totalCollateralValue
-          )}
-          greyBarValue={computeGreyBar(
-            currentVault.status.minted,
-            currentVault.status.totalCollateralValue
-          )}
-        />
-        <Typography
-          sx={{
-            marginLeft: "5px",
-            float: "right",
-            marginRight: "5px",
-            fontWeight: "200",
-            marginTop: "7px",
-          }}
-          variant="body1"
-        >
-          Smart Vault liquidates at 90.91%{" "}
-        </Typography>
-      </Box>
+      </Typography>
     </Box>
   );
 };
 
-export default Index;
+export default VaultChart;

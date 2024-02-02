@@ -35,6 +35,7 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import VaultMenuSmall from "../components/VaultMenuSmall";
 import VaultStats from "../components/collateral/VaultStats";
+import VaultChart from "../components/collateral/VaultChart";
 
 type RouteParams = {
   vaultId: string;
@@ -395,16 +396,16 @@ const Collateral = () => {
 
   const buttonDetails = [
     {
-      id: 1,
-      title: "View on Etherscan",
-    },
-    {
       id: 2,
-      title: "Add EUROs to wallet",
+      title: "Add EUROs",
     },
     {
       id: 3,
-      title: "Earn Yield on EUROs",
+      title: "Earn Yield",
+    },
+    {
+      id: 1,
+      title: "View Etherscan",
     },
   ];
 
@@ -524,11 +525,8 @@ const Collateral = () => {
           width: "100%",
           display: { xs: "flex", lg: "grid" },
           flexDirection: "column",
-          gridTemplateColumns:
-            " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
-          gap: "20px" /* Gap between the columns */,
-          gridAutoColumns: "1fr" /* Equal width for child components */,
-          // now flexbox
+          gridTemplateColumns: "4fr 1fr",
+          gap: "20px",
         }}
       >
         {/* left side of the container */}
@@ -551,16 +549,15 @@ const Collateral = () => {
           </Box>
         </Box>{" "}
         {/* right side of the container */}
-        <Box
-          sx={{
-            marginTop: "8px",
-          }}
-        >
+        <Box>
           {/* full chart container */}
-          <Card
+          <Box
             sx={{
+              paddingTop: "1.5rem",
+              display: "flex",
               alignItems: "center",
-              padding: "1.5rem",
+              justifyContent: "center",
+              marginBottom: "-1rem",
             }}
           >
             {vaultStore.status.liquidated ? (
@@ -572,9 +569,10 @@ const Collateral = () => {
                 />
               </Box>
             ) : (
-              <ChartComponent currentVault={currentVault} />
+              <VaultChart currentVault={currentVault} />
+              // <ChartComponent currentVault={currentVault} />
             )}
-          </Card>
+          </Box>
           <Box
             sx={{
               display: "flex",
