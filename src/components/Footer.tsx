@@ -59,9 +59,7 @@ const Footer = () => {
         borderTop: "1px solid #8E9BAE",
         marginTop: "20rem",
         paddingBlock: "1rem",
-        background:
-          "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
-
+        background: "linear-gradient(141deg, rgba(26,26,26,1) 32%, rgba(0,0,0,1) 100%)",
         borderRadius: "10px",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(13.9px)",
@@ -119,13 +117,13 @@ const Footer = () => {
           <Box
             sx={{
               /* From https://css.glass */
-              background: " rgba(104, 104, 104, 0.2)",
+              // background: " rgba(104, 104, 104, 0.2)",
               borderRadius: "16px",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(5px)",
-              WebkitBackdropFilter: "blur(5px)",
+              // boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              // backdropFilter: "blur(5px)",
+              // WebkitBackdropFilter: "blur(5px)",
               // -webkit-backdrop-filter: blur(5px),
-              border: "1px solid rgba(255, 255, 255, 0.3)",
+              // border: "1px solid rgba(255, 255, 255, 0.3)",
               width: "50px",
               height: "50px",
               margin: {
