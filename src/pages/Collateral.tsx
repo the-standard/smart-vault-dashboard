@@ -34,6 +34,7 @@ import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import VaultMenuSmall from "../components/VaultMenuSmall";
+import VaultStats from "../components/collateral/VaultStats";
 
 type RouteParams = {
   vaultId: string;
@@ -330,7 +331,8 @@ const Collateral = () => {
               display: "flex",
               alignItems: "flex-start",
             }}
-          ></Box>
+          >
+          </Box>
         </Box>
 
         <VaultMenuSmall
@@ -439,7 +441,7 @@ const Collateral = () => {
       <Box
         sx={{
           display: { xs: "none", sm: "flex" },
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: { xs: "column", xl: "row" },
           justifyContent: "space-between",
           marginBottom: "1rem",
           marginTop: { xs: "1rem", sm: "0px" },
@@ -488,13 +490,33 @@ const Collateral = () => {
           sx={{
             display: "flex",
             alignItems: "flex-start",
+            flex: "auto",
+            marginLeft: {
+              xs: "0px",
+              xl: "2rem",
+            },
+            marginTop: {
+              xs: "1.5rem",
+              xl: "0px",
+            }
           }}
-        ></Box>
+        >
+          <VaultStats currentVault={currentVault}/>
+        </Box>
       </Box>
 
       <VaultMenuSmall
         vaultId={vaultId}
       />
+
+      <Box sx={{
+        display: {
+          xs: "unset",
+          sm: "none"
+        }
+      }}>
+        <VaultStats currentVault={currentVault}/>
+      </Box>
 
       <Box
         sx={{
