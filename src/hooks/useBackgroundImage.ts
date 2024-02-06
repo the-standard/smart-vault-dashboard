@@ -99,6 +99,7 @@ export function useBackgroundImage() {
       -moz-transition: background 0.5s ease-in-out;
       -o-transition: background 0.5s ease-in-out;
       transition: background 0.5s ease-in-out;
+      z-index: -1;
     }
     body:before {
       content: "";

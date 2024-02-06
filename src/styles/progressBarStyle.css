@@ -10,6 +10,10 @@
   border-radius: 10px;
 }
 
+.progress-container.pc-slim {
+  height: 22px;
+}
+
 .progress-bar {
   height: 100%;
   width: 0;

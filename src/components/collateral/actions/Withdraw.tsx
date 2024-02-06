@@ -17,7 +17,6 @@ import {
 } from "../../../store/Store";
 
 import Button from "../../../components/Button";
-import MetamaskIcon from "../../../assets/metamasklogo.svg";
 
 interface WithdrawProps {
   symbol: string;
@@ -208,21 +207,32 @@ const Withdraw: React.FC<WithdrawProps> = ({
       >
         {collateralSymbol} to address "{shortenedAddress}"
       </Box>
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+        }}        
+      >
         <Button
+          sx={{
+            marginTop: "1rem",
+            marginBottom: "1rem",
+            padding: "10px",
+            width: "100%",
+            height: "1.3rem",
+          }}
           clickFunction={
             symbol === "ETH" || symbol === "AGOR"
               ? handlewithdrawCollateralNative
               : handlewithdrawCollateral
           }
           isDisabled={!amount}
+          isSuccess
         >
           Confirm
-          <img
-            style={{ marginLeft: "1rem", width: "2rem", height: "auto" }}
-            src={MetamaskIcon}
-            alt="metamaskicon"
-          />{" "}
         </Button>
       </Box>
     </Box>

@@ -22,7 +22,6 @@ import wbtclogo from "../../assets/wbtclogo.svg";
 import linklogo from "../../assets/linklogo.svg";
 import paxglogo from "../../assets/paxglogo.svg";
 import arblogo from "../../assets/arblogo.svg";
-import Card from "../../components/Card";
 import Button from "../../components/Button";
 
 interface AcceptedTokenProps {
@@ -114,7 +113,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   };
 
   return (
-    <Card
+    <Box
       sx={{
         marginTop: "0.5rem",
         marginBottom: "1rem",
@@ -289,7 +288,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         collateralSymbol={symbol}
         assets={assets}
       />
-    </Card>
+    </Box>
   );
 };
 
