@@ -597,7 +597,7 @@ const Collateral = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
+              gap: "1rem",
             }}
           >
             {buttonDetails.map((item, index) => (
