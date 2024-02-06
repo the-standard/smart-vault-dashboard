@@ -25,17 +25,18 @@ import {
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 import vaultLiauidatedImg from "../assets/vault-liquidated.png";
-import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
+// import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
 import EurosCompare from "../components/collateral/EurosCompare.tsx";
 import "../styles/buttonStyle.css";
-import ChartComponent from "../components/chart/index.tsx";
+// import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import VaultMenuSmall from "../components/VaultMenuSmall";
 import VaultStats from "../components/collateral/VaultStats";
 import VaultChart from "../components/collateral/VaultChart";
+import VaultToken from "../components/collateral/VaultToken";
 
 type RouteParams = {
   vaultId: string;
@@ -383,7 +384,7 @@ const Collateral = () => {
 
     return assets.map((asset: any, index: number) => {
       return (
-        <AcceptedToken
+        <VaultToken
           key={index}
           amount={ethers.BigNumber.from(asset.amount).toString()}
           token={asset.token}
@@ -444,7 +445,6 @@ const Collateral = () => {
           display: { xs: "none", sm: "flex" },
           flexDirection: { xs: "column", xl: "row" },
           justifyContent: "space-between",
-          marginBottom: "1rem",
           marginTop: { xs: "1rem", sm: "0px" },
         }}
       >
@@ -455,6 +455,10 @@ const Collateral = () => {
             justifyContent: "flex-start",
             flexWrap: "wrap",
             gap: "1rem",
+            marginBottom: {
+              xs: "0rem",
+              md: "1.5rem",
+            }
           }}
         >
           <Button
@@ -496,9 +500,13 @@ const Collateral = () => {
               xs: "0px",
               xl: "2rem",
             },
+            marginBottom: {
+              xs: "1rem",
+              md: "1.5rem",
+            },
             marginTop: {
-              xs: "1.5rem",
-              xl: "0px",
+              xs: "1rem",
+              md: "0rem",
             }
           }}
         >
@@ -512,9 +520,11 @@ const Collateral = () => {
 
       <Box sx={{
         display: {
-          xs: "unset",
+          xs: "block",
           sm: "none"
-        }
+        },
+        marginTop: "1rem",
+        marginBottom: "1rem",
       }}>
         <VaultStats currentVault={currentVault}/>
       </Box>
@@ -524,30 +534,96 @@ const Collateral = () => {
           height: "100%",
           width: "100%",
           display: { xs: "flex", lg: "grid" },
-          flexDirection: "column",
-          gridTemplateColumns: "4fr 1fr",
+          flexDirection: "column-reverse",
+          gridTemplateColumns: "6fr 2fr",
           gap: "20px",
         }}
       >
         {/* left side of the container */}
         <Box>
-          {" "}
+          {collateralOrDebt === 2 ? (
+            <>
+              <Debt currentVault={currentVault}/>
+              <EurosCompare />
+            </>
+          ) : (
+            <Card sx={{
+              padding: "0px",
+              overflow: "hidden",
+            }}>
+              <Box sx={{
+                padding: "0.5rem 1rem",
+                background: "rgba(255,255,255,0.1)",
+                display: "flex",
+              }}>
+                <Box sx={{flex: "1"}}>
+                  <Typography>
+                    Asset
+                  </Typography>
+                </Box>
+                <Box sx={{flex: "1"}}>
+                  <Typography>
+                    Balance
+                  </Typography>
+                </Box>
+                <Box sx={{
+                  flex: "2",
+                  display: {
+                    xs: "none",
+                    sm: "block"
+                  }
+                }}>
+                  <Typography>
+                    Price Development
+                  </Typography>
+                </Box>
+                <Box sx={{
+                  flex: "3",
+                  display: {
+                    xs: "none",
+                    md: "initial"
+                  }
+                }}>
+                  &nbsp;
+                </Box>
+              </Box>
+              <Box sx={{
+                padding: "0.5rem 1rem",
+              }}>
+                {displayTokens()}
+              </Box>
+            </Card>
+          )}
           <Box
             sx={{
-              width: "auto",
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            {/* list available tokens here */}
-            {collateralOrDebt === 2 ? (
-              <>
-                <Debt currentVault={currentVault}/>
-                <EurosCompare />
-              </>
-            ) : (
-              displayTokens()
-            )}
+            {buttonDetails.map((item, index) => (
+              <Button
+                sx={{
+                  marginTop: "1rem",
+                }}
+                key={index}
+                clickFunction={() => {
+                  handleButtonActions(item.id);
+                }}
+              >
+                {item.title}
+              </Button>            
+            ))}
           </Box>
-        </Box>{" "}
+          <Card
+            sx={{
+              padding: "1.5rem",
+              marginTop: "1rem",
+            }}
+          >
+            <LiquidityPool />
+          </Card>
+
+        </Box>
         {/* right side of the container */}
         <Box>
           {/* full chart container */}
@@ -573,46 +649,6 @@ const Collateral = () => {
               // <ChartComponent currentVault={currentVault} />
             )}
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            {/* the new buttons will come here */}
-            {buttonDetails.map((item, index) => (
-              <Button
-                sx={{
-                  margin: "2px",
-                  padding: "5px 20px",
-                  width: "auto",
-                  height: "3rem",
-                  marginTop: "1rem",
-                  fontSize: {
-                    xs: "0.7rem",
-                    sm: "0.8rem",
-                    md: "0.88rem",
-                  },
-                }}
-                key={index}
-                clickFunction={() => {
-                  handleButtonActions(item.id);
-                }}
-              >
-                {item.title}
-              </Button>            
-            ))}
-          </Box>
-          {/* camelot content comes here */}
-          <Card
-            sx={{
-              alignItems: "center",
-              padding: "1.5rem",
-              marginTop: "1rem",
-            }}
-          >
-            <LiquidityPool />
-          </Card>
         </Box>
       </Box>
       {/* Scan QR code modal */}

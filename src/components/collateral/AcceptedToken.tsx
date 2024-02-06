@@ -114,7 +114,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
   };
 
   return (
-    <Card
+    <Box
       sx={{
         marginTop: "0.5rem",
         marginBottom: "1rem",
@@ -289,7 +289,7 @@ const AcceptedToken: React.FC<AcceptedTokenProps> = ({
         collateralSymbol={symbol}
         assets={assets}
       />
-    </Card>
+    </Box>
   );
 };
 

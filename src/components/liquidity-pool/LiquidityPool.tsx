@@ -14,6 +14,7 @@ const LiquidityPool = () => {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "flex-start",
+          flexWrap: "wrap",
         }}
       >
         <Typography
@@ -50,6 +51,7 @@ const LiquidityPool = () => {
             fontFamily: "Poppins",
             fontSize: "1rem",
             marginBottom: "10px",
+            marginTop: "10px",
           }}
           variant="h6"
         >
