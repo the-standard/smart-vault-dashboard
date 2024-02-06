@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import { BigNumber } from "ethers";
 import { formatEther, parseEther } from "viem";
 import { parseBytes32String } from "ethers/lib/utils";
 import { useReadContracts, useChainId } from "wagmi";

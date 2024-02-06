@@ -17,7 +17,6 @@ import {
 } from "../../../store/Store";
 
 import Button from "../../../components/Button";
-import MetamaskIcon from "../../../assets/metamasklogo.svg";
 
 interface WithdrawProps {
   symbol: string;

@@ -22,7 +22,6 @@ import wbtclogo from "../../assets/wbtclogo.svg";
 import linklogo from "../../assets/linklogo.svg";
 import paxglogo from "../../assets/paxglogo.svg";
 import arblogo from "../../assets/arblogo.svg";
-import Card from "../../components/Card";
 import Button from "../../components/Button";
 
 interface AcceptedTokenProps {

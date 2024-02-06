@@ -7,7 +7,7 @@ import React, { useEffect, useState, useRef } from "react";
 interface ProgressBarProps {
   progressValue: any;
   greyBarValue?: any;
-  slim: boolean;
+  slim?: boolean;
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({

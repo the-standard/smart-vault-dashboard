@@ -24,7 +24,6 @@ import {
 
 import wagmiConfig from "../../../WagmiConfig";
 import QRicon from "../../../assets/qricon.png";
-import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import Button from "../../../components/Button";
 
 interface DepositProps {
