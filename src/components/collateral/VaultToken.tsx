@@ -138,6 +138,7 @@ const VaultToken: React.FC<VaultTokenProps> = ({
         sx={{
           display: "flex",
           flexWrap: "wrap",
+          minHeight: "80px",
           // paddingBottom: "1.5rem",
         }}
       >
