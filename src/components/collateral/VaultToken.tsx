@@ -145,10 +145,16 @@ const VaultToken: React.FC<VaultTokenProps> = ({
         {/* ASSET */}
         <Box sx={{
           flex: "1",
+          display: "inline-block",
+          minWidth: {
+            xs: "unset",
+            sm: "0px"
+          }
         }}>
           <Box sx={{
             display: "flex",
             alignItems: "center",
+            minWidth: "0px",
           }}>
             <Box
               sx={{
@@ -197,9 +203,11 @@ const VaultToken: React.FC<VaultTokenProps> = ({
               )}
             </Box>
             <Box sx={{
-              marginLeft: "0.5rem"
+              marginLeft: "0.5rem",
+              minWidth: "0px",
+              overflow: "hidden"
             }}>
-              <Typography variant="body2"> {symbol}</Typography>
+              <Typography variant="body2" noWrap> {symbol}</Typography>
             </Box>
           </Box>
         </Box>
