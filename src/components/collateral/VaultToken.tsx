@@ -101,7 +101,8 @@ const VaultToken: React.FC<VaultTokenProps> = ({
     try {
       return <VaultTokenChart data={chartData[symbol].prices} symbol={symbol} />;
     } catch (e) {
-      return <p>Chart data unavailable</p>;
+      // return <p>Chart data unavailable</p>;
+      // return <Skeleton variant="rounded" animation="wave" width={'100%'} height={'100%'} />
     }
   };
 
@@ -126,6 +127,10 @@ const VaultToken: React.FC<VaultTokenProps> = ({
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 1px",
         backgroundPosition: "center bottom",
+      },
+      paddingBottom: {
+        xs: "1rem",
+        md: "0rem",
       }
     }}>
       {/* MAIN ROW */}
@@ -202,9 +207,11 @@ const VaultToken: React.FC<VaultTokenProps> = ({
         <Box
           sx={{
             flex: "1",
-            display: "flex",
+            // display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
+            display: "inline-block",
+            minWidth: "0px",
           }}
         >
           <Typography
@@ -212,6 +219,7 @@ const VaultToken: React.FC<VaultTokenProps> = ({
               color: "white",
             }}
             variant="body1"
+            noWrap
           >
             {formatUnits(amount, token.dec)}
           </Typography>
@@ -221,6 +229,7 @@ const VaultToken: React.FC<VaultTokenProps> = ({
               opacity: "0.6",
             }}
             variant="body1"
+            noWrap
           >
             <div>€{formattedCollateralValue}</div>
           </Typography>
