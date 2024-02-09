@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
@@ -10,7 +11,8 @@ import arbitrumTestLogoLong from "../assets/arbitrumTestLogoLong.svg";
 import arbitrumTestLogoShort from "../assets/arbitrumTestLogoShort.svg";
 import networkNotSupportedLong from "../assets/networkNotSupportedLong.svg";
 import networkNotSupportedShort from "../assets/networkNotSupportedShort.svg";
-import { useChainId } from "wagmi";
+import { useChainId, useAccount } from "wagmi";
+import { useWeb3Modal } from '@web3modal/wagmi/react'
 
 const Navbar = () => {
   const { right } = usePositionStore((state) => state);
@@ -22,6 +24,15 @@ const Navbar = () => {
   };
 
   const chainId = useChainId();
+
+  const { isConnected } = useAccount() 
+  const { open } = useWeb3Modal()
+  
+  useEffect(() => {
+    if (!isConnected) {
+      open();
+    }
+  }, []);  
 
   let logoComponent = null;
   if (chainId === 42161) {
