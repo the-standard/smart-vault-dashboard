@@ -128,7 +128,7 @@ const Staking = () => {
                 opacity: "0.8"
               }}
             >
-              Connect your web3 wallet below to get started.
+              Connect your Arbitrum web3 wallet below to get started.
             </Typography>
             <Box
               sx={{
