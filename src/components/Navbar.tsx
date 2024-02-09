@@ -44,11 +44,11 @@ const Navbar = () => {
           },
           width: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           marginRight: {
             xs: "0px",
@@ -69,11 +69,11 @@ const Navbar = () => {
           },
           width: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           marginRight: {
             xs: "0px",
@@ -94,11 +94,11 @@ const Navbar = () => {
           },
           width: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           marginRight: {
             xs: "0px",
