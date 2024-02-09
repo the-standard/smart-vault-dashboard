@@ -4,7 +4,7 @@ import { stack as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
 import logo from "../assets/standardiologo.svg";
 import logoIcon from "../assets/standardiologoicon.svg";
-import { usePositionStore, useBurgerMenuStore } from "../store/Store";
+import { useBurgerMenuStore } from "../store/Store";
 import arbitrumLogoLong from "../assets/arbitrumLogoLong.svg";
 import arbitrumLogoShort from "../assets/arbitrumLogoShort.svg";
 import arbitrumTestLogoLong from "../assets/arbitrumTestLogoLong.svg";
@@ -15,8 +15,6 @@ import { useChainId, useAccount } from "wagmi";
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 
 const Navbar = () => {
-  const { right } = usePositionStore((state) => state);
-
   const { getBurgerMenu, burgerMenu } = useBurgerMenuStore();
 
   const handleStateChange = (state: any) => {
@@ -110,7 +108,6 @@ const Navbar = () => {
       height: "32px",
       top: "32px",
       right: "0px",
-      // right: window.innerWidth - right,
     },
     bmBurgerBars: {
       background: "white",
