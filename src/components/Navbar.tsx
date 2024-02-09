@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Box } from "@mui/material";
-import { stack as Menu } from "react-burger-menu";
+import { slide as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
 import logo from "../assets/standardiologo.svg";
 import logoIcon from "../assets/standardiologoicon.svg";
