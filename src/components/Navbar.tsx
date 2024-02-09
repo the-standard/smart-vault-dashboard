@@ -50,7 +50,10 @@ const Navbar = () => {
             xs: "42px",
             md: "170px",
           },
-          marginRight: "1rem"
+          marginRight: {
+            xs: "0px",
+            sm: "1rem"
+          },
         }}
         alt="Arbitrum Network"
       />
@@ -72,7 +75,10 @@ const Navbar = () => {
             xs: "42px",
             md: "170px",
           },
-          marginRight: "1rem"
+          marginRight: {
+            xs: "0px",
+            sm: "1rem"
+          },
         }}
         alt="Arbitrum Test Network"
       />
@@ -94,7 +100,10 @@ const Navbar = () => {
             xs: "42px",
             md: "170px",
           },
-          marginRight: "1rem"
+          marginRight: {
+            xs: "0px",
+            sm: "1rem"
+          },
         }}
         alt="Network Not Supported"
       />
