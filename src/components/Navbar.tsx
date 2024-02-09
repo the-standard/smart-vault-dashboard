@@ -109,7 +109,8 @@ const Navbar = () => {
       width: "36px",
       height: "32px",
       top: "32px",
-      right: window.innerWidth - right,
+      right: "0px",
+      // right: window.innerWidth - right,
     },
     bmBurgerBars: {
       background: "white",
@@ -171,6 +172,7 @@ const Navbar = () => {
       <Box
         sx={{
           display: { xs: "block", md: "none" },
+          position: "relative",
         }}
       >
         <Menu
@@ -258,8 +260,8 @@ const Navbar = () => {
               alignItems: "center",
             }}
           >
-          {chainId ? logoComponent : null}
-          <w3m-button />
+            {chainId ? logoComponent : null}
+            <w3m-button />
           </Box>
         </Box>
       </Box>

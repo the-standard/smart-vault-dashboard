@@ -6,30 +6,12 @@ import step2Mode from "../assets/select-mode.png";
 import step4Staking from "../assets/auto-staking.png";
 import nitroPools from "../assets/nitro-pools.png";
 import camelotLogo from "../assets/camelotLogo.svg";
-import { usePositionStore } from "../store/Store.ts";
-import { useLayoutEffect, useRef } from "react";
 import Exchange from "../components/Exchange.tsx";
 import { arbitrum } from "wagmi/chains";
 
 import Card from "../components/Card";
 
 const Yield = () => {
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
@@ -48,7 +30,6 @@ const Yield = () => {
           },      
           padding: "1.5rem",
         }}
-        ref={rectangleRef}
       >
         <Box
           sx={{

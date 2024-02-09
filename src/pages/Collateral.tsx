@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -20,7 +20,6 @@ import {
   useVaultIdStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
-  usePositionStore,
 } from "../store/Store";
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
@@ -43,7 +42,6 @@ function useQuery() {
   const { search } = useLocation();
   return useMemo(() => new URLSearchParams(search), [search]);
 }
-
 
 const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
@@ -69,9 +67,6 @@ const Collateral = () => {
   const handleWalletOpen = () => setOpenWalletModal(true);
   const handleWalletClose = () => setOpenWalletModal(false);
 
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
-
   const chainId = useChainId();
   const query = useQuery();
   const vaultView = query.get("view");
@@ -88,20 +83,6 @@ const Collateral = () => {
       setVaultsLoading(false);
     }, 1000);
   }, []);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
 
   const handleClick = (element: any) => {
     setActiveElement(element);
@@ -156,7 +137,6 @@ const Collateral = () => {
           minHeight: "100vh",
           height: "100%",
         }}
-        ref={rectangleRef}
       >
         {/* divide into 2 columns */}
         {/*  column 1 */}
@@ -272,7 +252,6 @@ const Collateral = () => {
             md: "3% 12%",
           },
         }}
-        ref={rectangleRef}
       >
         <Box
           sx={{
@@ -432,7 +411,6 @@ const Collateral = () => {
         minHeight: "100vh",
         height: "100%",
       }}
-      ref={rectangleRef}
     >
       {/* divide into 2 columns */}
       {/*  column 1 */}
