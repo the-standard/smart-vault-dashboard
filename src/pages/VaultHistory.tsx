@@ -1,4 +1,4 @@
-import { useEffect, useState, useLayoutEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
@@ -19,7 +19,6 @@ import {
   useVaultIdStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
-  usePositionStore,
 } from "../store/Store.ts";
 
 import Card from "../components/Card";
@@ -59,9 +58,6 @@ const VaultHistory = () => {
   const [totalRows, setTotalRows] = useState<any>(undefined);
   const [vaultsLoading, setVaultsLoading] = useState(true);
 
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
-
   useEffect(() => {
     // fixes flashing "no vault found" on first load
     setVaultsLoading(true);
@@ -69,20 +65,6 @@ const VaultHistory = () => {
       setVaultsLoading(false);
     }, 1000);
   }, []);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
 
   const vaultManagerAddress = chainId === arbitrumSepolia.id ?
       arbitrumSepoliaContractAddress :
@@ -131,7 +113,6 @@ const VaultHistory = () => {
           minHeight: "100vh",
           height: "100%",
         }}
-        ref={rectangleRef}
       >
         {/* divide into 2 columns */}
         {/*  column 1 */}
@@ -245,7 +226,6 @@ const VaultHistory = () => {
             md: "3% 12%",
           },
         }}
-        ref={rectangleRef}
       >
         <Box
           sx={{
@@ -585,7 +565,6 @@ const VaultHistory = () => {
         minHeight: "100vh",
         height: "100%",
       }}
-      ref={rectangleRef}
     >
       <Box
         sx={{

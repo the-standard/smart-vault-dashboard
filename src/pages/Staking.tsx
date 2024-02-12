@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Box, Grid, Typography } from "@mui/material";
 import { useAccount } from "wagmi";
@@ -8,10 +8,6 @@ import { useAccount } from "wagmi";
 // import StakingEarn from "../components/staking/StakingEarn";
 import StakingTST from "../components/staking/legacy/StakingTST";
 
-import {
-  usePositionStore,
-} from "../store/Store.ts";
-
 import Card from "../components/Card.tsx";
 
 function useQuery() {
@@ -20,23 +16,6 @@ function useQuery() {
 }
 
 const Staking = () => {
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
-
   const query = useQuery();
   const queryView = query.get("view") || '';
 
@@ -68,7 +47,6 @@ const Staking = () => {
         <StakingMenuSmall activeView={activeView} /> */}
   
         <Box
-          ref={rectangleRef}
         >
           {/* TEMP */}
           {/* {activeView === 'STAKE' || !activeView ? (
@@ -114,7 +92,6 @@ const Staking = () => {
             width: "100%",
             gap: "2rem",
           }}
-          ref={rectangleRef}
         >
           <Card
             sx={{
@@ -151,7 +128,7 @@ const Staking = () => {
                 opacity: "0.8"
               }}
             >
-              Connect your web3 wallet below to get started.
+              Connect your Arbitrum web3 wallet below to get started.
             </Typography>
             <Box
               sx={{
