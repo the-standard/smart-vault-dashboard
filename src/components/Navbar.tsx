@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { slide as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
@@ -11,11 +12,12 @@ import arbitrumTestLogoLong from "../assets/arbitrumTestLogoLong.svg";
 import arbitrumTestLogoShort from "../assets/arbitrumTestLogoShort.svg";
 import networkNotSupportedLong from "../assets/networkNotSupportedLong.svg";
 import networkNotSupportedShort from "../assets/networkNotSupportedShort.svg";
-import { useChainId, useAccount } from "wagmi";
+import { useChainId, useAccount, useAccountEffect } from "wagmi";
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 
 const Navbar = () => {
   const { getBurgerMenu, burgerMenu } = useBurgerMenuStore();
+  const navigate = useNavigate();
 
   const handleStateChange = (state: any) => {
     getBurgerMenu(state.isOpen);
@@ -25,6 +27,13 @@ const Navbar = () => {
 
   const { isConnected } = useAccount() 
   const { open } = useWeb3Modal()
+
+  useAccountEffect({
+    onDisconnect() {
+      console.log('Disconnected!')
+      navigate("/");
+    },
+  })
   
   useEffect(() => {
     if (!isConnected) {

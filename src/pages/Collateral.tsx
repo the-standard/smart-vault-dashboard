@@ -1,16 +1,16 @@
 import { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
   useBlockNumber,
   useReadContract,
   useChainId,
   useWatchBlockNumber,
+  useAccount,
 } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 
@@ -124,6 +124,8 @@ const Collateral = () => {
       refetch();
     },
   })
+
+  const { isConnected } = useAccount() 
 
   const currentVault: any = vaultData;
 
@@ -243,7 +245,7 @@ const Collateral = () => {
     )
   }
 
-  if (!currentVault) {
+  if (!currentVault || !isConnected) {
     // vault not found
     return (
       <Box
