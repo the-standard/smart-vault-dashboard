@@ -58,7 +58,7 @@ const homeBgImage = "/backgrounds/abstract1.png";
 
 function getVaultBgImage(vaultId: number) {
   let index = 0;
-  if (vaultId <= 51) {
+  if (vaultId <= 48) {
     index = vaultId - 1; // Since array index starts from 0
   } else {
     index = parseInt(vaultId.toString().slice(-1)) - 1;
@@ -99,6 +99,7 @@ export function useBackgroundImage() {
       -moz-transition: background 0.5s ease-in-out;
       -o-transition: background 0.5s ease-in-out;
       transition: background 0.5s ease-in-out;
+      z-index: -1;
     }
     body:before {
       content: "";

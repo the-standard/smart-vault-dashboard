@@ -165,9 +165,9 @@ const HomePriv = () => {
               <Card
                 sx={{
                   margin: {
-                    xs: "3% 4%",
-                    sm: "3% 6%",
-                    md: "3% 12%",
+                    xs: "2rem 4%",
+                    sm: "2rem 6%",
+                    md: "2rem 12%",
                   },
                   padding: "1.5rem",
                   // padding: {

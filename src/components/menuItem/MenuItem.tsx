@@ -22,7 +22,7 @@ const NavButton: React.FC<NavButtonProps> = ({
         fontSize: "1rem",
         border: "none",
         padding: "10px",
-        height: "65px",
+        height: "42px",
         width: "100%",
         // color: "#ffffff",
         cursor: "pointer",

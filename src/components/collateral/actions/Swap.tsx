@@ -383,10 +383,23 @@ const Swap: React.FC<SwapProps> = ({
             }}
           >
             <Button
-              isDisabled={!amount || !receiveAsset || !(receiveAmountFormatted > 0) || swapLoading}
               sx={{
-                width: "100%"
-              }}
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                marginBottom: "1rem",
+                padding: "10px",
+                height: "1.3rem",
+              }}            
+              isDisabled={
+                !amount||
+                !receiveAsset ||
+                !(receiveAmountFormatted > 0) ||
+                swapLoading
+              }
+              isSuccess={!swapLoading}
               clickFunction={handleSwapTokens}
             >
               {swapLoading ? (

@@ -259,15 +259,15 @@ const VaultList: React.FC<VaultListProps> = ({ vaults }) => {
                 <th>Vault ID</th>
                 <th style={{ lineBreak: "anywhere" }}>
                   Collateral
-                  <span style={{ fontWeight: "normal", lineBreak: "normal" }}>
+                  {/* <span style={{ fontWeight: "normal", lineBreak: "normal" }}>
                     &nbsp;(€)
-                  </span>
+                  </span> */}
                 </th>
                 <th style={{ lineBreak: "anywhere" }}>
                   Debt
-                  <span style={{ fontWeight: "normal", lineBreak: "normal" }}>
+                  {/* <span style={{ fontWeight: "normal", lineBreak: "normal" }}>
                     &nbsp;(EUROs)
-                  </span>
+                  </span> */}
                 </th>
                 <th>Ratio</th>
                 <th>Actions</th>
@@ -311,11 +311,15 @@ const VaultList: React.FC<VaultListProps> = ({ vaults }) => {
                           ).toString()
                         )
                       )}
+                      {/* TODO make var once $ supported */}
+                      &nbsp;€
                     </td>
                     <td>
                       {truncateToTwoDecimals(
                         formatEther(vault.status.minted.toString())
                       )}
+                      {/* TODO make var once USDs supported */}
+                      &nbsp;EUROs
                     </td>{" "}
                     <td style={{
                       minWidth: "80px"
@@ -367,6 +371,13 @@ const VaultList: React.FC<VaultListProps> = ({ vaults }) => {
             sx={{
               "& .MuiPaginationItem-page.Mui-selected": {
                 color: "white",
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+              },
+              "& .MuiPaginationItem-page": {
+                color: "rgba(255, 255, 255, 0.8)",
+              },
+              "& .MuiPaginationItem-icon": {
+                color: "rgba(255, 255, 255, 0.8)",
               },
             }}
           />
