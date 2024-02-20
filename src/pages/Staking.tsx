@@ -2,10 +2,10 @@ import { useMemo, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Box, Grid, Typography } from "@mui/material";
 import { useAccount } from "wagmi";
-// import StakingMenuSmall from "../components/staking/StakingMenuSmall";
-// import StakingMenuLarge from "../components/staking/StakingMenuLarge";
-// import StakingStake from "../components/staking/StakingStake";
-// import StakingEarn from "../components/staking/StakingEarn";
+import StakingMenuSmall from "../components/staking/StakingMenuSmall";
+import StakingMenuLarge from "../components/staking/StakingMenuLarge";
+import StakingStake from "../components/staking/StakingStake";
+import StakingEarn from "../components/staking/StakingEarn";
 import StakingTST from "../components/staking/legacy/StakingTST";
 
 import Card from "../components/Card.tsx";
@@ -43,13 +43,13 @@ const Staking = () => {
         }}
       >
         {/* TEMP */}
-        {/* <StakingMenuLarge activeView={activeView} />
-        <StakingMenuSmall activeView={activeView} /> */}
+        <StakingMenuLarge activeView={activeView} />
+        <StakingMenuSmall activeView={activeView} />
   
         <Box
         >
           {/* TEMP */}
-          {/* {activeView === 'STAKE' || !activeView ? (
+          {activeView === 'STAKE' || !activeView ? (
             <StakingStake />
           ) : null}
     
@@ -59,13 +59,13 @@ const Staking = () => {
     
           {activeView === 'TST' ? (
             <StakingTST />
-          ) : null} */}
+          ) : null}
 
-          {activeView ? (
+          {/* {activeView ? (
             <StakingTST />
           ) : 
             <StakingTST />
-          }
+          } */}
 
         </Box>
   
