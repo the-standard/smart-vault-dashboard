@@ -146,8 +146,6 @@ const StakingStake = () => {
         functionName: "approve",
         args: [liquidationPoolAddress as any, tstInWei],
       });
-
-      getSnackBar('SUCCESS', 'TST Approved');
     } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
@@ -168,7 +166,6 @@ const StakingStake = () => {
           args: [liquidationPoolAddress as any, eurosInWei],
         });
   
-        getSnackBar('SUCCESS', 'EUROs Approved');
       } catch (error: any) {
         let errorMessage: any = '';
         if (error && error.shortMessage) {
@@ -192,8 +189,6 @@ const StakingStake = () => {
             eurosInWei
           ],
         });
-  
-        getSnackBar('SUCCESS', 'Success!');
       } catch (error: any) {
         let errorMessage: any = '';
         if (error && error.shortMessage) {
@@ -222,11 +217,12 @@ const StakingStake = () => {
         getProgressType('STAKE_DEPOSIT');
         getCircularProgress(true);
       } else if (isSuccess) {
+        setStage('');
+        getSnackBar('SUCCESS', 'TST Approved');
         handleApproveEuros();
-        setStage('');
       } else if (isError) {
-        getCircularProgress(false);
         setStage('');
+        getCircularProgress(false);
       }  
     }
     if (stage === 'APPROVE_EUROS') {
@@ -234,11 +230,12 @@ const StakingStake = () => {
         getProgressType('STAKE_DEPOSIT');
         getCircularProgress(true);
       } else if (isSuccess) {
+        setStage('');
+        getSnackBar('SUCCESS', 'EUROs Approved');
         handleDepositToken();
-        setStage('');
       } else if (isError) {
-        getCircularProgress(false);
         setStage('');
+        getCircularProgress(false);
       }
     }
     if (stage === 'DEPOSIT_TOKEN') {
@@ -246,19 +243,20 @@ const StakingStake = () => {
         getProgressType('STAKE_DEPOSIT');
         getCircularProgress(true);
       } else if (isSuccess) {
+        setStage('');
+        getSnackBar('SUCCESS', 'Staked Successfully');
         getCircularProgress(false);
         eurosInputRef.current.value = "";
         tstInputRef.current.value = "";
         setTstStakeAmount(0);
         setEurosStakeAmount(0);
-        setStage('');
       } else if (isError) {
+        setStage('');
         getCircularProgress(false);
         eurosInputRef.current.value = "";
         tstInputRef.current.value = "";
         setTstStakeAmount(0);
         setEurosStakeAmount(0);
-        setStage('');
       }  
     }
   }, [
