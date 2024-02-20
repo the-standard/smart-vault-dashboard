@@ -53,7 +53,7 @@ const StakingStake = () => {
   const { liquidationPoolAbi } = useLiquidationPoolAbiStore();
   const { getSnackBar } = useSnackBarStore();
   const { getCircularProgress, getProgressType } = useCircularProgressStore();
-  const [learnMore, setLearnMore] = useState(false);
+  const [learnMore, setLearnMore] = useState(true);
   const [tstStakeAmount, setTstStakeAmount] = useState(0);
   const [eurosStakeAmount, setEurosStakeAmount] = useState(0);
   const [stage, setStage] = useState('');
