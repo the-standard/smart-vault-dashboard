@@ -52,7 +52,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const liquidationPoolAddress = chainId === arbitrumSepolia.id ? arbitrumSepoliaLiquidationPoolAddress :
   arbitrumLiquidationPoolAddress;
 
-  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+  const { writeContract, isError, isPending, isSuccess, error } = useWriteContract();
 
   const handleApproveWithdraw = async () => {
     console.log('FUNC START')
@@ -80,7 +80,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
   useEffect(() => {
     if (isPending) {
-      console.log('PENDING')
+      console.log('1PENDING')
       setClaimLoading(true);
     } else if (isSuccess) {
       console.log('SUCCESS')
@@ -90,7 +90,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
       setEurosWithdrawAmount(0);
       handleCloseModal();
     } else if (isError) {
-      console.log('ERROR')
+      console.log('ERROR', {error})
       setClaimLoading(false);
       setTstWithdrawAmount(0);
       setEurosWithdrawAmount(0);
@@ -99,6 +99,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
     isPending,
     isSuccess,
     isError,
+    error,
   ]);
 
   const handleTstAmount = (e: any) => {
