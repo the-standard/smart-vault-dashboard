@@ -55,7 +55,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const { writeContract, isError, isPending, isSuccess } = useWriteContract();
 
   const handleApproveWithdraw = async () => {
+    console.log('FUNC START')
     try {
+      console.log('TRY')
       writeContract({
         abi: liquidationPoolAbi,
         address: liquidationPoolAddress as any,
@@ -65,26 +67,30 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
           parseEther(eurosWithdrawAmount.toString()),
         ],
       });
-
-      getSnackBar('SUCCESS', 'Success!');
     } catch (error: any) {
+      console.log('TRY ERROR', {error})
       let errorMessage: any = '';
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
       getSnackBar('ERROR', errorMessage);
     }
+    console.log('FUNC END')
   };
 
   useEffect(() => {
     if (isPending) {
+      console.log('PENDING')
       setClaimLoading(true);
     } else if (isSuccess) {
+      console.log('SUCCESS')
+      getSnackBar('SUCCESS', 'Success!');
       setClaimLoading(false);
       setTstWithdrawAmount(0);
       setEurosWithdrawAmount(0);
       handleCloseModal();
     } else if (isError) {
+      console.log('ERROR')
       setClaimLoading(false);
       setTstWithdrawAmount(0);
       setEurosWithdrawAmount(0);
@@ -427,7 +433,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                       height: "2rem",
                     }}
                     clickFunction={handleApproveWithdraw}
-                    isDisabled={!(tstWithdrawAmount > 0)}
+                    isDisabled={!(tstWithdrawAmount > 0) && !(eurosWithdrawAmount > 0)}
                     lighter
                   >
                     Withdraw
