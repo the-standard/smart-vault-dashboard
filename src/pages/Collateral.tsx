@@ -1,16 +1,16 @@
-import { useEffect, useLayoutEffect, useState, useRef, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import QRCode from "react-qr-code";
 import { ethers } from "ethers";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
   useBlockNumber,
   useReadContract,
   useChainId,
   useWatchBlockNumber,
+  useAccount,
 } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 
@@ -20,20 +20,22 @@ import {
   useVaultIdStore,
   useContractAddressStore,
   useVaultManagerAbiStore,
-  usePositionStore,
 } from "../store/Store";
 
 import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 import vaultLiauidatedImg from "../assets/vault-liquidated.png";
-import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
+// import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
 import Debt from "../components/collateral/Debt.tsx";
 import EurosCompare from "../components/collateral/EurosCompare.tsx";
 import "../styles/buttonStyle.css";
-import ChartComponent from "../components/chart/index.tsx";
+// import ChartComponent from "../components/chart/index.tsx";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import VaultMenuSmall from "../components/VaultMenuSmall";
+import VaultStats from "../components/collateral/VaultStats";
+import VaultChart from "../components/collateral/VaultChart";
+import VaultToken from "../components/collateral/VaultToken";
 
 type RouteParams = {
   vaultId: string;
@@ -43,7 +45,6 @@ function useQuery() {
   const { search } = useLocation();
   return useMemo(() => new URLSearchParams(search), [search]);
 }
-
 
 const Collateral = () => {
   const { vaultId } = useParams<RouteParams>();
@@ -69,9 +70,6 @@ const Collateral = () => {
   const handleWalletOpen = () => setOpenWalletModal(true);
   const handleWalletClose = () => setOpenWalletModal(false);
 
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
-
   const chainId = useChainId();
   const query = useQuery();
   const vaultView = query.get("view");
@@ -88,20 +86,6 @@ const Collateral = () => {
       setVaultsLoading(false);
     }, 1000);
   }, []);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
 
   const handleClick = (element: any) => {
     setActiveElement(element);
@@ -141,6 +125,8 @@ const Collateral = () => {
     },
   })
 
+  const { isConnected } = useAccount() 
+
   const currentVault: any = vaultData;
 
   if (vaultsLoading) {
@@ -156,7 +142,6 @@ const Collateral = () => {
           minHeight: "100vh",
           height: "100%",
         }}
-        ref={rectangleRef}
       >
         {/* divide into 2 columns */}
         {/*  column 1 */}
@@ -260,7 +245,7 @@ const Collateral = () => {
     )
   }
 
-  if (!currentVault) {
+  if (!currentVault || !isConnected) {
     // vault not found
     return (
       <Box
@@ -272,7 +257,6 @@ const Collateral = () => {
             md: "3% 12%",
           },
         }}
-        ref={rectangleRef}
       >
         <Box
           sx={{
@@ -330,7 +314,8 @@ const Collateral = () => {
               display: "flex",
               alignItems: "flex-start",
             }}
-          ></Box>
+          >
+          </Box>
         </Box>
 
         <VaultMenuSmall
@@ -380,7 +365,7 @@ const Collateral = () => {
 
     return assets.map((asset: any, index: number) => {
       return (
-        <AcceptedToken
+        <VaultToken
           key={index}
           amount={ethers.BigNumber.from(asset.amount).toString()}
           token={asset.token}
@@ -393,16 +378,16 @@ const Collateral = () => {
 
   const buttonDetails = [
     {
-      id: 1,
-      title: "View on Etherscan",
-    },
-    {
       id: 2,
-      title: "Add EUROs to wallet",
+      title: "Add EUROs",
     },
     {
       id: 3,
-      title: "Earn Yield on EUROs",
+      title: "Earn Yield",
+    },
+    {
+      id: 1,
+      title: "View Etherscan",
     },
   ];
 
@@ -432,16 +417,14 @@ const Collateral = () => {
         minHeight: "100vh",
         height: "100%",
       }}
-      ref={rectangleRef}
     >
       {/* divide into 2 columns */}
       {/*  column 1 */}
       <Box
         sx={{
           display: { xs: "none", sm: "flex" },
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: { xs: "column", xl: "row" },
           justifyContent: "space-between",
-          marginBottom: "1rem",
           marginTop: { xs: "1rem", sm: "0px" },
         }}
       >
@@ -452,6 +435,10 @@ const Collateral = () => {
             justifyContent: "flex-start",
             flexWrap: "wrap",
             gap: "1rem",
+            marginBottom: {
+              xs: "0rem",
+              md: "1.5rem",
+            }
           }}
         >
           <Button
@@ -488,57 +475,145 @@ const Collateral = () => {
           sx={{
             display: "flex",
             alignItems: "flex-start",
+            flex: "auto",
+            marginLeft: {
+              xs: "0px",
+              xl: "2rem",
+            },
+            marginBottom: {
+              xs: "1rem",
+              md: "1.5rem",
+            },
+            marginTop: {
+              xs: "1rem",
+              md: "0rem",
+            }
           }}
-        ></Box>
+        >
+          <VaultStats currentVault={currentVault}/>
+        </Box>
       </Box>
 
       <VaultMenuSmall
         vaultId={vaultId}
       />
 
+      <Box sx={{
+        display: {
+          xs: "block",
+          sm: "none"
+        },
+        marginTop: "1rem",
+        marginBottom: "1rem",
+      }}>
+        <VaultStats currentVault={currentVault}/>
+      </Box>
+
       <Box
         sx={{
           height: "100%",
           width: "100%",
           display: { xs: "flex", lg: "grid" },
-          flexDirection: "column",
-          gridTemplateColumns:
-            " repeat(2, minmax(0, 1fr))" /* Two equal-width columns */,
-          gap: "20px" /* Gap between the columns */,
-          gridAutoColumns: "1fr" /* Equal width for child components */,
-          // now flexbox
+          flexDirection: "column-reverse",
+          gridTemplateColumns: "6fr 2fr",
+          gap: "20px",
         }}
       >
         {/* left side of the container */}
         <Box>
-          {" "}
+          {collateralOrDebt === 2 ? (
+            <>
+              <Debt currentVault={currentVault}/>
+              <EurosCompare />
+            </>
+          ) : (
+            <Card sx={{
+              padding: "0px",
+              overflow: "hidden",
+            }}>
+              <Box sx={{
+                padding: "0.5rem 1rem",
+                background: "rgba(255,255,255,0.1)",
+                display: "flex",
+              }}>
+                <Box sx={{flex: "1"}}>
+                  <Typography>
+                    Asset
+                  </Typography>
+                </Box>
+                <Box sx={{flex: "1"}}>
+                  <Typography>
+                    Balance
+                  </Typography>
+                </Box>
+                <Box sx={{
+                  flex: "2",
+                  display: {
+                    xs: "none",
+                    sm: "block"
+                  }
+                }}>
+                  <Typography>
+                    Price Development
+                  </Typography>
+                </Box>
+                <Box sx={{
+                  flex: "3",
+                  display: {
+                    xs: "none",
+                    md: "initial"
+                  }
+                }}>
+                  &nbsp;
+                </Box>
+              </Box>
+              <Box sx={{
+                padding: "0.5rem 1rem",
+              }}>
+                {displayTokens()}
+              </Box>
+            </Card>
+          )}
           <Box
             sx={{
-              width: "auto",
+              display: "flex",
+              gap: "1rem",
             }}
           >
-            {/* list available tokens here */}
-            {collateralOrDebt === 2 ? (
-              <>
-                <Debt currentVault={currentVault}/>
-                <EurosCompare />
-              </>
-            ) : (
-              displayTokens()
-            )}
+            {buttonDetails.map((item, index) => (
+              <Button
+                sx={{
+                  marginTop: "1rem",
+                }}
+                key={index}
+                clickFunction={() => {
+                  handleButtonActions(item.id);
+                }}
+              >
+                {item.title}
+              </Button>            
+            ))}
           </Box>
-        </Box>{" "}
-        {/* right side of the container */}
-        <Box
-          sx={{
-            marginTop: "8px",
-          }}
-        >
-          {/* full chart container */}
           <Card
             sx={{
-              alignItems: "center",
               padding: "1.5rem",
+              marginTop: "1rem",
+            }}
+          >
+            <LiquidityPool />
+          </Card>
+
+        </Box>
+        {/* right side of the container */}
+        <Box>
+          {/* full chart container */}
+          <Box
+            sx={{
+              paddingTop: "1.5rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "-1rem",
             }}
           >
             {vaultStore.status.liquidated ? (
@@ -550,49 +625,10 @@ const Collateral = () => {
                 />
               </Box>
             ) : (
-              <ChartComponent currentVault={currentVault} />
+              <VaultChart currentVault={currentVault} />
+              // <ChartComponent currentVault={currentVault} />
             )}
-          </Card>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            {/* the new buttons will come here */}
-            {buttonDetails.map((item, index) => (
-              <Button
-                sx={{
-                  margin: "2px",
-                  padding: "5px 20px",
-                  width: "auto",
-                  height: "3rem",
-                  marginTop: "1rem",
-                  fontSize: {
-                    xs: "0.7rem",
-                    sm: "0.8rem",
-                    md: "0.88rem",
-                  },
-                }}
-                key={index}
-                clickFunction={() => {
-                  handleButtonActions(item.id);
-                }}
-              >
-                {item.title}
-              </Button>            
-            ))}
           </Box>
-          {/* camelot content comes here */}
-          <Card
-            sx={{
-              alignItems: "center",
-              padding: "1.5rem",
-              marginTop: "1rem",
-            }}
-          >
-            <LiquidityPool />
-          </Card>
         </Box>
       </Box>
       {/* Scan QR code modal */}

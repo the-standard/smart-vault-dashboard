@@ -14,7 +14,7 @@ interface fullChartProps {
 const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
   <ResponsivePie
     data={fullChartData}
-    margin={{ top: 40, right: 0, bottom: 40, left: 0 }}
+    margin={{ top: 10, right: 0, bottom: 10, left: 0 }}
     innerRadius={0.82}
     padAngle={4}
     cornerRadius={45}

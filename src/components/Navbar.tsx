@@ -1,27 +1,45 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
-import { stack as Menu } from "react-burger-menu";
+import { slide as Menu } from "react-burger-menu";
 import NavbarMenu from "./NavbarMenu";
 import logo from "../assets/standardiologo.svg";
 import logoIcon from "../assets/standardiologoicon.svg";
-import { usePositionStore, useBurgerMenuStore } from "../store/Store";
+import { useBurgerMenuStore } from "../store/Store";
 import arbitrumLogoLong from "../assets/arbitrumLogoLong.svg";
 import arbitrumLogoShort from "../assets/arbitrumLogoShort.svg";
 import arbitrumTestLogoLong from "../assets/arbitrumTestLogoLong.svg";
 import arbitrumTestLogoShort from "../assets/arbitrumTestLogoShort.svg";
 import networkNotSupportedLong from "../assets/networkNotSupportedLong.svg";
 import networkNotSupportedShort from "../assets/networkNotSupportedShort.svg";
-import { useChainId } from "wagmi";
+import { useChainId, useAccount, useAccountEffect } from "wagmi";
+import { useWeb3Modal } from '@web3modal/wagmi/react'
 
 const Navbar = () => {
-  const { right } = usePositionStore((state) => state);
-
   const { getBurgerMenu, burgerMenu } = useBurgerMenuStore();
+  const navigate = useNavigate();
 
   const handleStateChange = (state: any) => {
     getBurgerMenu(state.isOpen);
   };
 
   const chainId = useChainId();
+
+  const { isConnected } = useAccount() 
+  const { open } = useWeb3Modal()
+
+  useAccountEffect({
+    onDisconnect() {
+      console.log('Disconnected!')
+      navigate("/");
+    },
+  })
+  
+  useEffect(() => {
+    if (!isConnected) {
+      open();
+    }
+  }, []);  
 
   let logoComponent = null;
   if (chainId === 42161) {
@@ -35,13 +53,16 @@ const Navbar = () => {
           },
           width: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
-          marginRight: "1rem"
+          marginRight: {
+            xs: "0px",
+            sm: "1rem"
+          },
         }}
         alt="Arbitrum Network"
       />
@@ -57,13 +78,16 @@ const Navbar = () => {
           },
           width: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
-          marginRight: "1rem"
+          marginRight: {
+            xs: "0px",
+            sm: "1rem"
+          },
         }}
         alt="Arbitrum Test Network"
       />
@@ -79,13 +103,16 @@ const Navbar = () => {
           },
           width: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
           height: {
             xs: "42px",
-            md: "170px",
+            md: "150px",
           },
-          marginRight: "1rem"
+          marginRight: {
+            xs: "0px",
+            sm: "1rem"
+          },
         }}
         alt="Network Not Supported"
       />
@@ -98,7 +125,7 @@ const Navbar = () => {
       width: "36px",
       height: "32px",
       top: "32px",
-      right: window.innerWidth - right,
+      right: "0px",
     },
     bmBurgerBars: {
       background: "white",
@@ -160,6 +187,7 @@ const Navbar = () => {
       <Box
         sx={{
           display: { xs: "block", md: "none" },
+          position: "relative",
         }}
       >
         <Menu
@@ -221,6 +249,7 @@ const Navbar = () => {
                 xs: "40px",
                 md: "60px",
               },
+              zIndex: "1",
             }}
             alt="Standard.io Logo"
           />
@@ -247,8 +276,8 @@ const Navbar = () => {
               alignItems: "center",
             }}
           >
-          {chainId ? logoComponent : null}
-          <w3m-button />
+            {chainId ? logoComponent : null}
+            <w3m-button />
           </Box>
         </Box>
       </Box>

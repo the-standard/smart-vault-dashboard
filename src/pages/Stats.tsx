@@ -1,27 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import statsbg from "../assets/statsbg.png";
-import { usePositionStore } from "../store/Store.ts";
-import { useLayoutEffect, useRef } from "react";
 
 import Card from "../components/Card";
 
 const Stats = () => {
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
   return (
     <Card
       sx={{
@@ -35,7 +17,6 @@ const Stats = () => {
         height: "100%",
         position: "relative",
       }}
-      ref={rectangleRef}
     >
       <Box
         sx={{

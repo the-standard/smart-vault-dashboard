@@ -17,6 +17,7 @@ const StyledButton = styled(Box)({
     0 5px 15px rgba(0, 0, 0, 0.2),
     0 10px 10px rgba(0, 0, 0, 0.2)
   `,
+  backgroundOrigin: 'border-box',
   fontFamily: '"Poppins", sans-serif',
   color: "#ffffff",
   fontSize: "1rem",
@@ -87,11 +88,24 @@ const disabledStyle = {
   pointerEvents: "none",
 }
 
+const successStyle = {
+  backgroundColor: "rgba(0,0,0,0)",
+  background: `linear-gradient(
+    119.96deg,
+    rgba(5, 255, 135, 0.1) 0%,
+    rgba(5, 255, 135, 1) 100%
+  )`,
+  backgroundOrigin: 'border-box',
+  backdropFilter: "blur(0px)",
+  WebkitBackdropFilter: "blur(0px)",
+}
+
 interface ButtonProps {
   id?: string;
   sx?: object;
   isActive?: boolean;
   lighter?: boolean;
+  isSuccess?: boolean;
   clickFunction?: () => void;
   isDisabled?: boolean;
   children?: React.ReactNode;
@@ -123,6 +137,14 @@ export function Button(props: ButtonProps) {
       </StyledButton>
     )  
   }
+
+  if (props.isSuccess) {
+    useSx={
+      ...props.sx,
+      ...successStyle
+    }
+  }
+
   return (
     <StyledButton
       sx={useSx}

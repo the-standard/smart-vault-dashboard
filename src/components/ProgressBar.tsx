@@ -7,11 +7,13 @@ import React, { useEffect, useState, useRef } from "react";
 interface ProgressBarProps {
   progressValue: any;
   greyBarValue?: any;
+  slim?: boolean;
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({
   progressValue,
   greyBarValue = 0,
+  slim,
 }) => {
 
   const [percentage, setPercentage] = useState(progressValue);
@@ -123,7 +125,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
   return (
     <div>
-      <div className="progress-container">
+      <div
+        className={slim ? "progress-container pc-slim" : "progress-container"}
+      >
         <div
           className="progress-bar"
           id="progress-bar"

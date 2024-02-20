@@ -24,7 +24,6 @@ import {
 
 import wagmiConfig from "../../../WagmiConfig";
 import QRicon from "../../../assets/qricon.png";
-import MetamaskIcon from "../../../assets/metamasklogo.svg";
 import Button from "../../../components/Button";
 
 interface DepositProps {
@@ -296,8 +295,7 @@ const Deposit: React.FC<DepositProps> = ({
               fontSize: "0.8rem",
             }}
           >
-            {" "}
-            With QR Code{" "}
+            QR
           </Typography>
         </Button>
         <Typography
@@ -387,19 +385,16 @@ const Deposit: React.FC<DepositProps> = ({
         <Button
           sx={{
             marginTop: "1rem",
+            marginBottom: "1rem",
             padding: "10px",
             width: "100%",
             height: "1.3rem",
           }}
           clickFunction={depositViaMetamask}
           isDisabled={!amount}
+          isSuccess
         >
           Confirm
-          <img
-            style={{ marginLeft: "1rem", width: "2rem", height: "auto" }}
-            src={MetamaskIcon}
-            alt="metamaskicon"
-          />
         </Button>
       </Box>
 

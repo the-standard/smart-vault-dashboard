@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Box, Grid, Modal, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import {
@@ -13,7 +13,6 @@ import { arbitrumSepolia } from "wagmi/chains";
 import {
   useVaultManagerAbiStore,
   useContractAddressStore,
-  usePositionStore,
   useSnackBarStore
 } from "../../store/Store.ts";
 
@@ -94,23 +93,6 @@ const HomePriv = () => {
     },
   })
 
-  const rectangleRef = useRef<HTMLDivElement | null>(null);
-  const setPosition = usePositionStore((state) => state.setPosition);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
-
   const myInactiveVaults =
     myVaults?.filter((vault: any) =>
       !vault.status || !vault.status.totalCollateralValue ||
@@ -162,7 +144,6 @@ const HomePriv = () => {
               width: "100%",
               gap: "2rem",
             }}
-            ref={rectangleRef}
           >
             {items.map((item) => (
               <VaultCard
@@ -184,9 +165,9 @@ const HomePriv = () => {
               <Card
                 sx={{
                   margin: {
-                    xs: "3% 4%",
-                    sm: "3% 6%",
-                    md: "3% 12%",
+                    xs: "2rem 4%",
+                    sm: "2rem 6%",
+                    md: "2rem 12%",
                   },
                   padding: "1.5rem",
                   // padding: {
