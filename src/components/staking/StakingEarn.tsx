@@ -43,6 +43,8 @@ const StakingEarn = () => {
   const positions: any = liquidationPool && liquidationPool[0];
   const rewards: any = liquidationPool && liquidationPool[1];
 
+  console.log(123123, liquidationPool)
+
   const getChartData = async () => {
     try {
       const response = await axios.get(

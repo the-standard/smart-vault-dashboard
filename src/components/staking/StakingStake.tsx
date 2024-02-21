@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -61,18 +61,6 @@ const StakingStake = () => {
 
   const tstInputRef: any = useRef<HTMLInputElement>(null);
   const eurosInputRef: any = useRef<HTMLInputElement>(null);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
 
   const tstAddress = chainId === arbitrumSepolia.id ?
   arbitrumSepoliaTstAddress :
