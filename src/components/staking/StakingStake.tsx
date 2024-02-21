@@ -20,7 +20,6 @@ import { arbitrum, arbitrumSepolia } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
 
 import {
-  usePositionStore,
   useTstAddressStore,
   useErc20AbiStore,
   usesEuroAddressStore,
@@ -50,7 +49,6 @@ const StakingStake = () => {
   } = useLiquidationPoolStore();
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const { address } = useAccount();
-  const setPosition = usePositionStore((state) => state.setPosition);
   const { erc20Abi } = useErc20AbiStore();
   const { liquidationPoolAbi } = useLiquidationPoolAbiStore();
   const { getSnackBar } = useSnackBarStore();
