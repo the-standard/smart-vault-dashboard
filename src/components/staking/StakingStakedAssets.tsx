@@ -19,6 +19,7 @@ import tstlogo from "../../assets/standardiologoicon.svg";
 interface StakingStakedAssetsProps {
   stakingPositionsData: Array<any>;
   positions: any;
+  pending: any;
 }
 
 function NoDataOverlay() {
@@ -39,6 +40,7 @@ function NoDataOverlay() {
 
 const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
   positions,
+  pending,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -304,6 +306,7 @@ const StakingStakedAssets: React.FC<StakingStakedAssetsProps> = ({
       </Box>
       <WithdrawModal
         stakedPositions={rows}
+        pending={pending}
         handleCloseModal={handleCloseModal}
         isOpen={open}
       />

@@ -41,9 +41,10 @@ const StakingEarn = () => {
   });
 
   const positions: any = liquidationPool && liquidationPool[0];
-  const rewards: any = liquidationPool && liquidationPool[1];
+  const pending: any = liquidationPool && liquidationPool[1];
+  const rewards: any = liquidationPool && liquidationPool[2];
 
-  console.log(123123, liquidationPool)
+  console.log(123123, {positions}, {pending})
 
   const getChartData = async () => {
     try {
@@ -186,6 +187,7 @@ const StakingEarn = () => {
         </Box>
         <StakingStakedAssets
           positions={positions || {}}
+          pending={pending || {}}
           stakingPositionsData={[] || []}
         />
       </Card>

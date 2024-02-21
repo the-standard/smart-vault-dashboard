@@ -232,7 +232,7 @@ const StakingStake = () => {
         getCircularProgress(true);
       } else if (isSuccess) {
         setStage('');
-        getSnackBar('SUCCESS', 'Staked Successfully');
+        getSnackBar('SUCCESS', 'Deposited Successfully');
         getCircularProgress(false);
         eurosInputRef.current.value = "";
         tstInputRef.current.value = "";

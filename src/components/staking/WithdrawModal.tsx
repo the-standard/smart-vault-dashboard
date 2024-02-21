@@ -6,23 +6,28 @@ import {
 } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
+import { ethers } from "ethers";
 import Lottie from "lottie-react";
 import withdrawLottie from "../../lotties/withdrawal.json";
+
 import {
   useSnackBarStore,
   useLiquidationPoolStore,
   useLiquidationPoolAbiStore
 } from "../../store/Store";
+
 import Button from "../Button";
 
 interface WithdrawModalProps {
   stakedPositions: any;
   isOpen: boolean;
   handleCloseModal: any;
+  pending: any;
 }
 
 const WithdrawModal: React.FC<WithdrawModalProps> = ({
   stakedPositions,
+  pending,
   isOpen,
   handleCloseModal,
 }) => {
@@ -46,8 +51,19 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const tstStakedAmount = tstPosition?.amount;
   const eurosStakedAmount = eurosPosition?.amount;
 
+  const tstPending = pending['TST'] || 0n;
+  const eurosPending = pending['EUROs'] || 0n;
+
   const useTstStakedAmount = formatEther(tstStakedAmount.toString());
   const useEurosStakedAmount = formatEther(eurosStakedAmount.toString());
+
+  const useTstPending = formatEther(tstPending.toString());
+  const useEurosPending = formatEther(eurosPending.toString());
+
+  const useTstAvailable = Number(useTstStakedAmount) - Number(useTstPending);
+  const useEurosAvailable = Number(useEurosStakedAmount) - Number(useEurosPending);
+
+  // console.log(23123, {useTstAvailable}, {useEurosAvailable})
 
   const liquidationPoolAddress = chainId === arbitrumSepolia.id ? arbitrumSepoliaLiquidationPoolAddress :
   arbitrumLiquidationPoolAddress;
@@ -219,8 +235,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         opacity: "0.8"
                       }}
                     >
-                      Here you can reduce your position at any time by withdrawing your tokens.
+                      Here you can reduce your position by withdrawing your tokens.
                     </Typography>
+
                     <Box sx={{
                       marginTop: "1rem",
                       width: "100%",
@@ -230,6 +247,28 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                       backgroundSize: "100% 1px",
                       backgroundPosition: "center bottom",                    
                     }}/>
+
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      width: "100%",
+                      alignItems: "center",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "1rem",
+                        width: "100%",
+                        opacity: "0.8"
+                      }}
+                    >
+                      Parts of your position are still being held for a 24hour maturity period.
+                    </Typography>
                   </Box>
                   <Box
                     sx={{
@@ -249,7 +288,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         // width: "100%",
                       }}
                     >
-                      Current TST:
+                      Pending TST:
                     </Typography>
                     <Typography
                       sx={{
@@ -257,7 +296,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         width: "100%",
                       }}
                     >
-                      {useTstStakedAmount || '0'}
+                      {useTstPending || '0'}
                     </Typography>
                   </Box>
                   <Box
@@ -278,7 +317,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         // width: "100%",
                       }}
                     >
-                      Current EUROs:
+                      Pending EUROs:
                     </Typography>
                     <Typography
                       sx={{
@@ -286,9 +325,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         width: "100%",
                       }}
                     >
-                      {useEurosStakedAmount || '0'}
+                      {useEurosPending || '0'}
                     </Typography>
                   </Box>
+
                   <Box sx={{
                     // marginTop: "1rem",
                     marginBottom: "1rem",
@@ -299,6 +339,79 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                     backgroundSize: "100% 1px",
                     backgroundPosition: "center bottom",                    
                   }}/>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      width: "100%",
+                      alignItems: "center",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        whiteSpace: "nowrap",
+                        marginRight: "0.5rem",
+                        minWidth: "180px",
+                        // width: "100%",
+                      }}
+                    >
+                      Available TST:
+                    </Typography>
+                    <Typography
+                      sx={{
+                        whiteSpace: "nowrap",
+                        width: "100%",
+                      }}
+                    >
+                      {/* {useTstStakedAmount || '0'} */}
+                      {useTstAvailable || '0'}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      width: "100%",
+                      alignItems: "center",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        whiteSpace: "nowrap",
+                        marginRight: "0.5rem",
+                        minWidth: "180px",
+                        // width: "100%",
+                      }}
+                    >
+                      Available EUROs:
+                    </Typography>
+                    <Typography
+                      sx={{
+                        whiteSpace: "nowrap",
+                        width: "100%",
+                      }}
+                    >
+                      {useEurosAvailable || '0'}
+                      {/* {useEurosStakedAmount || '0'} */}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{
+                    // marginTop: "1rem",
+                    marginBottom: "1rem",
+                    width: "100%",
+                    height: "2px",
+                    backgroundImage: "linear-gradient( to right, transparent, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.5) 85%, transparent )",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "100% 1px",
+                    backgroundPosition: "center bottom",                    
+                  }}/>
+
                   <Box
                     sx={{
                       display: "flex",
