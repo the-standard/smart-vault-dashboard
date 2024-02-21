@@ -330,7 +330,7 @@ const StakingLiquidations: React.FC<StakingLiquidationsProps> = ({
             clickFunction={handleClaimRewards}
             isDisabled={noRewards}
           >
-            Claim All Rewards
+            Claim All Tokens
           </Button>
         </Box>
       ) : null}

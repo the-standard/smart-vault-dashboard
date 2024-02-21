@@ -1,12 +1,14 @@
-import { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Box,
   Typography,
+  Tooltip,
   // FormGroup,
   // FormControlLabel,
   // Checkbox,
 } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import {
   useAccount,
   useReadContracts,
@@ -18,7 +20,6 @@ import { arbitrum, arbitrumSepolia } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
 
 import {
-  usePositionStore,
   useTstAddressStore,
   useErc20AbiStore,
   usesEuroAddressStore,
@@ -48,7 +49,6 @@ const StakingStake = () => {
   } = useLiquidationPoolStore();
   const rectangleRef = useRef<HTMLDivElement | null>(null);
   const { address } = useAccount();
-  const setPosition = usePositionStore((state) => state.setPosition);
   const { erc20Abi } = useErc20AbiStore();
   const { liquidationPoolAbi } = useLiquidationPoolAbiStore();
   const { getSnackBar } = useSnackBarStore();
@@ -61,18 +61,6 @@ const StakingStake = () => {
 
   const tstInputRef: any = useRef<HTMLInputElement>(null);
   const eurosInputRef: any = useRef<HTMLInputElement>(null);
-
-  useLayoutEffect(() => {
-    function updatePosition() {
-      if (rectangleRef.current) {
-        const { right, top } = rectangleRef.current.getBoundingClientRect();
-        setPosition({ right, top });
-      }
-    }
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [setPosition]);
 
   const tstAddress = chainId === arbitrumSepolia.id ?
   arbitrumSepoliaTstAddress :
@@ -244,7 +232,7 @@ const StakingStake = () => {
         getCircularProgress(true);
       } else if (isSuccess) {
         setStage('');
-        getSnackBar('SUCCESS', 'Staked Successfully');
+        getSnackBar('SUCCESS', 'Deposited Successfully');
         getCircularProgress(false);
         eurosInputRef.current.value = "";
         tstInputRef.current.value = "";
@@ -314,20 +302,53 @@ const StakingStake = () => {
               padding: "1.5rem",
             }}
           >
-            <Typography
+            <Box
               sx={{
-                color: "#fff",
-                margin: "1rem 0",
-                marginTop: "0",
-                fontSize: {
-                  xs: "1.5rem",
-                  md: "2.125rem"
-                }
+                display: "flex",
+                justifyContent: "space-between",
               }}
-              variant="h4"
             >
-              Staking
-            </Typography>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  margin: "0",
+                  marginBottom: "1rem",
+                  fontSize: {
+                    xs: "1.2rem",
+                    md: "1.5rem"
+                  }
+                }}
+                variant="h4"
+              >
+                Deposit
+              </Typography>
+              <Tooltip
+                arrow
+                placement="top"
+                enterTouchDelay={0}
+                leaveTouchDelay={5000}
+                title={
+                  <span style={{
+                    fontSize: "0.8rem",
+                    lineHeight: "1.2rem"
+                  }}>
+                    TST represents your share of the pool. The larger it is, the more fees you will collect.
+                    <span style={{display: "block", marginBottom:"0.5rem"}}/>
+                    EUROs will be spent to buy liquidated assets at up to a 10% discount.
+                    <span style={{display: "block", marginBottom:"0.5rem"}}/>
+                    Deposits will be held for a 24hour maturity period where they cannot be withdrawn, but can still be used for purchasing liquidated assets.
+                  </span>
+                }
+              >
+                <HelpOutlineIcon sx={{
+                  opacity: "0.5",
+                  "&:hover": {
+                    opacity: "0.8",
+                    transition: "0.5s",
+                  },  
+                }}/>
+              </Tooltip>
+            </Box>
             <Typography
               sx={{
                 marginBottom: "1rem",
@@ -464,7 +485,7 @@ const StakingStake = () => {
                 isDisabled={tstStakeAmount <= 0 && eurosStakeAmount <= 0}
                 clickFunction={handleLetsStake}
               >
-                Let&apos;s Stake
+                Confirm
               </Button>
             </Box>
           </Card>
@@ -537,7 +558,7 @@ const StakingStake = () => {
                     fontWeight: "300",
                   }}                  
                 >
-                  300 TST = 300 EUROs even if you have 500 EUROs staked. This means you should always try to have more TST tokens in the pool as EUROs
+                  300 TST = 300 EUROs even if you have 500 EUROs deposited. This means you should always try to have more TST tokens in the pool as EUROs.
                 </Typography>
                 <Button
                   sx={{
@@ -597,11 +618,11 @@ const StakingStake = () => {
             <Typography
               sx={{
                 color: "#fff",
-                margin: "1rem 0",
-                marginTop: "0",
+                margin: "0",
+                marginBottom: "1rem",
                 fontSize: {
-                  xs: "1.5rem",
-                  md: "2.125rem"
+                  xs: "1.2rem",
+                  md: "1.5rem"
                 }
               }}
               variant="h4"
