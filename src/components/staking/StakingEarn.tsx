@@ -99,7 +99,7 @@ const StakingEarn = () => {
             }}
             variant="h4"
           >
-            Asset Totals
+            Total Asset Volumes
           </Typography>
           <Tooltip
             arrow
@@ -111,7 +111,7 @@ const StakingEarn = () => {
                 fontSize: "0.8rem",
                 lineHeight: "1.2rem"
               }}>
-                This displays the total amounts of both your Staked Assets & Rewards over time.
+                This displays the total amounts of both your Deposited & Purchased Assets over time.
               </span>
             }
           >
@@ -153,7 +153,7 @@ const StakingEarn = () => {
             }}
             variant="h4"
           >
-            Staked Assets
+            Total Assets
           </Typography>
           <Tooltip
             arrow
@@ -165,11 +165,11 @@ const StakingEarn = () => {
                 fontSize: "0.8rem",
                 lineHeight: "1.2rem"
               }}>
-                Staked TST represents your share of the pool. The larger it is, the more fees you will collect.
+                TST represents your share of the pool. The larger it is, the more fees you will collect.
                 <span style={{display: "block", marginBottom:"0.5rem"}}/>
-                Staked EUROs will be spent to buy liquidated assets at up to a 10% discount.
+                EUROs will be spent to buy liquidated assets at up to a 10% discount.
                 <span style={{display: "block", marginBottom:"0.5rem"}}/>
-                Your staked TST determines the max amount of EUROs you will spend (e.g 300 TST = 300 EUROs), so you should always try to have more TST than EUROs.
+                Your total TST determines the max amount of EUROs you will spend (e.g 300 TST = 300 EUROs), so you should always try to have more TST than EUROs.
               </span>
             }
           >
@@ -223,7 +223,7 @@ const StakingEarn = () => {
                 fontSize: "0.8rem",
                 lineHeight: "1.2rem"
               }}>
-                These assets are earned through staking a mixture of TST and EUROs.
+                These assets are purchased through depositing a mixture of TST and EUROs.
               </span>
             }
           >
@@ -278,9 +278,9 @@ const StakingEarn = () => {
                 fontSize: "0.8rem",
                 lineHeight: "1.2rem"
               }}>
-                This shows the USD value of both your Staked Assets & Rewards over time.
+                This shows the USD value of both your Deposited & Purchased Assets over time.
                 <span style={{display: "block", marginBottom:"0.5rem"}}/>
-                The chart data is stacked on top of eachother, giving you a better idea of your total staked portfolio value. 
+                The chart data is stacked on top of eachother, giving you a better idea of your total Yield Account value. 
               </span>
             }
           >

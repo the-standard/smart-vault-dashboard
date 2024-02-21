@@ -22,7 +22,7 @@ import {
   useVaultManagerAbiStore,
 } from "../store/Store";
 
-import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
+// import LiquidityPool from "../components/liquidity-pool/LiquidityPool.tsx";
 import vaultLiauidatedImg from "../assets/vault-liquidated.png";
 // import AcceptedToken from "../components/collateral/AcceptedToken.tsx";
 import AddEuros from "../components/collateral/AddEuros.tsx";
@@ -383,7 +383,7 @@ const Collateral = () => {
     },
     {
       id: 3,
-      title: "Earn Yield",
+      title: "Earn Yields",
     },
     {
       id: 1,
@@ -594,14 +594,14 @@ const Collateral = () => {
               </Button>            
             ))}
           </Box>
-          <Card
+          {/* <Card
             sx={{
               padding: "1.5rem",
               marginTop: "1rem",
             }}
           >
             <LiquidityPool />
-          </Card>
+          </Card> */}
 
         </Box>
         {/* right side of the container */}

@@ -326,7 +326,7 @@ const StakingStake = () => {
               }}
               variant="h4"
             >
-              Staking
+              Deposit
             </Typography>
             <Typography
               sx={{
@@ -464,7 +464,7 @@ const StakingStake = () => {
                 isDisabled={tstStakeAmount <= 0 && eurosStakeAmount <= 0}
                 clickFunction={handleLetsStake}
               >
-                Let&apos;s Stake
+                Confirm
               </Button>
             </Box>
           </Card>
@@ -537,7 +537,7 @@ const StakingStake = () => {
                     fontWeight: "300",
                   }}                  
                 >
-                  300 TST = 300 EUROs even if you have 500 EUROs staked. This means you should always try to have more TST tokens in the pool as EUROs
+                  300 TST = 300 EUROs even if you have 500 EUROs deposited. This means you should always try to have more TST tokens in the pool as EUROs.
                 </Typography>
                 <Button
                   sx={{

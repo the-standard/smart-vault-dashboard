@@ -226,7 +226,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         opacity: "0.8"
                       }}
                     >
-                      Here you can reduce your stake at any time by withdrawing your tokens.
+                      Here you can reduce your position at any time by withdrawing your tokens.
                     </Typography>
                     <Box sx={{
                       marginTop: "1rem",
@@ -256,7 +256,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         // width: "100%",
                       }}
                     >
-                      Current Staked TST:
+                      Current TST:
                     </Typography>
                     <Typography
                       sx={{
@@ -285,7 +285,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         // width: "100%",
                       }}
                     >
-                      Current Staked EUROs:
+                      Current EUROs:
                     </Typography>
                     <Typography
                       sx={{
