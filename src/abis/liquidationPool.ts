@@ -77,6 +77,28 @@ export const abi = [
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "pendingUntil",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "TST",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "EUROs",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct LiquidationPool.PendingStake",
+                "name": "_pendingStake",
+                "type": "tuple"
+            },
+            {
+                "components": [
+                    {
                         "internalType": "bytes32",
                         "name": "symbol",
                         "type": "bytes32"
@@ -87,9 +109,9 @@ export const abi = [
                         "type": "uint256"
                     },
                     {
-                      "internalType": "uint8",
-                      "name": "dec",
-                      "type": "uint8"
+                        "internalType": "uint8",
+                        "name": "dec",
+                        "type": "uint8"
                     }
                 ],
                 "internalType": "struct LiquidationPool.Reward[]",
@@ -100,6 +122,6 @@ export const abi = [
         "stateMutability": "view",
         "type": "function"
     }
-]
+];
 
 export default abi;
