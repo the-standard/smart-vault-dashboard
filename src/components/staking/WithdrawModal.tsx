@@ -37,6 +37,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const { liquidationPoolAbi } = useLiquidationPoolAbiStore();
   const { getSnackBar } = useSnackBarStore();
   const [claimLoading, setClaimLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [tstWithdrawAmount, setTstWithdrawAmount] = useState(0);
   const [eurosWithdrawAmount, setEurosWithdrawAmount] = useState(0);
   const chainId = useChainId();
@@ -99,6 +100,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
       setEurosWithdrawAmount(0);
       handleCloseModal();
     } else if (isError) {
+      setShowError(true)
       setClaimLoading(false);
       setTstWithdrawAmount(0);
       setEurosWithdrawAmount(0);
@@ -132,6 +134,157 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
     const formatBalance = formatEther(eurosStakedAmount);
     eurosInputRef.current.value = formatBalance;
     handleEurosAmount({target: {value: formatBalance}});
+  }
+
+  if (showError) {
+    return (
+      <>
+        <Modal
+          open={isOpen}
+          onClose={() => {
+            setShowError(false);
+            handleCloseModal();
+          }}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <>
+            <Box
+              sx={{
+                position: { xs: "absolute" as const, md: "" },
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: {
+                  xs: "80%",
+                  sm: "70%",
+                  md: "60%",
+                },
+                background:
+                  "linear-gradient(110.28deg, rgba(26, 26, 26, 0.156) 0.2%, rgba(0, 0, 0, 0.6) 101.11%)",
+                borderRadius: "10px",
+                padding: "0",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                backdropFilter: "blur(13.9px)",
+                WebkitBackdropFilter: "blur(13.9px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                p: 4,
+                maxHeight: {
+                  xs: "80vh",
+                  sm: "80vh",
+                },
+                maxWidth: {
+                  xs: "640px"
+                },
+                overflowY: "auto",
+              }}
+              className="modal-content"
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                {claimLoading ? (
+                  <>
+                    <Typography
+                      sx={{
+                        fontSize: "1rem",
+                        width: "100%",
+                        textAlign: "center",
+                      }}
+                    >
+                      Withdrawing Your Tokens
+                    </Typography>
+                    <Box
+                    sx={{
+                      margin: "auto",
+                      width: "250px",
+                      height: "250px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "column",
+                    }}
+                    >
+                      <Lottie animationData={withdrawLottie} />
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100%",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "1.5rem",
+                          width: "100%",
+                          marginBottom: "1rem",
+                        }}                
+                      >
+                        Withraw Unsuccessful
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "1rem",
+                          width: "100%",
+                          opacity: "0.8",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        There was a problem processing your withdraw request.
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "1rem",
+                          width: "100%",
+                          opacity: "0.8",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        It is possible that your withdraw request exceeds the amount of tokens you have staked, or some of your tokens are still being held for their initial 24 hour maturity period.
+                      </Typography>
+
+                    </Box>
+
+                    <Button
+                      sx={{
+                        padding: "5px",
+                        height: "2rem",
+                      }}
+                      clickFunction={() => setShowError(false)}
+                      lighter
+                    >
+                      Return
+                    </Button>
+                    <Button
+                      sx={{
+                        padding: "5px",
+                        // height: "1rem",
+                        marginTop: "1rem",
+                      }}
+                      clickFunction={() => {
+                        setShowError(false);
+                        handleCloseModal();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                )}
+              </Box>
+            </Box>
+          </>
+        </Modal>
+      </>
+    )
   }
 
   return (
