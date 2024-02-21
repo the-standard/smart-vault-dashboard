@@ -44,8 +44,6 @@ const StakingEarn = () => {
   const pending: any = liquidationPool && liquidationPool[1];
   const rewards: any = liquidationPool && liquidationPool[2];
 
-  console.log(123123, {positions}, {pending})
-
   const getChartData = async () => {
     try {
       const response = await axios.get(

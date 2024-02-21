@@ -2,11 +2,13 @@ import { useRef, useState, useEffect } from "react";
 import {
   Box,
   Typography,
+  Tooltip,
   // FormGroup,
   // FormControlLabel,
   // Checkbox,
 } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import {
   useAccount,
   useReadContracts,
@@ -302,20 +304,53 @@ const StakingStake = () => {
               padding: "1.5rem",
             }}
           >
-            <Typography
+            <Box
               sx={{
-                color: "#fff",
-                margin: "1rem 0",
-                marginTop: "0",
-                fontSize: {
-                  xs: "1.5rem",
-                  md: "2.125rem"
-                }
+                display: "flex",
+                justifyContent: "space-between",
               }}
-              variant="h4"
             >
-              Deposit
-            </Typography>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  margin: "0",
+                  marginBottom: "1rem",
+                  fontSize: {
+                    xs: "1.2rem",
+                    md: "1.5rem"
+                  }
+                }}
+                variant="h4"
+              >
+                Deposit
+              </Typography>
+              <Tooltip
+                arrow
+                placement="top"
+                enterTouchDelay={0}
+                leaveTouchDelay={5000}
+                title={
+                  <span style={{
+                    fontSize: "0.8rem",
+                    lineHeight: "1.2rem"
+                  }}>
+                    TST represents your share of the pool. The larger it is, the more fees you will collect.
+                    <span style={{display: "block", marginBottom:"0.5rem"}}/>
+                    EUROs will be spent to buy liquidated assets at up to a 10% discount.
+                    <span style={{display: "block", marginBottom:"0.5rem"}}/>
+                    Deposits will be held for a 24hour maturity period where they cannot be withdrawn, but can still be used for purchasing liquidated assets.
+                  </span>
+                }
+              >
+                <HelpOutlineIcon sx={{
+                  opacity: "0.5",
+                  "&:hover": {
+                    opacity: "0.8",
+                    transition: "0.5s",
+                  },  
+                }}/>
+              </Tooltip>
+            </Box>
             <Typography
               sx={{
                 marginBottom: "1rem",
@@ -585,11 +620,11 @@ const StakingStake = () => {
             <Typography
               sx={{
                 color: "#fff",
-                margin: "1rem 0",
-                marginTop: "0",
+                margin: "0",
+                marginBottom: "1rem",
                 fontSize: {
-                  xs: "1.5rem",
-                  md: "2.125rem"
+                  xs: "1.2rem",
+                  md: "1.5rem"
                 }
               }}
               variant="h4"

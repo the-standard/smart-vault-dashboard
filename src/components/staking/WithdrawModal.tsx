@@ -6,7 +6,6 @@ import {
 } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 import { formatEther, parseEther } from "viem";
-import { ethers } from "ethers";
 import Lottie from "lottie-react";
 import withdrawLottie from "../../lotties/withdrawal.json";
 
@@ -63,7 +62,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const useTstAvailable = Number(useTstStakedAmount) - Number(useTstPending);
   const useEurosAvailable = Number(useEurosStakedAmount) - Number(useEurosPending);
 
-  // console.log(23123, {useTstAvailable}, {useEurosAvailable})
+  const hasPending = (tstPending > 0) || (eurosPending > 0);
 
   const liquidationPoolAddress = chainId === arbitrumSepolia.id ? arbitrumSepoliaLiquidationPoolAddress :
   arbitrumLiquidationPoolAddress;
@@ -250,95 +249,99 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
                   </Box>
 
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      width: "100%",
-                      alignItems: "center",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: "1rem",
-                        width: "100%",
-                        opacity: "0.8"
-                      }}
-                    >
-                      Parts of your position are still being held for a 24hour maturity period.
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      width: "100%",
-                      alignItems: "center",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        whiteSpace: "nowrap",
-                        marginRight: "0.5rem",
-                        minWidth: "180px",
-                        // width: "100%",
-                      }}
-                    >
-                      Pending TST:
-                    </Typography>
-                    <Typography
-                      sx={{
-                        whiteSpace: "nowrap",
-                        width: "100%",
-                      }}
-                    >
-                      {useTstPending || '0'}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      width: "100%",
-                      alignItems: "center",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        whiteSpace: "nowrap",
-                        marginRight: "0.5rem",
-                        minWidth: "180px",
-                        // width: "100%",
-                      }}
-                    >
-                      Pending EUROs:
-                    </Typography>
-                    <Typography
-                      sx={{
-                        whiteSpace: "nowrap",
-                        width: "100%",
-                      }}
-                    >
-                      {useEurosPending || '0'}
-                    </Typography>
-                  </Box>
+                  {hasPending ? (
+                    <>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "flex-start",
+                          width: "100%",
+                          alignItems: "center",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: "1rem",
+                            width: "100%",
+                            opacity: "0.8"
+                          }}
+                        >
+                          Parts of your position are still being held for a 24hour maturity period.
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "flex-start",
+                          width: "100%",
+                          alignItems: "center",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            whiteSpace: "nowrap",
+                            marginRight: "0.5rem",
+                            minWidth: "180px",
+                            // width: "100%",
+                          }}
+                        >
+                          Pending TST:
+                        </Typography>
+                        <Typography
+                          sx={{
+                            whiteSpace: "nowrap",
+                            width: "100%",
+                          }}
+                        >
+                          {useTstPending || '0'}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "flex-start",
+                          width: "100%",
+                          alignItems: "center",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            whiteSpace: "nowrap",
+                            marginRight: "0.5rem",
+                            minWidth: "180px",
+                            // width: "100%",
+                          }}
+                        >
+                          Pending EUROs:
+                        </Typography>
+                        <Typography
+                          sx={{
+                            whiteSpace: "nowrap",
+                            width: "100%",
+                          }}
+                        >
+                          {useEurosPending || '0'}
+                        </Typography>
+                      </Box>
 
-                  <Box sx={{
-                    // marginTop: "1rem",
-                    marginBottom: "1rem",
-                    width: "100%",
-                    height: "2px",
-                    backgroundImage: "linear-gradient( to right, transparent, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.5) 85%, transparent )",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "100% 1px",
-                    backgroundPosition: "center bottom",                    
-                  }}/>
+                      <Box sx={{
+                        // marginTop: "1rem",
+                        marginBottom: "1rem",
+                        width: "100%",
+                        height: "2px",
+                        backgroundImage: "linear-gradient( to right, transparent, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0.5) 85%, transparent )",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "100% 1px",
+                        backgroundPosition: "center bottom",                    
+                      }}/>
+                    </>
+                  ) : null}
 
                   <Box
                     sx={{
