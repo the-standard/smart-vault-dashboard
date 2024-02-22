@@ -29,7 +29,7 @@ import Disclaimer from "./components/Disclaimer.tsx";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import wagmiConfig from "./WagmiConfig";
 
-const projectId = "67027f91c1db8751c6ea2ed13b9cdc55";
+const projectId = import.meta.env.VITE_WALLETCONNECT_ID;
 
 function App() {
   useBackgroundImage();
