@@ -32,12 +32,14 @@ const FullChart: React.FC<fullChartProps> = ({ fullChartData }) => (
       modifiers: [["darker", 0.2]],
     }}
     valueFormat={() => ``}
+    enableArcLinkLabels={false}
     arcLinkLabelsSkipAngle={10}
     arcLinkLabelsTextColor="#ffffff"
     arcLinkLabelsThickness={2}
     arcLinkLabelsOffset={0}
     arcLinkLabelsStraightLength={0}
     arcLinkLabelsColor={{ from: "color" }}
+    arcLabel="id"
     arcLabelsSkipAngle={10}
     arcLinkLabelsDiagonalLength={5}
     arcLabelsTextColor={{
