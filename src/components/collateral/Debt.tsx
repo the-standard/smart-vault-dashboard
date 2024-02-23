@@ -152,7 +152,7 @@ const Debt: React.FC<DebtProps> = ({
         args: [address as any, amountInWei],
       });
 
-      getSnackBar('SUCCESS', 'Success!');
+      // getSnackBar('SUCCESS', 'Success!');
     } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
@@ -185,7 +185,7 @@ const Debt: React.FC<DebtProps> = ({
         args: [vaultAddress as any, repayFee],
       });
 
-      getSnackBar('SUCCESS', 'Success!');
+      // getSnackBar('SUCCESS', 'Success!');
     } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
@@ -219,7 +219,7 @@ const Debt: React.FC<DebtProps> = ({
         args: [amountInWei],
       });
 
-      getSnackBar('SUCCESS', 'Success!');
+      // getSnackBar('SUCCESS', 'Success!');
     } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
@@ -234,6 +234,7 @@ const Debt: React.FC<DebtProps> = ({
       if (isPending) {
         getProgressType(1);
       } else if (isSuccess) {
+        getSnackBar('SUCCESS', 'Success!');
         getCircularProgress(false);
         incrementCounter();
         handleOpenYield();
@@ -254,6 +255,7 @@ const Debt: React.FC<DebtProps> = ({
         handleOpen();
         getCircularProgress(true);
       } else if (isSuccess) {
+        getSnackBar('SUCCESS', 'Approved Successfully!');
         handleBurn();
         getCircularProgress(false);
         incrementCounter();
@@ -275,6 +277,7 @@ const Debt: React.FC<DebtProps> = ({
         setModalStep(2);
         getCircularProgress(true);
       } else if (isSuccess) {
+        getSnackBar('SUCCESS', 'Approved Successfully!');
         handleClose();
         setModalStep(1);
         getProgressType(2);
@@ -1052,10 +1055,10 @@ const Debt: React.FC<DebtProps> = ({
                   }}
                   variant="h3"
                 >
-                  Now earn between<br/>
-                  <b>10.3% and 91.03% APR</b><br/>
+                  Now you can buy tokens<br/>
+                  at a 9.91% discount<br/>
                   by placing your EUROs<br/>
-                  into a Camelot liquidity pool!
+                  into your Yield Account!
                 </Typography>
                 <Button
                   sx={{
@@ -1064,10 +1067,10 @@ const Debt: React.FC<DebtProps> = ({
                     marginTop: "1rem",
                     width: "250px",
                   }}
-                  clickFunction={() => window.open('https://app.camelot.exchange/liquidity/?token1=0x643b34980e635719c15a2d4ce69571a258f940e9&token2=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&mode=auto&provider=gamma', '_blank')?.focus()}
+                  clickFunction={() => window.open('/yield', '_blank')?.focus()}
                   lighter
                 >
-                  Take me to the pool!
+                  Take me to my Yield Account!
                 </Button>
                 <Button
                   sx={{
