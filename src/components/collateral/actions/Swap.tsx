@@ -124,7 +124,7 @@ const Swap: React.FC<SwapProps> = ({
         ],
     });
 
-      getSnackBar('SUCCESS', 'Success!');
+      // getSnackBar('SUCCESS', 'Success!');
     } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
@@ -140,6 +140,7 @@ const Swap: React.FC<SwapProps> = ({
       getCircularProgress(true);
       setSwapLoading(true);
     } else if (isSuccess) {
+      getSnackBar('SUCCESS', 'Success!');
       getCircularProgress(false);
       setSwapLoading(false);
       inputRef.current.value = "";
