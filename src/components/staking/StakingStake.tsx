@@ -210,6 +210,7 @@ const StakingStake = () => {
         handleApproveEuros();
       } else if (isError) {
         setStage('');
+        getSnackBar('ERROR', 'There was a problem');
         getCircularProgress(false);
       }  
     }
@@ -223,6 +224,7 @@ const StakingStake = () => {
         handleDepositToken();
       } else if (isError) {
         setStage('');
+        getSnackBar('ERROR', 'There was a problem');
         getCircularProgress(false);
       }
     }
@@ -240,6 +242,7 @@ const StakingStake = () => {
         setEurosStakeAmount(0);
       } else if (isError) {
         setStage('');
+        getSnackBar('ERROR', 'There was a problem');
         getCircularProgress(false);
         eurosInputRef.current.value = "";
         tstInputRef.current.value = "";
