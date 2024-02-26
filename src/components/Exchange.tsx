@@ -1,6 +1,13 @@
-import { LiFiWidget, WidgetConfig, WidgetWalletManagement, WidgetVariant } from '@lifi/widget';
+import {
+  LiFiWidget,
+  WidgetConfig,
+  WidgetWalletManagement,
+  WidgetVariant,
+} from '@lifi/widget';
 import { useWalletClient } from "wagmi";
 import { providers } from "ethers";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface ExchangeProps {
   variant?: WidgetVariant,
@@ -16,23 +23,65 @@ const Exchange: React.FC<ExchangeProps> = ({
   fromToken,
   toToken
 }) => {
+
   let signer:any;
   const { data: walletClient } = useWalletClient();
-  if (walletClient) {
-    const { account, chain, transport } = walletClient;
-    const network = {
-      chainId: chain.id,
-      name: chain.name,
-      ensAddress: chain.contracts?.ensRegistry?.address,
-    };
-    const provider = new providers.Web3Provider(transport, network);
-    signer = provider.getSigner(account.address);
+
+  if (!walletClient) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          minHeight: "350px",
+          background: "transparent",
+          zIndex: 9999,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
   }
+
+  // if (walletClient) {
+  //   const { account, chain, transport, switchChain } = walletClient;
+  //   const network = {
+  //     chainId: chain.id,
+  //     name: chain.name,
+  //     ensAddress: chain.contracts?.ensRegistry?.address,
+  //   };
+  //   const provider = new providers.Web3Provider(transport, network);
+  //   signer = provider.getSigner(account.address);
+  // }
+
+  const { account, chain, transport, switchChain } = walletClient;
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+  const provider = new providers.Web3Provider(transport, network);
+  signer = provider.getSigner(account.address);
+
 
   const walletConfig:WidgetWalletManagement = {
     signer,
     disconnect: async () => {null},
     connect: async () => signer,
+    switchChain: async (chainId: any) => {
+      console.log('SWITCHCHAIN');
+      await switchChain(chainId);
+      if (signer) {
+        console.log('SIGNER');
+        return signer;
+      } else {
+        console.log('ERROR');
+        throw Error('No signer object is found after the chain switch.');
+      }
+    },
   }
 
   const widgetConfig: WidgetConfig = {
