@@ -108,7 +108,7 @@ const Swap: React.FC<SwapProps> = ({
 
   const availableAssets = swapAssets?.filter((item: any) => item.symbol !== symbol);
 
-  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+  const { writeContract, isError, isPending, isSuccess, error } = useWriteContract();
 
   const handleSwapTokens = async () => {
     try {
@@ -124,7 +124,7 @@ const Swap: React.FC<SwapProps> = ({
         ],
     });
 
-      getSnackBar('SUCCESS', 'Success!');
+      // getSnackBar('SUCCESS', 'Success!');
     } catch (error: any) {
       let errorMessage: any = '';
       if (error && error.shortMessage) {
@@ -140,6 +140,7 @@ const Swap: React.FC<SwapProps> = ({
       getCircularProgress(true);
       setSwapLoading(true);
     } else if (isSuccess) {
+      getSnackBar('SUCCESS', 'Success!');
       getCircularProgress(false);
       setSwapLoading(false);
       inputRef.current.value = "";
@@ -147,6 +148,7 @@ const Swap: React.FC<SwapProps> = ({
       setReceiveAmountFormatted(0);
       setReceiveAsset('');
     } else if (isError) {
+      getSnackBar('ERROR', 'There was an error');
       getCircularProgress(false);
       setSwapLoading(false);
       inputRef.current.value = "";
@@ -158,6 +160,7 @@ const Swap: React.FC<SwapProps> = ({
     isPending,
     isSuccess,
     isError,
+    error
   ]);
 
   const handleMaxBalance = async () => {
