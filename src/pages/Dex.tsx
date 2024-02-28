@@ -1,6 +1,7 @@
-import Exchange from "../components/Exchange.tsx";
 import { arbitrum } from "wagmi/chains";
 
+import Exchange from "../components/Exchange.tsx";
+import LiFiExchange from "../components/LiFiExchange.tsx";
 import Card from "../components/Card";
 
 const Dex = () => {
@@ -13,7 +14,7 @@ const Dex = () => {
         height: "100%",
       }}
     >
-      <Exchange toChain={arbitrum.id} toToken='0xf5A27E55C748bCDdBfeA5477CB9Ae924f0f7fd2e' />
+      <LiFiExchange toChain={arbitrum.id} toToken='0xf5A27E55C748bCDdBfeA5477CB9Ae924f0f7fd2e' />
     </Card>
   );
 };
