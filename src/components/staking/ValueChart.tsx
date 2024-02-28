@@ -43,6 +43,18 @@ const ValueChart: React.FC<ValueChartProps> = ({ chartData }) => {
               enabled: false,
             },
           },
+          noData: {
+            text: 'No Data',
+            align: 'center',
+            verticalAlign: 'middle',
+            offsetX: 0,
+            offsetY: -20,
+            style: {
+              color: 'white',
+              fontSize: '14px',
+              // fontFamily: undefined
+            }
+          },
           dataLabels: {
             enabled: false,
           },
