@@ -13,7 +13,12 @@ const Dex = () => {
         height: "100%",
       }}
     >
-      <Exchange toChain={arbitrum.id} toToken='0xf5A27E55C748bCDdBfeA5477CB9Ae924f0f7fd2e' />
+      <Exchange
+        toChain={arbitrum.id}
+        fromChain={arbitrum.id}
+        fromToken="0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
+        toToken="0x643b34980e635719c15a2d4ce69571a258f940e9"
+      />
     </Card>
   );
 };
