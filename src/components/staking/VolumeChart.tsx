@@ -45,6 +45,18 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
               enabled: false,
             },
           },
+          noData: {
+            text: 'No Data',
+            align: 'center',
+            verticalAlign: 'middle',
+            offsetX: 0,
+            offsetY: -20,
+            style: {
+              color: 'white',
+              fontSize: '14px',
+              // fontFamily: undefined
+            }
+          },
           dataLabels: {
             enabled: false,
           },
@@ -79,6 +91,11 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
             labels: {
               show: true,
               offsetX: -15,
+              formatter: function(value) {
+                return (
+                  value.toFixed(0).toString()
+                )
+              }
             },
           },
           stroke: {
@@ -132,7 +149,7 @@ const VolumeChart: React.FC<VolumeChartProps> = ({ chartData }) => {
                 }
               },
               formatter: function (value:number) {
-                return value.toString();
+                return value.toFixed(8).toString();
               },
             },
             z: {
