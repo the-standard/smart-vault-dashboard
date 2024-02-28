@@ -25,10 +25,10 @@ export function StakingMenuSmall(props: any) {
       currentPage = 'Staking';
       break;
     case 'EARN':
-      currentPage = 'Earning';
+      currentPage = 'Dashboard';
       break;
     case 'TST':
-      currentPage = 'TST Staking';
+      currentPage = 'TST Staking (Legacy)';
       break;  
     default:
       currentPage = 'Staking';
