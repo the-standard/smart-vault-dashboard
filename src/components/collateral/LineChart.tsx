@@ -92,6 +92,18 @@ const LineChart: React.FC<LineChartProps> = ({ data, symbol }) => {
               enabled: false,
             },
           },
+          noData: {
+            text: 'No Data',
+            align: 'center',
+            verticalAlign: 'middle',
+            offsetX: 0,
+            offsetY: -20,
+            style: {
+              color: 'white',
+              fontSize: '14px',
+              // fontFamily: undefined
+            }
+          },
           dataLabels: {
             enabled: false,
           },
