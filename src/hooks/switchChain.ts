@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
 import {
   switchChain as wagmiSwitchChain,
   getAccount
@@ -9,10 +6,12 @@ import { walletClientToSignerAsync } from '../hooks/useEthersSigner';
 import WagmiConfig from "../WagmiConfig";
 
 export const switchChain = async (swapChainId: number) => {
+  // @ts-expect-error
   const { chainId } = getAccount(WagmiConfig);
 
   if (chainId !== swapChainId) {
     try {
+      // @ts-expect-error
       const chain = await wagmiSwitchChain(WagmiConfig, { chainId: swapChainId });
       return await walletClientToSignerAsync(chain?.id);
     } catch {

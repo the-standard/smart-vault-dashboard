@@ -6,7 +6,7 @@ import step2Mode from "../assets/select-mode.png";
 import step4Staking from "../assets/auto-staking.png";
 import nitroPools from "../assets/nitro-pools.png";
 import camelotLogo from "../assets/camelotLogo.svg";
-import Exchange from "../components/Exchange.tsx";
+import LiFiExchange from "../components/LiFiExchange.tsx";
 import { arbitrum } from "wagmi/chains";
 
 import Card from "../components/Card";
@@ -223,7 +223,7 @@ const Yield = () => {
                 marginBottom: "1rem",
               }}
             >
-              <Exchange
+              <LiFiExchange
                 toChain={arbitrum.id}
                 fromChain={arbitrum.id}
                 fromToken="0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"

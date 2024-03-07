@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
-import { providers } from 'ethers'
-import { useMemo } from 'react'
-import type { Chain, Client, Transport } from 'viem'
-import { Config, useClient } from 'wagmi'
+import { providers } from 'ethers';
+import { useMemo } from 'react';
+import type { Chain, Client, Transport } from 'viem';
+import { Config, useClient } from 'wagmi';
 
 export function clientToProvider(client: Client<Transport, Chain>) {
   const { chain, transport } = client
@@ -27,5 +24,6 @@ export function useEthersProvider({
   chainId,
 }: { chainId?: number | undefined } = {}) {
   const client = useClient<Config>({ chainId })
+  // @ts-expect-error
   return useMemo(() => clientToProvider(client), [client])
 }

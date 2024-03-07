@@ -1,28 +1,3 @@
-// import { configureChains, createConfig } from 'wagmi';
-// import { mainnet } from 'wagmi/chains';
-// import { injected } from 'wagmi/connectors';
-// import { publicProvider } from 'wagmi/providers/public';
-
-// export const {
-//   chains,
-//   publicClient,
-//   webSocketPublicClient
-// } = configureChains(
-//   [mainnet],
-//   [publicProvider()],
-// );
-
-// export const config = createConfig({
-//   // autoConnect: true,
-//   connectors: [
-//     injected({
-//       shimDisconnect: false, 
-//     })
-//   ],
-//   publicClient,
-//   webSocketPublicClient,
-// });
-
 import { createConfig, http } from "wagmi";
 import {
   arbitrum,
@@ -69,8 +44,8 @@ export const wagmiConfig = createConfig({
     [gnosis.id]: http(`https://rpc.gnosischain.com`),
 
   },
-  // connectors: [ walletConnect({projectId}) ],
   connectors: [
+    walletConnect({projectId}),
     injected({
       shimDisconnect: false, 
     })

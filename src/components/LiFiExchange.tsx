@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
 import type { WidgetConfig } from '@lifi/widget';
 import { LiFiWidget, WidgetVariant } from '@lifi/widget';
 import { Box } from '@mui/material';
@@ -44,6 +41,7 @@ const LiFiExchange: React.FC<LiFiExchangeProps> = ({
         signer: signer,
         connect: async () => {
           const result = await connectAsync({ connector: connectors[0] });
+          // @ts-expect-error
           const walletClient = await result.connector?.getWalletClient();
           if (walletClient) {
             return walletClientToSigner(walletClient);

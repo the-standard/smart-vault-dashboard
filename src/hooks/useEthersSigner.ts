@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
 import { Web3Provider } from '@ethersproject/providers';
 import { getWalletClient } from '@wagmi/core';
 import { useMemo } from 'react';
@@ -17,6 +14,7 @@ export function walletClientToSigner(walletClient?: any | null) {
 }
 
 export async function walletClientToSignerAsync(chainId?: number) {
+  // @ts-expect-error
   const walletClient = await getWalletClient({ chainId });
   return walletClientToSigner(walletClient);
 }

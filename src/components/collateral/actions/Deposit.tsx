@@ -152,6 +152,7 @@ const Deposit: React.FC<DepositProps> = ({
 
       const toAddress: any = vaultAddress;
 
+      // @ts-expect-error
       const hash = await sendTransaction(wagmiConfig, {
         account: address,
         to: toAddress,
