@@ -1,12 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { WagmiProvider } from "wagmi";
-import {
-  arbitrum,
-  arbitrumSepolia
-} from "wagmi/chains";
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import HomePage from "./pages/HomePage.tsx";
-//import navbar
 import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import { Box } from "@mui/material";
@@ -14,13 +9,11 @@ import Collateral from "./pages/Collateral.tsx";
 import CircularProgressComponent from "./components/CircularProgressComponent.tsx";
 import '@walletconnect/ethereum-provider';
 import {
-  // useCircularProgressStore,
   useRenderAppCounterStore,
 } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
 import Stats from "./pages/Stats.tsx";
-// import Yield from "./pages/Yield.tsx";
 import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
@@ -37,7 +30,11 @@ function App() {
 
   const queryClient = new QueryClient()
 
-  createWeb3Modal({ wagmiConfig, projectId, chains: [arbitrum, arbitrumSepolia] });
+  createWeb3Modal({
+    // @ts-expect-error
+    wagmiConfig,
+    projectId,
+  });
 
   return (
     <Box
@@ -51,7 +48,6 @@ function App() {
         flexDirection: "column",
       }}
     >
-      {/* <button onClick={handleRemountClick}>Remount</button>{" "} */}
       <CircularProgressComponent />
       <SnackbarComponent />
       <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
