@@ -1,3 +1,28 @@
+// import { configureChains, createConfig } from 'wagmi';
+// import { mainnet } from 'wagmi/chains';
+// import { injected } from 'wagmi/connectors';
+// import { publicProvider } from 'wagmi/providers/public';
+
+// export const {
+//   chains,
+//   publicClient,
+//   webSocketPublicClient
+// } = configureChains(
+//   [mainnet],
+//   [publicProvider()],
+// );
+
+// export const config = createConfig({
+//   // autoConnect: true,
+//   connectors: [
+//     injected({
+//       shimDisconnect: false, 
+//     })
+//   ],
+//   publicClient,
+//   webSocketPublicClient,
+// });
+
 import { createConfig, http } from "wagmi";
 import {
   arbitrum,
@@ -12,7 +37,7 @@ import {
   avalanche,
   gnosis
 } from "wagmi/chains";
-import { walletConnect } from "wagmi/connectors";
+import { walletConnect, injected } from "wagmi/connectors";
 
 const projectId = import.meta.env.VITE_WALLETCONNECT_ID;
 
@@ -44,7 +69,12 @@ export const wagmiConfig = createConfig({
     [gnosis.id]: http(`https://rpc.gnosischain.com`),
 
   },
-  connectors: [ walletConnect({projectId}) ],
+  // connectors: [ walletConnect({projectId}) ],
+  connectors: [
+    injected({
+      shimDisconnect: false, 
+    })
+  ],
 });
 
 export default wagmiConfig;
