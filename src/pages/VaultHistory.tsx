@@ -95,10 +95,10 @@ const VaultHistory = () => {
   }, []);
 
   useEffect(() => {
-    if (currentVault) {
+    if (currentVault && !vaultsLoading) {
       getHistoryData();
     }
-  }, [paginationModel]);
+  }, [paginationModel, currentVault, vaultsLoading]);
 
   if (vaultsLoading) {
     return (
