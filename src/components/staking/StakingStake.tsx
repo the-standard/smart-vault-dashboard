@@ -31,7 +31,7 @@ import {
 
 import Card from "../Card.tsx";
 import Button from "../Button.tsx";
-import Exchange from "../Exchange.tsx";
+import LiFiExchange from "../LiFiExchange.tsx";
 
 const StakingStake = () => {
   const chainId = useChainId();
@@ -645,7 +645,7 @@ const StakingStake = () => {
             >
               You can easily buy it here in our cross chain DEX.
             </Typography>
-            <Exchange
+            <LiFiExchange
               toChain={arbitrum.id}
               fromChain={arbitrum.id}
               fromToken="0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
