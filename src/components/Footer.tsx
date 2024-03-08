@@ -61,110 +61,122 @@ const Footer = () => {
     >
       <Box
         sx={{
-          width: "100%",
-          maxWidth: "1440px",
-          margin: "auto",
-          paddingBlock: "1rem",
           display: "flex",
-          flexDirection: {
-            xs: "column",
-            md: "row",
-          },
+          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-between",
-        }}
+          margin: {
+            xs: "0% 4%",
+            sm: "0% 6%",
+            md: "0% 12%",
+          },
+      }}
       >
         <Box
           sx={{
+            width: "100%",
+            maxWidth: "1440px",
+            paddingBlock: "1rem",
             display: "flex",
-            flexDirection: "row",
+            flexDirection: {
+              xs: "column",
+              md: "row",
+            },
             alignItems: "center",
-            justifyContent: {
-              xs: "center",
-              md: "flex-start",
-            },
-            flexWrap: {
-              xs: "wrap",
-              md: "nowrap",
-            },
+            justifyContent: "space-between",
           }}
         >
-          {links.map((link) => (
-            <Box key={link.name}>
-              <a
-                style={{
-                  color: "#8E9BAE",
-                  textDecoration: "none",
-                  marginRight: "1rem",
-                  fontSize: "0.8rem",
-                }}
-                href={link.link}
-                target="_blank"
-              >
-                {link.name}
-              </a>
-            </Box>
-          ))}
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: {
-              xs: "center",
-              md: "flex-end",
-            },
-            flexWrap: {
-              xs: "wrap",
-              md: "nowrap",
-            },
-          }}
-        >
-          {icons.map((icon) => (
-            <Box
-              sx={{
-                /* From https://css.glass */
-                // background: " rgba(104, 104, 104, 0.2)",
-                borderRadius: "16px",
-                // boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                // backdropFilter: "blur(5px)",
-                // WebkitBackdropFilter: "blur(5px)",
-                // -webkit-backdrop-filter: blur(5px),
-                // border: "1px solid rgba(255, 255, 255, 0.3)",
-                width: "50px",
-                height: "50px",
-                margin: {
-                  xs: "0.5rem",
-                  md: "0 0 0 1rem",
-                },
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-              }}
-              key={icon.logo}
-            >
-              <a
-                href={icon.link}
-                target="_blank" // Open link in a new tab
-                rel="noopener noreferrer" // Recommended for security
-                style={{
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: {
+                xs: "center",
+                md: "flex-start",
+              },
+              flexWrap: {
+                xs: "wrap",
+                md: "nowrap",
+              },
+            }}
+          >
+            {links.map((link) => (
+              <Box key={link.name}>
+                <a
+                  style={{
+                    color: "#8E9BAE",
+                    textDecoration: "none",
+                    marginRight: "1rem",
+                    fontSize: "0.8rem",
+                  }}
+                  href={link.link}
+                  target="_blank"
+                >
+                  {link.name}
+                </a>
+              </Box>
+            ))}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: {
+                xs: "center",
+                md: "flex-end",
+              },
+              flexWrap: {
+                xs: "wrap",
+                md: "nowrap",
+              },
+            }}
+          >
+            {icons.map((icon) => (
+              <Box
+                sx={{
+                  /* From https://css.glass */
+                  // background: " rgba(104, 104, 104, 0.2)",
+                  borderRadius: "16px",
+                  // boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                  // backdropFilter: "blur(5px)",
+                  // WebkitBackdropFilter: "blur(5px)",
+                  // -webkit-backdrop-filter: blur(5px),
+                  // border: "1px solid rgba(255, 255, 255, 0.3)",
+                  width: "50px",
+                  height: "50px",
+                  margin: {
+                    xs: "0.5rem",
+                    md: "0 0 0 1rem",
+                  },
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  cursor: "pointer",
                 }}
+                key={icon.logo}
               >
-                <img
+                <a
+                  href={icon.link}
+                  target="_blank" // Open link in a new tab
+                  rel="noopener noreferrer" // Recommended for security
                   style={{
-                    width: "25px",
-                    height: "25px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  src={icon.logo}
-                  alt="icon"
-                />
-              </a>{" "}
-            </Box>
-          ))}
+                >
+                  <img
+                    style={{
+                      width: "25px",
+                      height: "25px",
+                    }}
+                    src={icon.logo}
+                    alt="icon"
+                  />
+                </a>{" "}
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
     </Box>
