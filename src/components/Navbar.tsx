@@ -172,121 +172,131 @@ const Navbar = () => {
   return (
     <Box
       sx={{
-        padding: {
-          xs: "0 4%",
-          sm: "0 6%",
-          md: "0 12%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        margin: {
+          xs: "0% 4%",
+          sm: "0% 6%",
+          md: "0% 12%",
         },
-        height: {
-          xs: "100px",
-          md: "100%",
-        }
       }}
     >
-      {/* sidebar starts */}
       <Box
         sx={{
-          display: { xs: "block", md: "none" },
-          position: "relative",
+          width: "100%",
+          maxWidth: "1440px",
+          height: {
+            xs: "100px",
+            md: "100%",
+          }
         }}
       >
-        <Menu
-          isOpen={burgerMenu}
-          onStateChange={handleStateChange}
-          width={"100%"}
-          right
-          styles={styles}
+        {/* sidebar starts */}
+        <Box
+          sx={{
+            display: { xs: "block", md: "none" },
+            position: "relative",
+          }}
         >
-          <Box
-            sx={{
-              display: { xs: "block", sm: "none" },
-            }}
+          <Menu
+            isOpen={burgerMenu}
+            onStateChange={handleStateChange}
+            width={"100%"}
+            right
+            styles={styles}
           >
-            <NavbarMenu />
-          </Box>
-        </Menu>
-      </Box>
-      {/* sidebar ends */}
-      {/* nav */}
-      <Box
-        sx={{
-          display: "flex",
-          height: "100%",
-        }}
-      >
-        {" "}
-        {/* title */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <Box
-            component="img"
-            sx={{
-              width: "100%",
-              height: "100%",
-              padding: "0px",
-              content: {
-                xs: `url(${logoIcon})`,
-                md: `url(${logo})`,
-              },
-              maxHeight: {
-                xs: "40px",
-                md: "unset",
-              },
-              maxWidth: {
-                xs: "40px",
-                md: "unset",
-              },
-              marginTop: {
-                xs: "40px",
-                md: "60px",
-              },
-              marginBottom: {
-                xs: "40px",
-                md: "60px",
-              },
-              zIndex: "1",
-            }}
-            alt="Standard.io Logo"
-          />
+            <Box
+              sx={{
+                display: { xs: "block", sm: "none" },
+              }}
+            >
+              <NavbarMenu />
+            </Box>
+          </Menu>
         </Box>
-        {/* title ends */}
+        {/* sidebar ends */}
+        {/* nav */}
         <Box
           sx={{
             display: "flex",
-            justifyContent: { xs: "center", md: "flex-end" },
-            alignItems: "center",
-            width: "100%",
-            marginRight: {
-              xs: "0px",
-              sm: "80px",
-              md: "0px"
-            }
+            height: "100%",
           }}
         >
+          {" "}
+          {/* title */}
           <Box
             sx={{
-              position: "relative",
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-end",
               alignItems: "center",
             }}
           >
-            {chainId ? logoComponent : null}
-            <w3m-button />
+            <Box
+              component="img"
+              sx={{
+                width: "100%",
+                height: "100%",
+                padding: "0px",
+                content: {
+                  xs: `url(${logoIcon})`,
+                  md: `url(${logo})`,
+                },
+                maxHeight: {
+                  xs: "40px",
+                  md: "unset",
+                },
+                maxWidth: {
+                  xs: "40px",
+                  md: "unset",
+                },
+                marginTop: {
+                  xs: "40px",
+                  md: "60px",
+                },
+                marginBottom: {
+                  xs: "40px",
+                  md: "60px",
+                },
+                zIndex: "1",
+              }}
+              alt="Standard.io Logo"
+            />
+          </Box>
+          {/* title ends */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "center", md: "flex-end" },
+              alignItems: "center",
+              width: "100%",
+              marginRight: {
+                xs: "0px",
+                sm: "80px",
+                md: "0px"
+              }
+            }}
+          >
+            <Box
+              sx={{
+                position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {chainId ? logoComponent : null}
+              <w3m-button />
+            </Box>
           </Box>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          display: { xs: "none", md: "block" },
-        }}
-      >
-        <NavbarMenu />
+        <Box
+          sx={{
+            display: { xs: "none", md: "block" },
+          }}
+        >
+          <NavbarMenu />
+        </Box>
       </Box>
     </Box>
   );

@@ -35,6 +35,8 @@ const Staking = () => {
     return (
       <Box
         sx={{
+          width: "100%",
+          maxWidth: "1440px",  
           margin: {
             xs: "0% 4%",
             sm: "3% 6%",
@@ -42,13 +44,11 @@ const Staking = () => {
           },
         }}
       >
-        {/* TEMP */}
         <StakingMenuLarge activeView={activeView} />
         <StakingMenuSmall activeView={activeView} />
   
         <Box
         >
-          {/* TEMP */}
           {activeView === 'STAKE' || !activeView ? (
             <StakingStake />
           ) : null}
@@ -61,12 +61,6 @@ const Staking = () => {
             <StakingTST />
           ) : null}
 
-          {/* {activeView ? (
-            <StakingTST />
-          ) : 
-            <StakingTST />
-          } */}
-
         </Box>
   
       </Box>
@@ -77,6 +71,8 @@ const Staking = () => {
     <Box>
       <Grid
         sx={{
+          width: "100%",
+          maxWidth: "1440px",
           margin: {
             xs: "0% 4%",
             sm: "3% 6%",

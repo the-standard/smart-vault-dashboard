@@ -58,16 +58,27 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <Navbar />
           <Disclaimer />
-          <Routes key={renderAppCounter}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="termsofuse" element={<TermsOfUse />} />
-            <Route path="stats" element={<Stats />} />
-            <Route path="dex/*" element={<Dex />} />
-            <Route path="staking/*" element={<Staking />} />
-            <Route path="yield/*" element={<Staking />} />
-            <Route path="collateral/:vaultId" element={<Collateral />} />
-            <Route path="collateral/:vaultId/history" element={<VaultHistory />} />
-          </Routes>
+          <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            margin: {
+              xs: "0% 4%",
+              sm: "0% 6%",
+              md: "0% 12%",
+            },
+          }}>
+            <Routes key={renderAppCounter}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="termsofuse" element={<TermsOfUse />} />
+              <Route path="stats" element={<Stats />} />
+              <Route path="dex/*" element={<Dex />} />
+              <Route path="staking/*" element={<Staking />} />
+              <Route path="yield/*" element={<Staking />} />
+              <Route path="collateral/:vaultId" element={<Collateral />} />
+              <Route path="collateral/:vaultId/history" element={<VaultHistory />} />
+            </Routes>
+          </Box>
           <Footer />
         </QueryClientProvider>
       </WagmiProvider>

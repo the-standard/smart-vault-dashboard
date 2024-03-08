@@ -123,16 +123,18 @@ const HomePriv = () => {
   };
 
   return (
-    <Box>
-      <Grid
-        sx={{
-          margin: {
-            xs: "0% 4%",
-            sm: "3% 6%",
-            md: "3% 12%",
-          },
-        }}
-      >
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "1440px",
+        margin: {
+          xs: "0% 4%",
+          sm: "3% 6%",
+          md: "3% 12%",
+        },
+      }}
+    >
+      <Grid>
         {address ? (
           <Box
             sx={{
@@ -164,16 +166,8 @@ const HomePriv = () => {
             <>
               <Card
                 sx={{
-                  margin: {
-                    xs: "2rem 4%",
-                    sm: "2rem 6%",
-                    md: "2rem 12%",
-                  },
+                  margin: "2rem 0%",
                   padding: "1.5rem",
-                  // padding: {
-                  //   xs: "5px",
-                  //   sm: "1.5rem",
-                  // },
                   overflow: "scroll",
                 }}
               >
@@ -203,16 +197,7 @@ const HomePriv = () => {
                   {showInactiveVaults ? (
                     <Card
                       sx={{
-                        margin: {
-                          xs: "3% 4%",
-                          sm: "3% 6%",
-                          md: "3% 12%",
-                        },
                         padding: "1.5rem",
-                        // padding: {
-                        //   xs: "5px",
-                        //   sm: "1.5rem",
-                        // },
                         overflow: "scroll",
                       }}
                     >
@@ -269,11 +254,7 @@ const HomePriv = () => {
                   ) : (
                     <Box
                       sx={{
-                        margin: {
-                          xs: "3% 4%",
-                          sm: "3% 6%",
-                          md: "3% 12%",
-                        },
+                        margin: "3% 0%",
                         display: "flex",
                         flexDirection: {
                           xs: "column",
@@ -306,11 +287,7 @@ const HomePriv = () => {
               ) : (
                 <Box
                   sx={{
-                    margin: {
-                      xs: "3% 4%",
-                      sm: "3% 6%",
-                      md: "3% 12%",
-                    },
+                    margin: "3% 0%",
                     display: "flex",
                     flexDirection: {
                       xs: "column",
