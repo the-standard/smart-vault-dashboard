@@ -28,6 +28,8 @@ const HomePub = () => {
     <Box>
       <Grid
         sx={{
+          width: "100%",
+          maxWidth: "1440px",
           margin: {
             xs: "0% 4%",
             sm: "3% 6%",

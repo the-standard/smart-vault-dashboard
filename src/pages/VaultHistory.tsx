@@ -95,15 +95,17 @@ const VaultHistory = () => {
   }, []);
 
   useEffect(() => {
-    if (currentVault) {
+    if (currentVault && !vaultsLoading) {
       getHistoryData();
     }
-  }, [paginationModel]);
+  }, [paginationModel, currentVault, vaultsLoading]);
 
   if (vaultsLoading) {
     return (
       <Box
         sx={{
+          width: "100%",
+          maxWidth: "1440px",  
           color: "#8E9BAE",
           margin: {
             xs: "0% 4%",
@@ -219,6 +221,8 @@ const VaultHistory = () => {
     return (
       <Box
         sx={{
+          width: "100%",
+          maxWidth: "1440px",  
           color: "#ffffff",
           margin: {
             xs: "0% 4%",
@@ -557,6 +561,8 @@ const VaultHistory = () => {
   return (
     <Box
       sx={{
+        width: "100%",
+        maxWidth: "1440px",
         margin: {
           xs: "0% 4%",
           sm: "3% 6%",
