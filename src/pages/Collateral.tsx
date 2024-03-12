@@ -133,6 +133,8 @@ const Collateral = () => {
     return (
       <Box
         sx={{
+          width: "100%",
+          maxWidth: "1440px",  
           color: "#8E9BAE",
           margin: {
             xs: "0% 4%",
@@ -250,6 +252,8 @@ const Collateral = () => {
     return (
       <Box
         sx={{
+          width: "100%",
+          maxWidth: "1440px",
           color: "#ffffff",
           margin: {
             xs: "0% 4%",
@@ -408,6 +412,8 @@ const Collateral = () => {
   return (
     <Box
       sx={{
+        width: "100%",
+        maxWidth: "1440px",
         color: "#8E9BAE",
         margin: {
           xs: "0% 4%",
