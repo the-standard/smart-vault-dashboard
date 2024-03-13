@@ -77,7 +77,7 @@ const LiquidityPool = () => {
             marginTop: "1rem",
             width: "150px",
           }}
-          clickFunction={() => navigate('/yield')}
+          clickFunction={() => navigate('/liquidation-pools')}
         >
           Learn More
         </Button>
