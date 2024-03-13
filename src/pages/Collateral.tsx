@@ -405,7 +405,7 @@ const Collateral = () => {
     } else if (id === 2) {
       handleWalletOpen();
     } else if (id === 3) {
-      navigate("/yield");
+      navigate("/liquidation-pools");
     }
   };
 

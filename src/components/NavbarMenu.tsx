@@ -23,11 +23,11 @@ const menuItems = [
     isWorking: true,
   },
   {
-    text: "Yield Account",
+    text: "Liquidation Pools",
     icon: historylogo,
     icon2: historylogo2,
     isWorking: true,
-    route: "yield",
+    route: "liquidation-pools",
   },
   {
     text: "Cross Chain Dex",
@@ -58,8 +58,11 @@ const NavbarMenu = () => {
   };
 
   useEffect(() => {
-    if (window.location.pathname.includes('/staking')) {
-      navigate('yield');
+    if (
+      window.location.pathname.includes('/staking') ||
+      window.location.pathname.includes('/yield')
+    ) {
+      navigate('liquidation-pools');
     }
   }, []);
 

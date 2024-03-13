@@ -69,6 +69,7 @@ function App() {
               <Route path="termsofuse" element={<TermsOfUse />} />
               <Route path="stats" element={<Stats />} />
               <Route path="dex/*" element={<Dex />} />
+              <Route path="liquidation-pools/*" element={<Staking />} />
               <Route path="staking/*" element={<Staking />} />
               <Route path="yield/*" element={<Staking />} />
               <Route path="collateral/:vaultId" element={<Collateral />} />

@@ -211,7 +211,7 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
                     Now you can buy tokens<br/>
                     at a 9.91% discount<br/>
                     by placing your EUROs<br/>
-                    into your Yield Account!
+                    into Liquidation Pools!
                   </Typography>
                   <Button
                     sx={{
@@ -220,10 +220,11 @@ const ClaimingModal: React.FC<ClaimingModalProps> = ({
                       marginTop: "1rem",
                       width: "250px",
                     }}
-                    clickFunction={() => window.open('https://app.camelot.exchange/liquidity/?token1=0x643b34980e635719c15a2d4ce69571a258f940e9&token2=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&mode=auto&provider=gamma', '_blank')?.focus()}
+                    // clickFunction={() => window.open('https://app.camelot.exchange/liquidity/?token1=0x643b34980e635719c15a2d4ce69571a258f940e9&token2=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&mode=auto&provider=gamma', '_blank')?.focus()}
+                    clickFunction={() => window.open('/liquidation-pools', '_blank')?.focus()}
                     lighter
                   >
-                    Take me to my Yield Account!
+                    Take me to the liquidation pools!
                   </Button>
                   <Button
                     sx={{
