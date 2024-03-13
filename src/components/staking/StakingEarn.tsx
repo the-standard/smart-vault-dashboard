@@ -282,7 +282,7 @@ const StakingEarn = () => {
               }}>
                 This shows the USD value of both your Deposited & Purchased Assets over time.
                 <span style={{display: "block", marginBottom:"0.5rem"}}/>
-                The chart data is stacked on top of eachother, giving you a better idea of your total Yield Account value. 
+                The chart data is stacked on top of eachother, giving you a better idea of your total liquidation pool value. 
               </span>
             }
           >
