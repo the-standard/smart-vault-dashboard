@@ -13,7 +13,6 @@ import {
 } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
-import Stats from "./pages/Stats.tsx";
 import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
