@@ -13,7 +13,6 @@ import {
 } from "./store/Store.ts";
 import SnackbarComponent from "./components/SnackbarComponent.tsx";
 import { useBackgroundImage } from "./hooks/useBackgroundImage.ts";
-import Stats from "./pages/Stats.tsx";
 import Dex from "./pages/Dex.tsx";
 import Staking from "./pages/Staking.tsx";
 import VaultHistory from "./pages/VaultHistory.tsx";
@@ -67,7 +66,7 @@ function App() {
             <Routes key={renderAppCounter}>
               <Route path="/" element={<HomePage />} />
               <Route path="termsofuse" element={<TermsOfUse />} />
-              <Route path="stats" element={<Stats />} />
+              <Route path="stats" element={<HomePage />} />
               <Route path="dex/*" element={<Dex />} />
               <Route path="liquidation-pools/*" element={<Staking />} />
               <Route path="staking/*" element={<Staking />} />
