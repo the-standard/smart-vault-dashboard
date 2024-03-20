@@ -86,6 +86,37 @@ const NavbarMenu = () => {
       {menuItems.map((item, index) => {
         const collateralActive = window.location.pathname.includes('/Collateral') && !item.route;
 
+        let to: any = item.route ? `/${item.route}` : "/";
+
+        if (item.route === 'stats') {
+          to = "https://dune.com/the_standard/smart-vaults";
+
+          return (
+            <a
+              href={to}
+              target="_blank"
+              style={{
+                textDecoration: "none",
+                color: "white",
+                width: "100%",
+                overflow: "hidden",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "10px",
+                border: "",
+                boxShadow: "",
+              }}
+            >
+              <MenuItem
+                text={item.text}
+                isActive={false}
+                handleClick={() => null}
+              />
+            </a>
+          );  
+        }
+
         return (
           <NavLink
             style={({ isActive }) => {
@@ -103,7 +134,7 @@ const NavbarMenu = () => {
               };
             }}
             key={index}
-            to={item.route ? `/${item.route}` : "/"}
+            to={to}
           >
             <MenuItem
               text={item.text}
