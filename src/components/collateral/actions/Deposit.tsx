@@ -269,6 +269,31 @@ const Deposit: React.FC<DepositProps> = ({
           justifyContent: "space-between",
           alignItems: "center",
           marginTop: "1rem",
+          marginBottom: "1rem",
+          backgroundColor: "rgba(158, 117, 0, 0.5)",
+          padding: "0.5rem",
+          borderRadius: "10px",
+          color: "rgb(255, 245, 215)",
+          border: "2px solid rgb(255, 190, 0)",
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "1rem",
+          }}
+        >
+          <b>Only send coins on Arbitrum</b>. Deposits from other chains will be lost.
+        </Typography>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: "1rem",
           padding: "0",
         }}
       >
@@ -435,6 +460,30 @@ const Deposit: React.FC<DepositProps> = ({
           }}
           className="modal-content" // add class name to modal content box
         >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1rem",
+              backgroundColor: "rgba(158, 117, 0, 0.5)",
+              padding: "0.5rem",
+              borderRadius: "10px",
+              color: "rgb(255, 245, 215)",
+              border: "2px solid rgb(255, 190, 0)",
+            }}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                fontSize: "1rem",
+              }}
+            >
+              <b>Only send coins on Arbitrum</b>. Deposits from other chains will be lost.
+            </Typography>
+          </Box>
+
           {" "}
           <Box
             sx={{
