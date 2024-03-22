@@ -593,15 +593,30 @@ const Collateral = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
-              gap: "1rem",
+              justifyContent: {
+                xs: "normal",
+                sm: "space-between"
+              },
+              flexDirection: {
+                xs: "column",
+                sm: "row"
+              },
+              marginBottom: "2rem",
             }}
           >
             <Box
               sx={{
                 display: "flex",
                 gap: "1rem",
-              }}            
+                justifyContent: {
+                  xs: "space-between",
+                  sm: "normal"
+                },
+                flex: {
+                  xs: "1",
+                  sm: "auto"
+                }
+              }}
             >
               {buttonDetails.map((item, index) => (
                 <Button
@@ -620,8 +635,11 @@ const Collateral = () => {
             <Box
               sx={{
                 display: "flex",
+                justifyContent: {
+                  xs: "flex-end",
+                },
                 gap: "1rem",
-              }}            
+              }}
             >
               <Button
                 sx={{
@@ -636,7 +654,6 @@ const Collateral = () => {
               >
                 <DeleteOutlineIcon />
               </Button>
-       
               <Button
                 sx={{
                   "&:after": {
@@ -652,6 +669,7 @@ const Collateral = () => {
               </Button>            
             </Box>
           </Box>
+
           {/* <Card
             sx={{
               padding: "1.5rem",
