@@ -11,9 +11,9 @@ const links = [
   // { name: "The Standard Protocol", link: "/standard-protocol" },
   // { name: "Ecosystem", link: "/ecosystem" },
   // { name: "Careers", link: "/careers" },
-  { name: "FAQ", link: "https://www.thestandard.io/faq" },
-  { name: "Whitepaper", link: "https://www.thestandard.io/whitepaper" },
-  { name: "Blog", link: "https://blog.thestandard.io/" },
+  { name: "About", link: "https://www.thestandard.io/about" },
+  { name: "Whitepaper", link: "https://www.thestandard.io/tst-whitepaper" },
+  { name: "Blog", link: "https://thestandard.io/blog" },
   { name: "Terms of Use", link: "/termsofuse" },
 ];
 
