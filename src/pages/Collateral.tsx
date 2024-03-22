@@ -5,6 +5,9 @@ import QRCode from "react-qr-code";
 import { ethers } from "ethers";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SendIcon from '@mui/icons-material/Send';
+
 import {
   useBlockNumber,
   useReadContract,
@@ -36,6 +39,7 @@ import VaultMenuSmall from "../components/VaultMenuSmall";
 import VaultStats from "../components/collateral/VaultStats";
 import VaultChart from "../components/collateral/VaultChart";
 import VaultToken from "../components/collateral/VaultToken";
+import SendModal from "../components/collateral/SendModal";
 
 type RouteParams = {
   vaultId: string;
@@ -69,6 +73,8 @@ const Collateral = () => {
   const [openWalletModal, setOpenWalletModal] = useState(false);
   const handleWalletOpen = () => setOpenWalletModal(true);
   const handleWalletClose = () => setOpenWalletModal(false);
+
+  const [sendType, setSendType] = useState<any>(undefined);
 
   const chainId = useChainId();
   const query = useQuery();
@@ -125,7 +131,11 @@ const Collateral = () => {
     },
   })
 
-  const { isConnected } = useAccount() 
+  const handleCloseSendModal = () => {
+    setSendType(undefined);
+  };
+
+  const { isConnected, address } = useAccount();
 
   const currentVault: any = vaultData;
 
@@ -583,23 +593,83 @@ const Collateral = () => {
           <Box
             sx={{
               display: "flex",
-              gap: "1rem",
+              justifyContent: {
+                xs: "normal",
+                sm: "space-between"
+              },
+              flexDirection: {
+                xs: "column",
+                sm: "row"
+              },
+              marginBottom: "2rem",
             }}
           >
-            {buttonDetails.map((item, index) => (
+            <Box
+              sx={{
+                display: "flex",
+                gap: "1rem",
+                justifyContent: {
+                  xs: "space-between",
+                  sm: "normal"
+                },
+                flex: {
+                  xs: "1",
+                  sm: "auto"
+                }
+              }}
+            >
+              {buttonDetails.map((item, index) => (
+                <Button
+                  sx={{
+                    marginTop: "1rem",
+                  }}
+                  key={index}
+                  clickFunction={() => {
+                    handleButtonActions(item.id);
+                  }}
+                >
+                  {item.title}
+                </Button>            
+              ))}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: {
+                  xs: "flex-end",
+                },
+                gap: "1rem",
+              }}
+            >
               <Button
                 sx={{
+                  "&:after": {
+                    backgroundSize: "300% 100%",
+                  },
                   marginTop: "1rem",
                 }}
-                key={index}
                 clickFunction={() => {
-                  handleButtonActions(item.id);
+                  setSendType('BURN');
                 }}
               >
-                {item.title}
+                <DeleteOutlineIcon />
+              </Button>
+              <Button
+                sx={{
+                  "&:after": {
+                    backgroundSize: "300% 100%",
+                  },  
+                  marginTop: "1rem",
+                }}
+                clickFunction={() => {
+                  setSendType('SEND');
+                }}
+              >
+                <SendIcon />
               </Button>            
-            ))}
+            </Box>
           </Box>
+
           {/* <Card
             sx={{
               padding: "1.5rem",
@@ -716,6 +786,14 @@ const Collateral = () => {
           <AddEuros />
         </Card>
       </Modal>
+      <SendModal
+        isOpen={!!sendType}
+        sendType={sendType}
+        handleCloseModal={handleCloseSendModal}
+        currentVault={currentVault}
+        vaultId={vaultId}
+        address={address}
+      />
     </Box>
   );
 };
