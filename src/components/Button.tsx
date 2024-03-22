@@ -100,12 +100,25 @@ const successStyle = {
   WebkitBackdropFilter: "blur(0px)",
 }
 
+const errorStyle = {
+  backgroundColor: "rgba(0,0,0,0)",
+  background: `linear-gradient(
+    119.96deg,
+    rgba(244, 67, 54, 0.1) 0%,
+    rgba(244, 67, 54, 1) 100%
+  )`,
+  backgroundOrigin: 'border-box',
+  backdropFilter: "blur(0px)",
+  WebkitBackdropFilter: "blur(0px)",
+}
+
 interface ButtonProps {
   id?: string;
   sx?: object;
   isActive?: boolean;
   lighter?: boolean;
   isSuccess?: boolean;
+  isError?: boolean;
   clickFunction?: () => void;
   isDisabled?: boolean;
   children?: React.ReactNode;
@@ -142,6 +155,13 @@ export function Button(props: ButtonProps) {
     useSx={
       ...props.sx,
       ...successStyle
+    }
+  }
+
+  if (props.isError) {
+    useSx={
+      ...props.sx,
+      ...errorStyle
     }
   }
 
