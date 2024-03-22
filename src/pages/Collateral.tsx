@@ -135,7 +135,7 @@ const Collateral = () => {
     setSendType(undefined);
   };
 
-  const { isConnected } = useAccount() 
+  const { isConnected, address } = useAccount();
 
   const currentVault: any = vaultData;
 
@@ -769,10 +769,12 @@ const Collateral = () => {
         </Card>
       </Modal>
       <SendModal
-        isOpen={sendType}
+        isOpen={!!sendType}
         sendType={sendType}
         handleCloseModal={handleCloseSendModal}
         currentVault={currentVault}
+        vaultId={vaultId}
+        address={address}
       />
     </Box>
   );

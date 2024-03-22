@@ -1,26 +1,29 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Modal, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import CircularProgress from "@mui/material/CircularProgress";
-import { formatEther } from "viem";
-import Confetti from 'react-confetti';
 import {
-  useAccount,
   useWriteContract,
+  useChainId
 } from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
 
 import {
-  useStakingAbiStore,
+  useContractAddressStore,
+  useVaultManagerAbiStore,
   useSnackBarStore,
 } from "../../store/Store";
 
 import Button from "../../components/Button";
 
 interface SendModalProps {
-  isOpen: any;
+  isOpen: boolean;
   sendType: any;
   currentVault: any;
   handleCloseModal: any;
+  vaultId: any;
+  address: any;
 }
 
 const SendModal: React.FC<SendModalProps> = ({
@@ -28,15 +31,24 @@ const SendModal: React.FC<SendModalProps> = ({
   sendType,
   currentVault,
   handleCloseModal,
+  vaultId,
+  address,
 }) => {
+  const { arbitrumSepoliaContractAddress, arbitrumContractAddress } = useContractAddressStore();
+  const { vaultManagerAbi } = useVaultManagerAbiStore();
   const { getSnackBar } = useSnackBarStore();
-  const { address } = useAccount();
+  const navigate = useNavigate();
 
-  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+  const { writeContract, isError, isPending, isSuccess, error } = useWriteContract();
 
-  const vaultActive = Number(ethers.BigNumber.from(currentVault.status.totalCollateralValue)) > 0 || Number(ethers.BigNumber.from(currentVault.status.minted)) > 0;
+  const chainId = useChainId();
 
-  console.log(123123, vaultActive)
+  const vaultManagerAddress =
+  chainId === arbitrumSepolia.id
+    ? arbitrumSepoliaContractAddress
+    : arbitrumContractAddress;
+
+  const [sendTo, setSendTo] = useState('');
 
   const handleSendVault = async () => {
     const burnAddress = `0x000000000000000000000000000000000000dEaD`;
@@ -46,17 +58,17 @@ const SendModal: React.FC<SendModalProps> = ({
       useSendAddress = burnAddress;
     }
     if (sendType === 'SEND') {
-      // useSendAddress = sendTo;
+      useSendAddress = sendTo;
     }
     try {
       writeContract({
         abi: vaultManagerAbi,
-        address: vaultAddress as any,
+        address: vaultManagerAddress as any,
         functionName: "transferFrom",
         args: [
-          vaultAddress as any,
-          sendAddress as any,
-          vaultId as any
+          address as any, // from
+          useSendAddress as any, // to
+          vaultId as any // which vault
         ],
       });
 
@@ -65,7 +77,7 @@ const SendModal: React.FC<SendModalProps> = ({
       if (error && error.shortMessage) {
         errorMessage = error.shortMessage;
       }
-      getSnackBar('ERROR', errorMessage);
+      getSnackBar('ERROR', errorMessage || 'There was a problem');
     }
   };
 
@@ -74,14 +86,18 @@ const SendModal: React.FC<SendModalProps> = ({
       // 
     } else if (isSuccess) {
       getSnackBar('SUCCESS', 'Successful!');
+      navigate('/')
     } else if (isError) {
       // 
+      getSnackBar('ERROR', 'There was a problem');
     }
   }, [
     isPending,
     isSuccess,
     isError,
   ]);
+
+  const vaultActive = Number(ethers.BigNumber.from(currentVault.status.totalCollateralValue)) > 0 || Number(ethers.BigNumber.from(currentVault.status.minted)) > 0;
 
   if (vaultActive && (sendType === 'BURN')) {
     return (
@@ -223,171 +239,159 @@ const SendModal: React.FC<SendModalProps> = ({
             }}
             className="modal-content"
           >
-            {isSuccess ? (
-              <>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: "1.5rem",
-                      width: "100%",
-                      marginBottom: "0.5rem",
-                    }}                
-                  >
-                    {sendType === 'BURN' ? (
-                      'Smart Vault Deleted Successfully'
-                    ) : (
-                      'Smart Vault Transferred Successfully'
-                    )}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: "1rem",
-                      width: "100%",
-                      opacity: "0.8"
-                    }}
-                  >
-                    This action sends this smart vault to a burn address.
-                    <br/>
-                    You will no longer have access to this vault or any of it's history.
-                    <br/>
-                    <br/>
-                    <b>This action is irreversible.</b>
-                    <br/>
-                    <br/>
-                  </Typography>
-                </Box>
-
-                <Box sx={{
-                  textAlign: "center",
+            <>
+              <Box
+                sx={{
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
-                  alignItems: "center",
-                }}>
-                  <Button
+                }}
+              >
+                {isPending ? (
+                  <>
+                    <Typography
+                      sx={{
+                        fontSize: "1.5rem",
+                        width: "100%",
+                        marginBottom: "0.5rem",
+                      }}                
+                    >
+                      {sendType === 'BURN' ? (
+                        'Deleting Smart Vault'
+                      ) : (
+                        'Transferring Smart Vault NFT'
+                      )}
+                    </Typography>
+                    <Box
                     sx={{
-                      padding: "12px",
-                      textAlign: "center",
-                      marginTop: "1rem",
-                      width: "250px",
+                      minHeight: "250px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "column",
                     }}
-                    clickFunction={handleCloseModal}
-                  >
-                    Close
-                  </Button>
-                </Box>
-              </>
-            ) : (
-              <>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                  }}
-                >
-                  {isPending ? (
-                    <>
+                    >
+                      <CircularProgress size="8rem" />
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100%",
+                        marginBottom: "1rem",
+                      }}
+                    >
                       <Typography
                         sx={{
-                          fontSize: "1rem",
+                          fontSize: "1.5rem",
                           width: "100%",
-                          textAlign: "center",
-                        }}
+                          marginBottom: "0.5rem",
+                        }}                
                       >
                         {sendType === 'BURN' ? (
-                          'Deleting Smart Vault'
+                          'Delete Smart Vault'
                         ) : (
-                          'Transferring Smart Vault NFT'
+                          'Transfer Smart Vault NFT'
                         )}
                       </Typography>
-                      <Box
-                      sx={{
-                        minHeight: "250px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                      }}
-                      >
-                        <CircularProgress size="8rem" />
-                      </Box>
-                    </>
-                  ) : (
-                    <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          width: "100%",
-                          marginBottom: "1rem",
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            fontSize: "1.5rem",
-                            width: "100%",
-                            marginBottom: "0.5rem",
-                          }}                
-                        >
-                          {sendType === 'BURN' ? (
-                            'Delete Smart Vault'
-                          ) : (
-                            'Transfer Smart Vault NFT'
-                          )}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "1rem",
-                            width: "100%",
-                            opacity: "0.8"
-                          }}
-                        >
-                          This action sends this smart vault to a burn address.
-                          <br/>
-                          You will no longer have access to this vault or any of it's history.
-                          <br/>
-                          <br/>
-                          <b>This action is irreversible.</b>
-                          <br/>
-                          <br/>
-                        </Typography>
-                      </Box>
-                      <Button
-                        sx={{
-                          padding: "5px",
-                          height: "2rem",
-                        }}
-                        isError={sendType === 'BURN'}
-                        // clickFunction={handleClaimPosition}
-                      >
+
                         {sendType === 'BURN' ? (
-                          'Delete My Vault'
-                        ) : (
-                          'Transfer My Vault'
-                        )}
-                      </Button>
-                      <Button
-                        sx={{
-                          padding: "5px",
-                          marginTop: "1rem",
-                        }}
-                        clickFunction={handleCloseModal}
-                      >
-                        Cancel
-                      </Button>
-                    </>
-                  )}
-                </Box>
-              </>
-            )}
+                          <>
+                            <Typography
+                              sx={{
+                                fontSize: "1rem",
+                                width: "100%",
+                                opacity: "0.8"
+                              }}
+                            >
+                              This action sends this smart vault to a burn address.
+                              <br/>
+                              You will no longer have access to this vault or any of it's history.
+                              <br/>
+                              <br/>
+                              <b>This action is irreversible.</b>
+                              <br/>
+                              <br/>
+                            </Typography>
+                          </>
+                        ) : (null)}
+
+                        {sendType === 'SEND' ? (
+                          <>
+                            <Typography
+                              sx={{
+                                fontSize: "1rem",
+                                width: "100%",
+                                opacity: "0.8"
+                              }}
+                            >
+                              This action transfers this smart vault, including it's collateral and debt, to a new address.
+                              <br/>
+                              <br/>
+                              <b>This action is irreversible.</b>
+                              <br/>
+                              <br/>
+                            </Typography>
+                            <input
+                              style={{
+                                background: "rgba(18, 18, 18, 0.5)",
+                                border: "1px solid #8E9BAE",
+                                color: "white",
+                                fontSize: "1rem",
+                                fontWeight: "normal",
+                                fontFamily: "Poppins",
+                                height: "2.5rem",
+                                width: "100%",
+                                borderRadius: "10px",
+                                paddingLeft: "0.5rem",
+                                boxSizing: "border-box",
+                                MozBoxSizing: "border-box",
+                                WebkitBoxSizing: "border-box",
+                              }}
+                              placeholder="Send To Address"
+                              type="text"
+                              onChange={(e: any) => setSendTo(e.target.value)}
+                              value={sendTo || ''}
+                              disabled={isPending}
+                              // ref={tstInputRef}
+                            />
+                          </>
+                        ) : (null)}
+                    </Box>
+                    <Button
+                      sx={{
+                        padding: "5px",
+                        height: "2rem",
+                      }}
+                      isError={sendType === 'BURN'}
+                      clickFunction={() => handleSendVault()}
+                      isDisabled={
+                        sendType === 'SEND' &&
+                        !sendTo
+                      }
+                    >
+                      {sendType === 'BURN' ? (
+                        'Delete My Vault'
+                      ) : (
+                        'Transfer My Vault'
+                      )}
+                    </Button>
+                    <Button
+                      sx={{
+                        padding: "5px",
+                        marginTop: "1rem",
+                      }}
+                      clickFunction={handleCloseModal}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                )}
+              </Box>
+            </>
           </Box>
         </>
       </Modal>
