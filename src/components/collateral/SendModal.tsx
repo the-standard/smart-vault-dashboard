@@ -39,7 +39,7 @@ const SendModal: React.FC<SendModalProps> = ({
   const { getSnackBar } = useSnackBarStore();
   const navigate = useNavigate();
 
-  const { writeContract, isError, isPending, isSuccess, error } = useWriteContract();
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
 
   const chainId = useChainId();
 
