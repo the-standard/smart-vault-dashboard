@@ -22,7 +22,65 @@ import wbtclogo from "../../assets/wbtclogo.svg";
 import linklogo from "../../assets/linklogo.svg";
 import paxglogo from "../../assets/paxglogo.svg";
 import arblogo from "../../assets/arblogo.svg";
+import gmxlogo from "../../assets/gmxlogo.svg";
 import Button from "../../components/Button";
+
+const tokenIcon = (symbol: any) => {
+  switch (symbol) {
+    case 'ETH':
+      return (
+        <img
+          style={{ height: "2rem", width: "2rem" }}
+          src={ethereumlogo}
+          alt="ethereum logo"
+        />    
+      );
+    case 'WBTC':
+      return (
+        <img
+          style={{ height: "2rem", width: "2rem" }}
+          src={wbtclogo}
+          alt="wbtc logo"
+        />    
+      );
+    case 'LINK':
+      return (
+        <img
+          style={{ height: "2rem", width: "2rem" }}
+          src={linklogo}
+          alt="link logo"
+        />    
+      );
+    case 'ARB':
+      return (
+        <img
+          style={{ height: "2rem", width: "2rem" }}
+          src={arblogo}
+          alt="arb logo"
+        />    
+      );
+    case 'PAXG':
+      return (
+        <img
+          style={{ height: "2rem", width: "2rem" }}
+          src={paxglogo}
+          alt="paxg logo"
+        />    
+      );
+    case 'GMX':
+      return (
+        <img
+          style={{ height: "2rem", width: "2rem" }}
+          src={gmxlogo}
+          alt="gmx logo"
+        />    
+      );
+    default:
+      return (
+        <Typography variant="body2"> {symbol}</Typography>
+      );
+  }  
+};
 
 interface VaultTokenProps {
   amount: any;
@@ -168,39 +226,7 @@ const VaultToken: React.FC<VaultTokenProps> = ({
                 justifyContent: "center",
               }}
             >
-              {symbol === "ETH" ? (
-                <img
-                  style={{ height: "2rem", width: "2rem" }}
-                  src={ethereumlogo}
-                  alt="ethereum logo"
-                />
-              ) : symbol === "WBTC" ? (
-                <img
-                  style={{ height: "2rem", width: "2rem" }}
-                  src={wbtclogo}
-                  alt="wbtc logo"
-                />
-              ) : symbol === "LINK" ? (
-                <img
-                  style={{ height: "2rem", width: "2rem" }}
-                  src={linklogo}
-                  alt="link logo"
-                />
-              ) : symbol === "ARB" ? (
-                <img
-                  style={{ height: "2rem", width: "2rem" }}
-                  src={arblogo}
-                  alt="arb logo"
-                />
-              ) : symbol === "PAXG" ? (
-                <img
-                  style={{ height: "2rem", width: "2rem" }}
-                  src={paxglogo}
-                  alt="paxg logo"
-                />
-              ) : (
-                <Typography variant="body2"> {symbol}</Typography>
-              )}
+              {tokenIcon(symbol)}
             </Box>
             <Box sx={{
               marginLeft: "0.5rem",
